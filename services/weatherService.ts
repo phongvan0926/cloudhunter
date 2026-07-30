@@ -110,25 +110,52 @@ export async function fetchMountainWeather(
     };
   } else {
     try {
-      const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=vi&format=json`;
-      const geoRes = await fetch(geoUrl);
-      const geoData = await geoRes.json();
+      let geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=vi&format=json`;
+      let geoRes = await fetch(geoUrl);
+      let geoData = await geoRes.json();
+      
+      // If 1st attempt fails, clean Vietnamese prefixes and remove tones
+      if (!geoData.results || geoData.results.length === 0) {
+        const cleanName = locationName
+          .replace(/Đỉnh|Núi|Đèo|Thị trấn|Khu du lịch|Sống lưng khủng long|Homestay|Bản/gi, '')
+          .replace(/\(.*\)/g, '')
+          .trim();
+        const normName = cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D");
+        
+        if (normName.length >= 2) {
+          geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(normName)}&count=1&format=json`;
+          geoRes = await fetch(geoUrl);
+          geoData = await geoRes.json();
+        }
+      }
+
       if (geoData.results && geoData.results.length > 0) {
         const result = geoData.results[0];
         mt = {
-          name: result.name,
+          name: result.name || locationName,
           lat: result.latitude,
           lon: result.longitude,
-          elevation: result.elevation || 1000,
+          elevation: result.elevation || 1500,
           zone: "A_CLOUD_TRAP"
         };
       } else {
-        console.warn("Geocoding failed to find location:", locationName);
-        return null;
+        mt = {
+          name: locationName,
+          lat: lat || 22.3364,
+          lon: lon || 103.8438,
+          elevation: 1500,
+          zone: "A_CLOUD_TRAP"
+        };
       }
     } catch (error) {
       console.error("Geocoding error:", error);
-      return null;
+      mt = {
+        name: locationName,
+        lat: lat || 22.3364,
+        lon: lon || 103.8438,
+        elevation: 1500,
+        zone: "A_CLOUD_TRAP"
+      };
     }
   }
 

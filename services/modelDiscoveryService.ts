@@ -110,10 +110,14 @@ export async function discoverModels(apiKey?: string): Promise<DiscoveredModel[]
     }
 
     const discovered: DiscoveredModel[] = [];
+    const seenIds = new Set<string>();
 
     for (const item of data.models) {
       const rawName: string = item.name || '';
       const cleanId = rawName.replace(/^models\//, '');
+      if (seenIds.has(cleanId)) continue;
+      seenIds.add(cleanId);
+
       const methods: string[] = item.supportedGenerationMethods || [];
 
       // Filter requirement R1: Must support generateContent

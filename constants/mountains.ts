@@ -198,5 +198,59 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     lat: 20.7290, lon: 105.1320, elevation: 1000,
     zone: "A_CLOUD_TRAP",
     aliases: ['thung khe', 'đèo đá trắng', 'mai châu', 'thung khe pass']
+  },
+
+  // --- HÀ GIANG ---
+  DEO_MA_PI_LENG: {
+    name: "Đèo Mã Pí Lèng (Mèo Vạc)",
+    lat: 23.2389, lon: 105.3283, elevation: 1400,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['mã pí lèng', 'ma pi leng', 'mèo vạc', 'mã pì lèng', 'sông nho quế']
+  },
+  CHIEU_LAU_THI: {
+    name: "Đỉnh Chiêu Lầu Thi",
+    lat: 22.6658, lon: 104.6644, elevation: 2402,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['chiêu lầu thi', 'chieu lau thi', 'hoàng su phì', 'hoang su phi']
+  },
+  TAY_CON_LINH: {
+    name: "Tây Côn Lĩnh",
+    lat: 22.8050, lon: 104.8140, elevation: 2427,
+    zone: "B_WIND_TUNNEL",
+    aliases: ['tây côn lĩnh', 'tay con linh', 'nóc nhà hà giang']
+  },
+  DONG_VAN: {
+    name: "Cao nguyên đá Đồng Văn",
+    lat: 23.2786, lon: 105.3619, elevation: 1500,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['đồng văn', 'dong van', 'mèo vạc', 'cao nguyên đá']
+  },
+
+  // --- THANH HÓA ---
+  PU_LUONG: {
+    name: "Pù Luông",
+    lat: 20.4439, lon: 105.1583, elevation: 1700,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['pù luông', 'pu luong', 'bá thước', 'đỉnh pù luông']
+  },
+
+  // --- VĨNH PHÚC & HÀ NỘI ---
+  TAM_DAO: {
+    name: "Tam Đảo",
+    lat: 21.4583, lon: 105.6458, elevation: 1200,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['tam đảo', 'tam dao', 'thị trấn tam đảo']
+  },
+  BA_VI: {
+    name: "Đỉnh Ba Vì (Đỉnh Vua)",
+    lat: 21.0800, lon: 105.3600, elevation: 1280,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['ba vì', 'ba vi', 'đỉnh vua', 'núi ba vì']
+  },
+  MAU_SON: {
+    name: "Mẫu Sơn (Lạng Sơn)",
+    lat: 21.8419, lon: 106.9208, elevation: 1500,
+    zone: "A_CLOUD_TRAP",
+    aliases: ['mẫu sơn', 'mau son', 'lạng sơn']
   }
 };

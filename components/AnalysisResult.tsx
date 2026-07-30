@@ -428,9 +428,6 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
              <h2 className="text-3xl font-black text-white mb-1 tracking-tight">Dự báo: {result.locationName}</h2>
              <div className="flex flex-wrap items-center gap-2">
                  <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-900 text-cyan-300 border border-cyan-700">CLOUDHUNTER V4.0</span>
-                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-950 text-blue-300 border border-blue-600/80 flex items-center gap-1.5 shadow-sm">
-                   🤖 Model phân tích: <span className="text-white font-mono bg-blue-900/60 px-2 py-0.5 rounded border border-blue-400/50">{result.modelUsed || "Gemini 2.5 Flash"}</span>
-                 </span>
                  <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-950 text-purple-300 border border-purple-600/80 flex items-center gap-1">
                    🎯 Đồng Thuận Mô Hình: {result.modelConsensusScore || 94}%
                  </span>
