@@ -3,9 +3,12 @@ import { WeatherInput, CloudAnalysis, LocationAnalysis } from "../types";
 import { NORTHWEST_PEAKS } from '../constants';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { fetchMountainWeather, WeatherData } from './weatherService';
-import { discoverModels, executeWithFallback, getStoredModel } from './modelDiscoveryService';
+import { discoverModels, executeWithFallback, getStoredModel, getStoredApiKey } from './modelDiscoveryService';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+function getAIInstance(): GoogleGenAI {
+  const apiKey = getStoredApiKey();
+  return new GoogleGenAI({ apiKey });
+}
 
 function removeVietnameseTones(str: string): string {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
@@ -84,7 +87,7 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
     const primaryModel = model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
 
     const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
-      const fetchPromise = ai.models.generateContent({
+      const fetchPromise = getAIInstance().models.generateContent({
         model: modelId,
         contents: prompt,
         config: {
@@ -492,7 +495,7 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
     const primaryModel = data.model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
 
     const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
-      const fetchPromise = ai.models.generateContent({
+      const fetchPromise = getAIInstance().models.generateContent({
         model: modelId,
         contents: prompt,
         config: {

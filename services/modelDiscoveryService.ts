@@ -43,6 +43,28 @@ const FALLBACK_DEFAULT_MODELS: DiscoveredModel[] = [
   }
 ];
 
+const API_KEY_STORAGE_KEY = 'cloudhunter_custom_api_key';
+
+export function getStoredApiKey(): string {
+  try {
+    return localStorage.getItem(API_KEY_STORAGE_KEY) || process.env.GEMINI_API_KEY || '';
+  } catch {
+    return process.env.GEMINI_API_KEY || '';
+  }
+}
+
+export function setStoredApiKey(key: string): void {
+  try {
+    if (!key.trim()) {
+      localStorage.removeItem(API_KEY_STORAGE_KEY);
+    } else {
+      localStorage.setItem(API_KEY_STORAGE_KEY, key.trim());
+    }
+  } catch (err) {
+    console.warn("Could not save custom API key to localStorage:", err);
+  }
+}
+
 export function getStoredModel(): string | null {
   try {
     return localStorage.getItem(STORAGE_KEY);
@@ -66,7 +88,7 @@ export function setStoredModel(modelId: string): void {
  * Sorts Flash/Free models first, Pro models last.
  */
 export async function discoverModels(apiKey?: string): Promise<DiscoveredModel[]> {
-  const key = apiKey || process.env.GEMINI_API_KEY || '';
+  const key = apiKey || getStoredApiKey();
   if (!key) {
     console.warn("Missing GEMINI_API_KEY. Returning default model list.");
     return FALLBACK_DEFAULT_MODELS;

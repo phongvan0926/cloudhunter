@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { InputForm } from './components/InputForm';
 import { AnalysisResult } from './components/AnalysisResult';
 import { LocationConfirm } from './components/LocationConfirm';
+import { ApiKeyModal } from './components/ApiKeyModal';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { analyzeWeatherData, analyzeLocation } from './services/geminiService';
 
@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [pendingInput, setPendingInput] = useState<WeatherInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
 
   const handleInputSubmit = async (data: WeatherInput) => {
     setIsLoading(true);
@@ -25,8 +26,13 @@ const App: React.FC = () => {
         lat: locAnalysis.lat,
         lon: locAnalysis.lon
       });
-    } catch (err) {
-      setError("Không thể nhận diện địa điểm. Vui lòng thử lại.");
+    } catch (err: any) {
+      const msg = err?.message || String(err);
+      if (msg.includes('403') || msg.includes('leaked') || msg.includes('AUTH')) {
+        setError("⚠️ Key Gemini mặc định đã bị Google vô hiệu hóa vì lý do bảo mật (Leaked Key). Vui lòng nhấp vào đây để đổi sang API Key cá nhân của bạn.");
+      } else {
+        setError("Không thể nhận diện địa điểm. Vui lòng kiểm tra lại kết nối mạng hoặc thử lại.");
+      }
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -41,8 +47,13 @@ const App: React.FC = () => {
       const result = await analyzeWeatherData(pendingInput);
       setAnalysis(result);
       setLocationAnalysis(null); // Hide confirmation after success
-    } catch (err) {
-      setError("Có lỗi xảy ra trong quá trình phân tích lịch trình. Vui lòng thử lại.");
+    } catch (err: any) {
+      const msg = err?.message || String(err);
+      if (msg.includes('403') || msg.includes('leaked') || msg.includes('AUTH')) {
+        setError("⚠️ Key Gemini mặc định đã bị Google vô hiệu hóa vì lý do bảo mật (Leaked Key). Vui lòng nhấp đổi sang API Key cá nhân của bạn.");
+      } else {
+        setError("Có lỗi xảy ra trong quá trình phân tích lịch trình. Vui lòng thử lại.");
+      }
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -74,8 +85,15 @@ const App: React.FC = () => {
         
         <main className="transition-all duration-500 ease-in-out">
           {error && (
-            <div className="max-w-2xl mx-auto bg-red-900/30 border border-red-500 text-red-200 p-4 rounded-lg mb-6 text-center">
-              {error}
+            <div className="max-w-2xl mx-auto bg-red-900/40 border border-red-500 text-red-200 p-5 rounded-2xl mb-6 text-center shadow-xl space-y-3">
+              <p className="font-semibold text-sm leading-relaxed">{error}</p>
+              <button
+                onClick={() => setIsApiKeyModalOpen(true)}
+                className="px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 text-white font-bold text-xs border border-red-400 transition-all shadow-md inline-flex items-center gap-1.5"
+              >
+                <span>🔑</span>
+                <span>Cấu hình API Key Mới Tùy Chỉnh ngay</span>
+              </button>
             </div>
           )}
 
@@ -102,6 +120,12 @@ const App: React.FC = () => {
           <p>© 2026 CloudHunter AI. Dữ liệu mang tính chất tham khảo. Luôn kiểm tra thời tiết thực tế.</p>
         </footer>
       </div>
+
+      <ApiKeyModal
+        isOpen={isApiKeyModalOpen}
+        onClose={() => setIsApiKeyModalOpen(false)}
+        onKeyUpdated={() => window.location.reload()}
+      />
     </div>
   );
 };
