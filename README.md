@@ -18,22 +18,20 @@
   - Tự động gợi ý (Autocomplete) danh sách các đỉnh núi, đèo cao và trạm khí tượng Tây Bắc.
   - Tự động chuẩn hóa tiếng Việt, nhận diện tên viết tắt (`KQS`, `Bạch Mộc`, `Sống lưng khủng long`,...).
   - Tích hợp công cụ định vị tọa độ và xác nhận thông tin địa lý (`LocationConfirm`).
-- 📊 **Mô Hình Khí Tượng 8 Module Thuật Toán**:
-  - **Module 1 (LCL Calculator)**: Tính độ cao đáy mây theo độ ẩm sát đất.
-  - **Module 2 (Wind-Weighted FSI)**: Chỉ số FSI hiệu chỉnh theo hệ số xé mây của gió 850hPa.
-  - **Module 3 (Wind / Moisture Matrix)**: Phân tích cấu trúc ẩm tầng cao (Deep vs. Shallow Moisture).
-  - **Module 4 (Cloud Altimeter & Inversion)**: Phát hiện hiện tượng Nghịch Nhiệt Bức Xạ (Thermal Inversion).
-  - **Module 5 (Boundary Fluctuation Rule)**: Tính độ chênh lệch cao độ $\Delta H$ giữa vị trí người quan sát và mặt mây.
-  - **Module 6 (Topographic Fluid Dynamics)**: Phân loại Zone A (Bồn giữ ẩm - Cloud Trap) và Zone B (Ống gió - Wind Tunnel).
-  - **Module 7 (Seasonal Calibration)**: Hiệu chỉnh điểm số theo mùa (Thu +15, Hè -20).
-  - **Module 8 (Golden Hour Protocol)**: Xác định khung giờ vàng săn mây (04:00 - 09:30).
-- 🏔️ **Trực Quan Hóa Mặt Cắt Địa Hình (Elevation Profile)**:
-  - Biểu đồ SVG tương tác hiển thị độ cao các waypoint (Chân núi $\rightarrow$ Lán nghỉ $\rightarrow$ Đỉnh).
-  - Hiển thị tiềm năng tụ mây và mô tả đặc thù của từng mỏm đá/sống núi.
-- 📆 **Dự Báo Theo Lịch Trình Chi Tiết**:
-  - Chấm điểm săn mây (Score /100) theo từng ngày.
-  - Phân loại trạng thái mây: `STATIC` (Biển mây tĩnh), `FLOWING` (Mây luồn), `CLEAR` (Quang mây), `FOG` (Mù đặc), `DISSIPATING` (Mây tan), `FLUCTUATING` (Mây dâng từng lớp), `ROLLING` (Mây cuộn).
-  - Khuyến nghị trang bị, cảnh báo an toàn và lời khuyên chiến thuật từ chuyên gia.
+- 🎯 **Dự Báo Đa Mô Hình Ensemble (Multi-Model Consensus)**:
+  - Truy vấn và đối chiếu đồng thời mô hình **ECMWF IFS (Châu Âu)**, **GFS (Mỹ)** và **ICON (Đức)** từ Open-Meteo API.
+  - Tính điểm đồng thuận (`ModelConsensusScore`) để đánh giá độ tin cậy của bản tin dự báo (Ví dụ: *🎯 Đa mô hình đồng thuận 94%*).
+- 🌡️ **Chỉ Số Nghịch Nhiệt Bức Xạ Thung Lũng (VRII - Valley Radiation Inversion Index)**:
+  - Thuật toán mới đánh giá bức xạ nhiệt ban đêm, độ rộng điểm sương và lớp mây đè để tính điểm VRII (0-100).
+  - Phân loại độ phẳng và mịn của thảm mây (`Excellent`, `Favorable`, `Moderate`, `Poor`).
+- 🌅 **Bộ Tính Giờ Mặt Trời & Khung Giờ Vàng (Solar & Lighting Engine)**:
+  - Tự động tính chính xác thời điểm **Bình minh (🌄)**, **Hoàng hôn (🌇)** và **Khung giờ vàng chụp ảnh (⭐)** theo vĩ độ/kinh độ và ngày trong năm.
+- 🏔️ **Bộ Mô Phỏng Độ Cao Lán Nghỉ Tương Tác (Dynamic Waypoint Altitude Simulator)**:
+  - Cho phép người dùng nhấp trực tiếp vào bất kỳ mỏm đá/lán nghỉ nào trên đồ thị địa hình (ví dụ: *Lán 2200m*, *Đỉnh 2860m*, *Homestay 1900m*).
+  - Tự động tính lại $\Delta H = H_{\text{vị trí đứng}} - H_{\text{mặt mây}}$ và cập nhật ngay lập tức góc nhìn mây từ đúng độ cao đó theo thời gian thực!
+- 📥 **Xuất File Dữ Liệu Offline (GPX & Text Export)**:
+  - Cho phép xuất file dữ liệu lộ trình `.gpx` tích hợp tọa độ, độ cao và ghi chú dự báo thời tiết để nạp trực tiếp vào các ứng dụng leo núi offline (Gaia GPS, Strava, OsmAnd).
+  - Xuất bản tóm tắt văn bản `.txt` để tra cứu khi mất sóng điện thoại trên núi.
 
 ---
 
