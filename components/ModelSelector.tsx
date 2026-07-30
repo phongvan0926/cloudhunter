@@ -30,7 +30,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
       if (stored && isValidStored) {
         onSelectModel(stored);
       } else if (list.length > 0) {
-        // Safe default: top Flash / Light model (R4)
+        // Safe default: top Flash / Light model
         const defaultCandidate = list.find(m => m.isDefaultCandidate) || list[0];
         onSelectModel(defaultCandidate.id);
         setStoredModel(defaultCandidate.id);
@@ -59,20 +59,20 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   const activeModelObj = models.find(m => m.id === selectedModel);
 
   return (
-    <div className={`bg-slate-900/80 backdrop-blur-md border border-slate-700/80 rounded-2xl p-3.5 shadow-lg ${compact ? 'max-w-md mx-auto' : ''}`}>
-      <div className="flex justify-between items-center mb-2 gap-2">
-        <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+    <div className={`bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 shadow-xl ${compact ? 'max-w-md mx-auto' : ''}`}>
+      <div className="flex justify-between items-center mb-2.5 gap-2">
+        <label className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5 font-sans">
           <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
           </svg>
-          Mô hình AI (Dynamic Discovery)
+          Mô hình AI Phân Tích (Dynamic Discovery)
         </label>
 
         <button
           onClick={fetchModels}
           disabled={loading}
           title="Tải lại danh sách model mới nhất từ nhà cung cấp"
-          className="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded-md border border-slate-600 flex items-center gap-1 transition-all disabled:opacity-50"
+          className="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-600 flex items-center gap-1.5 transition-all font-sans font-medium disabled:opacity-50"
         >
           <span className={loading ? 'animate-spin' : ''}>🔄</span>
           <span>Cập nhật</span>
@@ -80,7 +80,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
       </div>
 
       {authError && (
-        <div className="text-[11px] text-rose-400 bg-rose-950/40 p-2 rounded border border-rose-800/50 mb-2">
+        <div className="text-xs text-rose-400 bg-rose-950/40 p-2.5 rounded-xl border border-rose-800/50 mb-2.5 font-sans">
           {authError}
         </div>
       )}
@@ -90,26 +90,26 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
           value={selectedModel}
           onChange={handleModelChange}
           disabled={loading}
-          className="w-full bg-slate-950 text-slate-100 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-cyan-500 transition-all appearance-none cursor-pointer pr-8"
+          className="w-full bg-slate-950 text-cyan-300 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm font-sans font-semibold focus:outline-none focus:border-cyan-500 transition-all appearance-none cursor-pointer pr-9 shadow-inner"
         >
           {models.map(m => (
-            <option key={m.id} value={m.id}>
-              {m.displayName} [{m.tierLabel}] {m.isDefaultCandidate ? '⭐ Mặc định' : ''}
+            <option key={m.id} value={m.id} className="bg-slate-950 text-slate-100 font-sans text-sm py-1.5">
+              {m.displayName} ({m.tier === 'flash' ? '⚡ Flash' : m.tier === 'pro' ? '🚀 Pro' : m.tier === 'experimental' ? '🧪 Preview' : '🤖 Khác'}) {m.isDefaultCandidate ? '⭐ Mặc định' : ''}
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-cyan-400">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
         </div>
       </div>
 
       {activeModelObj && (
-        <div className="mt-2 text-[10px] text-slate-400 flex justify-between items-center">
-          <span className="truncate max-w-[280px] italic">{activeModelObj.description}</span>
-          <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${
-            activeModelObj.tier === 'flash' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-700' :
-            activeModelObj.tier === 'pro' ? 'bg-purple-950/60 text-purple-300 border-purple-700' :
-            'bg-amber-950/60 text-amber-300 border-amber-700'
+        <div className="mt-2.5 text-xs text-slate-400 flex justify-between items-center font-sans">
+          <span className="truncate max-w-[300px] italic font-light">{activeModelObj.description}</span>
+          <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold border flex items-center gap-1 ${
+            activeModelObj.tier === 'flash' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-700/60' :
+            activeModelObj.tier === 'pro' ? 'bg-purple-950/60 text-purple-300 border-purple-700/60' :
+            'bg-amber-950/60 text-amber-300 border-amber-700/60'
           }`}>
             {activeModelObj.tierLabel}
           </span>

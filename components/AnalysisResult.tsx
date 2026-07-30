@@ -427,15 +427,15 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            <div>
              <h2 className="text-3xl font-black text-white mb-1 tracking-tight">Dự báo: {result.locationName}</h2>
              <div className="flex flex-wrap items-center gap-2">
-                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-900 text-cyan-400 border border-cyan-700">CLOUDHUNTER V4.0</span>
-                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950/80 text-blue-300 border border-blue-700 flex items-center gap-1">
-                   🤖 Executed Model: {result.modelUsed || "Dynamic Discovery"}
+                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-900 text-cyan-300 border border-cyan-700">CLOUDHUNTER V4.0</span>
+                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-950 text-blue-300 border border-blue-600/80 flex items-center gap-1.5 shadow-sm">
+                   🤖 Model phân tích: <span className="text-white font-mono bg-blue-900/60 px-2 py-0.5 rounded border border-blue-400/50">{result.modelUsed || "Gemini 2.5 Flash"}</span>
                  </span>
-                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-900/80 text-purple-300 border border-purple-700 flex items-center gap-1">
+                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-950 text-purple-300 border border-purple-600/80 flex items-center gap-1">
                    🎯 Đồng Thuận Mô Hình: {result.modelConsensusScore || 94}%
                  </span>
-                <p className="text-slate-400 text-xs">Hybrid Algorithm: 8 Modules + Open-Meteo Multi-Model</p>
-             </div>
+                 <p className="text-slate-400 text-xs">Hybrid Algorithm: 8 Modules + Open-Meteo Multi-Model</p>
+              </div>
            </div>
 
            <div className="mt-4 md:mt-0 flex flex-wrap gap-2 items-center">
@@ -480,12 +480,21 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            <p className="text-slate-200 leading-relaxed text-sm font-light">
              {result.overallStrategy}
            </p>
-           {result.modelSpread && (
-             <div className="mt-3 text-xs text-purple-300 font-mono bg-purple-950/40 p-2 rounded border border-purple-800/40 inline-block">
-               ℹ️ {result.modelSpread}
+
+           <div className="mt-4 pt-3 border-t border-slate-700/50 flex flex-wrap justify-between items-center text-xs text-slate-300 gap-2">
+             <div className="flex items-center gap-2">
+               <span className="text-slate-400 font-semibold">🤖 Mô hình AI thực hiện phân tích:</span>
+               <span className="font-bold text-cyan-300 font-mono bg-slate-900 px-2.5 py-1 rounded-lg border border-cyan-500/40 shadow-sm">
+                 {result.modelUsed || "Gemini 2.5 Flash"}
+               </span>
              </div>
-           )}
-        </div>
+             {result.modelSpread && (
+               <span className="text-purple-300 font-mono">
+                 ℹ️ {result.modelSpread}
+               </span>
+             )}
+            </div>
+         </div>
 
         {result.terrain_analysis && (
           <TerrainVisualizer 
