@@ -8,6 +8,14 @@ export interface WeatherInput {
   model?: string;
 }
 
+export interface SunTimes {
+  sunrise: string;
+  sunset: string;
+  goldenHourMorning: string;
+  goldenHourEvening: string;
+  solarElevationMaxDeg?: number;
+}
+
 export interface TechnicalIndices {
   T_surf?: string;
   Td_surf?: string;
@@ -21,6 +29,8 @@ export interface TechnicalIndices {
   moisture_type: 'Deep' | 'Shallow' | 'Unknown';
   inversion_strength?: 'Strong' | 'Moderate' | 'Weak' | 'None' | 'Unknown';
   boundary_status?: string;
+  vrii_score?: number; // Valley Radiation Inversion Index (0-100)
+  vrii_label?: 'Excellent' | 'Favorable' | 'Moderate' | 'Poor';
 }
 
 export interface WeatherAnalysis {
@@ -37,6 +47,7 @@ export interface DailyForecast {
   status_code: 'STATIC' | 'FLOWING' | 'CLEAR' | 'FOG' | 'DISSIPATING' | 'FLUCTUATING' | 'ROLLING' | 'UNKNOWN';
   status_text: string;
   golden_hours?: string;
+  sun_times?: SunTimes;
   recommended_position?: string;
   technical_indices: TechnicalIndices; // Replaces old technical_data
   weather_analysis: WeatherAnalysis;   // New field
@@ -83,6 +94,7 @@ export interface WeatherDataSource {
   lon?: number;
   elevation?: number;
   source: string;
+  models_compared?: string[];
 }
 
 export interface CloudAnalysis {
@@ -94,6 +106,8 @@ export interface CloudAnalysis {
   overallStrategy: string;
   seasonalContext?: string;
   dataReliability?: 'HIGH' | 'MEDIUM' | 'LOW';
+  modelConsensusScore?: number; // 0 - 100% agreement across ECMWF, GFS, ICON
+  modelSpread?: string;
   bestDays: string[]; 
   dailyForecasts: DailyForecast[];
   goldenTips?: string[];
