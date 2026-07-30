@@ -17,6 +17,13 @@ export interface WeatherData {
   model_consensus_score?: number;
 }
 
+function formatDateStr(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 export function computeSunTimes(lat: number, lon: number, dateStr: string): SunTimes {
   const d = new Date(dateStr);
   const dayOfYear = Math.floor((d.getTime() - new Date(d.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
@@ -127,43 +134,65 @@ export async function fetchMountainWeather(
 
   if (!mt) return null;
   
-  // URL API Open-Meteo với multi-model support
-  const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${mt.lat}&longitude=${mt.lon}&elevation=${mt.elevation}&hourly=temperature_2m,dewpoint_2m,surface_pressure&pressure_levels=850hPa,700hPa&hourly=temperature_850hPa,temperature_700hPa,windspeed_850hPa&models=best_match,gfs_seamless,icon_seamless&start_date=${startDate}&end_date=${endDate}`;
+  // URL API Open-Meteo chuẩn xác & ổn định
+  const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${mt.lat}&longitude=${mt.lon}&elevation=${mt.elevation}&hourly=temperature_2m,dewpoint_2m,surface_pressure,temperature_850hPa,temperature_700hPa,windspeed_850hPa&start_date=${startDate}&end_date=${endDate}&timezone=Asia%2FBangkok`;
 
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
     
     if (data.error || !data.hourly) {
-      console.warn("Open-Meteo API Error:", data.reason || "Missing hourly data");
+      console.warn("Open-Meteo API Error:", data.reason || "Missing hourly data", data);
       return null;
     }
     
+    const getArray = (key: string): number[] => {
+      if (!data || !data.hourly) return [];
+      if (Array.isArray(data.hourly[key])) return data.hourly[key];
+      if (Array.isArray(data.hourly[`${key}_best_match`])) return data.hourly[`${key}_best_match`];
+      return [];
+    };
+
+    const times: string[] = data.hourly.time || [];
+    const temps2m = getArray('temperature_2m');
+    const dews2m = getArray('dewpoint_2m');
+    const temps850 = getArray('temperature_850hPa');
+    const temps700 = getArray('temperature_700hPa');
+    const winds850 = getArray('windspeed_850hPa');
+
     const dailyWeather: Record<string, WeatherData> = {};
     
-    let currDate = new Date(startDate);
-    const end = new Date(endDate);
+    // Parse start and end date using YYYY-MM-DD local components to prevent UTC date shifting
+    const startParts = startDate.split('-').map(Number);
+    const endParts = endDate.split('-').map(Number);
+
+    let currDate = new Date(startParts[0], startParts[1] - 1, startParts[2]);
+    const end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
     
     while (currDate <= end) {
-        const dateStr = currDate.toISOString().split('T')[0];
+        const dateStr = formatDateStr(currDate);
         
         // Sample prime cloud-hunting hours: 04:00, 05:00, 06:00, 07:00, 08:00 AM
         const targetHours = ["04:00", "05:00", "06:00", "07:00", "08:00"];
-        const indices = targetHours
-            .map(h => data.hourly.time.findIndex((t: string) => t === `${dateStr}T${h}`))
-            .filter(idx => idx !== -1);
+        const indices: number[] = [];
+
+        for (const h of targetHours) {
+          const prefix = `${dateStr}T${h}`;
+          const foundIdx = times.findIndex((t: string) => t.startsWith(prefix));
+          if (foundIdx !== -1) indices.push(foundIdx);
+        }
         
         if (indices.length > 0) {
-            const temps = indices.map(idx => data.hourly.temperature_2m[idx]).filter(v => v !== null && !isNaN(v));
-            const dews = indices.map(idx => data.hourly.dewpoint_2m[idx]).filter(v => v !== null && !isNaN(v));
-            const temps850 = indices.map(idx => data.hourly.temperature_850hPa[idx]).filter(v => v !== null && !isNaN(v));
-            const temps700 = indices.map(idx => data.hourly.temperature_700hPa[idx]).filter(v => v !== null && !isNaN(v));
-            const winds = indices.map(idx => data.hourly.windspeed_850hPa[idx]).filter(v => v !== null && !isNaN(v));
+            const temps = indices.map(idx => temps2m[idx]).filter(v => v !== undefined && v !== null && !isNaN(v));
+            const dews = indices.map(idx => dews2m[idx]).filter(v => v !== undefined && v !== null && !isNaN(v));
+            const t850s = indices.map(idx => temps850[idx]).filter(v => v !== undefined && v !== null && !isNaN(v));
+            const t700s = indices.map(idx => temps700[idx]).filter(v => v !== undefined && v !== null && !isNaN(v));
+            const winds = indices.map(idx => winds850[idx]).filter(v => v !== undefined && v !== null && !isNaN(v));
 
             const t_surf_avg = temps.length ? Number((temps.reduce((a, b) => a + b, 0) / temps.length).toFixed(1)) : 15;
             const td_surf_avg = dews.length ? Number((dews.reduce((a, b) => a + b, 0) / dews.length).toFixed(1)) : 14;
-            const t_850_avg = temps850.length ? Number((temps850.reduce((a, b) => a + b, 0) / temps850.length).toFixed(1)) : 12;
-            const t_700_avg = temps700.length ? Number((temps700.reduce((a, b) => a + b, 0) / temps700.length).toFixed(1)) : 5;
+            const t_850_avg = t850s.length ? Number((t850s.reduce((a, b) => a + b, 0) / t850s.length).toFixed(1)) : 12;
+            const t_700_avg = t700s.length ? Number((t700s.reduce((a, b) => a + b, 0) / t700s.length).toFixed(1)) : 5;
             const wind_850_max = winds.length ? Number(Math.max(...winds).toFixed(1)) : 8;
 
             // Pre-calculate LCL
@@ -236,7 +265,7 @@ export async function fetchMountainWeather(
       modelsCompared: ["ECMWF IFS (European Center)", "GFS (NOAA USA)", "ICON (DWD Germany)"]
     };
   } catch (error) {
-    console.error("Lỗi lấy dữ liệu thời tiết:", error);
+    console.error("Lỗi lấy dữ liệu thời tiết Open-Meteo:", error);
     return null;
   }
 }
