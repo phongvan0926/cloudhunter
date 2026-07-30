@@ -18,9 +18,13 @@
   - Tự động gợi ý (Autocomplete) danh sách các đỉnh núi, đèo cao và trạm khí tượng Tây Bắc.
   - Tự động chuẩn hóa tiếng Việt, nhận diện tên viết tắt (`KQS`, `Bạch Mộc`, `Sống lưng khủng long`,...).
   - Tích hợp công cụ định vị tọa độ và xác nhận thông tin địa lý (`LocationConfirm`).
-- 🎯 **Dự Báo Đa Mô Hình Ensemble (Multi-Model Consensus)**:
-  - Truy vấn và đối chiếu đồng thời mô hình **ECMWF IFS (Châu Âu)**, **GFS (Mỹ)** và **ICON (Đức)** từ Open-Meteo API.
-  - Tính điểm đồng thuận (`ModelConsensusScore`) để đánh giá độ tin cậy của bản tin dự báo (Ví dụ: *🎯 Đa mô hình đồng thuận 94%*).
+- 🤖 **Khám Phá Model Động & Tự Động Chuyển Lùi (Dynamic AI Discovery & Fallback Engine)**:
+  - **Khám phá động (R1)**: Tự động gọi API nhà cung cấp để khám phá danh sách các model khả dụng trong phiên (lọc bỏ embedding, imagen, tts,...).
+  - **Phân hạng & Sắp xếp (R2)**: Tự động phân loại model nhẹ/tiết kiệm (Flash), cao cấp (Pro), thử nghiệm (Preview) và đưa model Flash lên đầu.
+  - **Ghi nhớ thiết bị (R3)**: Cho phép chọn model bất kỳ và tự động lưu vào `localStorage`.
+  - **Mặc định an toàn (R4)**: Tự động trỏ tới model Flash mới nhất có hạn mức thoáng nhất khi người dùng chưa chọn.
+  - **Tự động lùi model (R5 Fallback)**: Tự động lùi sang model dự phòng tiếp theo khi gặp lỗi `429 Rate Limit`, `404 Deprecated` hoặc `5xx Server Error`. Tự động ngắt ngay lập tức khi sai Key (`401/403`). Không tự động gọi model trả phí ngoài ý muốn.
+  - **Minh bạch (R6)**: Hiển thị nhãn công khai model thực tế đã phản hồi bản tin.
 - 🌡️ **Chỉ Số Nghịch Nhiệt Bức Xạ Thung Lũng (VRII - Valley Radiation Inversion Index)**:
   - Thuật toán mới đánh giá bức xạ nhiệt ban đêm, độ rộng điểm sương và lớp mây đè để tính điểm VRII (0-100).
   - Phân loại độ phẳng và mịn của thảm mây (`Excellent`, `Favorable`, `Moderate`, `Poor`).

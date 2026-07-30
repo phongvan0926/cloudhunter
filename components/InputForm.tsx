@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { WeatherInput, PeakPreset } from '../types';
 import { NORTHWEST_PEAKS } from '../constants';
 import { MOUNTAIN_DB } from '../constants/mountains';
+import { ModelSelector } from './ModelSelector';
 
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371; // Radius of the earth in km
@@ -245,27 +246,12 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
         </div>
 
         {/* AI Model Selection */}
-        <div className="space-y-2">
-          <label className="block text-slate-400 text-sm">🤖 Mô hình AI (AI Model)</label>
-          <div className="relative">
-            <select
-              name="model"
-              value={formData.model}
-              onChange={handleChange}
-              className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-100 focus:ring-2 focus:ring-cyan-500 outline-none appearance-none cursor-pointer"
-            >
-              <option value="gemini-3.5-flash">Gemini 3.5 Flash (Mới nhất, cực kỳ tối ưu & phân tích cực chuẩn)</option>
-              <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Phân tích chuyên sâu)</option>
-              <option value="gemini-3-flash-preview">Gemini 3.0 Flash (Nhanh, cơ bản)</option>
-              <option value="gemini-3.1-flash-lite-preview">Gemini 3.1 Flash Lite (Tiết kiệm Quota)</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-            </div>
-          </div>
-          <p className="text-xs text-slate-500 italic">
-            * Nếu bị lỗi hết Quota (429), hãy chuyển sang mô hình Flash hoặc Flash Lite.
-          </p>
+        {/* Dynamic AI Model Selector (R1-R5) */}
+        <div>
+          <ModelSelector 
+            selectedModel={formData.model} 
+            onSelectModel={(modelId) => setFormData(prev => ({ ...prev, model: modelId }))} 
+          />
         </div>
 
         {/* Observer Altitude */}

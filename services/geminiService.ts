@@ -3,6 +3,7 @@ import { WeatherInput, CloudAnalysis, LocationAnalysis } from "../types";
 import { NORTHWEST_PEAKS } from '../constants';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { fetchMountainWeather, WeatherData } from './weatherService';
+import { discoverModels, executeWithFallback, getStoredModel } from './modelDiscoveryService';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -41,7 +42,6 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
     is_known_peak = true;
   }
 
-  // Find exact coordinates and info in MOUNTAIN_DB
   let matchedMt = null;
   for (const [_, mt] of Object.entries(MOUNTAIN_DB)) {
     const normMtName = removeVietnameseTones(mt.name);
@@ -57,7 +57,6 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
     }
   }
 
-  // If it's a known mountain preset in our database, return immediately to save quota and ensure HIGH confidence!
   if (knownPeak && matchedMt) {
     return {
       name: knownPeak.name,
@@ -81,38 +80,46 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
   `;
 
   try {
-    const fetchPromise = ai.models.generateContent({
-      model: model || "gemini-3.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            name: { type: Type.STRING, description: "Tên chuẩn của địa điểm" },
-            province: { type: Type.STRING, description: "Tỉnh thành" },
-            estimated_elevation: { type: Type.NUMBER, description: "Độ cao ước tính (mét)" },
-            description: { type: Type.STRING, description: "Mô tả ngắn gọn về địa hình và đặc điểm săn mây" },
-            confidence: { type: Type.STRING, enum: ["HIGH", "MEDIUM", "LOW"] },
-            suggested_observer_alt: { type: Type.NUMBER, description: "Độ cao lý tưởng để đứng săn mây" },
-            lat: { type: Type.NUMBER, description: "Vĩ độ (Latitude)" },
-            lon: { type: Type.NUMBER, description: "Kinh độ (Longitude)" }
-          },
-          required: ["name", "province", "estimated_elevation", "description", "confidence", "suggested_observer_alt", "lat", "lon"]
+    const discovered = await discoverModels();
+    const primaryModel = model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
+
+    const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
+      const fetchPromise = ai.models.generateContent({
+        model: modelId,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              name: { type: Type.STRING, description: "Tên chuẩn của địa điểm" },
+              province: { type: Type.STRING, description: "Tỉnh thành" },
+              estimated_elevation: { type: Type.NUMBER, description: "Độ cao ước tính (mét)" },
+              description: { type: Type.STRING, description: "Mô tả ngắn gọn về địa hình và đặc điểm săn mây" },
+              confidence: { type: Type.STRING, enum: ["HIGH", "MEDIUM", "LOW"] },
+              suggested_observer_alt: { type: Type.NUMBER, description: "Độ cao lý tưởng để đứng săn mây" },
+              lat: { type: Type.NUMBER, description: "Vĩ độ (Latitude)" },
+              lon: { type: Type.NUMBER, description: "Kinh độ (Longitude)" }
+            },
+            required: ["name", "province", "estimated_elevation", "description", "confidence", "suggested_observer_alt", "lat", "lon"]
+          }
         }
-      }
+      });
+
+      const timeoutPromise = new Promise<any>((_, reject) => {
+        setTimeout(() => reject(new Error("Gemini API Timeout after 30s")), 30000);
+      });
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+      if (response && response.text) return response;
+      throw new Error("No response text");
     });
 
-    const timeoutPromise = new Promise<any>((_, reject) => {
-      setTimeout(() => reject(new Error("Gemini API Timeout after 30s")), 30000);
-    });
-
-    const response = await Promise.race([fetchPromise, timeoutPromise]);
+    const response = fallbackRes.result;
 
     if (response.text) {
       let jsonStr = response.text.trim();
       
-      // Extract JSON block if it's wrapped in markdown
       const jsonMatch = jsonStr.match(/```json\r?\n([\s\S]*?)\r?\n```/);
       if (jsonMatch) {
         jsonStr = jsonMatch[1].trim();
@@ -121,7 +128,6 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
         if (genericMatch) {
           jsonStr = genericMatch[1].trim();
         } else {
-          // Fallback: extract from first { to last }
           const startIdx = jsonStr.indexOf('{');
           const endIdx = jsonStr.lastIndexOf('}');
           if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
@@ -482,121 +488,130 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
   `;
 
   try {
-    const fetchPromise = ai.models.generateContent({
-      model: data.model || "gemini-3.5-flash",
-      contents: prompt,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            locationName: { type: Type.STRING },
-            province: { type: Type.STRING },
-            elevation: { type: Type.NUMBER },
-            zoneType: { type: Type.STRING },
-            overallScore: { type: Type.NUMBER },
-            overallStrategy: { type: Type.STRING },
-            seasonalContext: { type: Type.STRING },
-            dataReliability: { type: Type.STRING, enum: ["HIGH", "MEDIUM", "LOW"] },
-            modelConsensusScore: { type: Type.NUMBER },
-            modelSpread: { type: Type.STRING },
-            bestDays: { type: Type.ARRAY, items: { type: Type.STRING } },
-            goldenTips: { type: Type.ARRAY, items: { type: Type.STRING } },
-            safetyWarnings: { type: Type.ARRAY, items: { type: Type.STRING } },
-            terrain_analysis: {
-              type: Type.OBJECT,
-              properties: {
-                source: { type: Type.STRING, enum: ["HARDCODED", "RESEARCHED"] },
-                summary: { type: Type.STRING },
-                cloud_trap_potential: { type: Type.STRING, enum: ["High", "Medium", "Low"] },
-                zone_classification: { type: Type.STRING },
-                topographic_notes: { type: Type.STRING },
-                elevation_profile: {
-                  type: Type.ARRAY,
-                  items: {
-                    type: Type.OBJECT,
-                    properties: {
-                      label: { type: Type.STRING },
-                      altitude: { type: Type.NUMBER },
-                      type: { type: Type.STRING, enum: ["VALLEY", "SLOPE", "PEAK", "RIDGE"] },
-                      description: { type: Type.STRING }
-                    },
-                    required: ["label", "altitude", "type"]
-                  }
-                }
-              },
-              required: ["source", "summary", "cloud_trap_potential", "elevation_profile"]
-            },
-            dailyForecasts: {
-              type: Type.ARRAY,
-              items: {
+    const discovered = await discoverModels();
+    const primaryModel = data.model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
+
+    const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
+      const fetchPromise = ai.models.generateContent({
+        model: modelId,
+        contents: prompt,
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              locationName: { type: Type.STRING },
+              province: { type: Type.STRING },
+              elevation: { type: Type.NUMBER },
+              zoneType: { type: Type.STRING },
+              overallScore: { type: Type.NUMBER },
+              overallStrategy: { type: Type.STRING },
+              seasonalContext: { type: Type.STRING },
+              dataReliability: { type: Type.STRING, enum: ["HIGH", "MEDIUM", "LOW"] },
+              modelConsensusScore: { type: Type.NUMBER },
+              modelSpread: { type: Type.STRING },
+              bestDays: { type: Type.ARRAY, items: { type: Type.STRING } },
+              goldenTips: { type: Type.ARRAY, items: { type: Type.STRING } },
+              safetyWarnings: { type: Type.ARRAY, items: { type: Type.STRING } },
+              terrain_analysis: {
                 type: Type.OBJECT,
                 properties: {
-                  date: { type: Type.STRING },
-                  dayOfWeek: { type: Type.STRING },
-                  score: { type: Type.NUMBER },
-                  status_code: { type: Type.STRING, enum: ["STATIC", "FLOWING", "CLEAR", "FOG", "DISSIPATING", "FLUCTUATING", "ROLLING", "UNKNOWN"] },
-                  status_text: { type: Type.STRING },
-                  golden_hours: { type: Type.STRING },
-                  recommended_position: { type: Type.STRING },
-                  technical_indices: { 
-                    type: Type.OBJECT,
-                    properties: {
-                      T_surf: { type: Type.STRING },
-                      Td_surf: { type: Type.STRING },
-                      T_850: { type: Type.STRING },
-                      T_700: { type: Type.STRING },
-                      LCL_base: { type: Type.STRING },
-                      FSI_score: { type: Type.NUMBER },
-                      cloud_top_estimated: { type: Type.STRING },
-                      wind_impact_level: { type: Type.STRING, enum: ["Low", "Medium", "High", "Destructive", "Unknown"] },
-                      wind_detail: { type: Type.STRING },
-                      moisture_type: { type: Type.STRING, enum: ["Deep", "Shallow", "Unknown"] },
-                      inversion_strength: { type: Type.STRING, enum: ["Strong", "Moderate", "Weak", "None", "Unknown"] },
-                      boundary_status: { type: Type.STRING },
-                      vrii_score: { type: Type.NUMBER },
-                      vrii_label: { type: Type.STRING, enum: ["Excellent", "Favorable", "Moderate", "Poor"] }
-                    },
-                    required: ["LCL_base", "FSI_score", "cloud_top_estimated", "wind_impact_level", "moisture_type"]
-                  },
-                  weather_analysis: {
-                    type: Type.OBJECT,
-                    properties: {
-                      general: { type: Type.STRING },
-                      cloud_behavior: { type: Type.STRING },
-                      topography_effect: { type: Type.STRING },
-                      risk_factors: { type: Type.STRING }
-                    },
-                    required: ["general", "cloud_behavior", "topography_effect"]
-                  },
-                  expert_advice: { type: Type.STRING },
-                  weather_summary: {
-                    type: Type.OBJECT,
-                    properties: {
-                      temp: { type: Type.STRING },
-                      humidity: { type: Type.STRING },
-                      wind: { type: Type.STRING },
-                      pressure: { type: Type.STRING }
-                    },
-                    required: ["temp", "humidity", "wind"]
+                  source: { type: Type.STRING, enum: ["HARDCODED", "RESEARCHED"] },
+                  summary: { type: Type.STRING },
+                  cloud_trap_potential: { type: Type.STRING, enum: ["High", "Medium", "Low"] },
+                  zone_classification: { type: Type.STRING },
+                  topographic_notes: { type: Type.STRING },
+                  elevation_profile: {
+                    type: Type.ARRAY,
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        label: { type: Type.STRING },
+                        altitude: { type: Type.NUMBER },
+                        type: { type: Type.STRING, enum: ["VALLEY", "SLOPE", "PEAK", "RIDGE"] },
+                        description: { type: Type.STRING }
+                      },
+                      required: ["label", "altitude", "type"]
+                    }
                   }
                 },
-                required: ["date", "score", "status_code", "status_text", "technical_indices", "weather_analysis", "expert_advice", "weather_summary"]
-              }
+                required: ["source", "summary", "cloud_trap_potential", "elevation_profile"]
+              },
+              dailyForecasts: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    date: { type: Type.STRING },
+                    dayOfWeek: { type: Type.STRING },
+                    score: { type: Type.NUMBER },
+                    status_code: { type: Type.STRING, enum: ["STATIC", "FLOWING", "CLEAR", "FOG", "DISSIPATING", "FLUCTUATING", "ROLLING", "UNKNOWN"] },
+                    status_text: { type: Type.STRING },
+                    golden_hours: { type: Type.STRING },
+                    recommended_position: { type: Type.STRING },
+                    technical_indices: { 
+                      type: Type.OBJECT,
+                      properties: {
+                        T_surf: { type: Type.STRING },
+                        Td_surf: { type: Type.STRING },
+                        T_850: { type: Type.STRING },
+                        T_700: { type: Type.STRING },
+                        LCL_base: { type: Type.STRING },
+                        FSI_score: { type: Type.NUMBER },
+                        cloud_top_estimated: { type: Type.STRING },
+                        wind_impact_level: { type: Type.STRING, enum: ["Low", "Medium", "High", "Destructive", "Unknown"] },
+                        wind_detail: { type: Type.STRING },
+                        moisture_type: { type: Type.STRING, enum: ["Deep", "Shallow", "Unknown"] },
+                        inversion_strength: { type: Type.STRING, enum: ["Strong", "Moderate", "Weak", "None", "Unknown"] },
+                        boundary_status: { type: Type.STRING },
+                        vrii_score: { type: Type.NUMBER },
+                        vrii_label: { type: Type.STRING, enum: ["Excellent", "Favorable", "Moderate", "Poor"] }
+                      },
+                      required: ["LCL_base", "FSI_score", "cloud_top_estimated", "wind_impact_level", "moisture_type"]
+                    },
+                    weather_analysis: {
+                      type: Type.OBJECT,
+                      properties: {
+                        general: { type: Type.STRING },
+                        cloud_behavior: { type: Type.STRING },
+                        topography_effect: { type: Type.STRING },
+                        risk_factors: { type: Type.STRING }
+                      },
+                      required: ["general", "cloud_behavior", "topography_effect"]
+                    },
+                    expert_advice: { type: Type.STRING },
+                    weather_summary: {
+                      type: Type.OBJECT,
+                      properties: {
+                        temp: { type: Type.STRING },
+                        humidity: { type: Type.STRING },
+                        wind: { type: Type.STRING },
+                        pressure: { type: Type.STRING }
+                      },
+                      required: ["temp", "humidity", "wind"]
+                    }
+                  },
+                  required: ["date", "score", "status_code", "status_text", "technical_indices", "weather_analysis", "expert_advice", "weather_summary"]
+                }
+              },
+              gearChecklist: { type: Type.ARRAY, items: { type: Type.STRING } }
             },
-            gearChecklist: { type: Type.ARRAY, items: { type: Type.STRING } }
-          },
-          required: ["locationName", "dailyForecasts", "bestDays", "overallStrategy", "gearChecklist", "terrain_analysis"]
+            required: ["locationName", "dailyForecasts", "bestDays", "overallStrategy", "gearChecklist", "terrain_analysis"]
+          }
         }
-      }
+      });
+
+      const timeoutPromise = new Promise<any>((_, reject) => {
+        setTimeout(() => reject(new Error("Gemini API Timeout after 90s")), 90000);
+      });
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+      if (response && response.text) return response;
+      throw new Error("No response text");
     });
 
-    const timeoutPromise = new Promise<any>((_, reject) => {
-      setTimeout(() => reject(new Error("Gemini API Timeout after 90s")), 90000);
-    });
-
-    const response = await Promise.race([fetchPromise, timeoutPromise]);
+    const response = fallbackRes.result;
 
     if (response.text) {
       let jsonStr = response.text.trim();
@@ -647,7 +662,7 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
         ...analysis, 
         sources, 
         weather_data_source: weatherDataSourceInfo, 
-        modelUsed: data.model || "gemini-3.5-flash",
+        modelUsed: fallbackRes.modelUsed, // Transparent R6!
         modelConsensusScore: analysis.modelConsensusScore || 94,
         modelSpread: analysis.modelSpread || "ECMWF (9km) & GFS (13km) & ICON (7km) đạt độ đồng thuận 94%"
       };

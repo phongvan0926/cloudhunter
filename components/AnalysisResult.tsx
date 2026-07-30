@@ -427,10 +427,13 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            <div>
              <h2 className="text-3xl font-black text-white mb-1 tracking-tight">Dự báo: {result.locationName}</h2>
              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-900 text-cyan-400 border border-cyan-700">CLOUDHUNTER V4.0</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-900/80 text-purple-300 border border-purple-700 flex items-center gap-1">
-                  🎯 Đồng Thuận Mô Hình: {result.modelConsensusScore || 94}%
-                </span>
+                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-900 text-cyan-400 border border-cyan-700">CLOUDHUNTER V4.0</span>
+                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950/80 text-blue-300 border border-blue-700 flex items-center gap-1">
+                   🤖 Executed Model: {result.modelUsed || "Dynamic Discovery"}
+                 </span>
+                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-900/80 text-purple-300 border border-purple-700 flex items-center gap-1">
+                   🎯 Đồng Thuận Mô Hình: {result.modelConsensusScore || 94}%
+                 </span>
                 <p className="text-slate-400 text-xs">Hybrid Algorithm: 8 Modules + Open-Meteo Multi-Model</p>
              </div>
            </div>
