@@ -30,20 +30,20 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
   { 
     name: 'Hang Kia - Pà Cò', 
     altitude: 1200, 
-    province: 'Sơn La',
-    aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình'],
+    province: 'Sơn La / Hòa Bình',
+    aliases: ['hang kia', 'pa co', 'pa cò', 'hang kia pa co', 'mai chau', 'mai châu'],
     elevation_profile: [
-      { label: 'QL6', altitude: 800, type: 'VALLEY', description: 'Đường quốc lộ huyết mạch' },
+      { label: 'QL6 Mai Châu', altitude: 800, type: 'VALLEY', description: 'Đường quốc lộ huyết mạch' },
       { label: 'Dốc Cun', altitude: 1000, type: 'SLOPE', description: 'Dốc đá trắng hiểm trở, sương mù dày' },
-      { label: 'Thung lũng Kia', altitude: 1100, type: 'VALLEY', description: 'Thung lũng trồng mận, đào' },
-      { label: 'Cổng Trời', altitude: 1200, type: 'PEAK', description: 'Điểm săn mây view toàn cảnh thung lũng' }
+      { label: 'Thung lũng Pà Cò', altitude: 1100, type: 'VALLEY', description: 'Thung lũng trồng mận, đào' },
+      { label: 'Cổng Trời Hang Kia', altitude: 1200, type: 'PEAK', description: 'Điểm săn mây view toàn cảnh thung lũng' }
     ]
   },
   { 
     name: 'Xím Vàng', 
     altitude: 1500, 
     province: 'Sơn La',
-    aliases: ['xim vang', 'ruong bac thang', 'xím vàng', 'bắc yên'],
+    aliases: ['xim vang', 'ruong bac thang xim vang', 'xím vàng'],
     elevation_profile: [
       { label: 'Ngã 3 Tà Xùa', altitude: 1500, type: 'RIDGE', description: 'Nút giao thông chính trên cao' },
       { label: 'Sườn Xím Vàng', altitude: 1300, type: 'SLOPE', description: 'Ruộng bậc thang trải dài theo sườn núi' },
@@ -55,7 +55,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     name: 'Pu Nhi Farm', 
     altitude: 700, 
     province: 'Sơn La',
-    aliases: ['pu nhi', 'pu nhi farm', 'bắc yên', 'đồi pu nhi'],
+    aliases: ['pu nhi', 'pu nhi farm', 'đồi pu nhi'],
     elevation_profile: [
       { label: 'TT. Bắc Yên', altitude: 300, type: 'VALLEY', description: 'Trung tâm huyện' },
       { label: 'Đồi Pu Nhi', altitude: 700, type: 'PEAK', description: 'Đồi cỏ rộng, view thung lũng mây' }
@@ -65,7 +65,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     name: 'Đỉnh U Bò', 
     altitude: 1500, 
     province: 'Sơn La',
-    aliases: ['u bò', 'đỉnh u bò', 'bắc yên', 'tà xùa'],
+    aliases: ['u bò', 'đỉnh u bò', 'u bo'],
     elevation_profile: [
       { label: 'Ngã 3 Tà Xùa', altitude: 1500, type: 'RIDGE', description: 'Nút giao thông chính trên cao' },
       { label: 'Đỉnh U Bò', altitude: 1500, type: 'PEAK', description: 'Điểm ngắm hoàng hôn và biển mây' }
@@ -77,7 +77,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     name: 'Fansipan (Nóc nhà Đông Dương)', 
     altitude: 3143, 
     province: 'Lào Cai',
-    aliases: ['fansipan', 'phan xi pang', 'phanxipang', 'hoang lien son', 'nóc nhà đông dương', 'sapa', 'phan'],
+    aliases: ['fansipan', 'phan xi pang', 'phanxipang', 'hoang lien son', 'nóc nhà đông dương', 'đỉnh fansipan'],
     elevation_profile: [
       { label: 'Trạm Tôn', altitude: 1900, type: 'VALLEY', description: 'Cửa rừng VQG Hoàng Liên, đèo Ô Quy Hồ' },
       { label: 'Lán 2200m', altitude: 2200, type: 'SLOPE', description: 'Điểm nghỉ chân đầu tiên, rừng già' },
@@ -89,36 +89,60 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     name: 'Lảo Thẩn (Y Tý)', 
     altitude: 2860, 
     province: 'Lào Cai',
-    aliases: ['lao than', 'y ty', 'hau thao', 'lảo thẩn', 'mây y tý', 'đỉnh nhọn', 'y tý'],
+    aliases: ['lao than', 'lảo thẩn', 'đỉnh lảo thẩn', 'mây lảo thẩn', 'đỉnh nhọn y tý'],
     elevation_profile: [
-      { label: 'Chân núi', altitude: 1800, type: 'VALLEY', description: 'Trang trại rau Phìn Hồ, đường đất đỏ' },
+      { label: 'Chân núi Phìn Hồ', altitude: 1800, type: 'VALLEY', description: 'Trang trại rau Phìn Hồ, đường đất đỏ' },
       { label: 'Đồi cỏ cháy', altitude: 2200, type: 'SLOPE', description: 'Đồi cỏ vàng rực nắng, cây khô cô đơn' },
-      { label: 'Lán A Hờ', altitude: 2560, type: 'RIDGE', description: 'Hang đá & Lán nghỉ view biển mây trực diện' },
-      { label: 'Đỉnh Lảo Thẩn', altitude: 2860, type: 'PEAK', description: 'Chóp inox, view Hoàng Liên Sơn' }
+      { label: 'Lán A Hờ (2560m)', altitude: 2560, type: 'RIDGE', description: 'Hang đá & Lán nghỉ view biển mây trực diện' },
+      { label: 'Đỉnh Lảo Thẩn', altitude: 2860, type: 'PEAK', description: 'Chóp inox 2860m, view dãy Hoàng Liên Sơn' }
+    ]
+  },
+  { 
+    name: 'Ngải Thầu Thượng (Y Tý)', 
+    altitude: 2100, 
+    province: 'Lào Cai',
+    aliases: ['ngải thầu', 'ngải thầu thượng', 'ngai thau', 'ngai thau thuong', 'cổng trời ngải thầu'],
+    elevation_profile: [
+      { label: 'Thung lũng Thề Pả', altitude: 1500, type: 'VALLEY', description: 'Thung lũng ruộng bậc thang di tích quốc gia' },
+      { label: 'Cổng Trời Ngải Thầu', altitude: 1900, type: 'SLOPE', description: 'Điểm đón luồng mây từ thung lũng tràn qua đèo' },
+      { label: 'Lán ngắm mây', altitude: 2050, type: 'RIDGE', description: 'Khu vực homestay và điểm cắm trại săn mây' },
+      { label: 'Đỉnh Ngải Thầu Thượng', altitude: 2100, type: 'PEAK', description: 'Bản làng cao nhất Việt Nam, biển mây bồng bềnh' }
+    ]
+  },
+  { 
+    name: 'Đỉnh Cú Nhù San', 
+    altitude: 2662, 
+    province: 'Lào Cai',
+    aliases: ['cú nhù san', 'cu nhu san', 'núi cú nhù san'],
+    elevation_profile: [
+      { label: 'Bản Sàng Ma Sáo', altitude: 1200, type: 'VALLEY', description: 'Chân núi, ruộng bậc thang' },
+      { label: 'Rừng chè cổ', altitude: 1900, type: 'SLOPE', description: 'Rừng cây gỗ lớn, nhiều rêu' },
+      { label: 'Lán Cú Nhù San', altitude: 2300, type: 'RIDGE', description: 'Khu vực cắm trại lưng chừng núi' },
+      { label: 'Đỉnh Cú Nhù San', altitude: 2662, type: 'PEAK', description: 'Đỉnh núi hoang sơ, view mây tuyệt đẹp' }
     ]
   },
   { 
     name: 'Ky Quan San (Bạch Mộc Lương Tử)', 
     altitude: 3046, 
     province: 'Lào Cai',
-    aliases: ['ky quan san', 'bach moc luong tu', 'bach moc', 'sang ma sao', 'bạch mộc', 'muối', 'kqs', 'bach moc lao cai'],
+    aliases: ['ky quan san', 'bach moc luong tu', 'bach moc', 'sang ma sao', 'bạch mộc', 'núi muối', 'kqs', 'bach moc lao cai'],
     elevation_profile: [
       { label: 'Sàng Ma Sáo', altitude: 900, type: 'VALLEY', description: 'Bản người Mông chân núi, ruộng bậc thang' },
-      { label: 'Núi Muối', altitude: 2100, type: 'RIDGE', description: 'Điểm ngắm bình minh/biển mây đẹp nhất hành trình' },
-      { label: 'Sống lưng', altitude: 2800, type: 'RIDGE', description: 'Sống lưng khủng long hiểm trở, gió tạt mạnh' },
-      { label: 'Đỉnh KQS', altitude: 3046, type: 'PEAK', description: 'Đỉnh cao thứ 4 VN, view 360 độ' }
+      { label: 'Lán Núi Muối (2100m)', altitude: 2100, type: 'RIDGE', description: 'Điểm ngắm bình minh và biển mây đẹp nhất hành trình' },
+      { label: 'Sống lưng Khủng Long', altitude: 2800, type: 'RIDGE', description: 'Sống lưng mỏng hiểm trở, gió tạt mạnh' },
+      { label: 'Đỉnh Ky Quan San', altitude: 3046, type: 'PEAK', description: 'Đỉnh cao thứ 4 Việt Nam, view 360 độ toàn cảnh' }
     ]
   },
   { 
     name: 'Nhìu Cồ San (Sừng Trâu)', 
     altitude: 2965, 
     province: 'Lào Cai',
-    aliases: ['nhiu co san', 'sung trau', 'trinh tuong', 'nhìu cồ san', 'nhiu cồ san'],
+    aliases: ['nhiu co san', 'sung trau', 'nhìu cồ san', 'nhiu cồ san', 'đỉnh sừng trâu'],
     elevation_profile: [
       { label: 'Bản Nhìu Cồ San', altitude: 1000, type: 'VALLEY', description: 'Bản có đường đá cổ Pavi, mùa hoa đào' },
       { label: 'Thác Ong Chúa', altitude: 1600, type: 'SLOPE', description: 'Thác nước hùng vĩ nhất vùng Tây Bắc' },
-      { label: 'Bãi thả dê', altitude: 2400, type: 'RIDGE', description: 'Đồng cỏ trên núi cao, view thoáng' },
-      { label: 'Đỉnh Nhìu Cồ San', altitude: 2965, type: 'PEAK', description: 'Hai đỉnh núi kề nhau như sừng trâu' }
+      { label: 'Bãi thả dê (2400m)', altitude: 2400, type: 'RIDGE', description: 'Đồng cỏ trên núi cao, view thoáng đãng' },
+      { label: 'Đỉnh Nhìu Cồ San', altitude: 2965, type: 'PEAK', description: 'Hai đỉnh núi kề nhau như sừng trâu vươn trên mây' }
     ]
   },
   { 
@@ -128,119 +152,128 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     aliases: ['ngu chi son', 'ban tay phat', 'ngũ chỉ sơn', 'tả giàng phình'],
     elevation_profile: [
       { label: 'Tả Giàng Phình', altitude: 1200, type: 'VALLEY', description: 'Thung lũng lúa vàng, bản làng yên bình' },
-      { label: 'Khe Núi', altitude: 2000, type: 'SLOPE', description: 'Rừng trúc rậm rạp, suối nhỏ' },
-      { label: 'Vách Đá', altitude: 2600, type: 'RIDGE', description: 'Vách đá dựng đứng 90 độ cần leo thang' },
-      { label: 'Đỉnh Ngũ Chỉ', altitude: 2858, type: 'PEAK', description: 'View 5 ngón tay Phật hùng vĩ' }
+      { label: 'Khe Núi Rừng Trúc', altitude: 2000, type: 'SLOPE', description: 'Rừng trúc rậm rạp, suối nhỏ' },
+      { label: 'Vách Đá Thang Dây', altitude: 2600, type: 'RIDGE', description: 'Vách đá dựng đứng 90 độ cần leo thang' },
+      { label: 'Đỉnh Ngũ Chỉ Sơn', altitude: 2858, type: 'PEAK', description: 'View 5 ngón tay Phật hùng vĩ trên biển mây' }
     ]
   },
   { 
     name: 'Thị trấn Sapa (Hàm Rồng)', 
     altitude: 1600, 
     province: 'Lào Cai',
-    aliases: ['sapa', 'sa pa', 'ham rong', 'hàm rồng', 'sân mây', 'thị trấn mờ sương'],
+    aliases: ['thị trấn sapa', 'sa pa', 'ham rong', 'hàm rồng', 'sân mây sapa', 'thị trấn mờ sương'],
     elevation_profile: [
-      { label: 'Lào Cai', altitude: 300, type: 'VALLEY', description: 'Thành phố biên giới, sông Hồng' },
-      { label: 'Cốc San', altitude: 800, type: 'SLOPE', description: 'Ruộng bậc thang dọc QL4D' },
-      { label: 'TT. Sapa', altitude: 1600, type: 'RIDGE', description: 'Trung tâm du lịch, nhà thờ đá' },
-      { label: 'Hàm Rồng', altitude: 1800, type: 'PEAK', description: 'Vườn hoa & Sân mây ngắm toàn cảnh' }
-    ]
-  },
-  { 
-    name: 'Ngải Thầu Thượng (Y Tý)', 
-    altitude: 2100, 
-    province: 'Lào Cai',
-    aliases: ['ngải thầu', 'ngải thầu thượng', 'y tý', 'bát xát', 'ngai thau'],
-    elevation_profile: [
-      { label: 'Y Tý', altitude: 1900, type: 'VALLEY', description: 'Trung tâm xã Y Tý' },
-      { label: 'Ngải Thầu', altitude: 2100, type: 'PEAK', description: 'Bản cao nhất Việt Nam, biển mây bồng bềnh' }
-    ]
-  },
-  { 
-    name: 'Đỉnh Cú Nhù San', 
-    altitude: 2662, 
-    province: 'Lào Cai',
-    aliases: ['cú nhù san', 'cu nhu san', 'y tý'],
-    elevation_profile: [
-      { label: 'Y Tý', altitude: 1900, type: 'VALLEY', description: 'Trung tâm xã Y Tý' },
-      { label: 'Đỉnh Cú Nhù San', altitude: 2662, type: 'PEAK', description: 'Đỉnh núi hoang sơ, view mây tuyệt đẹp' }
-    ]
-  },
-  { 
-    name: 'Nam Kang Ho Tao', 
-    altitude: 2881, 
-    province: 'Lào Cai',
-    aliases: ['nam kang ho tao', 'nam kang', 'nậm cang'],
-    elevation_profile: [
-      { label: 'Bản Nậm Cang', altitude: 800, type: 'VALLEY', description: 'Bản người Dao Đỏ' },
-      { label: 'Đỉnh Nam Kang', altitude: 2881, type: 'PEAK', description: 'Cung trekking khắc nghiệt nhất Tây Bắc' }
+      { label: 'Thung lũng Mường Hoa', altitude: 1200, type: 'VALLEY', description: 'Ruộng bậc thang Mường Hoa' },
+      { label: 'TT. Sapa', altitude: 1600, type: 'SLOPE', description: 'Trung tâm du lịch, nhà thờ đá' },
+      { label: 'Đỉnh Hàm Rồng', altitude: 1800, type: 'PEAK', description: 'Sân Mây ngắm toàn cảnh Fansipan và thung lũng' }
     ]
   },
   { 
     name: 'Bản Hang Đá (Sapa)', 
     altitude: 1800, 
     province: 'Lào Cai',
-    aliases: ['hang đá', 'bản hang đá', 'sapa', 'hầu thào'],
+    aliases: ['hang đá', 'bản hang đá', 'hang da sapa', 'hầu thào'],
     elevation_profile: [
-      { label: 'Sapa', altitude: 1500, type: 'VALLEY', description: 'Thị trấn Sapa' },
-      { label: 'Bản Hang Đá', altitude: 1800, type: 'PEAK', description: 'Điểm săn mây hoang sơ ít người biết' }
+      { label: 'Thung lũng Mường Hoa', altitude: 1300, type: 'VALLEY', description: 'Chân núi, ruộng bậc thang' },
+      { label: 'Sườn Hầu Thào', altitude: 1600, type: 'SLOPE', description: 'Đường mòn ven sườn núi' },
+      { label: 'Bản Hang Đá', altitude: 1800, type: 'PEAK', description: 'Điểm săn mây hoang sơ nhìn thẳng xuống biển mây' }
     ]
   },
 
   // --- YÊN BÁI ---
   { 
-    name: 'Tà Xùa (Phu Sa Phìn - Yên Bái)', 
-    altitude: 2865, 
-    province: 'Yên Bái',
-    aliases: ['ta xua trek', 'tram tau', 'phu sa phin', 'trạm tấu', 'tà xùa yên bái', 'ta xua yen bai'],
-    elevation_profile: [
-      { label: 'Bản Công', altitude: 1200, type: 'VALLEY', description: 'Bản người Thái, điểm xuất phát trekking' },
-      { label: 'Đồi Cổ Rùa', altitude: 2100, type: 'RIDGE', description: 'Mỏm đá hình đầu rùa check-in nổi tiếng' },
-      { label: 'Sống Lưng', altitude: 2400, type: 'RIDGE', description: 'Sống lưng khủng long mỏng dính, cực kỳ nguy hiểm' },
-      { label: 'Đỉnh Tà Xùa', altitude: 2865, type: 'PEAK', description: 'Đỉnh cắm cờ Việt Nam, rừng rêu ma mị' }
-    ]
-  },
-  { 
     name: 'Tà Chì Nhù (Đồi hoa tím)', 
     altitude: 2979, 
     province: 'Yên Bái',
-    aliases: ['ta chi nhu', 'phu song sung', 'doi hoa tim', 'chung chua nha', 'tà chì nhù', 'chi pâu'],
+    aliases: ['ta chi nhu', 'phu song sung', 'doi hoa tim', 'chung chua nha', 'tà chì nhù', 'chi pâu', 'trạm tấu'],
     elevation_profile: [
-      { label: 'Mỏ Chì', altitude: 1200, type: 'VALLEY', description: 'Khu vực khai khoáng cũ, suối nước' },
-      { label: 'Lán nghỉ', altitude: 2400, type: 'SLOPE', description: 'Lán 2400m lộng gió, đồi trọc' },
-      { label: 'Đồi Hoa Tím', altitude: 2700, type: 'RIDGE', description: 'Hoa Chi Pâu nở tím rực vào tháng 10' },
-      { label: 'Đỉnh Tà Chì Nhù', altitude: 2979, type: 'PEAK', description: 'Đại dương mây Yên Bái, gió rất mạnh' }
+      { label: 'Mỏ Chì Trạm Tấu', altitude: 1200, type: 'VALLEY', description: 'Khu vực khai khoáng cũ, suối nước' },
+      { label: 'Lán nghỉ 2400m', altitude: 2400, type: 'SLOPE', description: 'Lán 2400m lộng gió, đồi trọc' },
+      { label: 'Đồi Hoa Tím Chi Pâu', altitude: 2700, type: 'RIDGE', description: 'Hoa Chi Pâu nở tím rực, biển mây ôm sườn' },
+      { label: 'Đỉnh Tà Chì Nhù', altitude: 2979, type: 'PEAK', description: 'Đại dương mây Yên Bái bao la 360 độ' }
     ]
   },
   { 
     name: 'Lùng Cúng', 
     altitude: 2913, 
     province: 'Yên Bái',
-    aliases: ['lung cung', 'mu cang chai', 'lùng cúng', 'mù cang chải', 'tu san'],
+    aliases: ['lung cung', 'lùng cúng', 'đỉnh lùng cúng', 'tu san'],
     elevation_profile: [
-      { label: 'Tu San', altitude: 1100, type: 'VALLEY', description: 'Bản làng người Mông, đường vào hiểm trở' },
-      { label: 'Thảo nguyên', altitude: 2200, type: 'SLOPE', description: 'Bãi cỏ rộng mênh mông, lán nghỉ' },
-      { label: 'Rừng già', altitude: 2600, type: 'RIDGE', description: 'Rừng nguyên sinh rậm rạp, dốc đứng' },
-      { label: 'Đỉnh Lùng Cúng', altitude: 2913, type: 'PEAK', description: 'Sân bóng trên mây, view 360 độ' }
+      { label: 'Bản Tu San', altitude: 1100, type: 'VALLEY', description: 'Bản làng người Mông, đường vào hiểm trở' },
+      { label: 'Thảo nguyên lán nghỉ', altitude: 2200, type: 'SLOPE', description: 'Bãi cỏ rộng mênh mông, lán nghỉ' },
+      { label: 'Rừng già nguyên sinh', altitude: 2600, type: 'RIDGE', description: 'Rừng cổ thụ rậm rạp, dốc đứng' },
+      { label: 'Đỉnh Lùng Cúng', altitude: 2913, type: 'PEAK', description: 'Sân bóng trên mây phẳng rộng, view 360 độ' }
     ]
   },
   { 
     name: 'Đèo Khau Phạ', 
-    altitude: 1200, 
+    altitude: 1500, 
     province: 'Yên Bái',
-    aliases: ['khau phạ', 'đèo khau phạ', 'mù cang chải', 'khau pha'],
+    aliases: ['khau phạ', 'đèo khau phạ', 'khau pha', 'đèo khau pha'],
     elevation_profile: [
-      { label: 'Tú Lệ', altitude: 600, type: 'VALLEY', description: 'Thung lũng Tú Lệ' },
-      { label: 'Đỉnh đèo', altitude: 1200, type: 'PEAK', description: 'Tứ đại đỉnh đèo, điểm bay dù lượn trên biển mây' }
+      { label: 'Thung lũng Tú Lệ', altitude: 600, type: 'VALLEY', description: 'Thung lũng nếp thơm Tú Lệ' },
+      { label: 'Đèo Khau Phạ (Điểm Dù Lượn)', altitude: 1200, type: 'SLOPE', description: 'Điểm cất cánh dù lượn lướt trên mây' },
+      { label: 'Đỉnh Đèo Khau Phạ', altitude: 1500, type: 'PEAK', description: 'Tứ đại đỉnh đèo Tây Bắc, mây cuộn quanh năm' }
     ]
   },
   { 
-    name: 'Đồi Mâm Xôi (Mù Cang Chải)', 
+    name: 'Mù Cang Chải (Đồi Mâm Xôi)', 
     altitude: 1000, 
     province: 'Yên Bái',
-    aliases: ['mâm xôi', 'la pán tẩn', 'mù cang chải', 'mam xoi'],
+    aliases: ['mâm xôi', 'la pán tẩn', 'mù cang chải', 'mam xoi', 'mu cang chai', 'đồi móng ngựa'],
     elevation_profile: [
-      { label: 'Ngã 3 Kim', altitude: 700, type: 'VALLEY', description: 'Đường vào La Pán Tẩn' },
-      { label: 'Đồi Mâm Xôi', altitude: 1000, type: 'PEAK', description: 'Ruộng bậc thang mâm xôi ngập trong mây sớm' }
+      { label: 'Ngã 3 Kim', altitude: 700, type: 'VALLEY', description: 'Đường vào xã La Pán Tẩn' },
+      { label: 'Đồi Móng Ngựa', altitude: 950, type: 'SLOPE', description: 'Ruộng bậc thang hình bán nguyệt ngắm hoàng hôn' },
+      { label: 'Đồi Mâm Xôi', altitude: 1000, type: 'PEAK', description: 'Ruộng bậc thang mâm xôi ngập trong biển mây sớm' }
+    ]
+  },
+
+  // --- HÀ GIANG ---
+  { 
+    name: 'Đèo Mã Pí Lèng (Mèo Vạc)', 
+    altitude: 1400, 
+    province: 'Hà Giang',
+    aliases: ['mã pí lèng', 'ma pi leng', 'mèo vạc', 'mã pì lèng', 'sông nho quế', 'đèo mã pí lèng'],
+    elevation_profile: [
+      { label: 'Bến thuyền Sông Nho Quế', altitude: 350, type: 'VALLEY', description: 'Dòng sông ngọc bích sâu thẳm dưới hẻm vực' },
+      { label: 'Hẻm Tu Sản', altitude: 600, type: 'SLOPE', description: 'Hẻm vực sâu nhất Đông Nam Á' },
+      { label: 'Điểm dừng chân Panorama', altitude: 1200, type: 'RIDGE', description: 'View nhìn trọn vẹn sống núi và biển mây' },
+      { label: 'Đỉnh Đèo Mã Pí Lèng', altitude: 1400, type: 'PEAK', description: 'Tứ đại đỉnh đèo, gió lộng và mây cuồn cuộn' }
+    ]
+  },
+  { 
+    name: 'Đỉnh Chiêu Lầu Thi', 
+    altitude: 2402, 
+    province: 'Hà Giang',
+    aliases: ['chiêu lầu thi', 'chieu lau thi', 'hoàng su phì', 'hoang su phi', 'đỉnh chiêu lầu thi'],
+    elevation_profile: [
+      { label: 'Chân núi Hồ Thầu', altitude: 1000, type: 'VALLEY', description: 'Bản người Dao, ruộng bậc thang Hoàng Su Phì' },
+      { label: 'Rừng Chè Shan Tuyết', altitude: 1600, type: 'SLOPE', description: 'Vườn chè cổ thụ hàng trăm năm tuổi' },
+      { label: 'Lán nghỉ 2000m', altitude: 2000, type: 'RIDGE', description: 'Lán nghỉ chân ngắm biển mây lúc bình minh' },
+      { label: 'Đỉnh Chiêu Lầu Thi', altitude: 2402, type: 'PEAK', description: 'Chóp kim loại 2402m, mây cuộn 9 tầng' }
+    ]
+  },
+  { 
+    name: 'Tây Côn Lĩnh', 
+    altitude: 2427, 
+    province: 'Hà Giang',
+    aliases: ['tây côn lĩnh', 'tay con linh', 'nóc nhà hà giang', 'đỉnh tây côn lĩnh'],
+    elevation_profile: [
+      { label: 'Bản Cao Bồ', altitude: 800, type: 'VALLEY', description: 'Bản làng trù phú dưới chân núi' },
+      { label: 'Lán Thảo Quả', altitude: 1700, type: 'SLOPE', description: 'Rừng trồng thảo quả râm mát' },
+      { label: 'Rừng Rêu Cổ Thụ', altitude: 2200, type: 'RIDGE', description: 'Rừng nguyên sinh bám đầy rêu phong huyền bí' },
+      { label: 'Đỉnh Tây Côn Lĩnh', altitude: 2427, type: 'PEAK', description: 'Nóc nhà Đông Bắc, biển mây hùng tráng' }
+    ]
+  },
+  { 
+    name: 'Cao nguyên đá Đồng Văn', 
+    altitude: 1500, 
+    province: 'Hà Giang',
+    aliases: ['đồng văn', 'dong van', 'cao nguyên đá', 'cột cờ lũng cú'],
+    elevation_profile: [
+      { label: 'Phố Cổ Đồng Văn', altitude: 1100, type: 'VALLEY', description: 'Thung lũng đá vôi, chợ phiên truyền thống' },
+      { label: 'Đèo Mã Lé', altitude: 1300, type: 'SLOPE', description: 'Đường đèo uốn lượn giữa rừng đá tai mèo' },
+      { label: 'Cột Cờ Lũng Cú', altitude: 1500, type: 'PEAK', description: 'Điểm cực Bắc thiêng liêng, mây giăng đỉnh núi' }
     ]
   },
 
@@ -249,102 +282,87 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     name: 'Putaleng', 
     altitude: 3049, 
     province: 'Lai Châu',
-    aliases: ['putaleng', 'pu ta leng', 'tả lèng', 'tam đường'],
+    aliases: ['putaleng', 'pu ta leng', 'tả lèng', 'đỉnh putaleng'],
     elevation_profile: [
-      { label: 'Hồ Thủy Điện', altitude: 800, type: 'VALLEY', description: 'Hồ chứa nước trong xanh, chân núi' },
-      { label: 'Suối Lớn', altitude: 1500, type: 'SLOPE', description: 'Suối Thầu tắm mát, cắm trại tốt' },
-      { label: 'Rừng Đỗ Quyên', altitude: 2600, type: 'RIDGE', description: 'Rừng hoa cổ thụ nở rực tháng 3-4' },
-      { label: 'Đỉnh Putaleng', altitude: 3049, type: 'PEAK', description: 'Nóc nhà thứ 3 Đông Dương, rậm rạp' }
-    ]
-  },
-  { 
-    name: 'Pusilung (Biên giới)', 
-    altitude: 3083, 
-    province: 'Lai Châu',
-    aliases: ['pusilung', 'moc 42', 'pa ve su', 'biên giới', 'pu si lung'],
-    elevation_profile: [
-      { label: 'Pa Vệ Sủ', altitude: 1400, type: 'VALLEY', description: 'Đồn biên phòng, điểm làm thủ tục' },
-      { label: 'Mốc 42', altitude: 2800, type: 'RIDGE', description: 'Cột mốc biên giới Việt-Trung thiêng liêng' },
-      { label: 'Dốc 3 Tiếng', altitude: 2500, type: 'SLOPE', description: 'Dốc leo liên tục 3h bào mòn thể lực' },
-      { label: 'Đỉnh Pusilung', altitude: 3083, type: 'PEAK', description: 'Đỉnh núi hoang sơ, hành trình dài nhất' }
+      { label: 'Hồ Thủy Điện Tả Lèng', altitude: 800, type: 'VALLEY', description: 'Chân núi, điểm tập kết' },
+      { label: 'Suối Lớn (1500m)', altitude: 1500, type: 'SLOPE', description: 'Suối Thầu trong vắt, bãi cắm trại' },
+      { label: 'Rừng Đỗ Quyên Cổ Thụ', altitude: 2600, type: 'RIDGE', description: 'Rừng hoa cổ thụ nở rực rỡ tháng 3-4' },
+      { label: 'Đỉnh Putaleng', altitude: 3049, type: 'PEAK', description: 'Nóc nhà thứ 3 Đông Dương, biển mây tuyệt đẹp' }
     ]
   },
   { 
     name: 'Tả Liên Sơn (Cổ Trâu)', 
     altitude: 2996, 
     province: 'Lai Châu',
-    aliases: ['ta lien son', 'co trau', 'ta leng', 'tả liên', 'tả liên sơn'],
+    aliases: ['ta lien son', 'co trau', 'tả liên', 'tả liên sơn', 'đỉnh tả liên'],
     elevation_profile: [
-      { label: 'Tả Lèng', altitude: 1000, type: 'VALLEY', description: 'Bản người Dao, ruộng bậc thang' },
-      { label: 'Rừng Cổ Thụ', altitude: 2200, type: 'SLOPE', description: 'Rừng rêu phong ma mị như cổ tích' },
-      { label: 'Hốc Đá', altitude: 2600, type: 'RIDGE', description: 'Hang đá trú ẩn tự nhiên, rừng trúc' },
-      { label: 'Đỉnh Tả Liên', altitude: 2996, type: 'PEAK', description: 'View nhìn sang Putaleng, rừng Đỗ Quyên' }
+      { label: 'Bản Tả Lèng', altitude: 1000, type: 'VALLEY', description: 'Bản người Dao, ruộng bậc thang' },
+      { label: 'Rừng Cổ Thụ Rêu Phong', altitude: 2200, type: 'SLOPE', description: 'Khu rừng rêu ma mị như xứ sở cổ tích' },
+      { label: 'Hốc Đá 2600m', altitude: 2600, type: 'RIDGE', description: 'Hang đá tự nhiên che chở cho người trekking' },
+      { label: 'Đỉnh Tả Liên Sơn', altitude: 2996, type: 'PEAK', description: 'View nhìn sang Putaleng và biển mây ngút ngàn' }
     ]
   },
   { 
     name: 'Đèo Ô Quy Hồ', 
     altitude: 2035, 
-    province: 'Lai Châu',
-    aliases: ['o quy ho', 'cong troi', 'deo o quy ho', 'ô quy hồ', 'cổng trời', 'o quy ho pass'],
+    province: 'Lai Châu / Lào Cai',
+    aliases: ['o quy ho', 'cổng trời ô quy hồ', 'deo o quy ho', 'ô quy hồ', 'cầu kính rồng mây'],
     elevation_profile: [
-      { label: 'Thác Bạc', altitude: 1700, type: 'VALLEY', description: 'Khu du lịch Thác Bạc, phía Sapa' },
-      { label: 'Cổng Trời', altitude: 2035, type: 'PEAK', description: 'Đỉnh đèo cao nhất Việt Nam, gió mạnh' },
-      { label: 'Cầu Kính', altitude: 2100, type: 'RIDGE', description: 'Khu du lịch Rồng Mây, thang máy ngoài trời' },
-      { label: 'Chu Va', altitude: 1000, type: 'VALLEY', description: 'Thung lũng phía Lai Châu, trời ấm hơn' }
-    ]
-  },
-  { 
-    name: 'Sì Thâu Chải', 
-    altitude: 1400, 
-    province: 'Lai Châu',
-    aliases: ['sì thâu chải', 'tam đường', 'si thau chai'],
-    elevation_profile: [
-      { label: 'Tam Đường', altitude: 800, type: 'VALLEY', description: 'Thị trấn Tam Đường' },
-      { label: 'Sì Thâu Chải', altitude: 1400, type: 'PEAK', description: 'Bản du lịch cộng đồng, điểm bay dù lượn ngắm mây' }
+      { label: 'Thác Bạc (Sapa)', altitude: 1700, type: 'VALLEY', description: 'Khu du lịch Thác Bạc' },
+      { label: 'Cổng Trời Ô Quy Hồ', altitude: 2035, type: 'PEAK', description: 'Đỉnh đèo cao nhất Việt Nam, hoàng hôn biển mây' },
+      { label: 'Cầu Kính Rồng Mây', altitude: 2100, type: 'RIDGE', description: 'Thang máy lồng kính ngắm mây trôi dưới chân' }
     ]
   },
 
-  // --- ĐIỆN BIÊN ---
+  // --- THANH HÓA ---
   { 
-    name: 'Đèo Pha Đin', 
-    altitude: 1048, 
-    province: 'Điện Biên',
-    aliases: ['pha đin', 'đèo pha đin', 'pha din'],
+    name: 'Pù Luông', 
+    altitude: 1700, 
+    province: 'Thanh Hóa',
+    aliases: ['pù luông', 'pu luong', 'bá thước', 'đỉnh pù luông', 'bản đôn pù luông'],
     elevation_profile: [
-      { label: 'Tuần Giáo', altitude: 500, type: 'VALLEY', description: 'Thị trấn Tuần Giáo' },
-      { label: 'Đỉnh đèo', altitude: 1048, type: 'PEAK', description: 'Tứ đại đỉnh đèo, ranh giới Sơn La - Điện Biên' }
-    ]
-  },
-  { 
-    name: 'Cực Tây A Pa Chải', 
-    altitude: 1864, 
-    province: 'Điện Biên',
-    aliases: ['a pa chải', 'cực tây', 'mường nhé', 'a pa chai'],
-    elevation_profile: [
-      { label: 'Đồn BP A Pa Chải', altitude: 1000, type: 'VALLEY', description: 'Đồn biên phòng' },
-      { label: 'Mốc số 0', altitude: 1864, type: 'PEAK', description: 'Ngã ba biên giới Việt - Lào - Trung, biển mây cuồn cuộn' }
+      { label: 'Bản Đôn', altitude: 400, type: 'VALLEY', description: 'Thung lũng homestay và ruộng bậc thang' },
+      { label: 'Bản Hiêu - Thác Hiêu', altitude: 700, type: 'SLOPE', description: 'Dòng thác nước trong veo giữa rừng' },
+      { label: 'Đỉnh Đèo Son Bá Mười', altitude: 1200, type: 'RIDGE', description: 'Khu vực quanh năm mát lạnh, biển mây sớm' },
+      { label: 'Đỉnh Pù Luông', altitude: 1700, type: 'PEAK', description: 'Nóc nhà Thanh Hóa, view thung lũng mây' }
     ]
   },
 
-  // --- HÒA BÌNH ---
+  // --- VĨNH PHÚC & HÀ NỘI ---
   { 
-    name: 'Lũng Vân (Nóc nhà xứ Mường)', 
+    name: 'Tam Đảo', 
     altitude: 1200, 
-    province: 'Hòa Bình',
-    aliases: ['lũng vân', 'tân lạc', 'lung van', 'nóc nhà xứ mường'],
+    province: 'Vĩnh Phúc',
+    aliases: ['tam đảo', 'tam dao', 'thị trấn tam đảo', 'đỉnh rùng rình'],
     elevation_profile: [
-      { label: 'Tân Lạc', altitude: 300, type: 'VALLEY', description: 'Trung tâm huyện' },
-      { label: 'Lũng Vân', altitude: 1200, type: 'PEAK', description: 'Bản làng chìm trong sương mây quanh năm' }
+      { label: 'Chân đèo Tam Đảo', altitude: 200, type: 'VALLEY', description: 'Điểm khởi hành lên núi' },
+      { label: 'TT. Tam Đảo', altitude: 900, type: 'SLOPE', description: 'Thị trấn trong sương, Cầu Mây' },
+      { label: 'Tháp Truyền Hình', altitude: 1150, type: 'RIDGE', description: 'Đường leo 1400 bậc đá xuyên rừng' },
+      { label: 'Đỉnh Rùng Rình', altitude: 1200, type: 'PEAK', description: 'Đỉnh núi cao nhất ngắm biển mây đồng bằng' }
     ]
   },
   { 
-    name: 'Đèo Thung Khe (Đèo Đá Trắng)', 
-    altitude: 1000, 
-    province: 'Hòa Bình',
-    aliases: ['thung khe', 'đèo đá trắng', 'mai châu', 'thung khe pass'],
+    name: 'Đỉnh Ba Vì (Đỉnh Vua)', 
+    altitude: 1280, 
+    province: 'Hà Nội',
+    aliases: ['ba vì', 'ba vi', 'đỉnh vua', 'núi ba vì', 'đền thượng ba vì'],
     elevation_profile: [
-      { label: 'Tân Lạc', altitude: 300, type: 'VALLEY', description: 'Đường lên đèo' },
-      { label: 'Đỉnh đèo', altitude: 1000, type: 'PEAK', description: 'Chợ phiên trên đèo, sương mù dày đặc như tuyết' }
+      { label: 'Chân VQG Ba Vì', altitude: 100, type: 'VALLEY', description: 'Cổng vào vườn quốc gia' },
+      { label: 'Cốt 400m', altitude: 400, type: 'SLOPE', description: 'Rừng thông và khu phế tích Pháp cổ' },
+      { label: 'Cốt 1100m', altitude: 1100, type: 'RIDGE', description: 'Bãi đỗ xe và đường leo các đỉnh núi' },
+      { label: 'Đỉnh Vua (Đền Bác Hồ)', altitude: 1280, type: 'PEAK', description: 'Đỉnh cao nhất Ba Vì ngắm trọn sông Đà và mây' }
+    ]
+  },
+  { 
+    name: 'Mẫu Sơn (Lạng Sơn)', 
+    altitude: 1500, 
+    province: 'Lạng Sơn',
+    aliases: ['mẫu sơn', 'mau son', 'đỉnh mẫu sơn', 'lạng sơn'],
+    elevation_profile: [
+      { label: 'Chân núi Lộc Bình', altitude: 300, type: 'VALLEY', description: 'Khu vực chân núi' },
+      { label: 'Dốc Mẫu Sơn', altitude: 900, type: 'SLOPE', description: 'Đường đèo uốn lượn trong mây mù' },
+      { label: 'Khu Biệt Thự Cổ', altitude: 1200, type: 'RIDGE', description: 'Khu nghỉ dưỡng Pháp cổ, điểm ngắm tuyết và mây' },
+      { label: 'Đỉnh Mẫu Sơn', altitude: 1500, type: 'PEAK', description: 'Nơi đón không khí lạnh sớm nhất Việt Nam, biển mây dày' }
     ]
   }
 ];

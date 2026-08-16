@@ -28,37 +28,89 @@ function removeVietnameseTones(str: string): string {
     return str.toLowerCase().trim();
 }
 
-export const analyzeLocation = async (locationName: string, model?: string): Promise<LocationAnalysis> => {
-  const normalizedInput = removeVietnameseTones(locationName);
-  
-  let is_known_peak = false;
-  let knownPeak = NORTHWEST_PEAKS.find(peak => {
+export function findBestMatchingPeak(input: string) {
+  const normInput = removeVietnameseTones(input);
+  let bestMatch: typeof NORTHWEST_PEAKS[0] | null = null;
+  let highestScore = 0;
+
+  for (const peak of NORTHWEST_PEAKS) {
     const normName = removeVietnameseTones(peak.name);
-    if (normalizedInput.includes(normName) || normName.includes(normalizedInput)) return true;
+    let score = 0;
+
+    if (normInput === normName) {
+      score = 10000 + normName.length;
+    } else if (normInput.includes(normName)) {
+      score = 5000 + normName.length;
+    } else if (normName.includes(normInput)) {
+      score = 2000 + normInput.length;
+    }
+
     if (peak.aliases) {
-        return peak.aliases.some(alias => normalizedInput.includes(removeVietnameseTones(alias)));
-    }
-    return false;
-  });
-
-  if (knownPeak) {
-    is_known_peak = true;
-  }
-
-  let matchedMt = null;
-  for (const [_, mt] of Object.entries(MOUNTAIN_DB)) {
-    const normMtName = removeVietnameseTones(mt.name);
-    if (normalizedInput.includes(normMtName) || normMtName.includes(normalizedInput)) {
-        matchedMt = mt;
-        break;
-    }
-    if (mt.aliases) {
-        if (mt.aliases.some(alias => normalizedInput.includes(removeVietnameseTones(alias)))) {
-            matchedMt = mt;
-            break;
+      for (const alias of peak.aliases) {
+        const normAlias = removeVietnameseTones(alias);
+        if (normInput === normAlias) {
+          score = Math.max(score, 4000 + normAlias.length);
+        } else if (normInput.includes(normAlias)) {
+          score = Math.max(score, 1000 + normAlias.length);
+        } else if (normAlias.includes(normInput)) {
+          score = Math.max(score, 500 + normInput.length);
         }
+      }
+    }
+
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = peak;
     }
   }
+
+  return highestScore > 0 ? bestMatch : null;
+}
+
+export function findBestMatchingMountain(input: string): { key: string; info: typeof MOUNTAIN_DB[string] } | null {
+  const normInput = removeVietnameseTones(input);
+  let bestMatch: { key: string; info: typeof MOUNTAIN_DB[string] } | null = null;
+  let highestScore = 0;
+
+  for (const [key, mt] of Object.entries(MOUNTAIN_DB)) {
+    const normName = removeVietnameseTones(mt.name);
+    let score = 0;
+
+    if (normInput === normName) {
+      score = 10000 + normName.length;
+    } else if (normInput.includes(normName)) {
+      score = 5000 + normName.length;
+    } else if (normName.includes(normInput)) {
+      score = 2000 + normInput.length;
+    }
+
+    if (mt.aliases) {
+      for (const alias of mt.aliases) {
+        const normAlias = removeVietnameseTones(alias);
+        if (normInput === normAlias) {
+          score = Math.max(score, 4000 + normAlias.length);
+        } else if (normInput.includes(normAlias)) {
+          score = Math.max(score, 1000 + normAlias.length);
+        } else if (normAlias.includes(normInput)) {
+          score = Math.max(score, 500 + normInput.length);
+        }
+      }
+    }
+
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = { key, info: mt };
+    }
+  }
+
+  return highestScore > 0 ? bestMatch : null;
+}
+
+export const analyzeLocation = async (locationName: string, model?: string): Promise<LocationAnalysis> => {
+  const knownPeak = findBestMatchingPeak(locationName);
+  const is_known_peak = !!knownPeak;
+  const matchedMountainEntry = findBestMatchingMountain(locationName);
+  const matchedMt = matchedMountainEntry ? matchedMountainEntry.info : null;
 
   if (knownPeak && matchedMt) {
     return {
@@ -293,77 +345,28 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
   const diffTime = Math.abs(end.getTime() - start.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-  // 1. Enhanced Matching with Normalization and Aliases
-  const normalizedInput = removeVietnameseTones(data.locationName);
-  const matchedPreset = NORTHWEST_PEAKS.find(peak => {
-    const normName = removeVietnameseTones(peak.name);
-    // Check main name inclusion
-    if (normalizedInput.includes(normName) || normName.includes(normalizedInput)) return true;
-    // Check aliases
-    if (peak.aliases) {
-        return peak.aliases.some(alias => normalizedInput.includes(removeVietnameseTones(alias)));
-    }
-    return false;
-  });
-
-  // Check if mountain is in MOUNTAIN_DB
-  let mountainKey: string | null = null;
-  for (const [key, mt] of Object.entries(MOUNTAIN_DB)) {
-      const normName = removeVietnameseTones(mt.name);
-      if (normalizedInput.includes(normName) || normName.includes(normalizedInput)) {
-          mountainKey = key;
-          break;
-      }
-      if (mt.aliases) {
-          if (mt.aliases.some(alias => normalizedInput.includes(removeVietnameseTones(alias)))) {
-              mountainKey = key;
-              break;
-          }
-      }
-  }
+  // 1. Enhanced Scored Matching
+  const matchedPreset = findBestMatchingPeak(data.locationName);
+  const matchedMountainEntry = findBestMatchingMountain(data.locationName);
+  const mountainKey = matchedMountainEntry ? matchedMountainEntry.key : null;
 
   let terrainContext = "";
-  if (matchedPreset && matchedPreset.elevation_profile) {
+  if (matchedPreset && matchedPreset.elevation_profile && matchedPreset.elevation_profile.length > 0) {
     terrainContext = `
-    **KNOWN_LOCATIONS_LIBRARY (DỮ LIỆU ĐỊA HÌNH CÓ THỂ KHỚP):**
-    Hệ thống nhận diện địa điểm này CÓ THỂ là: ${matchedPreset.name} (${matchedPreset.province}).
-    Dữ liệu địa hình: ${JSON.stringify(matchedPreset.elevation_profile)}
+    **KNOWN_LOCATIONS_LIBRARY (DỮ LIỆU ĐỊA HÌNH CHÍNH XÁC ĐÃ XÁC THỰC):**
+    Hệ thống nhận diện địa điểm này là: ${matchedPreset.name} (${matchedPreset.province}).
+    Mặt cắt địa hình chuẩn (Elevation Profile): ${JSON.stringify(matchedPreset.elevation_profile)}
+    BẠN BẮT BUỘC SỬ DỤNG MẶT CẮT ĐỊA HÌNH NÀY CHO TRƯỜNG "terrain_analysis.elevation_profile" VÀ ĐÁNH GIÁ ĐÚNG VỊ TRÍ ĐỨNG SĂN MÂY.
     `;
   }
 
-  // [TESTING INJECTION] - Hardcoded data for Y Ty testing
   let hasHardData = false;
   let hardcodedDataInjection = "";
   let weatherDataSourceInfo: any = null;
   let fetchedWeatherPackage: any = null;
 
-  if (normalizedInput.includes("y ty")) {
-      hasHardData = true;
-      weatherDataSourceInfo = {
-        locationName: "Y Tý",
-        elevation: 1900,
-        source: "Hardcoded Test Data"
-      };
-      hardcodedDataInjection = `
-      [TESTING_SCENARIO_ACTIVE]
-      Người dùng đang yêu cầu chạy thử nghiệm (Simulation Mode) với bộ dữ liệu cứng sau cho ngày 24/02. 
-      BẠN BẮT BUỘC PHẢI DÙNG SỐ LIỆU NÀY ĐỂ TÍNH TOÁN CHO NGÀY 24/02, BỎ QUA DỮ LIỆU SEARCH CHO NGÀY NÀY.
-      
-      [HARD_DATA]
-      - Location Altitude: 1900m (Y Tý)
-      - T_surf (1900m): 15°C
-      - Td_surf (1900m): 14°C
-      - T_850 (1500m): 12°C
-      - T_700 (3000m): 5°C
-      - Wind_850: 8 km/h (Đông Nam)
-      
-      HÃY ÁP DỤNG MODULE 5 ĐỂ XÁC ĐỊNH TRẠNG THÁI MÂY TẠI ĐỘ CAO 1900M.
-      Lưu ý: T_850 (12°C) < T_surf (15°C) -> Nghịch nhiệt mạnh. Mây bị nén xuống dưới.
-      Tính toán Delta H = 1900m - Cloud_Top.
-      `;
-  } else {
-      fetchedWeatherPackage = await fetchMountainWeather(mountainKey, data.locationName, data.startDate, data.endDate, data.lat, data.lon);
-      if (fetchedWeatherPackage) {
+  fetchedWeatherPackage = await fetchMountainWeather(mountainKey, data.locationName, data.startDate, data.endDate, data.lat, data.lon);
+  if (fetchedWeatherPackage) {
           const { mountainInfo, dailyWeather } = fetchedWeatherPackage;
           
           weatherDataSourceInfo = {
@@ -422,7 +425,6 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
               `;
           }
       }
-  }
 
   let searchStrategyPrompt = "";
   if (hasHardData) {
@@ -642,8 +644,9 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
         ?.map(chunk => chunk.web)
         .filter((web): web is { title: string; uri: string } => !!web) || [];
       
-      if (matchedPreset && matchedPreset.elevation_profile && analysis.terrain_analysis.source === 'HARDCODED') {
+      if (matchedPreset && matchedPreset.elevation_profile && matchedPreset.elevation_profile.length > 0) {
         analysis.terrain_analysis.elevation_profile = matchedPreset.elevation_profile;
+        analysis.terrain_analysis.source = 'HARDCODED';
       }
 
       // Populate computed Sun Times & VRII from fetchedWeatherPackage into forecasts if missing
