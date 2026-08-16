@@ -10,6 +10,61 @@ export interface DiscoveredModel {
   isDefaultCandidate?: boolean;
 }
 
+export function formatModelDisplayName(modelId: string, discoveredModels?: DiscoveredModel[]): { displayName: string; rawId: string; tierLabel: string } {
+  const cleanId = (modelId || '').replace(/^models\//, '');
+  
+  // Try matching from discovered models
+  if (discoveredModels && discoveredModels.length > 0) {
+    const found = discoveredModels.find(m => m.id === cleanId || m.name === cleanId);
+    if (found) {
+      return {
+        displayName: found.displayName,
+        rawId: found.id,
+        tierLabel: found.tierLabel
+      };
+    }
+  }
+
+  // Friendly name mapping for common / alias model IDs
+  const friendlyMap: Record<string, { displayName: string; tierLabel: string }> = {
+    'gemini-flash-latest': { displayName: 'Gemini 2.5 Flash (Bản mới nhất)', tierLabel: '⚡ Flash' },
+    'gemini-flash-lite-latest': { displayName: 'Gemini 2.5 Flash-Lite (Siêu nhanh / Tiết kiệm)', tierLabel: '⚡ Flash-Lite' },
+    'gemini-pro-latest': { displayName: 'Gemini 2.5 Pro (Tư duy sâu / Mới nhất)', tierLabel: '🚀 Pro' },
+    'gemini-2.5-flash': { displayName: 'Gemini 2.5 Flash', tierLabel: '⚡ Flash' },
+    'gemini-2.5-flash-lite': { displayName: 'Gemini 2.5 Flash-Lite', tierLabel: '⚡ Flash-Lite' },
+    'gemini-2.5-pro': { displayName: 'Gemini 2.5 Pro', tierLabel: '🚀 Pro' },
+    'gemini-2.0-flash': { displayName: 'Gemini 2.0 Flash', tierLabel: '⚡ Flash' },
+    'gemini-2.0-flash-lite': { displayName: 'Gemini 2.0 Flash-Lite', tierLabel: '⚡ Flash-Lite' },
+    'gemini-1.5-flash': { displayName: 'Gemini 1.5 Flash', tierLabel: '⚡ Flash' },
+    'gemini-1.5-pro': { displayName: 'Gemini 1.5 Pro', tierLabel: '🚀 Pro' },
+  };
+
+  if (friendlyMap[cleanId]) {
+    return {
+      displayName: friendlyMap[cleanId].displayName,
+      rawId: cleanId,
+      tierLabel: friendlyMap[cleanId].tierLabel
+    };
+  }
+
+  // General formatting: e.g. "gemini-2.5-flash-preview-0514" -> "Gemini 2.5 Flash Preview 0514"
+  const formatted = cleanId
+    .split(/[-_]/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  let tierLabel = '🤖 AI Model';
+  if (cleanId.toLowerCase().includes('flash')) tierLabel = '⚡ Flash';
+  else if (cleanId.toLowerCase().includes('pro')) tierLabel = '🚀 Pro';
+  else if (cleanId.toLowerCase().includes('preview') || cleanId.toLowerCase().includes('exp')) tierLabel = '🧪 Preview';
+
+  return {
+    displayName: formatted,
+    rawId: cleanId,
+    tierLabel
+  };
+}
+
 export type ErrorClassification = 'AUTH' | 'RETRYABLE' | 'OTHER';
 
 const STORAGE_KEY = 'cloudhunter_selected_model';

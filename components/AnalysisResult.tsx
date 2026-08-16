@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CloudAnalysis, TerrainAnalysis, TerrainPoint, DailyForecast } from '../types';
+import { formatModelDisplayName } from '../services/modelDiscoveryService';
 
 interface AnalysisResultProps {
   result: CloudAnalysis;
@@ -479,11 +480,24 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            </p>
 
            <div className="mt-4 pt-3 border-t border-slate-700/50 flex flex-wrap justify-between items-center text-xs text-slate-300 gap-2">
-             <div className="flex items-center gap-2">
-               <span className="text-slate-400 font-semibold">🤖 Mô hình AI thực hiện phân tích:</span>
-               <span className="font-bold text-cyan-300 font-mono bg-slate-900 px-2.5 py-1 rounded-lg border border-cyan-500/40 shadow-sm">
-                 {result.modelUsed || "Gemini 2.5 Flash"}
-               </span>
+             <div className="flex flex-wrap items-center gap-2">
+               <span className="text-slate-400 font-semibold">🤖 Mô hình AI phân tích:</span>
+               {(() => {
+                 const modelInfo = formatModelDisplayName(result.modelUsed || "gemini-2.5-flash");
+                 return (
+                   <div className="inline-flex items-center gap-1.5 flex-wrap">
+                     <span className="font-bold text-cyan-300 font-sans bg-slate-900 px-2.5 py-1 rounded-lg border border-cyan-500/40 shadow-sm flex items-center gap-1">
+                       <span>{modelInfo.displayName}</span>
+                       <span className="text-[10px] text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-500/30 font-mono">
+                         {modelInfo.tierLabel}
+                       </span>
+                     </span>
+                     <span className="text-[11px] text-slate-400 font-mono bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
+                       ID: {modelInfo.rawId}
+                     </span>
+                   </div>
+                 );
+               })()}
              </div>
              {result.modelSpread && (
                <span className="text-purple-300 font-mono">
