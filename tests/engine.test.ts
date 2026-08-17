@@ -212,6 +212,49 @@ describe('qualityForDaysAhead — nhãn tin cậy theo horizon', () => {
   });
 });
 
+describe('MOUNTAIN_DB mở rộng 8/2026 — nhận diện đúng điểm mới, không đụng điểm cũ', () => {
+  it('các điểm hot mới resolve đúng entry (Sa Mu, Bình Liêu, Bà Đen, Cầu Đất, Măng Đen...)', async () => {
+    const { findBestMatchingMountain } = await import('../services/geminiService');
+    const cases: Array<[string, string]> = [
+      ['Sa Mu', 'SA_MU_U_BO'],
+      ['đỉnh sa mu u bò', 'SA_MU_U_BO'],
+      ['sống lưng khủng long Bình Liêu', 'BINH_LIEU'],
+      ['núi Bà Đen', 'BA_DEN'],
+      ['đồi chè Cầu Đất', 'CAU_DAT'],
+      ['Măng Đen', 'MANG_DEN'],
+      ['Lang Biang', 'LANG_BIANG'],
+      ['Phia Oắc', 'PHIA_OAC'],
+      ['Bạch Mã', 'BACH_MA'],
+      ['Tà Năng', 'TA_NANG'],
+      ['Linh Quy Pháp Ấn', 'LINH_QUY_PHAP_AN'],
+    ];
+    for (const [input, key] of cases) {
+      const m = findBestMatchingMountain(input);
+      expect(m?.key, `input "${input}"`).toBe(key);
+    }
+  });
+
+  it('điểm cũ không bị điểm mới cướp match (Tà Xùa, Sa Pa, U Bò Bắc Yên cũ)', async () => {
+    const { findBestMatchingMountain } = await import('../services/geminiService');
+    expect(findBestMatchingMountain('Tà Xùa')?.key).toBe('TA_XUA_SON_LA');
+    // 'Sapa' vốn match FANSIPAN (cùng khu vực, alias 'sapa' có từ trước) — chỉ cần không rơi ra ngoài vùng Sapa
+    expect(['FANSIPAN', 'SAPA_HAM_RONG']).toContain(findBestMatchingMountain('Sapa')?.key);
+    expect(findBestMatchingMountain('đỉnh u bò')?.key).toBe('DINH_U_BO');
+  });
+
+  it('tọa độ mọi entry nằm trong lãnh thổ VN và độ cao hợp lệ', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    for (const [key, mt] of Object.entries(MOUNTAIN_DB)) {
+      expect(mt.lat, key).toBeGreaterThan(8);
+      expect(mt.lat, key).toBeLessThan(23.6);
+      expect(mt.lon, key).toBeGreaterThan(102);
+      expect(mt.lon, key).toBeLessThan(110);
+      expect(mt.elevation, key).toBeGreaterThan(100);
+      expect(mt.elevation, key).toBeLessThanOrEqual(3200);
+    }
+  });
+});
+
 describe('buildFallbackChain — thứ tự model dự phòng', () => {
   it('HỒI QUY: model chọn lỗi phải rơi xuống Flash GẦN NHẤT, Lite luôn cuối hàng', async () => {
     const { buildFallbackChain } = await import('../services/modelDiscoveryService');

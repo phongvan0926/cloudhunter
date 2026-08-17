@@ -251,6 +251,68 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     name: "Mẫu Sơn (Lạng Sơn)",
     lat: 21.8419, lon: 106.9208, elevation: 1500,
     zone: "A_CLOUD_TRAP",
-    aliases: ['mẫu sơn', 'mau son', 'lạng sơn']
+    aliases: ['mẫu sơn', 'mau son', 'lạng sơn', 'núi cha', 'phja pò', 'phặt chỉ', 'sống lưng khủng long mẫu sơn']
+  },
+
+  // --- BỔ SUNG 8/2026: các điểm hot 2025-2026, tọa độ xác minh qua OSM/Nominatim + DEM ---
+  SA_MU_U_BO: {
+    name: "Sa Mu - U Bò (2756m)",
+    lat: 21.3491, lon: 104.4127, elevation: 2756, // đường mòn Sa Mu (OSM), đỉnh 2756m KBT Tà Xùa
+    zone: "A_CLOUD_TRAP",
+    aliases: ['sa mu', 'samu', 'sa mu u bò', 'u bò 2756', 'háng đồng', 'khu bảo tồn tà xùa', 'sa mu u bo']
+  },
+  BINH_LIEU: {
+    name: "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+    lat: 21.5203, lon: 107.4883, elevation: 1429, // núi Cao Xiêm (OSM), DEM 1414m
+    zone: "B_WIND_TUNNEL", // đồi trọc biên giới đón thẳng gió mùa Đông Bắc
+    aliases: ['bình liêu', 'binh lieu', 'cao xiêm', 'mốc 1305', 'cột mốc 1305', 'sống lưng khủng long bình liêu', 'quảng ninh', 'cỏ lau']
+  },
+  PHIA_OAC: {
+    name: "Phia Oắc (Cao Bằng)",
+    lat: 22.6153, lon: 105.8636, elevation: 1931, // OSM "Núi Phja Oắc", DEM 1917m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['phia oắc', 'phja oắc', 'phia oac', 'phia đén', 'nguyên bình', 'cao bằng', 'băng giá']
+  },
+  BACH_MA: {
+    name: "Bạch Mã (Vọng Hải Đài)",
+    lat: 16.1750, lon: 107.8381, elevation: 1448, // OSM "Núi Bạch Mã", DEM 1338m
+    zone: "B_WIND_TUNNEL", // núi ven biển đón gió Đông, mù kéo rất nhanh
+    aliases: ['bạch mã', 'bach ma', 'vọng hải đài', 'huế', 'vườn quốc gia bạch mã']
+  },
+  BA_DEN: {
+    name: "Núi Bà Đen (Tây Ninh)",
+    lat: 11.3824, lon: 106.1702, elevation: 986, // OSM, DEM 967m
+    zone: "A_CLOUD_TRAP", // núi đơn độc giữa đồng bằng — mây bức xạ/mây đĩa khi lặng gió
+    aliases: ['bà đen', 'ba den', 'tây ninh', 'đĩa mây', 'nóc nhà nam bộ', 'núi bà']
+  },
+  MANG_DEN: {
+    name: "Măng Đen",
+    lat: 14.5772, lon: 108.2775, elevation: 1200, // OSM trung tâm Măng Đen, DEM 1151m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['măng đen', 'mang den', 'kon plông', 'kon tum', 'đồi đức mẹ', 'đà lạt thứ hai']
+  },
+  CAU_DAT: {
+    name: "Đồi chè Cầu Đất (Đà Lạt)",
+    lat: 11.8829, lon: 108.5519, elevation: 1500, // OSM Cầu Đất - Xuân Trường, DEM 1479m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['cầu đất', 'cau dat', 'đồi chè cầu đất', 'xuân trường', 'săn mây đà lạt', 'cầu đất farm']
+  },
+  LANG_BIANG: {
+    name: "Núi Lang Biang",
+    lat: 12.0473, lon: 108.4406, elevation: 2167, // OSM "Núi Lang Biang", DEM 2113m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['lang biang', 'langbiang', 'lạc dương', 'đà lạt', 'radar lang biang']
+  },
+  LINH_QUY_PHAP_AN: {
+    name: "Linh Quy Pháp Ấn (Bảo Lộc)",
+    lat: 11.4350, lon: 107.8159, elevation: 850, // OSM, DEM 840m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['linh quy pháp ấn', 'linh quy phap an', 'cổng trời bảo lộc', 'bảo lộc', 'chùa săn mây']
+  },
+  TA_NANG: {
+    name: "Tà Năng - Phan Dũng",
+    lat: 11.5942, lon: 108.4906, elevation: 1100, // OSM xã Tà Năng, DEM 1032m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['tà năng', 'ta nang', 'phan dũng', 'tà năng phan dũng', 'đồi cỏ', 'đức trọng']
   }
 };

@@ -364,6 +364,74 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
       { label: 'Khu Biệt Thự Cổ', altitude: 1200, type: 'RIDGE', description: 'Khu nghỉ dưỡng Pháp cổ, điểm ngắm tuyết và mây' },
       { label: 'Đỉnh Mẫu Sơn', altitude: 1500, type: 'PEAK', description: 'Nơi đón không khí lạnh sớm nhất Việt Nam, biển mây dày' }
     ]
+  },
+
+  // --- BỔ SUNG 8/2026: điểm săn mây hot 2025-2026 (tọa độ xác minh OSM + DEM trong MOUNTAIN_DB) ---
+  {
+    name: 'Sa Mu - U Bò (2756m)',
+    altitude: 2756,
+    province: 'Sơn La',
+    aliases: ['sa mu', 'samu', 'sa mu u bò', 'u bò 2756', 'háng đồng', 'sa mu u bo'],
+    elevation_profile: [
+      { label: 'Bản Chống Tra', altitude: 1400, type: 'VALLEY', description: 'Điểm xuất phát trek từ xã Háng Đồng (Bắc Yên)' },
+      { label: 'Lán nghỉ 2200m', altitude: 2200, type: 'SLOPE', description: 'Lán ngủ đêm giữa rừng già' },
+      { label: 'Rừng rêu cổ tích', altitude: 2500, type: 'RIDGE', description: 'Rừng rêu nguyên sinh nổi tiếng nhất cung này' },
+      { label: 'Đỉnh Sa Mu (U Bò)', altitude: 2756, type: 'PEAK', description: 'Chóp inox trong KBT Tà Xùa, biển mây 2 hướng Sơn La - Yên Bái' }
+    ]
+  },
+  {
+    name: 'Bình Liêu - Cao Xiêm (Sống lưng khủng long)',
+    altitude: 1429,
+    province: 'Quảng Ninh',
+    aliases: ['bình liêu', 'cao xiêm', 'mốc 1305', 'sống lưng khủng long bình liêu', 'cỏ lau']
+  },
+  {
+    name: 'Phia Oắc (Cao Bằng)',
+    altitude: 1931,
+    province: 'Cao Bằng',
+    aliases: ['phia oắc', 'phja oắc', 'phia đén', 'nguyên bình']
+  },
+  {
+    name: 'Bạch Mã (Vọng Hải Đài)',
+    altitude: 1448,
+    province: 'Huế',
+    aliases: ['bạch mã', 'vọng hải đài', 'vườn quốc gia bạch mã']
+  },
+  {
+    name: 'Núi Bà Đen (Tây Ninh)',
+    altitude: 986,
+    province: 'Tây Ninh',
+    aliases: ['bà đen', 'đĩa mây', 'nóc nhà nam bộ']
+  },
+  {
+    name: 'Măng Đen',
+    altitude: 1200,
+    province: 'Kon Tum (Măng Đen)',
+    aliases: ['măng đen', 'kon plông', 'đồi đức mẹ']
+  },
+  {
+    name: 'Đồi chè Cầu Đất (Đà Lạt)',
+    altitude: 1500,
+    province: 'Lâm Đồng',
+    aliases: ['cầu đất', 'đồi chè cầu đất', 'săn mây đà lạt', 'cầu đất farm']
+  },
+  {
+    name: 'Núi Lang Biang',
+    altitude: 2167,
+    province: 'Lâm Đồng',
+    aliases: ['lang biang', 'langbiang', 'lạc dương']
+  },
+  {
+    name: 'Linh Quy Pháp Ấn (Bảo Lộc)',
+    altitude: 850,
+    province: 'Lâm Đồng',
+    aliases: ['linh quy pháp ấn', 'cổng trời bảo lộc']
+  },
+  {
+    name: 'Tà Năng - Phan Dũng',
+    altitude: 1100,
+    province: 'Lâm Đồng',
+    aliases: ['tà năng', 'phan dũng', 'tà năng phan dũng']
   }
 ];
 
