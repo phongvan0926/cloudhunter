@@ -64,8 +64,8 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `services/geminiService.ts` | Phân giải địa danh nhiều tầng có nhãn nguồn + lời bình AI (schema chỉ chứa trường văn bản). |
 | `services/modelDiscoveryService.ts` | Discover model Gemini động + executeWithFallback (429/404/5xx retry, 401/403 dừng). |
 | `services/historyService.ts` | Lưu/mở lại các lần dự báo (localStorage). |
-| `tests/engine.test.ts` | 28 golden tests khóa vật lý & chấm điểm (vitest). |
-| `constants/mountains.ts`, `constants.ts` | 39 núi + 30 mặt cắt địa hình đã xác thực (tài sản quý — giữ cập nhật). |
+| `tests/engine.test.ts` | 37 golden tests: vật lý & chấm điểm, bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
+| `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
 
 ## 🛠️ Quy tắc dev
@@ -78,6 +78,18 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
    app này; câu lệnh như vậy chỉ tạo ảo giác "đã nghiên cứu".
 5. Sửa engine xong PHẢI chạy: `npm run lint && npm test && npm run build`.
 6. UI giữ glassmorphism dark-mode; Tailwind build-time (index.css, không CDN).
+7. **Mọi thay đổi có ý nghĩa phải cập nhật README.md + AGENTS.md trong CÙNG commit và
+   push lên GitHub ngay** — tài liệu lệch code là coi như chưa xong việc (yêu cầu của chủ dự án).
+8. **Thêm điểm săn mây mới vào thư viện** theo quy trình xác minh: (a) OSM/Nominatim, hoặc
+   (b) giải mã plus code Google Maps user cung cấp (OLC alphabet `23456789CFGHJMPQRVWX`,
+   khôi phục prefix từ xã tham chiếu, BẮT BUỘC bước hiệu chỉnh nearest-to-reference ±nửa ô
+   — từng suýt sai 111km với xã nằm ranh ô 1°), (c) đối chiếu độ cao DEM (Open-Meteo
+   Elevation API). Không xác minh được → KHÔNG thêm; xin user plus code.
+9. **Fallback model AI**: giữ bậc thang chất lượng trong `fallbackPriority` (Lite luôn cuối),
+   lọc model ảnh/Live qua `isTextAnalysisModel`, và luôn hiển thị `modelFallbackNote` khi
+   model người dùng chọn bị thay.
+10. **Ngày giờ**: mọi phép "hôm nay" dùng `vnTodayStr()` (Asia/Ho_Chi_Minh) — cấm
+   `toISOString().split('T')` cho ngày hiển thị (đó là ngày UTC, lùi 1 ngày lúc 0-7h VN).
 
 ## 🚀 Backlog gợi ý
 
