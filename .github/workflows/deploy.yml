@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - master
 
 permissions:
   contents: write
@@ -23,15 +22,18 @@ jobs:
           node-version: 20
           cache: npm
 
+      # KHÔNG truyền GEMINI_API_KEY vào build: đây là site tĩnh công khai,
+      # key nhúng vào bundle là ai cũng đọc được. Người dùng nhập key riêng
+      # qua cửa sổ "🔑 API Key" trong app (lưu localStorage).
       - name: Install and Build
         run: |
           npm ci
           npm run build
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          # gh-pages chỉ giữ 1 commit mới nhất, repo không phình theo thời gian
+          force_orphan: true
