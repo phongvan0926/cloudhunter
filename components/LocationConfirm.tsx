@@ -22,11 +22,24 @@ export const LocationConfirm: React.FC<LocationConfirmProps> = ({ analysis, inpu
       <div className="bg-slate-900/60 rounded-xl p-5 border border-slate-700/50 mb-6 space-y-4">
         <div>
           <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Tên địa điểm nhận diện</span>
-          <div className="text-xl font-bold text-white flex items-center gap-2">
+          <div className="text-xl font-bold text-white flex items-center gap-2 flex-wrap">
             {analysis.name}
-            {analysis.is_known_peak && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900/50 text-emerald-400 border border-emerald-700/50">
-                VERIFIED
+            {analysis.source === 'DB' && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900/50 text-emerald-400 border border-emerald-700/50"
+                    title="Có trong thư viện núi đã xác thực — tọa độ và độ cao tin cậy nhất">
+                ✅ THƯ VIỆN XÁC THỰC
+              </span>
+            )}
+            {analysis.source === 'GEOCODE' && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-900/50 text-sky-300 border border-sky-700/50"
+                    title="Tọa độ thật từ Open-Meteo Geocoding">
+                📍 GEOCODING THẬT
+              </span>
+            )}
+            {analysis.source === 'AI' && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-900/50 text-rose-300 border border-rose-700/50"
+                    title="Tọa độ do AI ước tính — kiểm tra bản đồ trước khi tin">
+                ⚠️ AI ƯỚC TÍNH
               </span>
             )}
           </div>

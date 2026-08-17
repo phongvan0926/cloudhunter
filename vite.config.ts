@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // Chép vercel.json vào dist: nhánh gh-pages publish từ dist, và Vercel đọc
 // config từ commit được deploy — nhờ đó Vercel bỏ qua các push lên gh-pages.
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      plugins: [react(), copyVercelJson()],
+      plugins: [react(), tailwindcss(), copyVercelJson()],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)

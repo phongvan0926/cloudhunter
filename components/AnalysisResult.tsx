@@ -68,12 +68,17 @@ const TerrainVisualizer: React.FC<{
                     {analysis.source === 'HARDCODED' ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-900/50 text-purple-300 border border-purple-700/50 flex items-center">
                             <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            VERIFIED DATA (HARDCODED)
+                            ĐỊA HÌNH ĐÃ XÁC THỰC
+                        </span>
+                    ) : analysis.source === 'DEM' ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900/50 text-blue-300 border border-blue-700/50 flex items-center"
+                              title="Độ cao lấy từ mô hình độ cao số (DEM) — dữ liệu đo đạc thật, độ phân giải thô">
+                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7l6-3 5.447 2.724A1 1 0 0121 7.618v10.764a1 1 0 01-1.447.894L15 17l-6 3z" /></svg>
+                            ƯỚC TÍNH TỪ DEM (DỮ LIỆU THẬT, ĐỘ PHÂN GIẢI THÔ)
                         </span>
                     ) : (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-900/50 text-blue-300 border border-blue-700/50 flex items-center">
-                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            AI RESEARCHED
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-900/50 text-amber-300 border border-amber-700/50 flex items-center">
+                            ⚠️ ƯỚC TÍNH CŨ — CHƯA XÁC THỰC
                         </span>
                     )}
                     <span className="text-xs text-slate-400 italic">👉 Nhấp vào một điểm trên đồ thị để xem góc nhìn mây tại độ cao đó</span>
@@ -271,7 +276,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       case 'DISSIPATING': return 'text-pink-400';
       case 'FLUCTUATING': return 'text-indigo-400';
       case 'ROLLING': return 'text-teal-400';
-      default: return 'text-slate-300';
+      case 'RAIN': return 'text-blue-400';
+      default: return 'text-slate-400';
     }
   };
 
@@ -284,7 +290,23 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       case 'DISSIPATING': return 'bg-pink-900/10 border-pink-500/30';
       case 'FLUCTUATING': return 'bg-indigo-900/10 border-indigo-500/30';
       case 'ROLLING': return 'bg-teal-900/10 border-teal-500/30';
+      case 'RAIN': return 'bg-blue-900/10 border-blue-500/30';
+      case 'UNKNOWN': return 'bg-slate-900/40 border-slate-700 border-dashed opacity-80';
       default: return 'bg-slate-800/50 border-slate-700';
+    }
+  };
+
+  // Nhãn chất lượng dữ liệu từng ngày — hiển thị trung thực độ tin cậy
+  const getQualityBadge = (quality?: string) => {
+    switch (quality) {
+      case 'FORECAST':
+        return { text: '✅ Dự báo tin cậy (≤3 ngày)', cls: 'bg-emerald-950/60 text-emerald-300 border-emerald-600/40' };
+      case 'UNCERTAIN':
+        return { text: '🔶 Dự báo xa — chỉ là xu hướng', cls: 'bg-amber-950/60 text-amber-300 border-amber-600/40' };
+      case 'NO_DATA':
+        return { text: '⛔ Ngoài phạm vi dữ liệu', cls: 'bg-slate-800 text-slate-400 border-slate-600' };
+      default:
+        return null;
     }
   };
 
@@ -335,6 +357,13 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
            </svg>
         );
+      case 'RAIN':
+        return (
+           <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 13a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 13z" />
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 19v2m4-2v2m4-2v2" />
+           </svg>
+        );
       default:
         return (
            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,13 +382,21 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
   const handleExportGPX = () => {
     const waypoints = result.terrain_analysis?.elevation_profile || [];
     const location = result.locationName.replace(/[^a-zA-Z0-9]/g, '_');
-    
-    let gpxContent = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-    gpxContent += `<gpx version="1.1" creator="CloudHunter AI v4.0" xmlns="http://www.topografix.com/GPX/1/1">\n`;
-    gpxContent += `  <metadata>\n    <name>CloudHunter Route - ${result.locationName}</name>\n    <desc>Offline cloud hunting forecast for ${result.locationName}</desc>\n  </metadata>\n`;
+    // Tọa độ THẬT của địa điểm đã phân giải — các waypoint dùng chung tọa độ tham chiếu này
+    // (app không có tọa độ riêng từng lán); độ cao <ele> là dữ liệu thật từng điểm.
+    const lat = result.weather_data_source?.lat;
+    const lon = result.weather_data_source?.lon;
+    if (lat === undefined || lon === undefined) {
+      alert('Không có tọa độ đã xác thực cho địa điểm này — không thể xuất GPX trung thực.');
+      return;
+    }
 
-    waypoints.forEach((p, idx) => {
-      gpxContent += `  <wpt lat="22.35" lon="103.85">\n`;
+    let gpxContent = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    gpxContent += `<gpx version="1.1" creator="CloudHunter AI" xmlns="http://www.topografix.com/GPX/1/1">\n`;
+    gpxContent += `  <metadata>\n    <name>CloudHunter - ${result.locationName}</name>\n    <desc>Toa do la diem tham chieu cua nui; do cao tung waypoint la du lieu that.</desc>\n  </metadata>\n`;
+
+    waypoints.forEach((p) => {
+      gpxContent += `  <wpt lat="${lat.toFixed(5)}" lon="${lon.toFixed(5)}">\n`;
       gpxContent += `    <ele>${p.altitude}</ele>\n`;
       gpxContent += `    <name>${p.label}</name>\n`;
       gpxContent += `    <desc>${p.description || p.type}</desc>\n`;
@@ -409,8 +446,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
-  const filteredForecasts = filterGoldenOnly 
-    ? sortedForecasts.filter(day => day.score >= 80 || bookmarkedDates.includes(day.date))
+  const filteredForecasts = filterGoldenOnly
+    ? sortedForecasts.filter(day => day.score >= 65 || bookmarkedDates.includes(day.date))
     : sortedForecasts;
   
   const sources = result.sources || [];
@@ -428,11 +465,23 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            <div>
              <h2 className="text-3xl font-black text-white mb-1 tracking-tight">Dự báo: {result.locationName}</h2>
              <div className="flex flex-wrap items-center gap-2">
-                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-900 text-cyan-300 border border-cyan-700">CLOUDHUNTER V4.0</span>
-                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-950 text-purple-300 border border-purple-600/80 flex items-center gap-1">
-                   🎯 Đồng Thuận Mô Hình: {result.modelConsensusScore || 94}%
-                 </span>
-                 <p className="text-slate-400 text-xs">Hybrid Algorithm: 8 Modules + Open-Meteo Multi-Model</p>
+                 <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-900 text-cyan-300 border border-cyan-700">CLOUDHUNTER V5</span>
+                 {result.consensus && (
+                   <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-950 text-purple-300 border border-purple-600/80 flex items-center gap-1"
+                         title={`Tính thật từ ${result.consensus.models.join(', ')} — % ngày các mô hình thống nhất trạng thái`}>
+                     🎯 {result.consensus.models.length} mô hình đồng thuận {result.consensus.agreementPct}%
+                   </span>
+                 )}
+                 {result.dataReliability && (
+                   <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                     result.dataReliability === 'HIGH' ? 'bg-emerald-950 text-emerald-300 border-emerald-700' :
+                     result.dataReliability === 'MEDIUM' ? 'bg-amber-950 text-amber-300 border-amber-700' :
+                     'bg-rose-950 text-rose-300 border-rose-700'
+                   }`}>
+                     Độ tin cậy dữ liệu: {result.dataReliability}
+                   </span>
+                 )}
+                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 3 mô hình toàn cầu</p>
               </div>
            </div>
 
@@ -481,30 +530,41 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
 
            <div className="mt-4 pt-3 border-t border-slate-700/50 flex flex-wrap justify-between items-center text-xs text-slate-300 gap-2">
              <div className="flex flex-wrap items-center gap-2">
-               <span className="text-slate-400 font-semibold">🤖 Mô hình AI phân tích:</span>
-               {(() => {
-                 const modelInfo = formatModelDisplayName(result.modelUsed || "gemini-2.5-flash");
+               <span className="text-slate-400 font-semibold">🔢 Số liệu & điểm: engine deterministic ({result.engineVersion || 'engine'})</span>
+               {result.aiNarrative && result.modelUsed ? (() => {
+                 const modelInfo = formatModelDisplayName(result.modelUsed);
                  return (
                    <div className="inline-flex items-center gap-1.5 flex-wrap">
+                     <span className="text-slate-400 font-semibold">· 🤖 Lời bình:</span>
                      <span className="font-bold text-cyan-300 font-sans bg-slate-900 px-2.5 py-1 rounded-lg border border-cyan-500/40 shadow-sm flex items-center gap-1">
                        <span>{modelInfo.displayName}</span>
                        <span className="text-[10px] text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-500/30 font-mono">
                          {modelInfo.tierLabel}
                        </span>
                      </span>
-                     <span className="text-[11px] text-slate-400 font-mono bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
-                       ID: {modelInfo.rawId}
-                     </span>
                    </div>
                  );
-               })()}
+               })() : (
+                 <span className="text-amber-300/90 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-700/40">
+                   ⚠️ AI không phản hồi — lời bình do engine sinh tự động (số liệu không ảnh hưởng)
+                 </span>
+               )}
              </div>
-             {result.modelSpread && (
-               <span className="text-purple-300 font-mono">
-                 ℹ️ {result.modelSpread}
+             {result.consensus && (
+               <span className="text-purple-300 font-mono" title="Đồng thuận tính thật từ dữ liệu từng mô hình">
+                 ℹ️ {result.consensus.note}
                </span>
              )}
             </div>
+
+           {result.safetyWarnings && result.safetyWarnings.length > 0 && (
+             <div className="mt-3 bg-rose-950/40 border border-rose-600/40 rounded-lg p-3">
+               <span className="text-rose-300 text-[10px] font-bold uppercase tracking-wider block mb-1">⚠️ Cảnh báo an toàn</span>
+               <ul className="text-rose-200 text-xs space-y-1 list-disc list-inside">
+                 {result.safetyWarnings.map((w, i) => <li key={i}>{w}</li>)}
+               </ul>
+             </div>
+           )}
          </div>
 
         {result.terrain_analysis && (
@@ -530,7 +590,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
               : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
           }`}
         >
-          <span>⭐ Chỉ xem Ngày Điểm Cao (Score ≥ 80)</span>
+          <span>⭐ Chỉ xem Ngày Đáng Đi (Score ≥ 65)</span>
         </button>
       </div>
 
@@ -538,9 +598,10 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       <div className="grid grid-cols-1 gap-5">
         {filteredForecasts.map((day, idx) => {
           // Dynamic calculation if user selected a custom waypoint altitude
+          // — chỉ tính khi engine THẬT SỰ ước tính được mặt mây (cloud_top_m là số, không mặc định)
           let dynamicBoundaryNote = null;
-          if (selectedWaypoint && day.technical_indices.cloud_top_estimated) {
-            const cloudTopAlt = parseInt(day.technical_indices.cloud_top_estimated.replace(/[^0-9]/g, '')) || 2000;
+          if (selectedWaypoint && typeof day.technical_indices.cloud_top_m === 'number') {
+            const cloudTopAlt = day.technical_indices.cloud_top_m;
             const deltaH = selectedWaypoint.altitude - cloudTopAlt;
             
             let deltaText = "";
@@ -584,11 +645,23 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                 {/* Left: Date & Status */}
                 <div className="flex-shrink-0 xl:w-48 border-b xl:border-b-0 xl:border-r border-white/10 pb-4 xl:pb-0 xl:pr-6">
                   <div className="text-xl font-bold text-white mb-1">{formatDate(day.date)}</div>
-                  <div className={`text-4xl font-black tracking-tighter ${getStatusColor(day.status_code)}`}>
-                    {day.score}
-                    <span className="text-sm font-medium text-slate-500 ml-1">/100</span>
-                  </div>
-                  
+                  {(() => {
+                    const badge = getQualityBadge(day.data_quality);
+                    return badge ? (
+                      <span className={`inline-block mb-2 px-2 py-0.5 rounded text-[10px] font-bold border ${badge.cls}`}>
+                        {badge.text}
+                      </span>
+                    ) : null;
+                  })()}
+                  {day.status_code !== 'UNKNOWN' ? (
+                    <div className={`text-4xl font-black tracking-tighter ${getStatusColor(day.status_code)}`}>
+                      {day.score}
+                      <span className="text-sm font-medium text-slate-500 ml-1">/100</span>
+                    </div>
+                  ) : (
+                    <div className="text-2xl font-black tracking-tighter text-slate-500">—</div>
+                  )}
+
                   <div className="mt-4 flex flex-col items-start">
                       <div className={getStatusColor(day.status_code)}>
                           {getStatusIcon(day.status_code)}
@@ -655,8 +728,46 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                       </div>
                   </div>
 
+                  {/* Nhãn tin cậy + vị trí đứng gợi ý + tiềm năng cháy mây */}
+                  {day.reliability_note && (
+                    <div className="bg-amber-950/30 border border-amber-600/30 rounded-lg p-2.5 text-[11px] text-amber-200">
+                      ⏳ {day.reliability_note}
+                    </div>
+                  )}
+                  {day.recommended_position && (
+                    <div className="bg-cyan-950/30 border border-cyan-600/30 rounded-lg p-2.5 text-[11px] text-cyan-200">
+                      🧭 {day.recommended_position}
+                    </div>
+                  )}
+                  {typeof day.sunrise_color_potential === 'number' && day.status_code !== 'UNKNOWN' && (
+                    <div className={`rounded-lg p-2.5 text-[11px] border flex items-center justify-between ${
+                      day.sunrise_color_potential >= 60
+                        ? 'bg-orange-950/40 border-orange-500/40 text-orange-200'
+                        : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                    }`}>
+                      <span>📸 Tiềm năng "cháy mây" bình minh (cho nhiếp ảnh)</span>
+                      <span className="font-mono font-bold">{day.sunrise_color_potential}/100</span>
+                    </div>
+                  )}
+
+                  {/* "Vì sao điểm này?" — minh bạch từng yếu tố engine cộng/trừ */}
+                  {day.reasons && day.reasons.length > 0 && (
+                    <details className="bg-slate-900/40 border border-slate-700/60 rounded-lg overflow-hidden group/why">
+                      <summary className="cursor-pointer px-3 py-2 text-[11px] font-bold text-slate-300 hover:text-white select-none">
+                        🔍 Vì sao {day.score} điểm? (bấm xem từng yếu tố)
+                      </summary>
+                      <ul className="px-4 pb-3 pt-1 space-y-1">
+                        {day.reasons.map((r, i) => (
+                          <li key={i} className={`text-[11px] font-mono ${r.startsWith('-') ? 'text-rose-300' : r.startsWith('+') ? 'text-emerald-300' : 'text-slate-400'}`}>
+                            {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
+
                   {/* Sun & Golden Hour Info Banner */}
-                  {day.sun_times && (
+                  {day.sun_times && day.status_code !== 'UNKNOWN' && (
                     <div className="bg-gradient-to-r from-amber-950/40 to-orange-950/40 rounded-xl p-3 border border-amber-500/30 flex flex-wrap justify-between items-center text-xs text-amber-200 gap-2">
                       <div className="flex items-center gap-3">
                         <span>🌄 <b>Bình minh:</b> {day.sun_times.sunrise}</span>

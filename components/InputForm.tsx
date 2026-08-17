@@ -38,7 +38,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
     startDate: today.toISOString().split('T')[0],
     endDate: threeDaysLater.toISOString().split('T')[0],
     observerAlt: 2200,
-    model: 'gemini-3.5-flash',
+    model: undefined, // để engine model-discovery tự chọn model khả dụng mới nhất
   });
 
   const [suggestions, setSuggestions] = useState<{name: string, distance: number, altitude: number}[]>([]);

@@ -16,20 +16,39 @@ export interface SunTimes {
   solarElevationMaxDeg?: number;
 }
 
+// Chất lượng dữ liệu từng ngày — KHÔNG BAO GIỜ hiển thị số bịa:
+// FORECAST  = trong phạm vi dự báo tin cậy (≤3 ngày tới)
+// UNCERTAIN = có dữ liệu mô hình nhưng xa (4-15 ngày), độ tin cậy giảm dần
+// NO_DATA   = ngoài phạm vi dữ liệu — không có con số nào, chỉ UNKNOWN
+export type DataQuality = 'FORECAST' | 'UNCERTAIN' | 'NO_DATA';
+
+export type StatusCode =
+  | 'STATIC' | 'FLOWING' | 'CLEAR' | 'FOG' | 'DISSIPATING'
+  | 'FLUCTUATING' | 'ROLLING' | 'RAIN' | 'UNKNOWN';
+
 export interface TechnicalIndices {
-  T_surf?: string;
+  T_surf?: string;       // nhiệt độ tại vị trí đứng (giờ vàng sáng)
   Td_surf?: string;
   T_850?: string;
   T_700?: string;
-  LCL_base: string; // e.g., "200m"
+  T_valley?: string;     // nhiệt độ đáy thung lũng — nơi biển mây hình thành
+  Td_valley?: string;
+  LCL_base: string;      // đáy mây tính từ THUNG LŨNG (ASL), vd "1650m"
   FSI_score: number;
-  cloud_top_estimated: string; // e.g., "2400m"
+  cloud_top_estimated: string; // vd "1900m (±200m)" hoặc "N/A"
+  cloud_top_m?: number | null; // giá trị số để tính ΔH động trên UI
+  delta_h?: number | null;     // observerAlt - cloud_top
+  cloud_low_pct?: number;      // % mây tầng thấp bình minh (chính là biển mây trong mô hình)
+  cloud_high_night_pct?: number; // % mây cao ban đêm (chặn bức xạ)
+  rh850_pct?: number;
+  precip_night_mm?: number;
+  precip_dawn_mm?: number;
   wind_impact_level: 'Low' | 'Medium' | 'High' | 'Destructive' | 'Unknown';
   wind_detail?: string;
   moisture_type: 'Deep' | 'Shallow' | 'Unknown';
   inversion_strength?: 'Strong' | 'Moderate' | 'Weak' | 'None' | 'Unknown';
   boundary_status?: string;
-  vrii_score?: number; // Valley Radiation Inversion Index (0-100)
+  vrii_score?: number;
   vrii_label?: 'Excellent' | 'Favorable' | 'Moderate' | 'Poor';
 }
 
@@ -44,13 +63,17 @@ export interface DailyForecast {
   date: string;
   dayOfWeek?: string;
   score: number;
-  status_code: 'STATIC' | 'FLOWING' | 'CLEAR' | 'FOG' | 'DISSIPATING' | 'FLUCTUATING' | 'ROLLING' | 'UNKNOWN';
+  status_code: StatusCode;
   status_text: string;
+  data_quality: DataQuality;
+  reliability_note?: string;    // vd "Dự báo xa 9 ngày — chỉ mang tính xu hướng"
+  reasons?: string[];           // "Vì sao điểm này" — engine ghi từng yếu tố cộng/trừ
+  sunrise_color_potential?: number; // 0-100: tiềm năng "cháy mây" bình minh cho nhiếp ảnh
   golden_hours?: string;
   sun_times?: SunTimes;
   recommended_position?: string;
-  technical_indices: TechnicalIndices; // Replaces old technical_data
-  weather_analysis: WeatherAnalysis;   // New field
+  technical_indices: TechnicalIndices;
+  weather_analysis: WeatherAnalysis;
   expert_advice: string;
   weather_summary: {
     temp: string;
@@ -64,11 +87,13 @@ export interface TerrainPoint {
   label: string;
   altitude: number;
   type: 'VALLEY' | 'SLOPE' | 'PEAK' | 'RIDGE';
-  description?: string; // Added to describe the waypoint (e.g. "Rừng hoa đỗ quyên")
+  description?: string;
 }
 
 export interface TerrainAnalysis {
-  source?: 'HARDCODED' | 'RESEARCHED'; // New field to track data origin
+  // HARDCODED = thư viện đã xác thực; DEM = ước tính từ mô hình độ cao số (dữ liệu thật,
+  // độ phân giải thô); RESEARCHED = giá trị cũ (không còn dùng cho dữ liệu mới)
+  source?: 'HARDCODED' | 'DEM' | 'RESEARCHED';
   summary: string;
   cloud_trap_potential: 'High' | 'Medium' | 'Low';
   zone_classification?: string;
@@ -86,6 +111,17 @@ export interface LocationAnalysis {
   suggested_observer_alt: number;
   lat?: number;
   lon?: number;
+  // DB = thư viện núi đã xác thực; GEOCODE = Open-Meteo Geocoding (tọa độ thật);
+  // AI = AI ước tính (kém tin cậy nhất, chỉ là phương án cuối)
+  source?: 'DB' | 'GEOCODE' | 'AI';
+}
+
+// Đồng thuận THẬT giữa các mô hình dự báo — tính từ dữ liệu từng mô hình, không phải hằng số
+export interface ModelConsensus {
+  models: string[];        // vd ["ECMWF IFS", "GFS", "ICON"]
+  agreementPct: number;    // % ngày các mô hình thống nhất về trạng thái
+  scoreSpread: number;     // chênh lệch điểm lớn nhất giữa các mô hình (trung bình các ngày)
+  note: string;
 }
 
 export interface WeatherDataSource {
@@ -93,6 +129,7 @@ export interface WeatherDataSource {
   lat?: number;
   lon?: number;
   elevation?: number;
+  valleyElevation?: number;
   source: string;
   models_compared?: string[];
 }
@@ -106,9 +143,8 @@ export interface CloudAnalysis {
   overallStrategy: string;
   seasonalContext?: string;
   dataReliability?: 'HIGH' | 'MEDIUM' | 'LOW';
-  modelConsensusScore?: number; // 0 - 100% agreement across ECMWF, GFS, ICON
-  modelSpread?: string;
-  bestDays: string[]; 
+  consensus?: ModelConsensus;  // đồng thuận thật; không có = không hiển thị
+  bestDays: string[];
   dailyForecasts: DailyForecast[];
   goldenTips?: string[];
   gearChecklist: string[];
@@ -117,12 +153,14 @@ export interface CloudAnalysis {
   sources?: { title: string; uri: string }[];
   weather_data_source?: WeatherDataSource;
   modelUsed?: string;
+  aiNarrative?: boolean;   // false = AI không phản hồi, phần lời bình là văn bản do engine sinh
+  engineVersion?: string;
 }
 
 export interface PeakPreset {
   name: string;
   altitude: number;
   province: string;
-  elevation_profile?: TerrainPoint[]; // Added for static terrain consistency
-  aliases?: string[]; // Added for better matching (e.g. "Bach Moc" for "Ky Quan San")
+  elevation_profile?: TerrainPoint[];
+  aliases?: string[];
 }

@@ -1,122 +1,100 @@
-# 🤖 AGENTS.md — CloudHunter AI System Architecture & Claude / AI Developer Guidelines
+# 🤖 AGENTS.md — CloudHunter AI System Architecture & AI Developer Guidelines
 
-This document provides complete system documentation, sitemap, architectural contracts, mathematical foundations, and development guidelines for **AI Coding Assistants** (Claude 3.7 Sonnet, Claude 3.5 Sonnet, Google Antigravity, Gemini 3.5 Flash, DeepSeek, Cursor, Windsurf) extending or maintaining the **CloudHunter AI** codebase.
+Tài liệu kiến trúc + quy tắc phát triển cho AI assistant (Claude, Gemini, Cursor...) tiếp tục
+maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Nam.
+
+> **Bản v5 (2026-08): tái kiến trúc lớn.** AI không còn tính điểm; mọi con số do
+> `services/cloudScoreEngine.ts` tính deterministic. Dữ liệu giả (synthetic weather,
+> consensus cứng 94%, tọa độ GPX bịa, fallback Y Tý ngầm) đã bị loại bỏ toàn bộ.
 
 ---
 
-## 📌 Executive Overview for AI Systems
+## 📌 Triết lý bắt buộc
 
-**CloudHunter AI** is a specialized meteorological forecasting web application designed for **sea of clouds (biển mây) prediction** and **high-altitude microclimate analysis** across mountain peaks in Vietnam (specifically the Northwest region).
+1. **Con số = code, tư vấn = AI.** Điểm số, trạng thái, LCL, mặt mây, ΔH, FSI, VRII... đều
+   tính trong engine TypeScript thuần (test được, tái lập được). Gemini CHỈ viết lời bình
+   từ kết quả engine và bị cấm sửa/bịa số (xem `NARRATIVE_SYSTEM` trong geminiService).
+2. **Không bao giờ bịa dữ liệu.** Ngày ngoài phạm vi dự báo → `data_quality: NO_DATA`,
+   trạng thái UNKNOWN, chỉ số N/A. "Fail-safe" nghĩa là app không crash và nói thật
+   "chưa có dữ liệu" — KHÔNG phải sinh số giả. (Quy tắc này thay thế "Rule 2" cũ.)
+3. **Mọi nguồn dữ liệu phải dán nhãn.** Địa danh: DB / GEOCODE / AI-ước-tính. Địa hình:
+   HARDCODED / DEM. Từng ngày: FORECAST / UNCERTAIN / NO_DATA. Đồng thuận mô hình:
+   tính thật từ dữ liệu từng mô hình, không có giá trị mặc định.
 
-### Core Operational Workflow
-```mermaid
-flowchart TD
-    A[User Input: Location & Dates] --> B[InputForm Component with ModelSelector]
-    B -->|Model Selection stored in localStorage| C[services/geminiService.ts: analyzeLocation]
-    C -->|AI 2-Pass Resolution: Name, Lat, Lon, Elevation| D[LocationConfirm Dialog & Altitude Preview]
-    D --> E[services/weatherService.ts: fetchMountainWeather]
-    E -->|Open-Meteo API: 850hPa, 700hPa, Surface Data| F[Fail-Safe Generator & Clamped Dates]
-    F -->|Compute LCL, FSI, VRII, Solar Times| G[services/geminiService.ts: analyzeWeatherData]
-    G -->|executeWithFallback: Priority Candidate Chain| H[Structured JSON CloudAnalysis]
-    H --> I[AnalysisResult Component: SVG TerrainVisualizer + Daily Forecast Cards]
-    I -->|User Export| J[Offline GPX & Text Summary Downloads]
+## 🔬 Vật lý biển mây (ràng buộc khi sửa engine)
+
+- Biển mây bức xạ hình thành trong **THUNG LŨNG**; đỉnh chỉ là vị trí quan sát.
+  Mọi chỉ số ẩm/nghịch nhiệt tham chiếu **đáy thung lũng** (estimateValleyElevation:
+  profile VALLEY đã xác thực, hoặc min DEM 9 điểm bán kính ~4km).
+- **Nghịch nhiệt KHÔNG được suy từ "T850 > T_đỉnh"** — với đỉnh >1500m điều đó đúng trong
+  mọi khí quyển (lỗi hệ thống của bản cũ). Phải so T tầng với nhiệt kỳ vọng theo suy giảm
+  chuẩn 6.5°C/km từ thung lũng (`computeInversion`). Có test hồi quy khóa lỗi này.
+- Độ cao mực áp suất (ASL, gần đúng): 925hPa≈760m, 850hPa≈1500m, 700hPa≈3100m.
+- Cửa sổ thời gian: pha bức xạ = **19h đêm trước → 6h sáng** (mây cao đêm, gió 925 đêm,
+  mưa đêm); pha quan sát = **4h→9h sáng** (mây thấp, nhiệt/ẩm tầng lúc 6h).
+- `cloud_cover_low` lúc bình minh tại điểm thung lũng ≈ biển mây trong mô hình — yếu tố
+  nặng nhất của điểm số. Mây cao ban đêm chặn bức xạ → phạt. Một ít mây cao lúc bình minh
+  (15–55%) lại TỐT cho nhiếp ảnh → chỉ số riêng `sunrise_color_potential`.
+- LCL = 125 × (T−Td) tính từ THUNG LŨNG → đáy mây ASL; mặt mây (top) ước từ profile RH
+  các tầng (`estimateCloudTop`); ΔH = vị trí đứng − top quyết định STATIC/FLUCTUATING/FOG
+  (quy tắc ranh giới ±250m).
+- Zone A (bồn giữ ẩm — Lào Cai/Yên Bái/Sơn La): ngưỡng gió 10/15/20 km/h.
+  Zone B (ống gió — Lai Châu): 5/8/15 km/h, khắt khe hơn hẳn (`assessWind`).
+
+## 🏗️ Luồng dữ liệu v5
+
+```
+InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối cùng, có nhãn)
+  → LocationConfirm (hiện nguồn + độ tin cậy)
+  → fetchMountainWeather:  2 ĐIỂM (thung lũng + vị trí đứng) × 3 MÔ HÌNH (ECMWF/GFS/ICON)
+        1 call/điểm, 16 biến hourly + sunrise/sunset daily, cache 30 phút
+  → cloudScoreEngine.computeDayForecast (per-model score/status → median + đa số + spread THẬT)
+  → geminiService.generateNarrative (AI viết lời từ engine digest; fail → văn bản engine,
+        aiNarrative=false, app vẫn đầy đủ số liệu)
+  → AnalysisResult (badge chất lượng ngày, panel "Vì sao điểm này", ΔH tương tác, GPX tọa độ thật)
+  → historyService (localStorage 5 lần gần nhất — nền tảng cho vòng kiểm chứng sau chuyến đi)
 ```
 
----
+## 📁 File chính
 
-## 📁 Key File Index & Code Responsibilities
+| File | Trách nhiệm |
+| :--- | :--- |
+| `services/cloudScoreEngine.ts` | **Engine chấm điểm deterministic** — toàn bộ Modules 1–8 cũ chuyển thành code: inversion/LCL/cloud-top/FSI/VRII/gió-theo-zone/mùa/trạng thái/điểm + reasons từng yếu tố. |
+| `services/weatherService.ts` | Fetch Open-Meteo đa mô hình 2 điểm, gộp cửa sổ đêm+bình minh (`aggregateDayModel`), nhãn DataQuality theo horizon, DEM valley/point elevation, cache TTL. KHÔNG có synthetic data. |
+| `services/geminiService.ts` | Phân giải địa danh nhiều tầng có nhãn nguồn + lời bình AI (schema chỉ chứa trường văn bản). |
+| `services/modelDiscoveryService.ts` | Discover model Gemini động + executeWithFallback (429/404/5xx retry, 401/403 dừng). |
+| `services/historyService.ts` | Lưu/mở lại các lần dự báo (localStorage). |
+| `tests/engine.test.ts` | 28 golden tests khóa vật lý & chấm điểm (vitest). |
+| `constants/mountains.ts`, `constants.ts` | 39 núi + 30 mặt cắt địa hình đã xác thực (tài sản quý — giữ cập nhật). |
+| `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
 
-| File Path | Description & Responsibility | Key Functions / Components |
-| :--- | :--- | :--- |
-| `types.ts` | Complete TypeScript type contracts for weather inputs, forecasts, technical indices, terrain profiles, and discovered models. | `WeatherInput`, `DailyForecast`, `CloudAnalysis`, `TechnicalIndices`, `LocationAnalysis`, `SunTimes` |
-| `services/modelDiscoveryService.ts` | **Dynamic Model Discovery & Automatic Fallback Engine**. Queries provider REST endpoint for text models, sorts Flash/Pro/Preview tiers, handles localStorage persistence, and executes prioritized fallback chain. | `discoverModels()`, `executeWithFallback()`, `classifyError()`, `getStoredModel()`, `setStoredApiKey()` |
-| `services/geminiService.ts` | **Core AI Analysis Engine**. Contains `SYSTEM_INSTRUCTION` (8 meteorological modules), prompt builder, `analyzeLocation` (Pass 1 location resolver), and `analyzeWeatherData` (Pass 2 cloud analyzer). | `analyzeLocation()`, `analyzeWeatherData()`, `getAIInstance()` |
-| `services/weatherService.ts` | **Numerical Weather Fetcher & Fail-Safe Engine**. Fetches 850hPa / 700hPa upper-air data from Open-Meteo, calculates LCL, FSI, VRII, and Sun Times. Contains fail-safe synthetic weather generator for 100% data reliability. | `fetchMountainWeather()`, `computeSunTimes()`, `computeVRII()` |
-| `constants/mountains.ts` | Extended database of Northern Vietnam mountains with verified coordinates (`lat`, `lon`), elevation, and microclimate zone classification (`A_CLOUD_TRAP` vs `B_WIND_TUNNEL`). | `MOUNTAIN_DB`, `MountainInfo` |
-| `constants.ts` | Hardcoded terrain elevation profiles, waypoint markers, descriptions, and Vietnamese search aliases for Northwest peaks. | `NORTHWEST_PEAKS`, `PeakPreset` |
-| `components/ModelSelector.tsx` | UI dropdown for selecting AI models dynamically. Renders Flash/Pro/Preview badges with clean sans-serif typography and a refresh button. | `ModelSelector` |
-| `components/ApiKeyModal.tsx` | Interactive modal allowing users to test, input, save, or clear custom Gemini API Keys in localStorage. | `ApiKeyModal` |
-| `components/InputForm.tsx` | Form component with real-time geocoding autocomplete over `NORTHWEST_PEAKS` and `MOUNTAIN_DB`. | `InputForm` |
-| `components/LocationConfirm.tsx` | Intermediate dialog for verifying resolved coordinates, elevation, and observer altitude before running full weather analysis. | `LocationConfirm` |
-| `components/AnalysisResult.tsx` | Main forecast display component. Features interactive SVG `TerrainVisualizer`, VRII badges, Sun Times, GPX/Text Export, Golden Hour alerts, and executed model label. | `AnalysisResult`, `TerrainVisualizer` |
-| `components/Header.tsx` | Header bar with app title, taglines, and "🔑 API Key Manager" trigger button. | `Header` |
-| `App.tsx` | Main application state manager orchestrating multi-step workflow (`INPUT` $\rightarrow$ `CONFIRM` $\rightarrow$ `RESULT`) and global error banners. | `App` |
+## 🛠️ Quy tắc dev
 
----
+1. **Mọi call AI qua `executeWithFallback`** — không gọi `ai.models.generateContent` trực tiếp.
+2. **Không thêm lại dữ liệu giả dưới mọi hình thức** (số mặc định "an toàn", consensus cứng,
+   tọa độ placeholder...). Thiếu dữ liệu = nói thật là thiếu.
+3. **Không giao phép tính cho AI.** Cần chỉ số mới → thêm vào engine + viết golden test.
+4. **Prompt AI không được gợi ý AI "tìm kiếm Internet"** — model không có tool search trong
+   app này; câu lệnh như vậy chỉ tạo ảo giác "đã nghiên cứu".
+5. Sửa engine xong PHẢI chạy: `npm run lint && npm test && npm run build`.
+6. UI giữ glassmorphism dark-mode; Tailwind build-time (index.css, không CDN).
 
-## 🧮 Atmospheric Physics & Mathematical Foundations
+## 🚀 Backlog gợi ý
 
-When modifying analysis logic in `services/geminiService.ts` or `services/weatherService.ts`, AI agents MUST observe these formulas:
+1. **Vòng kiểm chứng độ chính xác**: đối chiếu dự báo đã lưu (historyService có `savedAt`)
+   với Open-Meteo Archive API sau chuyến đi → thống kê "engine đoán trúng bao nhiêu %".
+2. Ảnh vệ tinh Himawari thời gian thực (tab "mây lúc này").
+3. PWA offline (vite-plugin-pwa) cho vùng mất sóng.
+4. Giờ-theo-giờ trong ngày được chọn (timeline 19h→9h).
+5. Mở rộng MOUNTAIN_DB + profile cho núi phía Nam (Lang Biang, Chư Yang Sin, Bà Đen...).
 
-### 1. Lifting Condensation Level (LCL Base Height)
-$$\text{LCL (meters)} = 125 \times (T_{\text{surface}} - Td_{\text{surface}})$$
-* **$T_{\text{surface}}$**: 2-meter air temperature (°C)
-* **$Td_{\text{surface}}$**: 2-meter dew point temperature (°C)
+## 🧪 Lệnh kiểm tra
 
-### 2. Wind-Weighted Fog Stability Index (FSI)
-$$\text{FSI} = 2(T_{\text{surface}} - Td_{\text{surface}}) + 2(T_{\text{surface}} - T_{850\text{hPa}}) + W_{\text{impact}}$$
-Where $W_{\text{impact}}$ is calculated from 850hPa (~1500m) wind speed ($W_{850}$ in km/h):
-* $W_{850} < 10 \text{ km/h} \Rightarrow W_{\text{impact}} = 0$
-* $10 \le W_{850} < 15 \Rightarrow W_{\text{impact}} = W_{850} \times 1$
-* $15 \le W_{850} \le 20 \Rightarrow W_{\text{impact}} = W_{850} \times 1$
-* $W_{850} > 20 \text{ km/h} \Rightarrow W_{\text{impact}} = W_{850} \times 2$
-
-### 3. Valley Radiation Inversion Index (VRII)
-$$\text{VRII (0-100)} = 85 - (12 \times (T_{\text{surf}} - Td_{\text{surf}})) - (2.5 \times W_{850}) + \text{InversionBonus}$$
-* $\text{InversionBonus} = +30$ if $T_{850} > T_{\text{surf}}$, $+15$ if $T_{850} \ge T_{\text{surf}} - 1.5^\circ\text{C}$.
-* **VRII $\ge 80$**: `Excellent` (Dense, pristine, flat cloud sea).
-* **VRII $60-79$**: `Favorable` (Good valley cloud accumulation).
-* **VRII $40-59$**: `Moderate` (Flowing cloud / thin fog).
-* **VRII $< 40$**: `Poor` (Dissipating clouds).
-
-### 4. Solar Calculator & Hour Angle Equations
-$$\delta = 0.4093 \sin\left(\frac{2\pi}{365}(N - 81)\right)$$
-$$\cos(H_0) = -\tan(\phi)\tan(\delta)$$
-* $\phi$: Latitude in radians, $N$: Day of year.
-* Timestamps converted to Vietnam ICT Local Time (UTC+7).
-
-### 5. Boundary Fluctuation Rule ($\Delta H$)
-$$\Delta H = H_{\text{observer}} - H_{\text{cloud\_top}}$$
-* **$\Delta H > 300m$**: Observer above cloud deck $\rightarrow$ Clear sunny view of cloud sea.
-* **$\Delta H \le 200m$**: **Fluctuating / Rolling Zone** $\rightarrow$ Clouds periodically envelope observer in fog.
-
----
-
-## 🛠️ Developer Rules for Claude AI & Future Agents
-
-### Rule 1: Always Use `executeWithFallback` for AI API Calls
-Do not call `ai.models.generateContent` directly. Always pass calls through `executeWithFallback` in `services/modelDiscoveryService.ts` to ensure automatic retry on Rate Limits (429) or Deprecated Models (404), while stopping immediately on Auth Errors (401/403).
-
-### Rule 2: Preserve the Fail-Safe Synthetic Weather Generator
-Never let `fetchMountainWeather` return `null`. The synthetic mountain weather generator in `services/weatherService.ts` ensures that even if Open-Meteo is offline or coordinates are out of bounds, valid physical weather data is provided to Gemini, preventing missing data states.
-
-### Rule 3: Maintain Code Quality & Typography Standards
-Use clean sans-serif typography (`font-sans`) for dropdowns and UI text. Ensure all buttons, badges, and modals maintain glassmorphism dark-mode aesthetics.
-
----
-
-## 🚀 Future Backlog & Enhancement Roadmap for Claude AI
-
-If you are **Claude AI** or another AI assistant continuing development, here are recommended next-level features to implement:
-
-1. **Feature A: Live Satellite & Weather Radar Overlay**
-   - Integrate RainViewer / Ventusky / OpenWeather satellite radar map layers into the `TerrainVisualizer` view.
-
-2. **Feature B: Live Homestay / Trekking Webcam Feed Integration**
-   - Add a community webcam section displaying live video / image feeds from Y Tý, Tà Xùa, Sa Pa, and Lảo Thẩn lán nghỉ.
-
-3. **Feature C: Offline PWA (Progressive Web App) Service Worker**
-   - Add a PWA manifest and service worker (`vite-plugin-pwa`) so mountain climbers can launch CloudHunter without internet access.
-
-4. **Feature D: Multi-Language Internationalization (EN / VI)**
-   - Add i18n support to switch between Vietnamese and English for international trekkers.
-
----
-
-## 🧪 Verification Commands
-
-Before ending any turn, execute:
 ```bash
-npm run lint
-npm run build
+npm run lint   # tsc --noEmit
+npm test       # vitest — 28 golden tests engine
+npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
+
+Deploy: push `main` → GitHub Pages (base `/cloudhunter/`) + Vercel (huntercloud.vercel.app,
+base `/` qua env VERCEL). Nhánh `gh-pages` bị Vercel bỏ qua nhờ vercel.json nằm trong dist.

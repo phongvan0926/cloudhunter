@@ -6,6 +6,7 @@ import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { analyzeWeatherData, analyzeLocation } from './services/geminiService';
+import { listRuns, loadRun, saveRun } from './services/historyService';
 
 const App: React.FC = () => {
   const [analysis, setAnalysis] = useState<CloudAnalysis | null>(null);
@@ -14,6 +15,12 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
+  const [historyList, setHistoryList] = useState(() => listRuns());
+
+  const handleLoadHistory = (id: string) => {
+    const saved = loadRun(id);
+    if (saved) setAnalysis(saved);
+  };
 
   const handleInputSubmit = async (data: WeatherInput) => {
     setIsLoading(true);
@@ -28,10 +35,12 @@ const App: React.FC = () => {
       });
     } catch (err: any) {
       const msg = err?.message || String(err);
-      if (msg.includes('403') || msg.includes('leaked') || msg.includes('AUTH')) {
-        setError("⚠️ Key Gemini mặc định đã bị Google vô hiệu hóa vì lý do bảo mật (Leaked Key). Vui lòng nhấp vào đây để đổi sang API Key cá nhân của bạn.");
+      if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
+        setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
+      } else if (msg.includes('Không nhận diện được địa điểm')) {
+        setError(msg); // lỗi trung thực từ bộ phân giải địa danh — hiển thị nguyên văn
       } else {
-        setError("Không thể nhận diện địa điểm. Vui lòng kiểm tra lại kết nối mạng hoặc thử lại.");
+        setError(`Không thể nhận diện địa điểm: ${msg}`);
       }
       console.error(err);
     } finally {
@@ -46,13 +55,17 @@ const App: React.FC = () => {
     try {
       const result = await analyzeWeatherData(pendingInput);
       setAnalysis(result);
+      saveRun(result);
+      setHistoryList(listRuns());
       setLocationAnalysis(null); // Hide confirmation after success
     } catch (err: any) {
       const msg = err?.message || String(err);
-      if (msg.includes('403') || msg.includes('leaked') || msg.includes('AUTH')) {
-        setError("⚠️ Key Gemini mặc định đã bị Google vô hiệu hóa vì lý do bảo mật (Leaked Key). Vui lòng nhấp đổi sang API Key cá nhân của bạn.");
+      if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
+        setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
+      } else if (msg.includes('Open-Meteo') || msg.includes('Elevation')) {
+        setError(`Không lấy được dữ liệu khí tượng (${msg}). Kiểm tra kết nối mạng rồi thử lại — app không hiển thị số liệu bịa thay thế.`);
       } else {
-        setError("Có lỗi xảy ra trong quá trình phân tích lịch trình. Vui lòng thử lại.");
+        setError(`Có lỗi khi phân tích: ${msg}`);
       }
       console.error(err);
     } finally {
@@ -109,6 +122,25 @@ const App: React.FC = () => {
             ) : (
               <div className="animate-fade-in-up">
                 <InputForm onSubmit={handleInputSubmit} isLoading={isLoading} />
+                {historyList.length > 0 && (
+                  <div className="max-w-xl mx-auto mt-4">
+                    <span className="block text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-2">
+                      🕘 Lần tra gần đây (mở lại tức thì, không tốn API)
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {historyList.map(h => (
+                        <button
+                          key={h.id}
+                          onClick={() => handleLoadHistory(h.id)}
+                          className="px-3 py-1.5 rounded-full text-xs bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-cyan-500 hover:text-cyan-300 transition-all"
+                          title={`Dự báo lưu lúc ${new Date(h.savedAt).toLocaleString('vi-VN')} — dùng để đối chiếu với thực tế sau chuyến đi`}
+                        >
+                          {h.locationName} · {h.dateRange}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )
           ) : (
