@@ -4,8 +4,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // Vercel serve ở gốc domain (base '/'); chỉ GitHub Pages cần '/cloudhunter/'.
+    // Vercel luôn set biến môi trường VERCEL=1 khi build.
+    const onVercel = !!process.env.VERCEL;
     return {
-      base: mode === 'production' ? '/cloudhunter/' : '/',
+      base: mode === 'production' && !onVercel ? '/cloudhunter/' : '/',
       server: {
         port: 3000,
         host: '0.0.0.0',
