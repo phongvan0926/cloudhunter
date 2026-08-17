@@ -686,7 +686,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                     </div>
                   )}
 
-                  {/* V4.0 Technical Grid */}
+                  {/* Technical Grid */}
                   <div className="grid grid-cols-2 lg:grid-cols-6 gap-2.5">
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
                           <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">LCL Base</span>
