@@ -100,6 +100,25 @@ const FALLBACK_DEFAULT_MODELS: DiscoveredModel[] = [
 
 const API_KEY_STORAGE_KEY = 'cloudhunter_custom_api_key';
 
+/**
+ * Chỉ giữ model PHÂN TÍCH VĂN BẢN. Loại: embedding, TTS, model TẠO ẢNH
+ * ("Nano Banana" = Gemini image, id chứa 'image'), model realtime audio/video (Live API).
+ * Model ảnh hỗ trợ generateContent nên lọt qua filter cũ và từng hiện trong dropdown.
+ */
+export function isTextAnalysisModel(id: string, displayName: string): boolean {
+  const lower = id.toLowerCase();
+  const dn = (displayName || '').toLowerCase();
+  const banned = [
+    'embedding', 'imagen', 'tts', 'aqa', 'robotics', 'computer-use', 'gecko', 'bison',
+    'image',        // gemini-*-image* = model tạo ảnh (Nano Banana)
+    '-live',        // Live API (realtime audio/video), không dùng cho phân tích
+    'native-audio', 'veo',
+  ];
+  if (banned.some(b => lower.includes(b))) return false;
+  if (dn.includes('nano banana') || dn.includes('image')) return false;
+  return true;
+}
+
 export function getStoredApiKey(): string {
   try {
     return localStorage.getItem(API_KEY_STORAGE_KEY) || process.env.GEMINI_API_KEY || '';
@@ -179,19 +198,8 @@ export async function discoverModels(apiKey?: string): Promise<DiscoveredModel[]
       if (!methods.includes('generateContent')) continue;
 
       // Filter out non-text models
+      if (!isTextAnalysisModel(cleanId, item.displayName || '')) continue;
       const lower = cleanId.toLowerCase();
-      if (
-        lower.includes('embedding') ||
-        lower.includes('imagen') ||
-        lower.includes('tts') ||
-        lower.includes('aqa') ||
-        lower.includes('robotics') ||
-        lower.includes('computer-use') ||
-        lower.includes('gecko') ||
-        lower.includes('bison')
-      ) {
-        continue;
-      }
 
       // Classify Tiers (R2)
       let tier: 'flash' | 'pro' | 'experimental' | 'custom' = 'custom';

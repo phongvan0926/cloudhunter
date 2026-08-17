@@ -232,6 +232,39 @@ describe('buildFallbackChain — thứ tự model dự phòng', () => {
   });
 });
 
+describe('buildFallbackChain — bậc thang đúng với danh sách model thật của user (18/8/2026)', () => {
+  it('3.7 lỗi → flash-latest → 3.6 → 3.5 → 2.5 → preview → mọi bản Lite cuối cùng', async () => {
+    const { buildFallbackChain } = await import('../services/modelDiscoveryService');
+    const mk = (id: string) => ({ id, name: id, displayName: id, tier: 'flash' as const, tierLabel: '⚡' });
+    const models = [
+      mk('gemini-flash-lite-latest'), mk('gemini-flash-latest'), mk('gemini-3.7-flash'),
+      mk('gemini-3.6-flash'), mk('gemini-3.5-flash-lite'), mk('gemini-3.5-flash'),
+      mk('gemini-3.1-flash-lite-preview'), mk('gemini-3.1-flash-lite'),
+      mk('gemini-3-flash-preview'), mk('gemini-2.5-flash-lite'), mk('gemini-2.5-flash'),
+    ];
+    const chain = buildFallbackChain('gemini-3.7-flash', models);
+    expect(chain.slice(0, 5)).toEqual([
+      'gemini-3.7-flash',      // lựa chọn của người dùng
+      'gemini-flash-latest',   // alias flash mạnh nhất hiện có
+      'gemini-3.6-flash',      // xuống dần từng bậc...
+      'gemini-3.5-flash',
+      'gemini-2.5-flash',
+    ]);
+    const firstLite = chain.findIndex(id => id.includes('lite'));
+    expect(chain.slice(0, firstLite)).not.toContain('gemini-3.5-flash-lite');
+    expect(firstLite).toBeGreaterThanOrEqual(6); // toàn bộ flash thường + preview đứng trước Lite
+  });
+
+  it('isTextAnalysisModel loại model tạo ảnh (Nano Banana) và Live/audio khỏi danh sách', async () => {
+    const { isTextAnalysisModel } = await import('../services/modelDiscoveryService');
+    expect(isTextAnalysisModel('gemini-3.1-flash-image', 'Nano Banana 2')).toBe(false);
+    expect(isTextAnalysisModel('gemini-2.5-flash-image-preview', 'Nano Banana')).toBe(false);
+    expect(isTextAnalysisModel('gemini-2.5-flash-live', 'Gemini Live')).toBe(false);
+    expect(isTextAnalysisModel('gemini-3.7-flash', 'Gemini 3.7 Flash')).toBe(true);
+    expect(isTextAnalysisModel('gemini-2.5-flash-lite', 'Gemini 2.5 Flash-Lite')).toBe(true);
+  });
+});
+
 describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
     expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
