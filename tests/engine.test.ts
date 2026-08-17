@@ -212,6 +212,26 @@ describe('qualityForDaysAhead — nhãn tin cậy theo horizon', () => {
   });
 });
 
+describe('buildFallbackChain — thứ tự model dự phòng', () => {
+  it('HỒI QUY: model chọn lỗi phải rơi xuống Flash GẦN NHẤT, Lite luôn cuối hàng', async () => {
+    const { buildFallbackChain } = await import('../services/modelDiscoveryService');
+    const mk = (id: string) => ({ id, name: id, displayName: id, tier: 'flash' as const, tierLabel: '⚡' });
+    const models = [
+      mk('gemini-flash-lite-latest'), mk('gemini-flash-latest'), mk('gemini-2.5-flash-lite'),
+      mk('gemini-2.5-flash'), mk('gemini-3.5-flash'), mk('gemini-3.7-flash-preview'),
+    ];
+    const chain = buildFallbackChain('gemini-3.7-flash', models);
+    expect(chain[0]).toBe('gemini-3.7-flash');            // luôn ưu tiên lựa chọn của người dùng
+    expect(chain[1]).toBe('gemini-flash-latest');         // alias flash mới nhất kế tiếp
+    // mọi bản "lite" phải đứng SAU mọi bản flash thường (bug cũ: lite-latest nhảy lên đầu)
+    const firstLite = chain.findIndex(id => id.includes('lite'));
+    const lastNonLite = chain.reduce((acc, id, i) => (!id.includes('lite') ? i : acc), 0);
+    expect(firstLite).toBeGreaterThan(lastNonLite);
+    // bản preview đứng sau bản ổn định cùng đẳng cấp
+    expect(chain.indexOf('gemini-3.5-flash')).toBeLessThan(chain.indexOf('gemini-3.7-flash-preview'));
+  });
+});
+
 describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
     expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);

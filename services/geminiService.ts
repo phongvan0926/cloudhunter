@@ -484,6 +484,16 @@ async function generateNarrative(base: CloudAnalysis, model?: string): Promise<C
     throw new Error("No response text");
   });
 
+  // Minh bạch fallback: người dùng chọn đích danh model thì phải biết nếu app đổi model
+  let modelFallbackNote: string | undefined;
+  if (fallbackRes.fallbackOccurred) {
+    const why = fallbackRes.attemptErrors[primaryModel] || 'không phản hồi';
+    const whyShort = /429|quota|resource_exhausted/i.test(why) ? 'hết hạn mức (429)' :
+                     /timeout/i.test(why) ? 'quá thời gian chờ' :
+                     /404|not found|deprecated/i.test(why) ? 'model không tồn tại/ngừng hỗ trợ' : why;
+    modelFallbackNote = `Model bạn chọn (${primaryModel}) bị lỗi: ${whyShort} — lời bình được viết bởi ${fallbackRes.modelUsed}. Con số dự báo KHÔNG bị ảnh hưởng (engine tính, không phụ thuộc model AI).`;
+  }
+
   const parsed = JSON.parse(extractJson(fallbackRes.result.text));
   const byDate = new Map<string, any>((parsed.days || []).map((d: any) => [d.date, d]));
 
@@ -510,5 +520,7 @@ async function generateNarrative(base: CloudAnalysis, model?: string): Promise<C
     dailyForecasts: merged,
     aiNarrative: true,
     modelUsed: fallbackRes.modelUsed,
+    modelRequested: primaryModel,
+    modelFallbackNote,
   };
 }

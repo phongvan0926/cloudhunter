@@ -557,6 +557,13 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
              )}
             </div>
 
+           {result.modelFallbackNote && (
+             <div className="mt-3 bg-amber-950/40 border border-amber-600/40 rounded-lg p-3 text-xs text-amber-200 flex items-start gap-2">
+               <span>🔀</span>
+               <span>{result.modelFallbackNote}</span>
+             </div>
+           )}
+
            {result.safetyWarnings && result.safetyWarnings.length > 0 && (
              <div className="mt-3 bg-rose-950/40 border border-rose-600/40 rounded-lg p-3">
                <span className="text-rose-300 text-[10px] font-bold uppercase tracking-wider block mb-1">⚠️ Cảnh báo an toàn</span>

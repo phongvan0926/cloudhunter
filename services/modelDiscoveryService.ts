@@ -290,11 +290,42 @@ export interface FallbackResult<T> {
   modelUsed: string;
   fallbackOccurred: boolean;
   attemptedModels: string[];
+  attemptErrors: Record<string, string>; // model → lỗi ngắn gọn (để UI giải thích vì sao fallback)
+}
+
+/**
+ * Điểm ưu tiên khi chọn model DỰ PHÒNG: model bạn chọn lỗi thì thử model
+ * GẦN NHẤT VỀ CHẤT LƯỢNG trước, Lite luôn là phương án cuối cùng.
+ * (Bản cũ sort theo chữ cái ngược → 'gemini-flash-lite-latest' xếp trước mọi
+ * model số vì 'l' > chữ số, khiến chọn 3.7 Flash lỗi 1 phát là rơi thẳng
+ * xuống Flash-Lite — lỗi người dùng đã gặp thật.)
+ */
+export function fallbackPriority(id: string): number {
+  const lower = id.toLowerCase();
+  const m = lower.match(/(\d+(?:\.\d+)?)/);
+  const version = m ? parseFloat(m[1]) : (lower.includes('latest') ? 900 : 0);
+  let score = version * 10;
+  if (lower.includes('latest')) score += 5;                                  // alias -latest nhỉnh hơn bản số cùng loại
+  if (lower.includes('preview') || lower.includes('exp')) score -= 100;      // bản thử nghiệm sau bản ổn định
+  if (lower.includes('lite')) score -= 100000;                               // Lite = chất lượng thấp nhất → cuối hàng
+  return score;
+}
+
+/** Chuỗi thử: [model người dùng chọn, rồi các Flash khác xếp theo chất lượng giảm dần]. */
+export function buildFallbackChain(primaryModel: string, discoveredModels: DiscoveredModel[]): string[] {
+  const chain: string[] = [primaryModel];
+  const safeFallbacks = discoveredModels
+    .filter(m => m.tier === 'flash' || m.tier === 'custom')
+    .map(m => m.id)
+    .sort((a, b) => fallbackPriority(b) - fallbackPriority(a));
+  for (const fb of safeFallbacks) {
+    if (!chain.includes(fb)) chain.push(fb);
+  }
+  return chain;
 }
 
 /**
  * R5: Automatic Fallback Execution Engine
- * Priority chain: [primaryModel, ...safeFlashModels]
  * Stops on AUTH errors; retries on RATE_LIMIT / BAD_MODEL / 5XX.
  * Prevents calling expensive PRO models automatically unless user selected it.
  */
@@ -303,22 +334,11 @@ export async function executeWithFallback<T>(
   discoveredModels: DiscoveredModel[],
   fn: (modelId: string) => Promise<T>
 ): Promise<FallbackResult<T>> {
-  // Construct candidate fallback chain
-  const chain: string[] = [primaryModel];
-
-  // Safe fallbacks: Include only Flash/Light models (Anti-requirement: DO NOT include expensive Pro models)
-  const safeFallbacks = discoveredModels
-    .filter(m => m.tier === 'flash' || m.tier === 'custom')
-    .map(m => m.id);
-
-  for (const fb of safeFallbacks) {
-    if (!chain.includes(fb)) {
-      chain.push(fb);
-    }
-  }
+  const chain = buildFallbackChain(primaryModel, discoveredModels);
 
   let lastError: any = null;
   const attemptedModels: string[] = [];
+  const attemptErrors: Record<string, string> = {};
 
   for (const modelId of chain) {
     attemptedModels.push(modelId);
@@ -328,23 +348,22 @@ export async function executeWithFallback<T>(
         result,
         modelUsed: modelId,
         fallbackOccurred: modelId !== primaryModel,
-        attemptedModels
+        attemptedModels,
+        attemptErrors,
       };
     } catch (err: any) {
       const classification = classifyError(err);
-      
+
       if (classification === 'AUTH') {
         // STOP IMMEDIATELY (R5). Do not cycle through remaining models on bad key
         throw new Error(`Xác thực thất bại (401/403): Vui lòng kiểm tra lại GEMINI_API_KEY. Cụ thể: ${err.message || 'Key không hợp lệ'}`);
       }
 
+      const brief = String(err?.message || err).slice(0, 120);
+      attemptErrors[modelId] = brief;
       if (classification === 'RETRYABLE') {
-        console.warn(`[Fallback Engine] Model ${modelId} không khả dụng (${err.message || 'Rate limit / Deprecated'}). Đang tự động chuyển sang model tiếp theo...`);
-        lastError = err;
-        continue;
+        console.warn(`[Fallback Engine] Model ${modelId} không khả dụng (${brief}). Đang tự động chuyển sang model tiếp theo...`);
       }
-
-      // If OTHER error, save and try next or throw if final
       lastError = err;
     }
   }

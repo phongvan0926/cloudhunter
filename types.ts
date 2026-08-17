@@ -153,6 +153,8 @@ export interface CloudAnalysis {
   sources?: { title: string; uri: string }[];
   weather_data_source?: WeatherDataSource;
   modelUsed?: string;
+  modelRequested?: string;     // model người dùng chọn (có thể khác modelUsed nếu fallback)
+  modelFallbackNote?: string;  // giải thích trung thực vì sao phải đổi model
   aiNarrative?: boolean;   // false = AI không phản hồi, phần lời bình là văn bản do engine sinh
   engineVersion?: string;
 }
