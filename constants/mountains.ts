@@ -22,10 +22,10 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['pha luong', 'moc chau', 'đỉnh pha luông', 'nóc nhà mộc châu', 'mộc châu', 'cửa khẩu lóng sập']
   },
   HANG_KIA_PA_CO: {
-    name: "Hang Kia - Pà Cò",
+    name: "Hang Kia - Pà Cò (Thung Mài)",
     lat: 20.7410, lon: 104.9310, elevation: 1200,
     zone: "A_CLOUD_TRAP",
-    aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình']
+    aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình', 'thung mài', 'thung mai', 'săn mây thung mài']
   },
   XIM_VANG: {
     name: "Xím Vàng",
@@ -245,7 +245,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     name: "Đỉnh Ba Vì (Đỉnh Vua)",
     lat: 21.0800, lon: 105.3600, elevation: 1280,
     zone: "A_CLOUD_TRAP",
-    aliases: ['ba vì', 'ba vi', 'đỉnh vua', 'núi ba vì']
+    aliases: ['ba vì', 'ba vi', 'đỉnh vua', 'núi ba vì', 'cốt 1100', 'cot 1100', 'vườn quốc gia ba vì']
   },
   MAU_SON: {
     name: "Mẫu Sơn (Lạng Sơn)",
@@ -314,5 +314,37 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     lat: 11.5942, lon: 108.4906, elevation: 1100, // OSM xã Tà Năng, DEM 1032m
     zone: "A_CLOUD_TRAP",
     aliases: ['tà năng', 'ta nang', 'phan dũng', 'tà năng phan dũng', 'đồi cỏ', 'đức trọng']
+  },
+
+  // --- BỔ SUNG 8/2026 (đợt 2): điểm ÍT NGƯỜI BIẾT do user cung cấp, đã xác minh tọa độ ---
+  PHINH_HO: {
+    name: "Phình Hồ (Trạm Tấu)",
+    lat: 21.5221, lon: 104.5418, elevation: 1080, // OSM đường Phình Hồ, DEM 1083m; thung lũng dưới 319m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['phình hồ', 'phinh ho', 'trạm tấu', 'săn mây phình hồ', 'đồi chè phình hồ']
+  },
+  LANG_NHI: {
+    name: "Làng Nhì (Trạm Tấu)",
+    lat: 21.4952, lon: 104.5394, elevation: 950, // OSM đường Làng Nhì, DEM 945m; đỉnh cục bộ ~1641m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['làng nhì', 'lang nhi', 'đỉnh săn mây làng nhì', 'săn mây làng nhì']
+  },
+  TA_LENG_SAN_MAY: {
+    name: "Đồi săn mây Tả Lèng (Lai Châu)",
+    lat: 22.43069, lon: 103.50131, elevation: 1360, // plus code CGJ2+7G user cung cấp, DEM 1363m
+    zone: "B_WIND_TUNNEL",
+    aliases: ['săn mây tả lèng', 'săn mây lai châu', 'đồi săn mây tả lèng', 'tả lèng lai châu', 'san may lai chau']
+  },
+  NGOC_SON_LAC_SON: {
+    name: "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+    lat: 20.44256, lon: 105.38106, elevation: 390, // plus code C9VJ+2C user cung cấp, DEM 391m; thung lũng dưới 47m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['ngọc sơn', 'ngoc son', 'lạc sơn', 'săn mây ngọc sơn', 'ngổ luông']
+  },
+  KEO_LOM: {
+    name: "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+    lat: 21.0542, lon: 104.0422, elevation: 860, // tọa độ trung tâm xã Phiêng Pằn (OSM), DEM 855m; đỉnh cục bộ ~1147m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['kéo lồm', 'keo lom', 'phiêng pằn', 'phieng pan', 'mai sơn', 'săn mây kéo lồm']
   }
 };

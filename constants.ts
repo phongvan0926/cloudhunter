@@ -432,6 +432,38 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     altitude: 1100,
     province: 'Lâm Đồng',
     aliases: ['tà năng', 'phan dũng', 'tà năng phan dũng']
+  },
+
+  // --- BỔ SUNG 8/2026 (đợt 2): điểm ít người biết do user tìm, tọa độ đã xác minh ---
+  {
+    name: 'Phình Hồ (Trạm Tấu)',
+    altitude: 1080,
+    province: 'Yên Bái (nay Lào Cai)',
+    aliases: ['phình hồ', 'săn mây phình hồ', 'đồi chè phình hồ']
+  },
+  {
+    name: 'Làng Nhì (Trạm Tấu)',
+    altitude: 950,
+    province: 'Yên Bái (nay Lào Cai)',
+    aliases: ['làng nhì', 'đỉnh săn mây làng nhì']
+  },
+  {
+    name: 'Đồi săn mây Tả Lèng (Lai Châu)',
+    altitude: 1360,
+    province: 'Lai Châu',
+    aliases: ['săn mây tả lèng', 'săn mây lai châu', 'đồi săn mây tả lèng']
+  },
+  {
+    name: 'Điểm săn mây Ngọc Sơn (Lạc Sơn)',
+    altitude: 390,
+    province: 'Hòa Bình (nay Phú Thọ)',
+    aliases: ['ngọc sơn', 'lạc sơn', 'săn mây ngọc sơn']
+  },
+  {
+    name: 'Kéo Lồm - Phiêng Pằn (Mai Sơn)',
+    altitude: 860,
+    province: 'Sơn La',
+    aliases: ['kéo lồm', 'phiêng pằn', 'săn mây kéo lồm']
   }
 ];
 

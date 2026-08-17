@@ -234,6 +234,26 @@ describe('MOUNTAIN_DB mở rộng 8/2026 — nhận diện đúng điểm mới,
     }
   });
 
+  it('đợt 2 — điểm ít người biết user cung cấp resolve đúng, Putaleng giữ nguyên alias tả lèng', async () => {
+    const { findBestMatchingMountain } = await import('../services/geminiService');
+    const cases: Array<[string, string]> = [
+      ['Phình Hồ', 'PHINH_HO'],
+      ['đỉnh săn mây Làng Nhì', 'LANG_NHI'],
+      ['săn mây Tả Lèng', 'TA_LENG_SAN_MAY'],
+      ['săn mây Lai Châu', 'TA_LENG_SAN_MAY'],
+      ['điểm săn mây Ngọc Sơn', 'NGOC_SON_LAC_SON'],
+      ['Kéo Lồm', 'KEO_LOM'],
+      ['săn mây Thung Mài', 'HANG_KIA_PA_CO'],
+      ['cốt 1100', 'BA_VI'],
+    ];
+    for (const [input, key] of cases) {
+      expect(findBestMatchingMountain(input)?.key, `input "${input}"`).toBe(key);
+    }
+    // Putaleng không bị đồi Tả Lèng mới cướp tên gốc
+    expect(findBestMatchingMountain('Putaleng')?.key).toBe('PUTALENG');
+    expect(findBestMatchingMountain('Tả Lèng')?.key).toBe('PUTALENG');
+  });
+
   it('điểm cũ không bị điểm mới cướp match (Tà Xùa, Sa Pa, U Bò Bắc Yên cũ)', async () => {
     const { findBestMatchingMountain } = await import('../services/geminiService');
     expect(findBestMatchingMountain('Tà Xùa')?.key).toBe('TA_XUA_SON_LA');
