@@ -346,5 +346,23 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     lat: 21.0542, lon: 104.0422, elevation: 860, // tọa độ trung tâm xã Phiêng Pằn (OSM), DEM 855m; đỉnh cục bộ ~1147m
     zone: "A_CLOUD_TRAP",
     aliases: ['kéo lồm', 'keo lom', 'phiêng pằn', 'phieng pan', 'mai sơn', 'săn mây kéo lồm']
+  },
+  DON_DEN: {
+    name: "Đồn Đèn (Ba Bể)",
+    lat: 22.42481, lon: 105.67906, elevation: 660, // plus code CMFH+WJ user cung cấp, DEM 659m; thung lũng Ba Bể dưới 172m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['đồn đèn', 'don den', 'ba bể', 'ba be', 'săn mây đồn đèn', 'bắc kạn', 'khang ninh']
+  },
+  BAN_NA: {
+    name: "Điểm săn mây Bản Nà (Tân Yên)",
+    lat: 21.00219, lon: 104.55731, elevation: 740, // plus code 2H24+VWM user cung cấp (hiệu chỉnh ô OLC), DEM 737m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['bản nà', 'ban na', 'tân yên', 'săn mây bản nà']
+  },
+  CHIENG_CONG: {
+    name: "Điểm săn mây Chiềng Công (Mường La)",
+    lat: 21.43931, lon: 104.19894, elevation: 1350, // plus code C5QX+PH6 user cung cấp, DEM 1354m; đáy thung lũng 464m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['chiềng công', 'chieng cong', 'chiềng hoa', 'mường la', 'săn mây chiềng công']
   }
 };

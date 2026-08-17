@@ -245,6 +245,9 @@ describe('MOUNTAIN_DB mở rộng 8/2026 — nhận diện đúng điểm mới,
       ['Kéo Lồm', 'KEO_LOM'],
       ['săn mây Thung Mài', 'HANG_KIA_PA_CO'],
       ['cốt 1100', 'BA_VI'],
+      ['săn mây Đồn Đèn', 'DON_DEN'],
+      ['điểm săn mây Bản Nà', 'BAN_NA'],
+      ['săn mây Chiềng Công', 'CHIENG_CONG'],
     ];
     for (const [input, key] of cases) {
       expect(findBestMatchingMountain(input)?.key, `input "${input}"`).toBe(key);

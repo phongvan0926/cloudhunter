@@ -464,6 +464,24 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     altitude: 860,
     province: 'Sơn La',
     aliases: ['kéo lồm', 'phiêng pằn', 'săn mây kéo lồm']
+  },
+  {
+    name: 'Đồn Đèn (Ba Bể)',
+    altitude: 660,
+    province: 'Bắc Kạn (nay Thái Nguyên)',
+    aliases: ['đồn đèn', 'ba bể', 'săn mây đồn đèn']
+  },
+  {
+    name: 'Điểm săn mây Bản Nà (Tân Yên)',
+    altitude: 740,
+    province: 'Sơn La',
+    aliases: ['bản nà', 'tân yên', 'săn mây bản nà']
+  },
+  {
+    name: 'Điểm săn mây Chiềng Công (Mường La)',
+    altitude: 1350,
+    province: 'Sơn La',
+    aliases: ['chiềng công', 'chiềng hoa', 'săn mây chiềng công']
   }
 ];
 
