@@ -3,6 +3,7 @@ import { WeatherInput, PeakPreset } from '../types';
 import { NORTHWEST_PEAKS } from '../constants';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { ModelSelector } from './ModelSelector';
+import { vnTodayStr, addDaysStr } from '../services/weatherService';
 
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371; // Radius of the earth in km
@@ -28,15 +29,13 @@ interface InputFormProps {
 }
 
 export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => {
-  // Default range: Today to +3 days
-  const today = new Date();
-  const threeDaysLater = new Date(today);
-  threeDaysLater.setDate(today.getDate() + 3);
+  // Mặc định: hôm nay → +3 ngày, theo GIỜ VIỆT NAM (toISOString là UTC → từng lùi 1 ngày lúc rạng sáng)
+  const today = vnTodayStr();
 
   const [formData, setFormData] = useState<WeatherInput>({
     locationName: '',
-    startDate: today.toISOString().split('T')[0],
-    endDate: threeDaysLater.toISOString().split('T')[0],
+    startDate: today,
+    endDate: addDaysStr(today, 3),
     observerAlt: 2200,
     model: undefined, // để engine model-discovery tự chọn model khả dụng mới nhất
   });

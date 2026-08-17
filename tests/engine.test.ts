@@ -8,7 +8,7 @@ import {
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
   computeDayForecast,
 } from '../services/cloudScoreEngine';
-import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel } from '../services/weatherService';
+import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
 /** Kịch bản "đêm bức xạ vàng" ở thung lũng 600m: lặng gió, cận bão hòa, nghịch nhiệt rõ. */
 function goldenNight(overrides: Partial<DayModelData> = {}): DayModelData {
@@ -209,6 +209,25 @@ describe('qualityForDaysAhead — nhãn tin cậy theo horizon', () => {
     expect(qualityForDaysAhead(15)).toBe('UNCERTAIN');
     expect(qualityForDaysAhead(16)).toBe('NO_DATA');
     expect(qualityForDaysAhead(-3)).toBe('NO_DATA');
+  });
+});
+
+describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
+  it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
+    expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const expected = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+    expect(vnTodayStr()).toBe(expected);
+    // Hồi quy bug: sau 17h UTC (= 0h VN hôm sau), toISOString() lùi 1 ngày so với giờ VN
+    const utcDate = new Date().toISOString().slice(0, 10);
+    const diffDays = (new Date(vnTodayStr() + 'T00:00:00Z').getTime() - new Date(utcDate + 'T00:00:00Z').getTime()) / 86400000;
+    expect([0, 1]).toContain(diffDays); // VN luôn bằng hoặc NHANH hơn UTC 1 ngày, không bao giờ chậm hơn
+  });
+
+  it('addDaysStr cộng ngày an toàn qua ranh giới tháng/năm', () => {
+    expect(addDaysStr('2026-08-18', 3)).toBe('2026-08-21');
+    expect(addDaysStr('2026-08-30', 3)).toBe('2026-09-02');
+    expect(addDaysStr('2026-12-31', 1)).toBe('2027-01-01');
+    expect(addDaysStr('2026-03-01', -1)).toBe('2026-02-28');
   });
 });
 

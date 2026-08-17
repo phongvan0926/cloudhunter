@@ -73,6 +73,22 @@ function formatDateStr(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
+/**
+ * "Hôm nay" theo GIỜ VIỆT NAM (Asia/Ho_Chi_Minh), dạng YYYY-MM-DD.
+ * KHÔNG dùng toISOString() cho việc này — nó trả ngày UTC, khiến app lùi 1 ngày
+ * trong khung 00:00–07:00 giờ VN (bug người dùng đã gặp thật).
+ */
+export function vnTodayStr(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+}
+
+/** Cộng/trừ ngày trên chuỗi YYYY-MM-DD, an toàn múi giờ (tính ở UTC giữa trưa). */
+export function addDaysStr(dateStr: string, n: number): string {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
 function addDays(d: Date, n: number): Date {
   const r = new Date(d);
   r.setDate(r.getDate() + n);
@@ -324,7 +340,8 @@ export async function fetchMountainWeather(
   // Phạm vi ngày người dùng yêu cầu
   const reqStart = new Date(startDate + 'T00:00:00');
   const reqEnd = new Date(endDate + 'T00:00:00');
-  const today = new Date(); today.setHours(0, 0, 0, 0);
+  // Mốc "hôm nay" neo theo giờ Việt Nam (địa bàn của app), không theo múi giờ thiết bị
+  const today = new Date(vnTodayStr() + 'T00:00:00');
 
   // Phạm vi API hợp lệ: [hôm nay - 2, hôm nay + 15]; lùi thêm 1 ngày để có cửa sổ đêm-trước
   const apiMin = addDays(today, -2);
