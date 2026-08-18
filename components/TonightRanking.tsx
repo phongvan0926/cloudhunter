@@ -7,7 +7,7 @@ const TOTAL_SPOTS = Object.keys(MOUNTAIN_DB).length;
 
 /**
  * TonightRanking — "Đêm nay đi đâu săn mây?": bảng xếp hạng toàn thư viện cho rạng
- * sáng ngày mai (1 call batch GFS+ICON). Bấm một điểm → chạy phân tích đầy đủ 4 mô hình.
+ * sáng ngày mai (1 call batch GFS+ICON+UKMO). Bấm một điểm → chạy phân tích đầy đủ 6 mô hình.
  */
 interface Props {
   targetDate: string;               // YYYY-MM-DD (ngày mai theo giờ VN)
@@ -45,8 +45,8 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
         <span>Đêm nay đi đâu săn mây? — rạng sáng {dateVN}</span>
       </h3>
       <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-        Xếp hạng nhanh <b>toàn bộ thư viện</b> theo 2 mô hình GFS+ICON, dữ liệu lấy tại đáy
-        thung lũng DEM từng điểm. Bấm một điểm để phân tích đầy đủ 4 mô hình + biểu đồ.
+        Xếp hạng nhanh <b>toàn bộ thư viện</b> theo 3 mô hình GFS+ICON+UKMO, dữ liệu lấy tại
+        đáy thung lũng từng điểm. Bấm một điểm để phân tích đầy đủ 6 mô hình + biểu đồ.
       </p>
 
       {error && (
@@ -99,8 +99,8 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
           )}
           <p className="mt-2 text-[10px] text-slate-500">
             {ranks.length}/{TOTAL_SPOTS} điểm có đủ dữ liệu · cùng engine + cùng 41 biến (đủ profile
-            7 tầng) với bản đầy đủ — chỉ khác dùng 2 mô hình GFS+ICON thay vì 4 nên điểm có thể
-            lệch vài đơn vị (đo thực tế: trung bình ~4/100).
+            7 tầng) với bản đầy đủ — chỉ khác dùng 3 mô hình GFS+ICON+UKMO thay vì 6 nên điểm
+            có thể lệch vài đơn vị (đo thực tế: trung bình ~4/100).
           </p>
         </>
       )}

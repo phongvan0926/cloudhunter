@@ -5,12 +5,12 @@
  *  - KHÔNG BAO GIỜ bịa số. Ngày nào ngoài phạm vi dự báo → quality = NO_DATA, models rỗng.
  *  - Mỗi ngày mang nhãn DataQuality để UI hiển thị đúng độ tin cậy.
  *  - Dữ liệu lấy cho 2 ĐIỂM: đáy thung lũng (nơi biển mây hình thành) và vị trí đứng.
- *  - 4 mô hình toàn cầu (ECMWF/GFS/ICON/JMA) trong cùng 1 call → đồng thuận tính THẬT ở engine.
+ *  - 6 mô hình toàn cầu (ECMWF/GFS/ICON/JMA/UKMO 10km/AIFS-AI) trong cùng 1 call → đồng thuận THẬT ở engine.
  */
 import { MOUNTAIN_DB, MountainInfo } from '../constants/mountains';
 import { SunTimes, TerrainPoint, DataQuality, HourlyLevelProfile, EnsembleDay } from '../types';
 
-export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'jma_seamless'] as const;
+export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'jma_seamless', 'ukmo_seamless', 'ecmwf_aifs025_single'] as const;
 export type WeatherModelId = (typeof WEATHER_MODELS)[number];
 
 export const MODEL_LABELS: Record<string, string> = {
@@ -18,12 +18,14 @@ export const MODEL_LABELS: Record<string, string> = {
   gfs_seamless: 'GFS (NOAA)',
   icon_seamless: 'ICON (DWD)',
   jma_seamless: 'JMA GSM (Nhật)',
+  ukmo_seamless: 'UKMO 10km (Anh)',
+  ecmwf_aifs025_single: 'ECMWF AIFS (AI)',
 };
 
 /**
  * Các mực áp suất khai thác + độ cao XẤP XỈ (m ASL) — chỉ dùng khi API không trả
- * geopotential_height thật. GFS/ICON có đủ 7 mực; ECMWF ifs025 và JMA chỉ có 925/850/700
- * (các mực còn lại trả null → tự bị bỏ qua, không chèn mặc định).
+ * geopotential_height thật. GFS/ICON/UKMO có đủ 7 mực; ECMWF ifs025, JMA và AIFS chỉ có
+ * 925/850/700 (các mực còn lại trả null → tự bị bỏ qua, không chèn mặc định).
  */
 export const PRESSURE_LEVELS = [
   { p: 975, approxH: 320 },
@@ -386,7 +388,7 @@ export function buildHourlyProfile(
   ];
   if (idxs.length < 12) return undefined;
   let best: HourlyLevelProfile | undefined;
-  for (const model of ['icon_seamless', 'gfs_seamless', 'ecmwf_ifs025', 'jma_seamless']) {
+  for (const model of ['icon_seamless', 'gfs_seamless', 'ukmo_seamless', 'ecmwf_ifs025', 'jma_seamless']) {
     const levels: { p: number; h: number; hReal: boolean }[] = [];
     const cc: (number | null)[][] = [];
     for (const { p, approxH } of PRESSURE_LEVELS) {

@@ -31,7 +31,7 @@ export const Header: React.FC<{ onOpenApiKey: () => void }> = ({ onOpenApiKey })
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
          <span className="px-3 py-1 bg-slate-800 rounded-full text-xs font-mono text-cyan-500 border border-slate-700">Engine deterministic — số không bịa</span>
-         <span className="px-3 py-1 bg-purple-900/40 rounded-full text-xs font-mono text-purple-400 border border-purple-700/50">4 mô hình ECMWF · GFS · ICON · JMA</span>
+         <span className="px-3 py-1 bg-purple-900/40 rounded-full text-xs font-mono text-purple-400 border border-purple-700/50">6 mô hình: ECMWF · GFS · ICON · JMA · UKMO 10km · AIFS (AI)</span>
          <span className="px-3 py-1 bg-slate-800 rounded-full text-xs font-mono text-cyan-500 border border-slate-700">🤖 AI Gemini viết lời bình</span>
       </div>
     </header>

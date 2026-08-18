@@ -307,7 +307,7 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
   const matchedMountainEntry = findBestMatchingMountain(data.locationName);
   const mountainKey = matchedMountainEntry ? matchedMountainEntry.key : null;
 
-  // 2) Dữ liệu khí tượng thật (2 điểm × 4 mô hình) — lỗi ở đây phải nổi lên, không nuốt
+  // 2) Dữ liệu khí tượng thật (2 điểm × 6 mô hình) — lỗi ở đây phải nổi lên, không nuốt
   const pkg = await fetchMountainWeather(
     mountainKey, data.locationName, data.startDate, data.endDate,
     data.lat, data.lon, data.observerAlt, matchedPreset?.elevation_profile,
@@ -408,7 +408,7 @@ function buildFallbackStrategy(forecasts: DailyForecast[], bestDays: string[], s
     ? `Ngày đáng đi nhất: ${bestDays.join(', ')}.`
     : 'Chưa có ngày nào đạt ngưỡng "đáng đi" (≥60 điểm) trong khoảng này.';
   const avg = Math.round(withData.reduce((s, f) => s + f.score, 0) / withData.length);
-  return `${seasonLabel}. Điểm trung bình khoảng ngày: ${avg}/100. ${best} Điểm số do engine tính từ dữ liệu 4 mô hình toàn cầu; xem chi tiết "vì sao" ở từng ngày.`;
+  return `${seasonLabel}. Điểm trung bình khoảng ngày: ${avg}/100. ${best} Điểm số do engine tính từ dữ liệu 6 mô hình toàn cầu; xem chi tiết "vì sao" ở từng ngày.`;
 }
 
 function defaultGear(seasonLabel: string): string[] {

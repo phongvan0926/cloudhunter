@@ -612,11 +612,13 @@ describe('engine-2.0 — profile tầng thật (geopotential + cloud cover từn
   });
 });
 
-describe('WEATHER_MODELS — 4 mô hình toàn cầu', () => {
-  it('gồm ECMWF/GFS/ICON/JMA (KMA không phủ Việt Nam nên không dùng)', async () => {
+describe('WEATHER_MODELS — 6 mô hình toàn cầu', () => {
+  it('gồm ECMWF/GFS/ICON/JMA/UKMO/AIFS (KMA không phủ VN; AIFS phải là id _single)', async () => {
     const { WEATHER_MODELS, MODEL_LABELS } = await import('../services/weatherService');
-    expect(WEATHER_MODELS).toHaveLength(4);
+    expect(WEATHER_MODELS).toHaveLength(6);
     expect(WEATHER_MODELS).toContain('jma_seamless');
+    expect(WEATHER_MODELS).toContain('ukmo_seamless');
+    expect(WEATHER_MODELS).toContain('ecmwf_aifs025_single'); // 'ecmwf_aifs025' trả toàn null!
     for (const m of WEATHER_MODELS) expect(MODEL_LABELS[m]).toBeTruthy();
   });
 });

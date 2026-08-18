@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/Vitest-57_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
-[![Open-Meteo](https://img.shields.io/badge/Open--Meteo-4_models-00B4D8)](https://open-meteo.com/)
+[![Open-Meteo](https://img.shields.io/badge/Open--Meteo-6_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
 Nam (Tà Xùa, Lảo Thẩn, Ky Quan San, Fansipan, Putaleng, Tà Chì Nhù...).
@@ -23,8 +23,10 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   cao nào cũng báo đẹp".
 - 🌙 **Cửa sổ đêm-trước**: xét cả pha bức xạ 19h→6h (mây cao che đêm, gió thung lũng đêm,
   mưa đêm) — yếu tố quyết định biển mây có hình thành hay không.
-- 🎯 **Đồng thuận mô hình THẬT**: ECMWF IFS + GFS + ICON + JMA (hợp Đông Á) trong cùng
-  1 call; điểm = median, trạng thái = đa số, kèm % đồng thuận và độ lệch thật.
+- 🎯 **Đồng thuận mô hình THẬT — 6 mô hình trong cùng 1 call**: ECMWF IFS + GFS + ICON
+  + JMA (hợp Đông Á) + **UKMO 10km** (lưới mịn nhất trong các model toàn cầu miễn phí)
+  + **ECMWF AIFS** (model AI — trường phái dự báo khác hẳn, tăng độ tin khi đồng thuận);
+  điểm = median, trạng thái = đa số, kèm % đồng thuận và độ lệch thật.
 - 📡 **Profile khí quyển 7 mực (engine-2.0)**: 975→700hPa với độ cao **geopotential THẬT
   từng ngày** (hết hằng số lệch 20–40m), cloud cover theo từng tầng → mặt mây = đỉnh lớp
   mây LIÊN TỤC từ dưới lên; **boundary layer height đêm** (GFS) bắt không khí tù đọng;
@@ -53,8 +55,8 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 - 📥 **Xuất GPX/TXT offline** với tọa độ thật của địa điểm.
 - 🌄 **"Đêm nay đi đâu săn mây?"**: xếp hạng TOÀN BỘ thư viện cho rạng sáng mai trong
   1 call batch — cùng engine + cùng 41 biến (đủ profile 7 tầng) với bản đầy đủ, chỉ khác
-  dùng 2 mô hình GFS+ICON (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích đầy đủ
-  4 mô hình điểm đó.
+  dùng 3 mô hình GFS+ICON+UKMO (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích
+  đầy đủ 6 mô hình điểm đó.
 - 🛰️ **"Mây LÚC NÀY"**: vòng lặp ảnh vệ tinh Himawari-9 hồng ngoại (JMA, 10 phút/ảnh,
   nhìn được mây cả ban đêm) — kiểm tra biển mây đang thật sự hình thành trước khi xuất
   phát lúc 3-4h sáng.

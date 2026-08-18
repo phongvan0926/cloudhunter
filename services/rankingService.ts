@@ -4,7 +4,7 @@
  * sách latitude/longitude/elevation, trả JSON array đúng thứ tự).
  *
  * Trung thực dữ liệu:
- *  - Đây là XẾP HẠNG NHANH: 2 mô hình (GFS+ICON), điểm dữ liệu tại tọa độ điểm săn mây
+ *  - Đây là XẾP HẠNG NHANH: 3 mô hình (GFS+ICON+UKMO), điểm dữ liệu tại tọa độ điểm săn mây
  *    với &elevation= ĐÁY THUNG LŨNG (nơi biển mây hình thành) — đúng vật lý của engine.
  *  - Đáy thung lũng ước tính từ DEM thật (min 5 điểm mẫu ~3km quanh đỉnh), cache
  *    localStorage vĩnh viễn (địa hình không đổi).
@@ -16,9 +16,9 @@ import { addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_
 import { scoreOneModel, combineModels } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
-const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless'];
-// Dùng CÙNG bộ 41 biến với phân tích đầy đủ: GFS+ICON chính là 2 model có đủ profile
-// 7 tầng + BLH → vật lý xếp hạng giống hệt bản đầy đủ, chỉ còn khác 2 vs 4 model.
+const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_seamless'];
+// Dùng CÙNG bộ 41 biến với phân tích đầy đủ: GFS/ICON/UKMO chính là 3 model có đủ profile
+// 7 tầng → vật lý xếp hạng giống hệt bản đầy đủ, chỉ còn khác 3 vs 6 model.
 // (Đo 19/8: bộ 16 biến cũ lệch điểm max 11/100 vì thiếu profile — đã nâng lên 41 biến.)
 const RANK_VARS = HOURLY_VARS;
 const VALLEY_CACHE_KEY = 'cloudhunter_valley_dem_v1';
@@ -99,7 +99,7 @@ export async function rankSpotsForDawn(
   const usable = spots.filter(([k]) => typeof valleys[k] === 'number');
   if (usable.length === 0) throw new Error('Không đo được độ cao thung lũng từ DEM — kiểm tra kết nối mạng.');
 
-  onProgress?.(`Tải dự báo GFS+ICON cho ${usable.length} điểm (1 call batch)...`);
+  onProgress?.(`Tải dự báo GFS+ICON+UKMO cho ${usable.length} điểm (1 call batch)...`);
   const prevDate = addDaysStr(targetDate, -1);
   const url =
     `https://api.open-meteo.com/v1/forecast` +

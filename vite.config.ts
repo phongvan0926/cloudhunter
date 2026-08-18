@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
           manifest: {
             name: 'CloudHunter AI — Dự báo Biển Mây',
             short_name: 'CloudHunter',
-            description: 'Dự báo biển mây cho trekking & nhiếp ảnh núi cao Việt Nam — engine deterministic, 4 mô hình toàn cầu.',
+            description: 'Dự báo biển mây cho trekking & nhiếp ảnh núi cao Việt Nam — engine deterministic, 6 mô hình toàn cầu.',
             theme_color: '#0f172a',
             background_color: '#020617',
             display: 'standalone',

@@ -523,7 +523,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                      Độ tin cậy dữ liệu: {result.dataReliability}
                    </span>
                  )}
-                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 4 mô hình toàn cầu</p>
+                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 6 mô hình toàn cầu</p>
               </div>
            </div>
 

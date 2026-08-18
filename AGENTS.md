@@ -6,8 +6,11 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 > **Bản v5 (2026-08): tái kiến trúc lớn.** AI không còn tính điểm; mọi con số do
 > `services/cloudScoreEngine.ts` tính deterministic. Dữ liệu giả (synthetic weather,
 > consensus cứng 94%, tọa độ GPX bịa, fallback Y Tý ngầm) đã bị loại bỏ toàn bộ.
-> **Engine 2.0 (18/8/2026):** 4 mô hình (thêm JMA), profile 7 mực áp suất với geopotential
-> THẬT, cloud cover từng tầng, boundary layer height đêm, mực đóng băng — xem mục Vật lý.
+> **Engine 2.0 (18/8/2026):** profile 7 mực áp suất với geopotential THẬT, cloud cover
+> từng tầng, boundary layer height đêm, mực đóng băng — xem mục Vật lý.
+> **19/8/2026: 6 mô hình** — thêm JMA, UKMO 10km (lưới mịn nhất miễn phí, đủ 7 mực),
+> ECMWF AIFS (model AI, id phải là `ecmwf_aifs025_single` — `ecmwf_aifs025` trả toàn null).
+> KMA không phủ VN; CMA có trường mây không đáng tin (đã kiểm chứng) — KHÔNG dùng.
 
 ---
 
@@ -34,8 +37,8 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 - **Độ cao mực áp suất (engine-2.0): ưu tiên `geopotential_height_XXXhPa` THẬT** từ API
   (biến thiên 20–40m theo ngày); hằng số 925≈760m / 850≈1500m / 700≈3100m chỉ là fallback
   khi model không trả geopotential (`LevelSample.hReal=false`).
-- **Profile 7 mực** (`PRESSURE_LEVELS` 975/950/925/900/850/800/700hPa): GFS+ICON có đủ 7,
-  ECMWF ifs025 và JMA chỉ 925/850/700 — mực thiếu trả null và tự bị bỏ qua, KHÔNG chèn
+- **Profile 7 mực** (`PRESSURE_LEVELS` 975/950/925/900/850/800/700hPa): GFS+ICON+UKMO đủ 7,
+  ECMWF ifs025, JMA và AIFS chỉ 925/850/700 — mực thiếu trả null và tự bị bỏ qua, KHÔNG chèn
   mặc định. `computeInversion` quét toàn profile nhưng CHỈ các tầng ≤2600m ASL — ấm ở
   700hPa là ấm tầng cao, không phải nắp nghịch nhiệt thung lũng (có test khóa).
 - **Mặt mây (`estimateCloudTop`)**: đỉnh của LỚP MÂY LIÊN TỤC từ dưới lên (cloud_cover
@@ -67,7 +70,7 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 ```
 InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối cùng, có nhãn)
   → LocationConfirm (hiện nguồn + độ tin cậy)
-  → fetchMountainWeather:  2 ĐIỂM (thung lũng + vị trí đứng) × 4 MÔ HÌNH (ECMWF/GFS/ICON/JMA)
+  → fetchMountainWeather:  2 ĐIỂM (thung lũng + vị trí đứng) × 6 MÔ HÌNH (ECMWF/GFS/ICON/JMA/UKMO/AIFS)
         1 call/điểm (&elevation= để API downscale nhiệt theo độ cao thật), 41 biến hourly
         (profile 7 mực T/RH/cloud/geopotential + BLH/freezing/lifted) + sunrise/sunset, cache 30 phút
   → cloudScoreEngine.computeDayForecast (per-model score/status → median + đa số + spread THẬT)
@@ -86,7 +89,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `services/geminiService.ts` | Phân giải địa danh nhiều tầng có nhãn nguồn + lời bình AI (schema chỉ chứa trường văn bản). |
 | `services/modelDiscoveryService.ts` | Discover model Gemini động + executeWithFallback (429/404/5xx retry, 401/403 dừng). |
 | `services/historyService.ts` | Lưu/mở lại các lần dự báo (localStorage). |
-| `services/rankingService.ts` | "Đêm nay đi đâu": batch 1 call toàn thư viện (lat/lon/elevation dạng danh sách — API trả JSON array theo thứ tự), CÙNG 41 biến HOURLY_VARS với bản đầy đủ (GFS+ICON có đủ 7 tầng), đáy thung lũng ưu tiên profile VALLEY đã xác thực rồi mới DEM (cache localStorage vĩnh viễn), chấm bằng CHÍNH scoreOneModel/combineModels. Đo lệch vs bản đầy đủ: `npx vite-node scripts/compare-rank-vs-full.ts` (~4/100 điểm, khác biệt còn lại = 2 vs 4 model). |
+| `services/rankingService.ts` | "Đêm nay đi đâu": batch 1 call toàn thư viện (lat/lon/elevation dạng danh sách — API trả JSON array theo thứ tự), CÙNG 41 biến HOURLY_VARS với bản đầy đủ (GFS+ICON+UKMO đủ 7 tầng), đáy thung lũng ưu tiên profile VALLEY đã xác thực rồi mới DEM (cache localStorage vĩnh viễn), chấm bằng CHÍNH scoreOneModel/combineModels. Đo lệch vs bản đầy đủ: `npx vite-node scripts/compare-rank-vs-full.ts` (~4/100 điểm, khác biệt còn lại = 3 vs 6 model). |
 | `services/astroService.ts` | Trăng/bình minh thiên văn cục bộ (suncalc) — pha, độ sáng, moonset, cửa sổ Milky Way; deterministic, có golden test. |
 | `components/SatellitePanel.tsx` | Vòng lặp ảnh Himawari-9 Band13 hồng ngoại của JMA (`se1_b13_{HHMM}.jpg`, UTC bước 10 phút, lùi 40 phút cho chắc ảnh đã đăng, `<img>` thuần nên không vướng CORS); khung lỗi bị bỏ qua, không ảnh thay thế. |
 | `components/CloudLayerChart.tsx` | Heatmap mây tầng × giờ bằng CSS grid (KHÔNG SVG — chữ không bị co trên mobile), thang độ cao tuyến tính theo geopotential thật, vạch vị trí đứng/thung lũng/bình minh. |
