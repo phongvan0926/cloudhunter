@@ -321,11 +321,12 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
     valleyElevation: pkg.valleyElevation,
     observerAlt,
     zone,
+    lat: pkg.mountainInfo.lat,
     peakAltitude: matchedPreset?.altitude,
     profile: matchedPreset?.elevation_profile,
   }));
   const trip = computeTripSummary(dayOutputs);
-  const season = seasonAdjust(data.startDate);
+  const season = seasonAdjust(data.startDate, pkg.mountainInfo.lat);
   const warnings = [...new Set(dayOutputs.flatMap(o => o.warnings))];
 
   // 4) Địa hình: thư viện xác thực, hoặc mặt cắt tối thiểu từ dữ liệu THẬT (DEM + geocode)

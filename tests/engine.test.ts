@@ -344,6 +344,97 @@ describe('parseKeyFromHash — chuyển API key giữa thiết bị qua #gkey', 
   });
 });
 
+describe('seasonAdjust theo vùng khí hậu (Đợt 4)', () => {
+  it('không có vĩ độ → giữ nguyên nhịp Tây Bắc (hành vi cũ)', () => {
+    expect(seasonAdjust('2026-10-15').delta).toBe(8);
+    expect(seasonAdjust('2026-07-15').delta).toBe(-12);
+  });
+  it('miền Trung (Bạch Mã 16.17°): mùa mưa bão 9-12 trừ nặng + cảnh báo; đầu năm cộng', () => {
+    const storm = seasonAdjust('2026-10-15', 16.175);
+    expect(storm.delta).toBeLessThan(0);
+    expect(storm.warnings.join(' ')).toMatch(/bão/);
+    expect(seasonAdjust('2026-01-15', 16.175).delta).toBeGreaterThan(0);
+  });
+  it('Nam/Tây Nguyên (Bà Đen 11.38°, Măng Đen 14.58°): mùa khô 11-4 cộng, mùa mưa 5-10 trừ', () => {
+    expect(seasonAdjust('2026-12-15', 11.38).delta).toBeGreaterThan(0);
+    expect(seasonAdjust('2026-12-15', 14.577).delta).toBeGreaterThan(0);
+    expect(seasonAdjust('2026-07-15', 11.38).delta).toBeLessThan(0);
+  });
+  it('cùng ngày tháng 12: Bắc = 0 (rét), Nam = +6 (mùa khô) — nhịp mùa 3 miền khác nhau', () => {
+    expect(seasonAdjust('2026-12-15', 21.27).delta).toBe(0);
+    expect(seasonAdjust('2026-12-15', 11.38).delta).toBe(6);
+  });
+});
+
+describe('fetchEnsembleDays — xác suất từ tổ hợp ECMWF (fetch mock)', () => {
+  it('probCloudSea/p10/p90/probRain đúng theo phân bố member; giữ nguyên khi <10 member thì bỏ', async () => {
+    const { fetchEnsembleDays } = await import('../services/weatherService');
+    const time: string[] = [];
+    for (let h = 0; h < 24; h++) time.push(`2026-11-05T${String(h).padStart(2, '0')}:00`);
+    const hourly: any = { time };
+    // 20 kịch bản: 10 kịch bản mây thấp 80%, 10 kịch bản 10%; 5 kịch bản có mưa
+    for (let m = 1; m <= 20; m++) {
+      const v = m <= 10 ? 80 : 10;
+      hourly[`cloud_cover_low_member${String(m).padStart(2, '0')}`] = time.map(() => v);
+      hourly[`precipitation_member${String(m).padStart(2, '0')}`] = time.map(() => (m <= 5 ? 0.2 : 0));
+    }
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = (async () => ({ ok: true, json: async () => ({ hourly }) })) as any;
+    try {
+      const out = await fetchEnsembleDays(21.3, 104.3, 600, '2026-11-05', '2026-11-05');
+      const d = out['2026-11-05'];
+      expect(d.members).toBe(20);
+      expect(d.probCloudSea).toBe(50);
+      expect(d.p10).toBe(10);
+      expect(d.p90).toBe(80);
+      expect(d.probRain).toBe(25); // 5/20 kịch bản có mưa >0.3mm trong 4-9h
+    } finally { globalThis.fetch = origFetch; }
+  });
+});
+
+describe('verifyRun — đối chiếu dự báo đã lưu với ERA5 (fetch mock)', () => {
+  it('STATIC + thực tế mây 80% = trúng; CLEAR + thực tế 70% = trượt; ngày null = chờ', async () => {
+    const { verifyRun } = await import('../services/verificationService');
+    const d1 = addDaysStr(vnTodayStr(), -10);
+    const d2 = addDaysStr(vnTodayStr(), -9);
+    const d3 = addDaysStr(vnTodayStr(), -8);
+    const mkFc = (date: string, status: string, score: number) => ({
+      date, score, status_code: status, status_text: '', data_quality: 'FORECAST',
+      technical_indices: {}, weather_analysis: {}, expert_advice: '', weather_summary: {},
+    });
+    const analysis: any = {
+      locationName: 'Test',
+      weather_data_source: { lat: 21.3, lon: 104.3 },
+      dailyForecasts: [mkFc(d1, 'STATIC', 80), mkFc(d2, 'CLEAR', 20), mkFc(d3, 'STATIC', 70)],
+    };
+    const time: string[] = [];
+    const cloud: (number | null)[] = [];
+    for (const [d, v] of [[d1, 80], [d2, 70], [d3, null]] as [string, number | null][]) {
+      for (let h = 0; h < 24; h++) { time.push(`${d}T${String(h).padStart(2, '0')}:00`); cloud.push(v); }
+    }
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = (async () => ({ ok: true, json: async () => ({ hourly: { time, cloud_cover_low: cloud } }) })) as any;
+    try {
+      const r = await verifyRun(analysis);
+      expect(r.days).toHaveLength(3);
+      expect(r.days[0].hit).toBe(true);   // đoán có, thực tế 80% ≥40 → trúng
+      expect(r.days[1].hit).toBe(false);  // đoán không, thực tế 70% → trượt
+      expect(r.days[2].hit).toBeNull();   // ERA5 chưa có → không phán
+      expect(r.hits).toBe(1); expect(r.misses).toBe(1); expect(r.pending).toBe(1);
+    } finally { globalThis.fetch = origFetch; }
+  });
+
+  it('chưa có ngày nào đủ xa → báo lỗi trung thực, không tự phán', async () => {
+    const { verifyRun } = await import('../services/verificationService');
+    const analysis: any = {
+      locationName: 'Test',
+      weather_data_source: { lat: 21.3, lon: 104.3 },
+      dailyForecasts: [{ date: vnTodayStr(), score: 50, status_code: 'STATIC' }],
+    };
+    await expect(verifyRun(analysis)).rejects.toThrow(/đủ xa/);
+  });
+});
+
 describe('buildHourlyProfile — dữ liệu biểu đồ mây time × altitude', () => {
   const mkTime = () => {
     const time: string[] = [];

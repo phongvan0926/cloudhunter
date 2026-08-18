@@ -55,6 +55,12 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
   (quy tắc ranh giới ±250m).
 - Zone A (bồn giữ ẩm — Lào Cai/Yên Bái/Sơn La): ngưỡng gió 10/15/20 km/h.
   Zone B (ống gió — Lai Châu): 5/8/15 km/h, khắt khe hơn hẳn (`assessWind`).
+- **Mùa theo 3 miền** (`seasonAdjust(dateStr, lat)` + `climateRegion`): NORTH ≥17.5°
+  (nhịp Tây Bắc), CENTRAL 15.5–17.5° (mưa bão 9-12, khô đầu năm), SOUTH <15.5°
+  (Tây Nguyên/Nam Bộ: khô 11-4 cộng, mưa 5-10 trừ). Không truyền lat → NORTH (hành vi cũ).
+- **Ensemble ECMWF 51 kịch bản** (`fetchEnsembleDays`, best-effort): phân bố % mây thấp
+  bình minh qua các member → probCloudSea (ngưỡng 40%), P10/P50/P90, probRain.
+  <10 member có dữ liệu → bỏ ngày đó, không bịa xác suất. Lỗi API → app vẫn chạy đủ.
 
 ## 🏗️ Luồng dữ liệu v5
 
@@ -85,6 +91,8 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `components/SatellitePanel.tsx` | Vòng lặp ảnh Himawari-9 Band13 hồng ngoại của JMA (`se1_b13_{HHMM}.jpg`, UTC bước 10 phút, lùi 40 phút cho chắc ảnh đã đăng, `<img>` thuần nên không vướng CORS); khung lỗi bị bỏ qua, không ảnh thay thế. |
 | `components/CloudLayerChart.tsx` | Heatmap mây tầng × giờ bằng CSS grid (KHÔNG SVG — chữ không bị co trên mobile), thang độ cao tuyến tính theo geopotential thật, vạch vị trí đứng/thung lũng/bình minh. |
 | `components/RadarPanel.tsx` | Radar mưa RainViewer (weather-maps.json, CORS *; composite phủ VN thật) trên nền 3×3 tile OSM lọc màu tối; khung nowcast dán nhãn "dự báo". |
+| `services/verificationService.ts` | Vòng đối chiếu: dự báo đã lưu vs ERA5 archive (cloud_cover_low 4-9h, trễ ~5 ngày, ngưỡng biển mây 40%); ngày chưa có ERA5 → hit=null, không phán. |
+| `components/VerificationPanel.tsx` | UI trúng/trượt/chờ từng ngày + tổng kết; nói rõ ERA5 là proxy, không phải mắt thấy. |
 | `tests/engine.test.ts` | 46 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
@@ -118,8 +126,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ## 🚀 Backlog gợi ý
 
-1. **Vòng kiểm chứng độ chính xác**: đối chiếu dự báo đã lưu (historyService có `savedAt`)
-   với Open-Meteo Archive API sau chuyến đi → thống kê "engine đoán trúng bao nhiêu %".
+1. ~~Vòng kiểm chứng độ chính xác~~ ✅ đã có (verificationService + nút 🔬 trên lịch sử) từ 19/8/2026.
 2. ~~Ảnh vệ tinh Himawari~~ ✅ đã có SatellitePanel (JMA se1_b13) từ 19/8/2026; nguồn dự
    phòng nếu JMA đổi format: NASA GIBS WMTS Band13 (`{time}` dùng `default`).
 3. ~~PWA offline~~ ✅ đã có (vite-plugin-pwa, registerSW trong index.tsx, cache Open-Meteo NetworkFirst 12h) từ 19/8/2026. LƯU Ý: scope/start_url theo `base` nên build GH Pages và Vercel tự đúng, không cần build riêng.
@@ -130,7 +137,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 50 golden tests engine
+npm test       # vitest — 57 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

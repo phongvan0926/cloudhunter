@@ -110,7 +110,7 @@ export async function rankSpotsForDawn(
     const loc = arr[i];
     if (!loc?.hourly) return; // điểm này thiếu dữ liệu → loại, không bịa
     const block = makeHourlyBlock(loc.hourly);
-    const ctx = { valleyElevation: Math.round(valleys[key]), observerAlt: mt.elevation, zone: mt.zone };
+    const ctx = { valleyElevation: Math.round(valleys[key]), observerAlt: mt.elevation, zone: mt.zone, lat: mt.lat };
     const per = [];
     for (const model of RANK_MODELS) {
       const agg = aggregateDayModel(block, block, model, targetDate, prevDate);

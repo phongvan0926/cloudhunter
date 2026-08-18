@@ -64,6 +64,19 @@ export interface HourlyLevelProfile {
   cc: (number | null)[][];                             // [tầng][giờ] % mây; null = thiếu, không bịa
 }
 
+/**
+ * Độ bất định THẬT từ tổ hợp 51 kịch bản ECMWF (ensemble) — mỗi kịch bản là một lần
+ * chạy mô hình với nhiễu ban đầu khác nhau; % kịch bản đồng ý = xác suất có cơ sở vật lý.
+ */
+export interface EnsembleDay {
+  members: number;      // số kịch bản có dữ liệu (tối đa 51)
+  probCloudSea: number; // % kịch bản có mây thấp bình minh ≥40%
+  probRain: number;     // % kịch bản có mưa >0.3mm trong khung 4-9h
+  p10: number;          // phân vị 10 của % mây thấp bình minh
+  p50: number;
+  p90: number;
+}
+
 export interface WeatherAnalysis {
   general: string;
   cloud_behavior: string;
@@ -85,6 +98,7 @@ export interface DailyForecast {
   sun_times?: SunTimes;
   recommended_position?: string;
   hourly_profile?: HourlyLevelProfile; // biểu đồ mây theo độ cao (dữ liệu thật, có thể thiếu)
+  ensemble?: EnsembleDay;              // 51 kịch bản ECMWF (best-effort, thiếu thì ẩn)
   technical_indices: TechnicalIndices;
   weather_analysis: WeatherAnalysis;
   expert_advice: string;

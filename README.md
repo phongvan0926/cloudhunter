@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-50_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-57_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-4_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -70,6 +70,13 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   để đăng nhóm săn mây; tên file giữ chữ Việt bỏ dấu đúng cách.
 - ⚡ **Tải nhanh**: code-split — SDK AI (~300KB) và màn kết quả chỉ tải khi cần;
   meta/OG đầy đủ để link chia sẻ có preview đẹp.
+- 🎲 **Xác suất từ 51 kịch bản tổ hợp ECMWF** (ensemble): "% kịch bản có mây thấp ≥40%
+  lúc bình minh" + dải P10–P90 — độ bất định CÓ CƠ SỞ VẬT LÝ, không chỉ so 4 model.
+- 🔬 **Đối chiếu với thực tế**: mỗi lần dự báo đã lưu có nút 🔬 — sau chuyến đi ~5 ngày,
+  app tự so trạng thái đã đoán với % mây thấp thực tế từ tái phân tích ERA5 và báo
+  trúng/trượt từng ngày (sai thì nói sai).
+- 🗺️ **Mùa theo 3 miền khí hậu**: Bắc (nhịp Tây Bắc), Trung (mưa bão 9-12), Nam/Tây
+  Nguyên (khô 11-4) — hết chuyện Bà Đen tháng 12 bị trừ điểm theo "mùa đông Tây Bắc".
 
 ## 📐 Engine (tóm tắt — chi tiết trong AGENTS.md)
 
@@ -90,7 +97,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 50 golden tests: engine + fallback model + múi giờ + alias thư viện + trăng + profile biểu đồ
+npm test         # 57 golden tests: engine + mùa 3 miền + ensemble + đối chiếu ERA5 + trăng + fallback + múi giờ + alias
 npm run build
 ```
 

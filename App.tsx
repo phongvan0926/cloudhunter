@@ -4,6 +4,7 @@ import { InputForm } from './components/InputForm';
 import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
+import { VerificationPanel } from './components/VerificationPanel';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { listRuns, loadRun, saveRun } from './services/historyService';
 import { vnTodayStr, addDaysStr } from './services/weatherService';
@@ -23,6 +24,7 @@ const App: React.FC = () => {
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [historyList, setHistoryList] = useState(() => listRuns());
   const [showTonight, setShowTonight] = useState(false);
+  const [verifyTarget, setVerifyTarget] = useState<CloudAnalysis | null>(null);
 
   const handleLoadHistory = (id: string) => {
     const saved = loadRun(id);
@@ -186,17 +188,29 @@ const App: React.FC = () => {
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {historyList.map(h => (
-                        <button
-                          key={h.id}
-                          onClick={() => handleLoadHistory(h.id)}
-                          className="px-3 py-1.5 rounded-full text-xs bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-cyan-500 hover:text-cyan-300 transition-all"
-                          title={`Dự báo lưu lúc ${new Date(h.savedAt).toLocaleString('vi-VN')} — dùng để đối chiếu với thực tế sau chuyến đi`}
-                        >
-                          {h.locationName} · {h.dateRange}
-                        </button>
+                        <span key={h.id} className="inline-flex items-stretch rounded-full overflow-hidden border border-slate-700 bg-slate-800/80">
+                          <button
+                            onClick={() => handleLoadHistory(h.id)}
+                            className="px-3 py-1.5 text-xs text-slate-300 hover:text-cyan-300 hover:bg-slate-800 transition-all"
+                            title={`Dự báo lưu lúc ${new Date(h.savedAt).toLocaleString('vi-VN')}`}
+                          >
+                            {h.locationName} · {h.dateRange}
+                          </button>
+                          <button
+                            onClick={() => setVerifyTarget(loadRun(h.id))}
+                            aria-label={`Đối chiếu dự báo ${h.locationName} với thực tế ERA5`}
+                            title="Đối chiếu với thực tế (ERA5) — app đoán trúng không?"
+                            className="px-2.5 text-sm border-l border-slate-700 text-teal-400 hover:bg-slate-700 transition-all"
+                          >
+                            🔬
+                          </button>
+                        </span>
                       ))}
                     </div>
                   </div>
+                )}
+                {verifyTarget && (
+                  <VerificationPanel analysis={verifyTarget} onClose={() => setVerifyTarget(null)} />
                 )}
               </div>
             )

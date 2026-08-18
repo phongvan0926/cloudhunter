@@ -31,6 +31,7 @@ export interface DayContext {
   valleyElevation: number;
   observerAlt: number;
   zone: Zone;
+  lat?: number;          // vĩ độ điểm — để hiệu chỉnh mùa theo vùng khí hậu
   peakAltitude?: number;
   profile?: TerrainPoint[];
 }
@@ -190,8 +191,54 @@ export function sunriseColorPotential(m: DayModelData): number {
 
 // ---------------------------------------------------------- mùa (Module 7) ----
 
-export function seasonAdjust(dateStr: string): { delta: number; label: string; warnings: string[] } {
+export type ClimateRegion = 'NORTH' | 'CENTRAL' | 'SOUTH';
+
+/**
+ * Phân vùng khí hậu theo vĩ độ (thư viện 58 điểm phủ toàn quốc, nhịp mùa 3 miền khác hẳn):
+ * NORTH ≥17.5° (Bắc Bộ — nhịp Tây Bắc cũ); CENTRAL 15.5–17.5° (Trung Trung Bộ — mưa bão
+ * 9-12, khô 1-5); SOUTH <15.5° (Tây Nguyên + Nam Bộ — khô 11-4, mưa 5-10).
+ */
+export function climateRegion(lat?: number): ClimateRegion {
+  if (typeof lat !== 'number') return 'NORTH'; // mặc định nhịp Tây Bắc (hành vi cũ)
+  if (lat >= 17.5) return 'NORTH';
+  if (lat >= 15.5) return 'CENTRAL';
+  return 'SOUTH';
+}
+
+export function seasonAdjust(dateStr: string, lat?: number): { delta: number; label: string; warnings: string[] } {
   const month = parseInt(dateStr.slice(5, 7), 10);
+  const region = climateRegion(lat);
+
+  if (region === 'CENTRAL') {
+    if (month >= 9 && month <= 12) {
+      return {
+        delta: -12, label: 'Mùa mưa bão miền Trung (9-12)',
+        warnings: ['Mùa mưa bão miền Trung: lũ quét/sạt lở — kiểm tra tin bão và tình trạng đường trước khi đi.'],
+      };
+    }
+    if (month <= 2) {
+      return { delta: 5, label: 'Đầu mùa khô miền Trung — không khí lạnh tràn về tạo mây luồn đẹp', warnings: [] };
+    }
+    if (month <= 5) {
+      return { delta: 2, label: 'Mùa khô miền Trung, trời ổn định', warnings: [] };
+    }
+    return {
+      delta: -4, label: 'Hè miền Trung (gió Lào khô nóng)',
+      warnings: ['Dông nhiệt chiều tối: nên xuống núi trước 14:00.'],
+    };
+  }
+
+  if (region === 'SOUTH') {
+    if (month >= 11 || month <= 4) {
+      return { delta: 6, label: 'Mùa khô Tây Nguyên/Nam Bộ — sương mù bức xạ sáng sớm thường xuyên', warnings: [] };
+    }
+    return {
+      delta: -8, label: 'Mùa mưa Tây Nguyên/Nam Bộ (5-10)',
+      warnings: ['Mưa dông chiều tối gần như mỗi ngày — canh khung 4-9h sáng, cẩn thận đường trơn.'],
+    };
+  }
+
+  // NORTH — nhịp Tây Bắc (hành vi gốc)
   if (month >= 10 && month <= 11) {
     return { delta: 8, label: 'Thu (mùa vàng săn mây)', warnings: [] };
   }
@@ -284,7 +331,7 @@ export function scoreOneModel(
   else if (m.precip_dawn > 0.3) add(-8, `Mưa phùn sáng sớm ${m.precip_dawn}mm`);
   if (m.precip_night > 8) add(-15, `Mưa đêm lớn ${m.precip_night}mm`);
 
-  const season = seasonAdjust(dateStr);
+  const season = seasonAdjust(dateStr, ctx.lat);
   if (season.delta !== 0) add(season.delta, `Hiệu chỉnh mùa: ${season.label}`);
 
   score = Math.round(Math.max(0, Math.min(100, score)));
@@ -406,7 +453,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
   const vrii = computeVRII(rep, inv.anomaly);
   const cloudBase = computeCloudBase(rep, ctx.valleyElevation);
   const deltaH = combined.cloudTop !== null ? ctx.observerAlt - combined.cloudTop : null;
-  const season = seasonAdjust(day.date);
+  const season = seasonAdjust(day.date, ctx.lat);
   const colorPotential = sunriseColorPotential(rep);
 
   const moisture: TechnicalIndices['moisture_type'] =
@@ -464,6 +511,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
       reasons: combined.representative.reasons,
       sunrise_color_potential: colorPotential,
       hourly_profile: day.hourly_profile,
+      ensemble: day.ensemble,
       recommended_position: recommendPosition(deltaH, combined.cloudTop, ctx),
       technical_indices: indices,
       // Lời bình mặc định do engine sinh — AI sẽ thay bằng văn hay hơn nếu khả dụng

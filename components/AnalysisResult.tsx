@@ -846,6 +846,19 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                       <span className="font-mono font-bold">{day.sunrise_color_potential}/100</span>
                     </div>
                   )}
+                  {day.ensemble && day.status_code !== 'UNKNOWN' && (
+                    <div className={`rounded-lg p-2.5 text-[11px] border leading-relaxed ${
+                      day.ensemble.probCloudSea >= 70
+                        ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                        : day.ensemble.probCloudSea >= 40
+                          ? 'bg-amber-950/30 border-amber-600/30 text-amber-200'
+                          : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                    }`}>
+                      🎲 <b>{day.ensemble.probCloudSea}%</b> trong {day.ensemble.members} kịch bản tổ hợp ECMWF
+                      có mây thấp ≥40% lúc bình minh (dải P10–P90: {day.ensemble.p10}–{day.ensemble.p90}%)
+                      {day.ensemble.probRain >= 30 && <> · ⚠️ {day.ensemble.probRain}% kịch bản có mưa sáng sớm</>}
+                    </div>
+                  )}
                   {moon && (
                     <div className={`rounded-lg p-2.5 text-[11px] border flex flex-wrap items-center justify-between gap-2 ${
                       moon.milkyWayWindow || (moon.moonUpAtDawn && moon.illumination >= 60)

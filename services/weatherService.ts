@@ -8,7 +8,7 @@
  *  - 4 mô hình toàn cầu (ECMWF/GFS/ICON/JMA) trong cùng 1 call → đồng thuận tính THẬT ở engine.
  */
 import { MOUNTAIN_DB, MountainInfo } from '../constants/mountains';
-import { SunTimes, TerrainPoint, DataQuality, HourlyLevelProfile } from '../types';
+import { SunTimes, TerrainPoint, DataQuality, HourlyLevelProfile, EnsembleDay } from '../types';
 
 export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'jma_seamless'] as const;
 export type WeatherModelId = (typeof WEATHER_MODELS)[number];
@@ -80,6 +80,7 @@ export interface DayData {
   models: Partial<Record<WeatherModelId, DayModelData>>; // rỗng nếu NO_DATA
   sun_times: SunTimes;
   hourly_profile?: HourlyLevelProfile;            // mây theo tầng × giờ cho biểu đồ (dữ liệu thật)
+  ensemble?: EnsembleDay;                         // 51 kịch bản ECMWF (best-effort)
 }
 
 export interface WeatherPackage {
@@ -403,6 +404,54 @@ export function buildHourlyProfile(
   return best;
 }
 
+/**
+ * Tổ hợp 51 kịch bản ECMWF (ensemble-api, đã kiểm chứng phủ VN với biến surface):
+ * mỗi ngày tính phân bố % mây thấp bình minh (4-9h) qua các kịch bản → xác suất
+ * biển mây CÓ CƠ SỞ VẬT LÝ thay vì chỉ so 4 model. Best-effort: lỗi → {} (không chặn app).
+ */
+export async function fetchEnsembleDays(
+  lat: number, lon: number, valleyElev: number, startStr: string, endStr: string
+): Promise<Record<string, EnsembleDay>> {
+  const url =
+    `https://ensemble-api.open-meteo.com/v1/ensemble?latitude=${lat}&longitude=${lon}` +
+    `&elevation=${Math.round(valleyElev)}&hourly=cloud_cover_low,precipitation` +
+    `&models=ecmwf_ifs025&start_date=${startStr}&end_date=${endStr}&timezone=Asia%2FBangkok`;
+  const data = await cachedJson(url);
+  const hourly = data?.hourly;
+  const time: string[] = hourly?.time || [];
+  // control (không hậu tố) + member01..member50
+  const cloudKeys = Object.keys(hourly || {}).filter(k => /^cloud_cover_low(_member\d+)?$/.test(k));
+  const out: Record<string, EnsembleDay> = {};
+  for (let dStr = startStr; dStr <= endStr; dStr = addDaysStr(dStr, 1)) {
+    const idxs = hourIndices(time, dStr, 4, 9);
+    if (idxs.length === 0) continue;
+    const means: number[] = [];
+    let rainy = 0, rainMembers = 0;
+    for (const key of cloudKeys) {
+      const arr = hourly[key];
+      if (!Array.isArray(arr)) continue;
+      const vals = idxs.map(i => arr[i]).filter(isNum);
+      if (vals.length === 0) continue;
+      means.push(avg(vals));
+      const pArr = hourly[key.replace('cloud_cover_low', 'precipitation')];
+      if (Array.isArray(pArr)) {
+        const pv = idxs.map(i => pArr[i]).filter(isNum);
+        if (pv.length) { rainMembers++; if (sum(pv) > 0.3) rainy++; }
+      }
+    }
+    if (means.length < 10) continue; // quá ít kịch bản → bỏ ngày này, không bịa xác suất
+    means.sort((a, b) => a - b);
+    const q = (p: number) => Math.round(means[Math.min(means.length - 1, Math.floor(p * means.length))]);
+    out[dStr] = {
+      members: means.length,
+      probCloudSea: Math.round((100 * means.filter(m => m >= 40).length) / means.length),
+      probRain: rainMembers ? Math.round((100 * rainy) / rainMembers) : 0,
+      p10: q(0.10), p50: q(0.50), p90: q(0.90),
+    };
+  }
+  return out;
+}
+
 /** Nhãn tin cậy theo khoảng cách dự báo. */
 export function qualityForDaysAhead(daysAhead: number): DataQuality {
   if (daysAhead < -2 || daysAhead > 15) return 'NO_DATA';
@@ -450,16 +499,21 @@ export async function fetchMountainWeather(
   let valleyBlock: HourlyBlock | null = null;
   let obsBlock: HourlyBlock | null = null;
   let dailyData: any = null;
+  let ensembleDays: Record<string, EnsembleDay> = {};
   if (hasApiRange) {
     const qStart = formatDateStr(addDays(apiStart, -1)); // -1 ngày cho cửa sổ đêm
     const qEnd = formatDateStr(apiEnd);
-    const [valleyRes, obsRes] = await Promise.all([
+    const [valleyRes, obsRes, ens] = await Promise.all([
       fetchPoint(mt.lat, mt.lon, valleyElevation, qStart, qEnd),
       fetchPoint(mt.lat, mt.lon, obsElev, qStart, qEnd),
+      // ensemble là best-effort: lỗi thì bỏ qua (app vẫn đầy đủ), không bịa xác suất
+      fetchEnsembleDays(mt.lat, mt.lon, valleyElevation, formatDateStr(apiStart), qEnd)
+        .catch(() => ({} as Record<string, EnsembleDay>)),
     ]);
     valleyBlock = makeHourlyBlock(valleyRes.hourly);
     obsBlock = makeHourlyBlock(obsRes.hourly);
     dailyData = obsRes.daily || valleyRes.daily || null;
+    ensembleDays = ens;
   }
 
   const days: DayData[] = [];
@@ -494,7 +548,10 @@ export async function fetchMountainWeather(
     const hourly_profile = effQuality !== 'NO_DATA' && valleyBlock
       ? buildHourlyProfile(valleyBlock, dateStr, prevStr)
       : undefined;
-    days.push({ date: dateStr, quality: effQuality, daysAhead, models, sun_times: sunTimes, hourly_profile });
+    days.push({
+      date: dateStr, quality: effQuality, daysAhead, models, sun_times: sunTimes,
+      hourly_profile, ensemble: effQuality !== 'NO_DATA' ? ensembleDays[dateStr] : undefined,
+    });
   }
 
   return {
