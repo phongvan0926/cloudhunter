@@ -18,8 +18,10 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-1.0.0';
+export const ENGINE_VERSION = 'engine-2.0.0';
 
+// Độ cao XẤP XỈ các mực — CHỈ là fallback khi model không trả geopotential_height thật.
+// engine-2.0: khi DayModelData.levels có mặt, mọi phép tính dùng độ cao THẬT từng ngày.
 export const LEVEL_HEIGHTS = { p925: 760, p850: 1500, p700: 3100 } as const;
 const LAPSE_RATE = 6.5; // °C / km — suy giảm nhiệt chuẩn
 
@@ -47,23 +49,39 @@ export interface EngineDayResult {
 
 // ---------------------------------------------------------------- vật lý ----
 
-/** Nghịch nhiệt tham chiếu THUNG LŨNG: anomaly = T_tầng − T_kỳ_vọng(suy giảm chuẩn từ thung lũng). */
+/**
+ * Nghịch nhiệt tham chiếu THUNG LŨNG: anomaly = T_tầng − T_kỳ_vọng(suy giảm chuẩn từ thung lũng).
+ * engine-2.0: quét TOÀN BỘ profile tầng (7 mực GFS/ICON, độ cao geopotential thật) và trả thêm
+ * ĐỘ CAO của tầng nghịch nhiệt cực đại; fallback 925/850 xấp xỉ khi model không có profile.
+ */
 export function computeInversion(m: DayModelData, valleyElev: number): {
   strength: 'Strong' | 'Moderate' | 'Weak' | 'None';
   anomaly: number;
+  height: number | null; // m ASL của tầng anomaly cực đại (null nếu None)
 } {
-  const anomalies: number[] = [];
   const expectAt = (h: number) => m.t_valley_dawn - (LAPSE_RATE * (h - valleyElev)) / 1000;
-  if (Number.isFinite(m.t925) && LEVEL_HEIGHTS.p925 > valleyElev + 80) {
-    anomalies.push(m.t925 - expectAt(LEVEL_HEIGHTS.p925));
+  const samples: { h: number; a: number }[] = [];
+  // Chỉ quét tầng THẤP (≤2600m): nắp nghịch nhiệt nhốt biển mây nằm trong ~2km đầu;
+  // ấm ở 700hPa (~3100m) là ấm tầng cao, KHÔNG được tính là nghịch nhiệt thung lũng
+  // (nếu tính sẽ tái phạm lỗi hệ thống "đỉnh cao nào cũng báo Strong" ở dạng khác).
+  const profile = (m.levels ?? []).filter(
+    l => Number.isFinite(l.t) && l.h > valleyElev + 80 && l.h <= 2600
+  );
+  if (profile.length > 0) {
+    for (const l of profile) samples.push({ h: l.h, a: l.t - expectAt(l.h) });
+  } else {
+    if (Number.isFinite(m.t925) && LEVEL_HEIGHTS.p925 > valleyElev + 80) {
+      samples.push({ h: LEVEL_HEIGHTS.p925, a: m.t925 - expectAt(LEVEL_HEIGHTS.p925) });
+    }
+    if (Number.isFinite(m.t850) && LEVEL_HEIGHTS.p850 > valleyElev + 80) {
+      samples.push({ h: LEVEL_HEIGHTS.p850, a: m.t850 - expectAt(LEVEL_HEIGHTS.p850) });
+    }
   }
-  if (Number.isFinite(m.t850) && LEVEL_HEIGHTS.p850 > valleyElev + 80) {
-    anomalies.push(m.t850 - expectAt(LEVEL_HEIGHTS.p850));
-  }
-  if (anomalies.length === 0) return { strength: 'None', anomaly: 0 };
-  const anomaly = Math.max(...anomalies);
+  if (samples.length === 0) return { strength: 'None', anomaly: 0, height: null };
+  const best = samples.reduce((a, b) => (b.a > a.a ? b : a));
+  const anomaly = best.a;
   const strength = anomaly >= 3 ? 'Strong' : anomaly >= 1 ? 'Moderate' : anomaly >= -1 ? 'Weak' : 'None';
-  return { strength, anomaly: +anomaly.toFixed(1) };
+  return { strength, anomaly: +anomaly.toFixed(1), height: strength === 'None' ? null : Math.round(best.h) };
 }
 
 /** LCL từ THUNG LŨNG → đáy mây ASL (m). */
@@ -73,12 +91,37 @@ export function computeCloudBase(m: DayModelData, valleyElev: number): number {
 }
 
 /**
- * Ước tính mặt trên biển mây (cloud top, ASL) từ profile ẩm các tầng.
+ * Ước tính mặt trên biển mây (cloud top, ASL) từ profile các tầng.
+ * engine-2.0: ưu tiên cloud_cover THEO TỪNG TẦNG (mô hình nói thẳng "mây nằm ở đâu")
+ * kết hợp RH≥80%, trên độ cao geopotential thật; fallback 3 mực RH xấp xỉ như cũ.
  * Trả null nếu mô hình không nhìn thấy mây tầng thấp (không có biển mây).
  */
 export function estimateCloudTop(m: DayModelData, valleyElev: number): number | null {
   if (m.cloud_low_dawn < 15) return null;
   const base = computeCloudBase(m, valleyElev);
+  const profile = (m.levels ?? [])
+    .filter(l => l.h > valleyElev)
+    .sort((a, b) => a.h - b.h);
+  if (profile.length > 0) {
+    const isCloudy = (l: { rh: number; cc: number }) =>
+      (Number.isFinite(l.cc) && l.cc >= 45) || (Number.isFinite(l.rh) && l.rh >= 80);
+    // Mặt biển mây = đỉnh của LỚP MÂY LIÊN TỤC từ tầng thấp nhất có mây đi lên.
+    // Không nhảy cóc lên tầng mây trung/cao tách rời phía trên (đó là lớp mây khác).
+    const firstCloudy = profile.findIndex(isCloudy);
+    let moistTop = -1;
+    if (firstCloudy >= 0) {
+      let i = firstCloudy;
+      while (i < profile.length && isCloudy(profile[i])) {
+        moistTop = profile[i].h;
+        i++;
+      }
+    }
+    let top: number;
+    if (moistTop < 0) top = base + 350;              // mây thấp nông, không tầng nào rõ mây
+    else if (moistTop >= 2900) top = moistTop + 400; // lớp mây liên tục tới ~700hPa → trùm dày
+    else top = moistTop + 150;
+    return Math.max(top, base + 100);
+  }
   const levels = [
     { h: LEVEL_HEIGHTS.p925, rh: m.rh925 },
     { h: LEVEL_HEIGHTS.p850, rh: m.rh850 },
@@ -218,6 +261,15 @@ export function scoreOneModel(
   if (Number.isFinite(seaRH)) {
     if (seaRH >= 90) add(8, `Ẩm lớp biển mây rất cao (RH ${seaRH}%)`);
     else if (seaRH >= 80) add(4, `Ẩm lớp biển mây tốt (RH ${seaRH}%)`);
+  }
+
+  // Lớp biên đêm (boundary layer height — hiện chỉ GFS cung cấp): BLH mỏng ban đêm
+  // = không khí lạnh tù đọng sát đáy thung lũng — chỉ báo trực tiếp của nghịch nhiệt bức xạ
+  const blh = m.blh_night_min;
+  if (blh !== undefined && Number.isFinite(blh)) {
+    if (blh <= 200) add(8, `Lớp biên đêm rất mỏng (${Math.round(blh)}m) — không khí lạnh tù đọng trong thung lũng`);
+    else if (blh <= 500) add(4, `Lớp biên đêm mỏng (${Math.round(blh)}m) — thuận lợi cho nghịch nhiệt`);
+    else if (blh >= 1200) add(-5, `Lớp biên đêm dày (${Math.round(blh)}m) — khí quyển xáo trộn, khó giữ mây trong thung lũng`);
   }
 
   if (wind.level === 'Medium') add(-6, `Gió 850hPa: ${wind.detail}`);
@@ -363,6 +415,10 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
   const warnings: string[] = [...season.warnings];
   if (wind.level === 'Destructive') warnings.push(`Gió tầng 1.500m tới ${rep.wind850_dawn_max}km/h — nguy hiểm khi đứng sống núi/mỏm đá.`);
   if (combined.status === 'RAIN') warnings.push('Có mưa trong khung giờ săn mây — đường trơn, vách đá nguy hiểm.');
+  // Mực đóng băng thật từ mô hình (GFS/ICON) — cảnh báo băng giá khi vị trí đứng ở trên nó
+  if (rep.freezing_level !== undefined && Number.isFinite(rep.freezing_level) && ctx.observerAlt >= rep.freezing_level) {
+    warnings.push(`Vị trí đứng ${ctx.observerAlt}m ở TRÊN mực đóng băng (~${Math.round(rep.freezing_level)}m) — nguy cơ băng giá, mặt đá/ván gỗ trơn trượt.`);
+  }
 
   const reliability_note =
     day.quality === 'UNCERTAIN'
@@ -390,6 +446,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
     wind_detail: wind.detail,
     moisture_type: moisture,
     inversion_strength: inv.strength,
+    inversion_height_m: inv.height,
     boundary_status: deltaH !== null
       ? (deltaH > 250 ? `Trên mây ${Math.round(deltaH)}m` : deltaH >= -250 ? `Ranh giới mặt mây (ΔH=${Math.round(deltaH)}m)` : `Chìm dưới mặt mây ${Math.abs(Math.round(deltaH))}m`)
       : 'Không có biển mây',

@@ -426,7 +426,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     result.dailyForecasts.forEach(fc => {
       text += `\n--- Ngày ${fc.date} (Score: ${fc.score}/100) ---\n`;
       text += `Trạng thái: ${fc.status_text} (${fc.status_code})\n`;
-      text += `Khung giờ vàng: ${fc.golden_hours || fc.sun_times?.goldenHourMorning || '05:30 - 07:30'}\n`;
+      text += `Khung giờ vàng: ${fc.golden_hours || fc.sun_times?.goldenHourMorning || 'N/A (thiếu dữ liệu)'}\n`;
       text += `LCL: ${fc.technical_indices.LCL_base} | Mặt mây: ${fc.technical_indices.cloud_top_estimated} | FSI: ${fc.technical_indices.FSI_score}\n`;
       text += `Lời khuyên: ${fc.expert_advice}\n`;
     });
@@ -481,7 +481,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                      Độ tin cậy dữ liệu: {result.dataReliability}
                    </span>
                  )}
-                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 3 mô hình toàn cầu</p>
+                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 4 mô hình toàn cầu</p>
               </div>
            </div>
 
@@ -602,6 +602,20 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       </div>
 
       {/* Daily List */}
+      {filteredForecasts.length === 0 && (
+        <div className="bg-slate-900/70 border border-slate-700 rounded-2xl p-8 text-center space-y-3">
+          <p className="text-slate-300 text-sm leading-relaxed">
+            😕 Không có ngày nào đạt ≥65 điểm trong khoảng đã tra — điều kiện biển mây kém
+            (thường gặp mùa mưa). Xem tất cả các ngày để biết vì sao điểm thấp.
+          </p>
+          <button
+            onClick={() => setFilterGoldenOnly(false)}
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 font-bold text-xs transition-all"
+          >
+            Hiện tất cả các ngày
+          </button>
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-5">
         {filteredForecasts.map((day, idx) => {
           // Dynamic calculation if user selected a custom waypoint altitude
@@ -714,10 +728,20 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
                           <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">VRII Bức Xạ</span>
-                          <div className={`font-mono font-bold text-base ${(day.technical_indices.vrii_score || 70) >= 80 ? 'text-emerald-400' : 'text-cyan-300'}`}>
-                              {day.technical_indices.vrii_score || 75}/100
-                          </div>
-                          <div className="text-[9px] text-slate-500">{day.technical_indices.vrii_label || 'Thung lũng'}</div>
+                          {/* KHÔNG bịa số: thiếu VRII thì hiện N/A, không mặc định 75 */}
+                          {typeof day.technical_indices.vrii_score === 'number' ? (
+                            <>
+                              <div className={`font-mono font-bold text-base ${day.technical_indices.vrii_score >= 80 ? 'text-emerald-400' : 'text-cyan-300'}`}>
+                                  {day.technical_indices.vrii_score}/100
+                              </div>
+                              <div className="text-[9px] text-slate-500">{day.technical_indices.vrii_label || 'Thung lũng'}</div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-mono font-bold text-base text-slate-500">N/A</div>
+                              <div className="text-[9px] text-slate-500">Thiếu dữ liệu</div>
+                            </>
+                          )}
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
                           <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Wind Impact</span>

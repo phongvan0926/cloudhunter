@@ -363,6 +363,78 @@ describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   });
 });
 
+describe('engine-2.0 — profile tầng thật (geopotential + cloud cover từng tầng)', () => {
+  // Thung lũng 600m, đêm bức xạ: mây phủ liên tục 975→850hPa, khô từ 800hPa trở lên,
+  // độ cao là geopotential THẬT (khác hằng số xấp xỉ vài chục mét)
+  const realLevels = () => [
+    { p: 975, h: 320, hReal: true, t: 11.0, rh: 96, cc: 90 },
+    { p: 950, h: 540, hReal: true, t: 11.4, rh: 95, cc: 85 },
+    { p: 925, h: 745, hReal: true, t: 11.5, rh: 95, cc: 80 },
+    { p: 900, h: 985, hReal: true, t: 11.8, rh: 92, cc: 70 },
+    { p: 850, h: 1462, hReal: true, t: 10.0, rh: 88, cc: 55 },
+    { p: 800, h: 1940, hReal: true, t: 4.5, rh: 40, cc: 5 },
+    { p: 700, h: 3105, hReal: true, t: 2.0, rh: 30, cc: 0 },
+  ];
+
+  it('nghịch nhiệt quét TOÀN profile, trả độ cao tầng cực đại theo geopotential thật', () => {
+    const inv = computeInversion(goldenNight({ levels: realLevels() }), 600);
+    // anomaly cực đại tại 850hPa (1462m): 10.0 − (12 − 6.5×0.862) = +3.6 → Strong
+    expect(inv.strength).toBe('Strong');
+    expect(inv.height).toBe(1462);
+    expect(inv.anomaly).toBeGreaterThan(3);
+  });
+
+  it('fallback không có profile: độ cao nghịch nhiệt lấy xấp xỉ 850hPa=1500m', () => {
+    const inv = computeInversion(goldenNight(), 600);
+    expect(inv.strength).toBe('Strong');
+    expect(inv.height).toBe(1500);
+  });
+
+  it('mặt mây = đỉnh LỚP MÂY LIÊN TỤC (cc≥45 hoặc RH≥80) + 150m, theo độ cao thật', () => {
+    const top = estimateCloudTop(goldenNight({ levels: realLevels() }), 600);
+    expect(top).toBe(1462 + 150); // lớp mây liền mạch 320→1462m, 800hPa khô chặn trên
+  });
+
+  it('KHÔNG nhảy cóc lên lớp mây trung tách rời: 850 khô + 700 có mây → top vẫn ở ~900hPa', () => {
+    const lv = realLevels().map(l =>
+      l.p === 850 ? { ...l, rh: 40, cc: 5 } : l.p === 700 ? { ...l, rh: 90, cc: 80 } : l
+    );
+    const top = estimateCloudTop(goldenNight({ levels: lv }), 600);
+    expect(top).toBe(985 + 150); // dừng ở 900hPa (985m), không phải 3105m
+    expect(top!).toBeLessThan(2000);
+  });
+
+  it('lớp biên đêm mỏng (GFS) cộng điểm; lớp biên dày trừ điểm', () => {
+    const base = scoreOneModel('gfs_seamless', goldenNight(), CTX_A, '2026-11-05');
+    const thin = scoreOneModel('gfs_seamless', goldenNight({ blh_night_min: 150 }), CTX_A, '2026-11-05');
+    const thick = scoreOneModel('gfs_seamless', goldenNight({ blh_night_min: 1500, cloud_low_dawn: 40 }), CTX_A, '2026-11-05');
+    const thickBase = scoreOneModel('gfs_seamless', goldenNight({ cloud_low_dawn: 40 }), CTX_A, '2026-11-05');
+    expect(thin.score).toBeGreaterThanOrEqual(base.score); // đêm vàng có thể đã kịch 100 → chỉ cần không giảm
+    expect(thin.reasons.join(' ')).toMatch(/Lớp biên đêm rất mỏng/);
+    expect(thick.score).toBeLessThan(thickBase.score);
+  });
+
+  it('vị trí đứng trên mực đóng băng thật → cảnh báo băng giá', () => {
+    const day: DayData = {
+      date: '2026-12-20', quality: 'FORECAST', daysAhead: 1,
+      models: { gfs_seamless: goldenNight({ freezing_level: 1800 }) },
+      sun_times: computeSunTimes(22.6, 103.6, '2026-12-20'),
+    };
+    const out = computeDayForecast(day, { ...CTX_A, observerAlt: 2800 });
+    expect(out.warnings.join(' ')).toMatch(/đóng băng/);
+    expect(out.forecast.technical_indices.inversion_height_m).not.toBeUndefined();
+  });
+});
+
+describe('WEATHER_MODELS — 4 mô hình toàn cầu', () => {
+  it('gồm ECMWF/GFS/ICON/JMA (KMA không phủ Việt Nam nên không dùng)', async () => {
+    const { WEATHER_MODELS, MODEL_LABELS } = await import('../services/weatherService');
+    expect(WEATHER_MODELS).toHaveLength(4);
+    expect(WEATHER_MODELS).toContain('jma_seamless');
+    for (const m of WEATHER_MODELS) expect(MODEL_LABELS[m]).toBeTruthy();
+  });
+});
+
 describe('aggregateDayModel — parser dữ liệu Open-Meteo', () => {
   it('thiếu biến cốt lõi → null (không chèn giá trị mặc định)', () => {
     const empty = { time: [], get: () => null };
@@ -391,5 +463,39 @@ describe('aggregateDayModel — parser dữ liệu Open-Meteo', () => {
     expect(agg.t_valley_dawn).toBe(10);
     expect(agg.cloud_low_dawn).toBe(80);
     expect(agg.precip_night).toBe(0);
+    // engine-2.0: profile chỉ chứa các mực model THẬT SỰ có nhiệt độ (925/850/700),
+    // không có geopotential → dùng độ cao xấp xỉ, đánh dấu hReal=false trung thực
+    expect(agg.levels!.map(l => l.p)).toEqual([925, 850, 700]);
+    expect(agg.levels!.every(l => l.hReal === false)).toBe(true);
+    expect(Number.isFinite(agg.blh_night_min!)).toBe(false); // không có BLH → NaN, không bịa
+  });
+
+  it('geopotential thật được ưu tiên thay độ cao xấp xỉ; BLH đêm lấy MIN', () => {
+    const time: string[] = [];
+    for (const d of ['2026-11-04', '2026-11-05']) {
+      for (let h = 0; h < 24; h++) time.push(`${d}T${String(h).padStart(2, '0')}:00`);
+    }
+    const constant = (v: number) => time.map(() => v);
+    // BLH: đêm 04 sau 19h = 80m (tù đọng), còn lại 600m → min cửa sổ đêm phải là 80
+    const blh = time.map(t => (t.startsWith('2026-11-04') && parseInt(t.slice(11, 13), 10) >= 19 ? 80 : 600));
+    const series: Record<string, number[]> = {
+      temperature_2m: constant(12), dew_point_2m: constant(11), relative_humidity_2m: constant(95),
+      cloud_cover_low: constant(80), cloud_cover_mid: constant(10), cloud_cover_high: constant(10),
+      precipitation: constant(0),
+      temperature_925hPa: constant(11), temperature_850hPa: constant(8), temperature_700hPa: constant(0),
+      relative_humidity_925hPa: constant(90), relative_humidity_850hPa: constant(85), relative_humidity_700hPa: constant(30),
+      geopotential_height_925hPa: constant(742), geopotential_height_850hPa: constant(1465), geopotential_height_700hPa: constant(3120),
+      cloud_cover_925hPa: constant(85), cloud_cover_850hPa: constant(60), cloud_cover_700hPa: constant(0),
+      wind_speed_925hPa: constant(4), wind_speed_850hPa: constant(6), wind_direction_850hPa: constant(90),
+      boundary_layer_height: blh, freezing_level_height: constant(4200), lifted_index: constant(4),
+    };
+    const block = { time, get: (v: string) => series[v] || null };
+    const agg = aggregateDayModel(block as any, block as any, 'gfs_seamless', '2026-11-05', '2026-11-04')!;
+    const l850 = agg.levels!.find(l => l.p === 850)!;
+    expect(l850.h).toBe(1465);
+    expect(l850.hReal).toBe(true);
+    expect(l850.cc).toBe(60);
+    expect(agg.blh_night_min).toBe(80);
+    expect(agg.freezing_level).toBe(4200);
   });
 });

@@ -3,8 +3,8 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-37_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
-[![Open-Meteo](https://img.shields.io/badge/Open--Meteo-3_models-00B4D8)](https://open-meteo.com/)
+[![Tests](https://img.shields.io/badge/Vitest-46_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Open-Meteo](https://img.shields.io/badge/Open--Meteo-4_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
 Nam (Tà Xùa, Lảo Thẩn, Ky Quan San, Fansipan, Putaleng, Tà Chì Nhù...).
@@ -23,8 +23,13 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   cao nào cũng báo đẹp".
 - 🌙 **Cửa sổ đêm-trước**: xét cả pha bức xạ 19h→6h (mây cao che đêm, gió thung lũng đêm,
   mưa đêm) — yếu tố quyết định biển mây có hình thành hay không.
-- 🎯 **Đồng thuận mô hình THẬT**: ECMWF IFS + GFS + ICON trong cùng 1 call; điểm = median,
-  trạng thái = đa số, kèm % đồng thuận và độ lệch thật giữa các mô hình.
+- 🎯 **Đồng thuận mô hình THẬT**: ECMWF IFS + GFS + ICON + JMA (hợp Đông Á) trong cùng
+  1 call; điểm = median, trạng thái = đa số, kèm % đồng thuận và độ lệch thật.
+- 📡 **Profile khí quyển 7 mực (engine-2.0)**: 975→700hPa với độ cao **geopotential THẬT
+  từng ngày** (hết hằng số lệch 20–40m), cloud cover theo từng tầng → mặt mây = đỉnh lớp
+  mây LIÊN TỤC từ dưới lên; **boundary layer height đêm** (GFS) bắt không khí tù đọng;
+  **mực đóng băng thật** → cảnh báo băng giá; nhiệt độ 2 điểm được API downscale theo
+  đúng độ cao thung lũng/vị trí đứng (`&elevation=`).
 - 🔍 **"Vì sao điểm này?"**: mỗi ngày liệt kê từng yếu tố cộng/trừ điểm (mây thấp bình minh,
   nghịch nhiệt, ẩm, gió theo vùng địa hình, mây cao che đêm, mưa, mùa) — minh bạch 100%.
 - ⛔ **Trung thực dữ liệu**: ngày ngoài phạm vi dự báo hiện UNKNOWN + "ngoài phạm vi dữ
@@ -52,13 +57,13 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Chỉ số | Công thức / cách tính |
 | :--- | :--- |
 | LCL (đáy mây) | `thung_lũng + 125 × (T_valley − Td_valley)` |
-| Nghịch nhiệt | anomaly = T_tầng − (T_valley − 6.5°C/km × Δh); ≥3°C = Strong |
-| Mặt mây (top) | tầng cao nhất có RH ≥ 80% (+150m), ràng buộc với đáy mây |
+| Nghịch nhiệt | anomaly = T_tầng − (T_valley − 6.5°C/km × Δh) trên profile 7 mực (độ cao thật, chỉ tầng ≤2600m); ≥3°C = Strong + độ cao tầng |
+| Mặt mây (top) | đỉnh LỚP MÂY LIÊN TỤC từ dưới lên (cc tầng ≥45% / RH≥80%) +150m, không nhảy cóc lên lớp mây tách rời |
 | ΔH | vị_trí_đứng − top → STATIC / FLUCTUATING(±250m) / FOG |
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
 | Gió theo vùng | Zone A: 10/15/20 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
-| Điểm ngày | mây thấp bình minh (nặng nhất) + nghịch nhiệt + ẩm − gió − mây cao đêm − mưa ± mùa |
+| Điểm ngày | mây thấp bình minh (nặng nhất) + nghịch nhiệt + ẩm + lớp biên đêm mỏng − gió − mây cao đêm − mưa ± mùa |
 
 ## 🚀 Chạy & kiểm tra
 
@@ -66,7 +71,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 37 golden tests: engine + fallback model + múi giờ + alias thư viện
+npm test         # 46 golden tests: engine + fallback model + múi giờ + alias thư viện
 npm run build
 ```
 

@@ -28,8 +28,17 @@ const App: React.FC = () => {
     try {
       const locAnalysis = await analyzeLocation(data.locationName, data.model);
       setLocationAnalysis(locAnalysis);
+      // Kẹp độ cao đứng theo núi THẬT: slider mặc định 2200m từng cao hơn cả đỉnh
+      // (vd Bà Đen 986m) → ΔH sai toàn bộ. Vượt đỉnh thì hạ về vị trí gợi ý/đỉnh.
+      const peak = locAnalysis.estimated_elevation;
+      let obsAlt = data.observerAlt;
+      if (typeof obsAlt === 'number' && typeof peak === 'number' && peak > 0 && obsAlt > peak) {
+        const suggested = locAnalysis.suggested_observer_alt;
+        obsAlt = typeof suggested === 'number' && suggested > 0 && suggested <= peak ? suggested : peak;
+      }
       setPendingInput({
         ...data,
+        observerAlt: obsAlt,
         lat: locAnalysis.lat,
         lon: locAnalysis.lon
       });

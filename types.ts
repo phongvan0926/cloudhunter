@@ -47,6 +47,7 @@ export interface TechnicalIndices {
   wind_detail?: string;
   moisture_type: 'Deep' | 'Shallow' | 'Unknown';
   inversion_strength?: 'Strong' | 'Moderate' | 'Weak' | 'None' | 'Unknown';
+  inversion_height_m?: number | null; // độ cao tầng nghịch nhiệt cực đại (geopotential thật nếu có)
   boundary_status?: string;
   vrii_score?: number;
   vrii_label?: 'Excellent' | 'Favorable' | 'Moderate' | 'Poor';

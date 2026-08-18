@@ -6,6 +6,8 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 > **Bản v5 (2026-08): tái kiến trúc lớn.** AI không còn tính điểm; mọi con số do
 > `services/cloudScoreEngine.ts` tính deterministic. Dữ liệu giả (synthetic weather,
 > consensus cứng 94%, tọa độ GPX bịa, fallback Y Tý ngầm) đã bị loại bỏ toàn bộ.
+> **Engine 2.0 (18/8/2026):** 4 mô hình (thêm JMA), profile 7 mực áp suất với geopotential
+> THẬT, cloud cover từng tầng, boundary layer height đêm, mực đóng băng — xem mục Vật lý.
 
 ---
 
@@ -29,7 +31,20 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 - **Nghịch nhiệt KHÔNG được suy từ "T850 > T_đỉnh"** — với đỉnh >1500m điều đó đúng trong
   mọi khí quyển (lỗi hệ thống của bản cũ). Phải so T tầng với nhiệt kỳ vọng theo suy giảm
   chuẩn 6.5°C/km từ thung lũng (`computeInversion`). Có test hồi quy khóa lỗi này.
-- Độ cao mực áp suất (ASL, gần đúng): 925hPa≈760m, 850hPa≈1500m, 700hPa≈3100m.
+- **Độ cao mực áp suất (engine-2.0): ưu tiên `geopotential_height_XXXhPa` THẬT** từ API
+  (biến thiên 20–40m theo ngày); hằng số 925≈760m / 850≈1500m / 700≈3100m chỉ là fallback
+  khi model không trả geopotential (`LevelSample.hReal=false`).
+- **Profile 7 mực** (`PRESSURE_LEVELS` 975/950/925/900/850/800/700hPa): GFS+ICON có đủ 7,
+  ECMWF ifs025 và JMA chỉ 925/850/700 — mực thiếu trả null và tự bị bỏ qua, KHÔNG chèn
+  mặc định. `computeInversion` quét toàn profile nhưng CHỈ các tầng ≤2600m ASL — ấm ở
+  700hPa là ấm tầng cao, không phải nắp nghịch nhiệt thung lũng (có test khóa).
+- **Mặt mây (`estimateCloudTop`)**: đỉnh của LỚP MÂY LIÊN TỤC từ dưới lên (cloud_cover
+  tầng ≥45% hoặc RH≥80%) + 150m — KHÔNG nhảy cóc lên lớp mây trung tách rời phía trên
+  (có test khóa). Fallback 3 mực RH như cũ khi thiếu profile.
+- **Boundary layer height đêm** (GFS mới có): BLH min đêm ≤200m = không khí tù đọng
+  → +8; ≤500m → +4; ≥1200m → −5. Model khác không có BLH thì bỏ qua, không giả định.
+- **Mực đóng băng thật** (`freezing_level_height`, GFS/ICON): vị trí đứng cao hơn → cảnh
+  báo băng giá trong `warnings`.
 - Cửa sổ thời gian: pha bức xạ = **19h đêm trước → 6h sáng** (mây cao đêm, gió 925 đêm,
   mưa đêm); pha quan sát = **4h→9h sáng** (mây thấp, nhiệt/ẩm tầng lúc 6h).
 - `cloud_cover_low` lúc bình minh tại điểm thung lũng ≈ biển mây trong mô hình — yếu tố
@@ -46,8 +61,9 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 ```
 InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối cùng, có nhãn)
   → LocationConfirm (hiện nguồn + độ tin cậy)
-  → fetchMountainWeather:  2 ĐIỂM (thung lũng + vị trí đứng) × 3 MÔ HÌNH (ECMWF/GFS/ICON)
-        1 call/điểm, 16 biến hourly + sunrise/sunset daily, cache 30 phút
+  → fetchMountainWeather:  2 ĐIỂM (thung lũng + vị trí đứng) × 4 MÔ HÌNH (ECMWF/GFS/ICON/JMA)
+        1 call/điểm (&elevation= để API downscale nhiệt theo độ cao thật), 41 biến hourly
+        (profile 7 mực T/RH/cloud/geopotential + BLH/freezing/lifted) + sunrise/sunset, cache 30 phút
   → cloudScoreEngine.computeDayForecast (per-model score/status → median + đa số + spread THẬT)
   → geminiService.generateNarrative (AI viết lời từ engine digest; fail → văn bản engine,
         aiNarrative=false, app vẫn đầy đủ số liệu)
@@ -64,7 +80,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `services/geminiService.ts` | Phân giải địa danh nhiều tầng có nhãn nguồn + lời bình AI (schema chỉ chứa trường văn bản). |
 | `services/modelDiscoveryService.ts` | Discover model Gemini động + executeWithFallback (429/404/5xx retry, 401/403 dừng). |
 | `services/historyService.ts` | Lưu/mở lại các lần dự báo (localStorage). |
-| `tests/engine.test.ts` | 37 golden tests: vật lý & chấm điểm, bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
+| `tests/engine.test.ts` | 46 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
 
@@ -95,7 +111,8 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 1. **Vòng kiểm chứng độ chính xác**: đối chiếu dự báo đã lưu (historyService có `savedAt`)
    với Open-Meteo Archive API sau chuyến đi → thống kê "engine đoán trúng bao nhiêu %".
-2. Ảnh vệ tinh Himawari thời gian thực (tab "mây lúc này").
+2. Ảnh vệ tinh Himawari thời gian thực (tab "mây lúc này") — đã xác minh nguồn: JMA
+   `se1_b13_{HHMM}.jpg` (10 phút, CORS *) + NASA GIBS WMTS Band13 (`{time}` dùng `default`).
 3. PWA offline (vite-plugin-pwa) cho vùng mất sóng.
 4. Giờ-theo-giờ trong ngày được chọn (timeline 19h→9h).
 5. Mở rộng MOUNTAIN_DB + profile cho núi phía Nam (Lang Biang, Chư Yang Sin, Bà Đen...).
@@ -104,7 +121,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 28 golden tests engine
+npm test       # vitest — 46 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

@@ -5,19 +5,45 @@
  *  - KHÔNG BAO GIỜ bịa số. Ngày nào ngoài phạm vi dự báo → quality = NO_DATA, models rỗng.
  *  - Mỗi ngày mang nhãn DataQuality để UI hiển thị đúng độ tin cậy.
  *  - Dữ liệu lấy cho 2 ĐIỂM: đáy thung lũng (nơi biển mây hình thành) và vị trí đứng.
- *  - 3 mô hình toàn cầu (ECMWF/GFS/ICON) trong cùng 1 call → đồng thuận tính THẬT ở engine.
+ *  - 4 mô hình toàn cầu (ECMWF/GFS/ICON/JMA) trong cùng 1 call → đồng thuận tính THẬT ở engine.
  */
 import { MOUNTAIN_DB, MountainInfo } from '../constants/mountains';
 import { SunTimes, TerrainPoint, DataQuality } from '../types';
 
-export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless'] as const;
+export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'jma_seamless'] as const;
 export type WeatherModelId = (typeof WEATHER_MODELS)[number];
 
 export const MODEL_LABELS: Record<string, string> = {
   ecmwf_ifs025: 'ECMWF IFS',
   gfs_seamless: 'GFS (NOAA)',
   icon_seamless: 'ICON (DWD)',
+  jma_seamless: 'JMA GSM (Nhật)',
 };
+
+/**
+ * Các mực áp suất khai thác + độ cao XẤP XỈ (m ASL) — chỉ dùng khi API không trả
+ * geopotential_height thật. GFS/ICON có đủ 7 mực; ECMWF ifs025 và JMA chỉ có 925/850/700
+ * (các mực còn lại trả null → tự bị bỏ qua, không chèn mặc định).
+ */
+export const PRESSURE_LEVELS = [
+  { p: 975, approxH: 320 },
+  { p: 950, approxH: 540 },
+  { p: 925, approxH: 760 },
+  { p: 900, approxH: 990 },
+  { p: 850, approxH: 1500 },
+  { p: 800, approxH: 1950 },
+  { p: 700, approxH: 3100 },
+] as const;
+
+/** Một mẫu tầng áp suất lúc ~06h — độ cao là geopotential THẬT nếu model cung cấp. */
+export interface LevelSample {
+  p: number;      // hPa
+  h: number;      // m ASL
+  hReal: boolean; // true = geopotential_height thật; false = xấp xỉ chuẩn
+  t: number;      // °C
+  rh: number;     // % (NaN nếu model không có)
+  cc: number;     // % cloud cover của tầng (NaN nếu model không có)
+}
 
 /** Số liệu 1 ngày theo 1 mô hình — toàn bộ là số đo/đại lượng dẫn xuất từ API, không có giá trị chế tác. */
 export interface DayModelData {
@@ -40,6 +66,11 @@ export interface DayModelData {
   wind925_night: number;      // km/h trung bình đêm trong thung lũng
   precip_night: number;       // mm tổng đêm
   rh2m_valley_night: number;  // % ẩm sát đất thung lũng ban đêm
+  // engine-2.0: profile tầng thật + biến chẩn đoán (optional — model nào không có thì bỏ qua)
+  levels?: LevelSample[];     // profile 06h các mực áp suất model này có dữ liệu
+  blh_night_min?: number;     // m — boundary layer height tối thiểu ban đêm (GFS mới có)
+  freezing_level?: number;    // m — mực đóng băng lúc bình minh (GFS/ICON)
+  lifted_index?: number;      // chỉ số bất ổn định (GFS)
 }
 
 export interface DayData {
@@ -61,9 +92,14 @@ export interface WeatherPackage {
 const HOURLY_VARS = [
   'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
   'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
-  'temperature_925hPa', 'temperature_850hPa', 'temperature_700hPa',
-  'relative_humidity_925hPa', 'relative_humidity_850hPa', 'relative_humidity_700hPa',
   'wind_speed_925hPa', 'wind_speed_850hPa', 'wind_direction_850hPa',
+  // profile tầng: T + RH + cloud cover + geopotential thật cho mọi mực trong PRESSURE_LEVELS
+  ...PRESSURE_LEVELS.flatMap(({ p }) => [
+    `temperature_${p}hPa`, `relative_humidity_${p}hPa`,
+    `cloud_cover_${p}hPa`, `geopotential_height_${p}hPa`,
+  ]),
+  // biến chẩn đoán (GFS có đủ; model khác trả null → bỏ qua trung thực)
+  'boundary_layer_height', 'freezing_level_height', 'lifted_index',
 ];
 
 function formatDateStr(d: Date): string {
@@ -281,6 +317,29 @@ export function aggregateDayModel(
   const windDir = pick(observer, 'wind_direction_850hPa', model, coreIdxO);
   const rh2mNight = pick(valley, 'relative_humidity_2m', model, nightIdxV);
 
+  // Profile tầng lúc ~06h: chỉ đưa vào các mực model này THẬT SỰ có nhiệt độ;
+  // độ cao ưu tiên geopotential thật (thay hằng số 925≈760m vốn lệch 20-40m theo ngày)
+  const sixOrCore = sixIdxV.length ? sixIdxV : coreIdxV;
+  const levels: LevelSample[] = [];
+  for (const { p, approxH } of PRESSURE_LEVELS) {
+    const t = pick(valley, `temperature_${p}hPa`, model, sixOrCore);
+    if (t.length === 0) continue;
+    const gph = pick(valley, `geopotential_height_${p}hPa`, model, sixOrCore);
+    const rh = pick(valley, `relative_humidity_${p}hPa`, model, sixOrCore);
+    const cc = pick(valley, `cloud_cover_${p}hPa`, model, sixOrCore);
+    levels.push({
+      p,
+      h: gph.length ? Math.round(avg(gph)) : approxH,
+      hReal: gph.length > 0,
+      t: +avg(t).toFixed(1),
+      rh: rh.length ? Math.round(avg(rh)) : NaN,
+      cc: cc.length ? Math.round(avg(cc)) : NaN,
+    });
+  }
+  const blhNight = pick(valley, 'boundary_layer_height', model, nightIdxV);
+  const freezing = pick(observer, 'freezing_level_height', model, coreIdxO);
+  const lifted = pick(valley, 'lifted_index', model, coreIdxV);
+
   return {
     t_valley_dawn: +avg(tValley).toFixed(1),
     td_valley_dawn: +avg(tdValley).toFixed(1),
@@ -303,6 +362,10 @@ export function aggregateDayModel(
     wind925_night: wind925Night.length ? +avg(wind925Night).toFixed(1) : 0,
     precip_night: precipNight.length ? +sum(precipNight).toFixed(1) : 0,
     rh2m_valley_night: rh2mNight.length ? Math.round(avg(rh2mNight)) : NaN,
+    levels,
+    blh_night_min: blhNight.length ? Math.round(Math.min(...blhNight)) : NaN,
+    freezing_level: freezing.length ? Math.round(avg(freezing)) : NaN,
+    lifted_index: lifted.length ? +avg(lifted).toFixed(1) : NaN,
   };
 }
 
