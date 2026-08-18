@@ -331,6 +331,19 @@ describe('buildFallbackChain — bậc thang đúng với danh sách model thậ
   });
 });
 
+describe('parseKeyFromHash — chuyển API key giữa thiết bị qua #gkey', () => {
+  it('nhận key hợp lệ, từ chối rác/thiếu, hỗ trợ URL-encode', async () => {
+    const { parseKeyFromHash } = await import('../services/modelDiscoveryService');
+    expect(parseKeyFromHash('#gkey=AIzaSyABCDEFGHIJKLMNOPQRSTUV123')).toBe('AIzaSyABCDEFGHIJKLMNOPQRSTUV123');
+    expect(parseKeyFromHash('#foo=1&gkey=AIzaSyABCDEFGHIJKLMNOPQRSTUV123')).toBe('AIzaSyABCDEFGHIJKLMNOPQRSTUV123');
+    expect(parseKeyFromHash('#gkey=AIzaSy%41BCDEFGHIJKLMNOPQRSTUV123')).toBe('AIzaSyABCDEFGHIJKLMNOPQRSTUV123');
+    expect(parseKeyFromHash('#gkey=short')).toBeNull();          // quá ngắn
+    expect(parseKeyFromHash('#gkey=co%20khoang%20trang%20abcdef')).toBeNull(); // ký tự lạ
+    expect(parseKeyFromHash('#other=x')).toBeNull();
+    expect(parseKeyFromHash('')).toBeNull();
+  });
+});
+
 describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
     expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);

@@ -71,7 +71,10 @@ npm run build
 ```
 
 AI (tùy chọn): nhập Gemini API Key qua nút 🔑 trong app (lưu localStorage máy bạn —
-không nhúng key vào code/bundle).
+không nhúng key vào code/bundle). **Dùng nhiều thiết bị:** trong modal 🔑 bấm
+"📱 Dùng trên thiết bị khác" → quét QR (hoặc chép link) bằng máy kia → key tự lưu vào
+máy đó và tự xóa khỏi thanh địa chỉ. Key nằm trong `#fragment` của link nên không bao
+giờ được gửi lên server nào — chỉ quét/gửi cho chính mình.
 
 ## 🤖 Cho AI assistant tiếp tục phát triển
 

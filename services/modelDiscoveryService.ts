@@ -127,6 +127,37 @@ export function getStoredApiKey(): string {
   }
 }
 
+/**
+ * Chuyển key giữa các thiết bị qua URL fragment (#gkey=...).
+ * Fragment KHÔNG bao giờ được trình duyệt gửi lên server — key đi thẳng thiết bị-tới-thiết bị.
+ */
+export function parseKeyFromHash(hash: string): string | null {
+  const m = (hash || '').match(/[#&]gkey=([^&]+)/);
+  if (!m) return null;
+  const key = decodeURIComponent(m[1]).trim();
+  // kiểm tra hình dạng key Google (AIza...) hoặc tối thiểu 20 ký tự an toàn
+  if (/^AIza[0-9A-Za-z_-]{20,}$/.test(key) || /^[0-9A-Za-z_-]{20,}$/.test(key)) return key;
+  return null;
+}
+
+/** Gọi lúc khởi động app: nhận key từ link/QR thiết bị khác, lưu rồi XÓA ngay khỏi thanh địa chỉ. */
+export function importKeyFromUrlHash(): boolean {
+  try {
+    const key = parseKeyFromHash(window.location.hash);
+    if (!key) return false;
+    setStoredApiKey(key);
+    // xóa fragment để key không nằm lại trên thanh địa chỉ / lịch sử tab
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function buildKeyTransferUrl(key: string): string {
+  return `${window.location.origin}${window.location.pathname}#gkey=${encodeURIComponent(key)}`;
+}
+
 export function setStoredApiKey(key: string): void {
   try {
     if (!key.trim()) {

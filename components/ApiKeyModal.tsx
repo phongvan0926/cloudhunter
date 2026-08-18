@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { getStoredApiKey, setStoredApiKey, discoverModels } from '../services/modelDiscoveryService';
+import QRCode from 'qrcode';
+import { getStoredApiKey, setStoredApiKey, discoverModels, buildKeyTransferUrl } from '../services/modelDiscoveryService';
 
 interface ApiKeyModalProps {
   isOpen: boolean;
@@ -11,8 +12,29 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onKey
   const [apiKey, setApiKey] = useState<string>(getStoredApiKey());
   const [testing, setTesting] = useState<boolean>(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState<boolean>(false);
 
   if (!isOpen) return null;
+
+  const storedKey = getStoredApiKey();
+
+  const handleShowQr = async () => {
+    if (!storedKey) return;
+    if (qrDataUrl) { setQrDataUrl(null); return; } // bấm lần nữa để ẩn
+    const url = buildKeyTransferUrl(storedKey);
+    const dataUrl = await QRCode.toDataURL(url, { width: 220, margin: 1, color: { dark: '#0f172a', light: '#e2e8f0' } });
+    setQrDataUrl(dataUrl);
+  };
+
+  const handleCopyLink = async () => {
+    if (!storedKey) return;
+    try {
+      await navigator.clipboard.writeText(buildKeyTransferUrl(storedKey));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* clipboard bị chặn thì thôi, QR vẫn dùng được */ }
+  };
 
   const handleTestAndSave = async () => {
     setTesting(true);
@@ -126,6 +148,39 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onKey
                 </button>
               )}
             </div>
+
+            {/* Chuyển key sang thiết bị khác qua QR / link (#gkey — fragment không lên server) */}
+            {storedKey && (
+              <div className="mt-3 pt-3 border-t border-slate-700/60">
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleShowQr}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 font-bold text-xs transition-all"
+                  >
+                    {qrDataUrl ? '🙈 Ẩn mã QR' : '📱 Dùng trên thiết bị khác (QR)'}
+                  </button>
+                  <button
+                    onClick={handleCopyLink}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 font-bold text-xs transition-all"
+                  >
+                    {copied ? '✅ Đã chép link!' : '🔗 Chép link chuyển key'}
+                  </button>
+                </div>
+                {qrDataUrl && (
+                  <div className="mt-3 flex flex-col items-center gap-2 bg-slate-950/60 rounded-2xl p-4 border border-slate-700/50">
+                    <img src={qrDataUrl} alt="QR chuyển API key" className="rounded-lg" width={220} height={220} />
+                    <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                      Mở camera/trình quét QR trên thiết bị kia → mở link → key tự lưu vào thiết bị đó
+                      và tự xóa khỏi thanh địa chỉ.
+                    </p>
+                  </div>
+                )}
+                <p className="text-[10px] text-amber-300/80 mt-2 leading-relaxed">
+                  ⚠️ Link/QR này CHỨA key của bạn — chỉ quét/gửi cho chính mình, đừng đăng công khai.
+                  Key không đi qua server nào (nằm trong phần #fragment của link).
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
