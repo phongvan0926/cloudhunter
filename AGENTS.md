@@ -80,6 +80,10 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `services/geminiService.ts` | Phân giải địa danh nhiều tầng có nhãn nguồn + lời bình AI (schema chỉ chứa trường văn bản). |
 | `services/modelDiscoveryService.ts` | Discover model Gemini động + executeWithFallback (429/404/5xx retry, 401/403 dừng). |
 | `services/historyService.ts` | Lưu/mở lại các lần dự báo (localStorage). |
+| `services/rankingService.ts` | "Đêm nay đi đâu": batch 1 call toàn thư viện (lat/lon/elevation dạng danh sách — API trả JSON array theo thứ tự), đáy thung lũng DEM cache localStorage vĩnh viễn, chấm bằng CHÍNH scoreOneModel/combineModels (GFS+ICON). |
+| `services/astroService.ts` | Trăng/bình minh thiên văn cục bộ (suncalc) — pha, độ sáng, moonset, cửa sổ Milky Way; deterministic, có golden test. |
+| `components/SatellitePanel.tsx` | Vòng lặp ảnh Himawari-9 Band13 hồng ngoại của JMA (`se1_b13_{HHMM}.jpg`, UTC bước 10 phút, lùi 40 phút cho chắc ảnh đã đăng, `<img>` thuần nên không vướng CORS); khung lỗi bị bỏ qua, không ảnh thay thế. |
+| `components/CloudLayerChart.tsx` | Heatmap mây tầng × giờ bằng CSS grid (KHÔNG SVG — chữ không bị co trên mobile), thang độ cao tuyến tính theo geopotential thật, vạch vị trí đứng/thung lũng/bình minh. |
 | `tests/engine.test.ts` | 46 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
@@ -111,17 +115,17 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 1. **Vòng kiểm chứng độ chính xác**: đối chiếu dự báo đã lưu (historyService có `savedAt`)
    với Open-Meteo Archive API sau chuyến đi → thống kê "engine đoán trúng bao nhiêu %".
-2. Ảnh vệ tinh Himawari thời gian thực (tab "mây lúc này") — đã xác minh nguồn: JMA
-   `se1_b13_{HHMM}.jpg` (10 phút, CORS *) + NASA GIBS WMTS Band13 (`{time}` dùng `default`).
+2. ~~Ảnh vệ tinh Himawari~~ ✅ đã có SatellitePanel (JMA se1_b13) từ 19/8/2026; nguồn dự
+   phòng nếu JMA đổi format: NASA GIBS WMTS Band13 (`{time}` dùng `default`).
 3. PWA offline (vite-plugin-pwa) cho vùng mất sóng.
-4. Giờ-theo-giờ trong ngày được chọn (timeline 19h→9h).
+4. ~~Giờ-theo-giờ~~ ✅ đã có CloudLayerChart (12h hôm trước → 12h) từ 19/8/2026.
 5. Mở rộng MOUNTAIN_DB + profile cho núi phía Nam (Lang Biang, Chư Yang Sin, Bà Đen...).
 
 ## 🧪 Lệnh kiểm tra
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 46 golden tests engine
+npm test       # vitest — 50 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

@@ -215,7 +215,7 @@ export function seasonAdjust(dateStr: string): { delta: number; label: string; w
 
 // ------------------------------------------------------- chấm 1 mô hình ----
 
-const STATUS_TEXT: Record<StatusCode, string> = {
+export const STATUS_TEXT: Record<StatusCode, string> = {
   STATIC: 'Biển mây tĩnh — thảm mây phẳng',
   FLOWING: 'Mây luồn — biển mây chuyển động đẹp',
   CLEAR: 'Trời quang — không có biển mây',
@@ -463,6 +463,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
       reliability_note,
       reasons: combined.representative.reasons,
       sunrise_color_potential: colorPotential,
+      hourly_profile: day.hourly_profile,
       recommended_position: recommendPosition(deltaH, combined.cloudTop, ctx),
       technical_indices: indices,
       // Lời bình mặc định do engine sinh — AI sẽ thay bằng văn hay hơn nếu khả dụng

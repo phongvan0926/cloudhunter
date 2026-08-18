@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-46_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-50_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-4_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -51,6 +51,17 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 - 🕘 **Lịch sử dự báo** (localStorage): mở lại tức thì, và là nền tảng để đối chiếu
   "app đoán gì vs thực tế" sau chuyến đi.
 - 📥 **Xuất GPX/TXT offline** với tọa độ thật của địa điểm.
+- 🌄 **"Đêm nay đi đâu săn mây?"**: xếp hạng TOÀN BỘ thư viện cho rạng sáng mai trong
+  1 call batch (GFS+ICON, dữ liệu tại đáy thung lũng DEM từng điểm) — bấm điểm nào là
+  phân tích đầy đủ điểm đó.
+- 🛰️ **"Mây LÚC NÀY"**: vòng lặp ảnh vệ tinh Himawari-9 hồng ngoại (JMA, 10 phút/ảnh,
+  nhìn được mây cả ban đêm) — kiểm tra biển mây đang thật sự hình thành trước khi xuất
+  phát lúc 3-4h sáng.
+- 📊 **Biểu đồ mây theo độ cao × thời gian** (kiểu meteoblue): mỗi tầng áp suất một
+  hàng với độ cao geopotential thật + vạch vị trí bạn đứng — nhìn 1 giây biết mây nằm
+  dưới chân (biển mây) hay trùm đầu (mù).
+- 🌙 **Trăng cho nhiếp ảnh đêm** (tính cục bộ bằng suncalc): pha, độ sáng, giờ lặn/mọc,
+  cửa sổ Milky Way hoặc "biển mây dưới trăng" cho từng rạng sáng.
 
 ## 📐 Engine (tóm tắt — chi tiết trong AGENTS.md)
 
@@ -71,7 +82,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 46 golden tests: engine + fallback model + múi giờ + alias thư viện
+npm test         # 50 golden tests: engine + fallback model + múi giờ + alias thư viện + trăng + profile biểu đồ
 npm run build
 ```
 

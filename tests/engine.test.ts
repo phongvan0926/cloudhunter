@@ -344,6 +344,82 @@ describe('parseKeyFromHash — chuyển API key giữa thiết bị qua #gkey', 
   });
 });
 
+describe('buildHourlyProfile — dữ liệu biểu đồ mây time × altitude', () => {
+  const mkTime = () => {
+    const time: string[] = [];
+    for (const d of ['2026-11-04', '2026-11-05']) {
+      for (let h = 0; h < 24; h++) time.push(`${d}T${String(h).padStart(2, '0')}:00`);
+    }
+    return time;
+  };
+
+  it('chọn model nhiều tầng nhất, cửa sổ 12h hôm trước → 12h ngày dự báo, null giữ nguyên', async () => {
+    const { buildHourlyProfile } = await import('../services/weatherService');
+    const time = mkTime();
+    const constant = (v: number) => time.map(() => v);
+    const series: Record<string, number[]> = {
+      // icon có 4 tầng cc, gfs chỉ 3 → phải chọn icon
+      'cloud_cover_925hPa_icon_seamless': constant(80),
+      'cloud_cover_900hPa_icon_seamless': constant(60),
+      'cloud_cover_850hPa_icon_seamless': constant(40),
+      'cloud_cover_700hPa_icon_seamless': constant(0),
+      'geopotential_height_850hPa_icon_seamless': constant(1470),
+      'cloud_cover_925hPa_gfs_seamless': constant(70),
+      'cloud_cover_850hPa_gfs_seamless': constant(30),
+      'cloud_cover_700hPa_gfs_seamless': constant(0),
+    };
+    const block = {
+      time,
+      get: (v: string, model: string) => series[`${v}_${model}`] || null,
+    };
+    const p = buildHourlyProfile(block as any, '2026-11-05', '2026-11-04')!;
+    expect(p.model).toBe('icon_seamless');
+    expect(p.levels.map(l => l.p)).toEqual([925, 900, 850, 700]);
+    expect(p.times).toHaveLength(25); // 12→23 (12 giờ) + 0→12 (13 giờ)
+    expect(p.times[0]).toBe('2026-11-04T12:00');
+    expect(p.times[24]).toBe('2026-11-05T12:00');
+    const l850 = p.levels.find(l => l.p === 850)!;
+    expect(l850.h).toBe(1470);
+    expect(l850.hReal).toBe(true);
+    expect(p.levels.find(l => l.p === 925)!.hReal).toBe(false); // không có gph → xấp xỉ, dán nhãn thật
+  });
+
+  it('không model nào đủ 3 tầng → undefined (không vẽ biểu đồ bịa)', async () => {
+    const { buildHourlyProfile } = await import('../services/weatherService');
+    const time = mkTime();
+    const series: Record<string, number[]> = {
+      'cloud_cover_925hPa_gfs_seamless': time.map(() => 50),
+    };
+    const block = { time, get: (v: string, m: string) => series[`${v}_${m}`] || null };
+    expect(buildHourlyProfile(block as any, '2026-11-05', '2026-11-04')).toBeUndefined();
+  });
+});
+
+describe('astroService — trăng cho nhiếp ảnh (tính cục bộ, deterministic)', () => {
+  it('cùng đầu vào → cùng kết quả; illumination 0-100; logic Milky Way nhất quán', async () => {
+    const { moonInfoForDawn } = await import('../services/astroService');
+    const a = moonInfoForDawn('2026-11-05', 21.35, 104.41);
+    const b = moonInfoForDawn('2026-11-05', 21.35, 104.41);
+    expect(a).toEqual(b);
+    expect(a.illumination).toBeGreaterThanOrEqual(0);
+    expect(a.illumination).toBeLessThanOrEqual(100);
+    expect(a.phaseLabel.length).toBeGreaterThan(0);
+    if (!a.moonUpAtDawn) expect(a.milkyWayWindow).toBe(true);
+  });
+
+  it('trăng tròn vs trăng non cho illumination khác nhau rõ rệt (chu kỳ ~29.5 ngày)', async () => {
+    const { moonInfoForDawn } = await import('../services/astroService');
+    // quét 30 ngày liên tiếp phải có cả ngày rất sáng (>90) và ngày rất tối (<10)
+    const ills: number[] = [];
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(Date.UTC(2026, 10, 1 + i)).toISOString().slice(0, 10);
+      ills.push(moonInfoForDawn(d, 21.35, 104.41).illumination);
+    }
+    expect(Math.max(...ills)).toBeGreaterThan(90);
+    expect(Math.min(...ills)).toBeLessThan(10);
+  });
+});
+
 describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
     expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);

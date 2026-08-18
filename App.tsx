@@ -4,9 +4,11 @@ import { InputForm } from './components/InputForm';
 import { AnalysisResult } from './components/AnalysisResult';
 import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
+import { TonightRanking } from './components/TonightRanking';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { analyzeWeatherData, analyzeLocation } from './services/geminiService';
 import { listRuns, loadRun, saveRun } from './services/historyService';
+import { vnTodayStr, addDaysStr } from './services/weatherService';
 
 const App: React.FC = () => {
   const [analysis, setAnalysis] = useState<CloudAnalysis | null>(null);
@@ -16,6 +18,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [historyList, setHistoryList] = useState(() => listRuns());
+  const [showTonight, setShowTonight] = useState(false);
 
   const handleLoadHistory = (id: string) => {
     const saved = loadRun(id);
@@ -131,6 +134,37 @@ const App: React.FC = () => {
             ) : (
               <div className="animate-fade-in-up">
                 <InputForm onSubmit={handleInputSubmit} isLoading={isLoading} />
+
+                {/* "Đêm nay đi đâu?" — xếp hạng toàn thư viện cho rạng sáng mai */}
+                <div className="max-w-xl mx-auto mt-4">
+                  <button
+                    onClick={() => setShowTonight(v => !v)}
+                    className={`w-full min-h-11 py-3 rounded-xl font-bold text-sm transition-all border flex justify-center items-center gap-2 ${
+                      showTonight
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
+                        : 'bg-slate-800/70 text-amber-300/90 border-slate-700 hover:border-amber-500/50'
+                    }`}
+                  >
+                    <span>🌄</span>
+                    <span>{showTonight ? 'Ẩn bảng xếp hạng' : 'Đêm nay đi đâu săn mây? — xếp hạng toàn bộ điểm cho sáng mai'}</span>
+                  </button>
+                </div>
+                {showTonight && (
+                  <TonightRanking
+                    targetDate={addDaysStr(vnTodayStr(), 1)}
+                    onPickSpot={(name, elevation) => {
+                      setShowTonight(false);
+                      handleInputSubmit({
+                        locationName: name,
+                        startDate: vnTodayStr(),
+                        endDate: addDaysStr(vnTodayStr(), 2),
+                        observerAlt: elevation,
+                        model: undefined,
+                      });
+                    }}
+                  />
+                )}
+
                 {historyList.length > 0 && (
                   <div className="max-w-xl mx-auto mt-4">
                     <span className="block text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-2">

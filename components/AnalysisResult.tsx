@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { CloudAnalysis, TerrainAnalysis, TerrainPoint, DailyForecast } from '../types';
 import { formatModelDisplayName } from '../services/modelDiscoveryService';
+import { SatellitePanel } from './SatellitePanel';
+import { CloudLayerChart } from './CloudLayerChart';
+import { moonInfoForDawn } from '../services/astroService';
 
 interface AnalysisResultProps {
   result: CloudAnalysis;
@@ -583,6 +586,9 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
         )}
       </div>
 
+      {/* Vệ tinh thời gian thực — nowcasting trước khi xuất phát */}
+      <SatellitePanel />
+
       {/* Filter & View Control */}
       <div className="flex justify-between items-center px-2">
         <h3 className="text-white font-bold text-lg flex items-center gap-2">
@@ -640,6 +646,13 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
 
             dynamicBoundaryNote = { text: deltaText, color: deltaColor };
           }
+
+          // Trăng cho rạng sáng ngày này — tính cục bộ (suncalc), chỉ khi có tọa độ thật
+          const moonLat = result.weather_data_source?.lat;
+          const moonLon = result.weather_data_source?.lon;
+          const moon = day.status_code !== 'UNKNOWN' && typeof moonLat === 'number' && typeof moonLon === 'number'
+            ? moonInfoForDawn(day.date, moonLat, moonLon)
+            : null;
 
           const isBookmarked = bookmarkedDates.includes(day.date);
 
@@ -780,6 +793,18 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                       <span className="font-mono font-bold">{day.sunrise_color_potential}/100</span>
                     </div>
                   )}
+                  {moon && (
+                    <div className={`rounded-lg p-2.5 text-[11px] border flex flex-wrap items-center justify-between gap-2 ${
+                      moon.milkyWayWindow || (moon.moonUpAtDawn && moon.illumination >= 60)
+                        ? 'bg-indigo-950/40 border-indigo-500/40 text-indigo-200'
+                        : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                    }`}>
+                      <span className="leading-relaxed">{moon.note}</span>
+                      <span className="font-mono text-slate-400 shrink-0">
+                        {moon.moonset ? `🌙 lặn ${moon.moonset}` : moon.moonrise ? `🌙 mọc ${moon.moonrise}` : ''}
+                      </span>
+                    </div>
+                  )}
 
                   {/* "Vì sao điểm này?" — minh bạch từng yếu tố engine cộng/trừ */}
                   {day.reasons && day.reasons.length > 0 && (
@@ -794,6 +819,23 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                           </li>
                         ))}
                       </ul>
+                    </details>
+                  )}
+
+                  {/* Biểu đồ mây time × altitude — nhìn 1 giây biết mây dưới chân hay trùm đầu */}
+                  {day.hourly_profile && (
+                    <details className="bg-slate-900/40 border border-slate-700/60 rounded-lg overflow-hidden">
+                      <summary className="cursor-pointer px-3 py-2 min-h-11 flex items-center text-[11px] font-bold text-slate-300 hover:text-white select-none">
+                        📊 Biểu đồ mây theo độ cao (12h hôm trước → trưa) — mây nằm ở tầng nào?
+                      </summary>
+                      <div className="px-3 pb-3 pt-1">
+                        <CloudLayerChart
+                          profile={day.hourly_profile}
+                          observerAlt={result.weather_data_source?.elevation}
+                          valleyElev={result.weather_data_source?.valleyElevation}
+                          sunrise={day.sun_times?.sunrise}
+                        />
+                      </div>
                     </details>
                   )}
 

@@ -8,7 +8,7 @@
  *  - 4 mô hình toàn cầu (ECMWF/GFS/ICON/JMA) trong cùng 1 call → đồng thuận tính THẬT ở engine.
  */
 import { MOUNTAIN_DB, MountainInfo } from '../constants/mountains';
-import { SunTimes, TerrainPoint, DataQuality } from '../types';
+import { SunTimes, TerrainPoint, DataQuality, HourlyLevelProfile } from '../types';
 
 export const WEATHER_MODELS = ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless', 'jma_seamless'] as const;
 export type WeatherModelId = (typeof WEATHER_MODELS)[number];
@@ -79,6 +79,7 @@ export interface DayData {
   daysAhead: number;                              // so với hôm nay (0 = hôm nay)
   models: Partial<Record<WeatherModelId, DayModelData>>; // rỗng nếu NO_DATA
   sun_times: SunTimes;
+  hourly_profile?: HourlyLevelProfile;            // mây theo tầng × giờ cho biểu đồ (dữ liệu thật)
 }
 
 export interface WeatherPackage {
@@ -235,12 +236,12 @@ export async function estimateValleyElevation(
   return { elevation: Math.max(80, Math.round(Math.min(...els))), source: 'DEM' };
 }
 
-interface HourlyBlock {
+export interface HourlyBlock {
   time: string[];
   get(varName: string, model: string): number[] | null;
 }
 
-function makeHourlyBlock(hourly: any): HourlyBlock {
+export function makeHourlyBlock(hourly: any): HourlyBlock {
   return {
     time: hourly?.time || [],
     get(varName: string, model: string) {
@@ -369,6 +370,39 @@ export function aggregateDayModel(
   };
 }
 
+/**
+ * Profile mây THEO GIỜ × TẦNG cho biểu đồ "time × altitude": cửa sổ 12h hôm trước → 12h
+ * ngày dự báo (bao trọn pha bức xạ đêm + bình minh + tan mây buổi trưa).
+ * Chọn model có NHIỀU TẦNG cloud cover nhất (ICON/GFS đủ 7 mực); không model nào có ≥3
+ * tầng → trả undefined, KHÔNG vẽ biểu đồ bịa.
+ */
+export function buildHourlyProfile(
+  valley: HourlyBlock, dateStr: string, prevDateStr: string
+): HourlyLevelProfile | undefined {
+  const idxs = [
+    ...hourIndices(valley.time, prevDateStr, 12, 23),
+    ...hourIndices(valley.time, dateStr, 0, 12),
+  ];
+  if (idxs.length < 12) return undefined;
+  let best: HourlyLevelProfile | undefined;
+  for (const model of ['icon_seamless', 'gfs_seamless', 'ecmwf_ifs025', 'jma_seamless']) {
+    const levels: { p: number; h: number; hReal: boolean }[] = [];
+    const cc: (number | null)[][] = [];
+    for (const { p, approxH } of PRESSURE_LEVELS) {
+      const arr = valley.get(`cloud_cover_${p}hPa`, model);
+      if (!arr || !idxs.some(i => isNum(arr[i]))) continue;
+      const gph = valley.get(`geopotential_height_${p}hPa`, model);
+      const hVal = gph && isNum(gph[idxs[0]]) ? Math.round(gph[idxs[0]]) : approxH;
+      levels.push({ p, h: hVal, hReal: !!(gph && isNum(gph[idxs[0]])) });
+      cc.push(idxs.map(i => (isNum(arr[i]) ? arr[i] : null)));
+    }
+    if (levels.length >= 3 && (!best || levels.length > best.levels.length)) {
+      best = { model, times: idxs.map(i => valley.time[i]), levels, cc };
+    }
+  }
+  return best;
+}
+
 /** Nhãn tin cậy theo khoảng cách dự báo. */
 export function qualityForDaysAhead(daysAhead: number): DataQuality {
   if (daysAhead < -2 || daysAhead > 15) return 'NO_DATA';
@@ -457,7 +491,10 @@ export async function fetchMountainWeather(
     }
     // Có nhãn quality nhưng không mô hình nào có dữ liệu → hạ xuống NO_DATA (trung thực)
     const effQuality: DataQuality = Object.keys(models).length === 0 ? 'NO_DATA' : quality;
-    days.push({ date: dateStr, quality: effQuality, daysAhead, models, sun_times: sunTimes });
+    const hourly_profile = effQuality !== 'NO_DATA' && valleyBlock
+      ? buildHourlyProfile(valleyBlock, dateStr, prevStr)
+      : undefined;
+    days.push({ date: dateStr, quality: effQuality, daysAhead, models, sun_times: sunTimes, hourly_profile });
   }
 
   return {

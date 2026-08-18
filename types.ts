@@ -53,6 +53,17 @@ export interface TechnicalIndices {
   vrii_label?: 'Excellent' | 'Favorable' | 'Moderate' | 'Poor';
 }
 
+/**
+ * Mây theo TẦNG ÁP SUẤT × GIỜ (12h hôm trước → 12h ngày dự báo) cho biểu đồ
+ * time × altitude — dữ liệu thật từ 1 mô hình (model có nhiều tầng nhất).
+ */
+export interface HourlyLevelProfile {
+  model: string;                                       // id mô hình nguồn
+  times: string[];                                     // ISO giờ địa phương (ICT)
+  levels: { p: number; h: number; hReal: boolean }[];  // tăng dần theo độ cao; hReal = geopotential thật
+  cc: (number | null)[][];                             // [tầng][giờ] % mây; null = thiếu, không bịa
+}
+
 export interface WeatherAnalysis {
   general: string;
   cloud_behavior: string;
@@ -73,6 +84,7 @@ export interface DailyForecast {
   golden_hours?: string;
   sun_times?: SunTimes;
   recommended_position?: string;
+  hourly_profile?: HourlyLevelProfile; // biểu đồ mây theo độ cao (dữ liệu thật, có thể thiếu)
   technical_indices: TechnicalIndices;
   weather_analysis: WeatherAnalysis;
   expert_advice: string;
