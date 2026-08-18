@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { InputForm } from './components/InputForm';
-import { AnalysisResult } from './components/AnalysisResult';
 import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
-import { analyzeWeatherData, analyzeLocation } from './services/geminiService';
 import { listRuns, loadRun, saveRun } from './services/historyService';
 import { vnTodayStr, addDaysStr } from './services/weatherService';
+
+// Code-split: màn kết quả (nặng nhất) + SDK Gemini chỉ tải khi cần → trang đầu nhẹ hơn hẳn
+const AnalysisResult = React.lazy(() =>
+  import('./components/AnalysisResult').then(m => ({ default: m.AnalysisResult }))
+);
 
 const App: React.FC = () => {
   const [analysis, setAnalysis] = useState<CloudAnalysis | null>(null);
@@ -16,6 +19,7 @@ const App: React.FC = () => {
   const [pendingInput, setPendingInput] = useState<WeatherInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorNeedsKey, setErrorNeedsKey] = useState(false); // chỉ hiện nút "Cấu hình Key" khi ĐÚNG là lỗi key
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [historyList, setHistoryList] = useState(() => listRuns());
   const [showTonight, setShowTonight] = useState(false);
@@ -29,6 +33,7 @@ const App: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
+      const { analyzeLocation } = await import('./services/geminiService');
       const locAnalysis = await analyzeLocation(data.locationName, data.model);
       setLocationAnalysis(locAnalysis);
       // Kẹp độ cao đứng theo núi THẬT: slider mặc định 2200m từng cao hơn cả đỉnh
@@ -49,10 +54,13 @@ const App: React.FC = () => {
       const msg = err?.message || String(err);
       if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
         setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
+        setErrorNeedsKey(true);
       } else if (msg.includes('Không nhận diện được địa điểm')) {
         setError(msg); // lỗi trung thực từ bộ phân giải địa danh — hiển thị nguyên văn
+        setErrorNeedsKey(false);
       } else {
         setError(`Không thể nhận diện địa điểm: ${msg}`);
+        setErrorNeedsKey(false);
       }
       console.error(err);
     } finally {
@@ -65,6 +73,7 @@ const App: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
+      const { analyzeWeatherData } = await import('./services/geminiService');
       const result = await analyzeWeatherData(pendingInput);
       setAnalysis(result);
       saveRun(result);
@@ -74,10 +83,13 @@ const App: React.FC = () => {
       const msg = err?.message || String(err);
       if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
         setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
+        setErrorNeedsKey(true);
       } else if (msg.includes('Open-Meteo') || msg.includes('Elevation')) {
         setError(`Không lấy được dữ liệu khí tượng (${msg}). Kiểm tra kết nối mạng rồi thử lại — app không hiển thị số liệu bịa thay thế.`);
+        setErrorNeedsKey(false);
       } else {
         setError(`Có lỗi khi phân tích: ${msg}`);
+        setErrorNeedsKey(false);
       }
       console.error(err);
     } finally {
@@ -106,19 +118,21 @@ const App: React.FC = () => {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 pb-12">
-        <Header />
+        <Header onOpenApiKey={() => setIsApiKeyModalOpen(true)} />
         
         <main className="transition-all duration-500 ease-in-out">
           {error && (
             <div className="max-w-2xl mx-auto bg-red-900/40 border border-red-500 text-red-200 p-5 rounded-2xl mb-6 text-center shadow-xl space-y-3">
               <p className="font-semibold text-sm leading-relaxed">{error}</p>
-              <button
-                onClick={() => setIsApiKeyModalOpen(true)}
-                className="px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 text-white font-bold text-xs border border-red-400 transition-all shadow-md inline-flex items-center gap-1.5"
-              >
-                <span>🔑</span>
-                <span>Cấu hình API Key Mới Tùy Chỉnh ngay</span>
-              </button>
+              {errorNeedsKey && (
+                <button
+                  onClick={() => setIsApiKeyModalOpen(true)}
+                  className="min-h-11 px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 text-white font-bold text-xs border border-red-400 transition-all shadow-md inline-flex items-center gap-1.5"
+                >
+                  <span>🔑</span>
+                  <span>Cấu hình API Key Mới Tùy Chỉnh ngay</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -187,11 +201,13 @@ const App: React.FC = () => {
               </div>
             )
           ) : (
-            <AnalysisResult result={analysis} onReset={handleReset} />
+            <React.Suspense fallback={<p className="text-center text-cyan-300 text-sm py-10">Đang mở kết quả...</p>}>
+              <AnalysisResult result={analysis} onReset={handleReset} />
+            </React.Suspense>
           )}
         </main>
         
-        <footer className="mt-16 text-center text-slate-600 text-sm">
+        <footer className="mt-16 text-center text-slate-500 text-sm">
           <p>© 2026 CloudHunter AI. Dữ liệu mang tính chất tham khảo. Luôn kiểm tra thời tiết thực tế.</p>
         </footer>
       </div>

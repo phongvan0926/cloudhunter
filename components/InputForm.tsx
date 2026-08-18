@@ -44,6 +44,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
+    const abort = new AbortController();
     const timer = setTimeout(async () => {
       const text = formData.locationName.trim();
       if (text.length < 3) {
@@ -60,8 +61,9 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
 
       setIsSearching(true);
       try {
+        // AbortController: gõ tiếp thì hủy request cũ — tránh gợi ý cũ đè lên gợi ý mới
         const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(text)}&count=1&language=vi&format=json`;
-        const res = await fetch(geoUrl);
+        const res = await fetch(geoUrl, { signal: abort.signal });
         const data = await res.json();
         
         if (data.results && data.results.length > 0) {
@@ -82,14 +84,14 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
         } else {
           setSuggestions([]);
         }
-      } catch (error) {
-        console.error("Error fetching suggestions:", error);
+      } catch (error: any) {
+        if (error?.name !== 'AbortError') console.error("Error fetching suggestions:", error);
       } finally {
         setIsSearching(false);
       }
     }, 800);
 
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); abort.abort(); };
   }, [formData.locationName]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -97,16 +99,18 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
     setFormData(prev => ({ ...prev, [name]: name === 'observerAlt' ? Number(value) : value }));
   };
 
-  // Handler for the "Quick Select" dropdown
+  // Handler for the "Quick Select" dropdown — value là TÊN THẬT của đỉnh,
+  // độ cao tra trực tiếp từ NORTHWEST_PEAKS (không nhét số vào chuỗi hiển thị rồi regex lại)
   const handlePresetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value) {
-        // Extract altitude from the value string to set observerAlt
-        const match = value.match(/Alt: (\d+)m/);
-        const alt = match ? parseInt(match[1], 10) - 100 : 2200; // Default to 100m below peak
-        setFormData(prev => ({ ...prev, locationName: value, observerAlt: alt }));
-        setSuggestions([]);
-    }
+    const name = e.target.value;
+    if (!name) return;
+    const peak = NORTHWEST_PEAKS.find(p => p.name === name);
+    setFormData(prev => ({
+      ...prev,
+      locationName: name,
+      ...(peak ? { observerAlt: Math.max(300, peak.altitude - 100) } : {}),
+    }));
+    setSuggestions([]);
   };
 
   const handleSuggestionClick = (name: string, altitude: number) => {
@@ -156,7 +160,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
                     {Object.keys(groupedPeaks).map(province => (
                         <optgroup key={province} label={`--- ${province} ---`} className="text-slate-400 font-bold bg-slate-900">
                         {groupedPeaks[province].map(peak => (
-                            <option key={peak.name} value={`${peak.name} (Alt: ${peak.altitude}m)`} className="text-slate-100 font-normal">
+                            <option key={peak.name} value={peak.name} className="text-slate-100 font-normal">
                             {peak.name} ({peak.altitude}m)
                             </option>
                         ))}
@@ -173,6 +177,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
                  <input
                     type="text"
                     name="locationName"
+                    aria-label="Địa điểm săn mây"
                     value={formData.locationName}
                     onChange={handleChange}
                     placeholder="Hoặc nhập địa điểm bất kỳ (VD: Đồi Đa Phú, Đà Lạt...)"
@@ -197,16 +202,19 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
                      </div>
                      <ul className="max-h-60 overflow-y-auto">
                        {suggestions.map((sug, idx) => (
-                         <li 
-                           key={idx}
-                           onClick={() => handleSuggestionClick(sug.name, sug.altitude)}
-                           className="px-4 py-3 hover:bg-slate-700 cursor-pointer border-b border-slate-700/50 last:border-0 transition-colors flex justify-between items-center"
-                         >
-                           <div>
-                             <div className="text-slate-200 font-medium">{sug.name}</div>
-                             <div className="text-xs text-slate-400 mt-0.5">Cách khoảng {sug.distance}km</div>
-                           </div>
-                           <div className="text-cyan-400 font-mono text-sm">{sug.altitude}m</div>
+                         <li key={idx}>
+                           {/* button thật: dùng được bàn phím (Tab + Enter), không chỉ chuột */}
+                           <button
+                             type="button"
+                             onClick={() => handleSuggestionClick(sug.name, sug.altitude)}
+                             className="w-full min-h-11 px-4 py-3 hover:bg-slate-700 focus:bg-slate-700 cursor-pointer border-b border-slate-700/50 last:border-0 transition-colors flex justify-between items-center text-left"
+                           >
+                             <span>
+                               <span className="block text-slate-200 font-medium">{sug.name}</span>
+                               <span className="block text-xs text-slate-400 mt-0.5">Cách khoảng {sug.distance}km</span>
+                             </span>
+                             <span className="text-cyan-400 font-mono text-sm">{sug.altitude}m</span>
+                           </button>
                          </li>
                        ))}
                      </ul>
@@ -258,9 +266,10 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
           <label className="block text-slate-400 text-sm">
             🧭 Độ cao quan sát (Vị trí đứng): <span className="text-cyan-400 font-mono">{formData.observerAlt?.toLocaleString()}m</span>
           </label>
-          <input 
-            type="range" 
+          <input
+            type="range"
             name="observerAlt"
+            aria-label="Độ cao vị trí đứng săn mây (mét)"
             min={500} 
             max={3200} 
             step={50} 

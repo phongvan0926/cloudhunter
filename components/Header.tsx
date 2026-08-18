@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { ApiKeyModal } from './ApiKeyModal';
+import React from 'react';
 import { getStoredApiKey } from '../services/modelDiscoveryService';
 
-export const Header: React.FC = () => {
-  const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
+// Modal API key do App quản lý DUY NHẤT một instance (trước đây Header mount thêm
+// một modal riêng → 2 instance với state lệch nhau, lỗi audit #3)
+export const Header: React.FC<{ onOpenApiKey: () => void }> = ({ onOpenApiKey }) => {
   const activeKey = getStoredApiKey();
 
   return (
     <header className="pt-12 pb-8 text-center px-4 relative">
       <div className="flex justify-end max-w-5xl mx-auto mb-2">
         <button
-          onClick={() => setIsKeyModalOpen(true)}
-          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1.5 shadow-md ${
+          onClick={onOpenApiKey}
+          aria-label="Cấu hình Gemini API Key"
+          className={`min-h-11 px-4 py-2 rounded-full text-xs font-bold transition-all border flex items-center gap-1.5 shadow-md ${
             activeKey 
               ? 'bg-slate-900/80 text-cyan-400 border-cyan-500/40 hover:border-cyan-400' 
               : 'bg-rose-950/80 text-rose-300 border-rose-500/50 animate-pulse'
@@ -33,12 +34,6 @@ export const Header: React.FC = () => {
          <span className="px-3 py-1 bg-purple-900/40 rounded-full text-xs font-mono text-purple-400 border border-purple-700/50">4 mô hình ECMWF · GFS · ICON · JMA</span>
          <span className="px-3 py-1 bg-slate-800 rounded-full text-xs font-mono text-cyan-500 border border-slate-700">🤖 AI Gemini viết lời bình</span>
       </div>
-
-      <ApiKeyModal
-        isOpen={isKeyModalOpen}
-        onClose={() => setIsKeyModalOpen(false)}
-        onKeyUpdated={() => window.location.reload()}
-      />
     </header>
   );
 };

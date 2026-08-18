@@ -62,6 +62,14 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   dưới chân (biển mây) hay trùm đầu (mù).
 - 🌙 **Trăng cho nhiếp ảnh đêm** (tính cục bộ bằng suncalc): pha, độ sáng, giờ lặn/mọc,
   cửa sổ Milky Way hoặc "biển mây dưới trăng" cho từng rạng sáng.
+- 🌧️ **Radar mưa RainViewer** quanh điểm (composite có 10 trạm radar VN): "mưa phùn tối
+  nay có tan trước sáng không?" — quy luật vàng của biển mây.
+- 📴 **PWA offline**: cài lên màn hình chính, mất sóng trên đèo vẫn mở lại được app và
+  dự báo đã tải (cache app shell + dữ liệu Open-Meteo 12h).
+- 📤 **Chia sẻ ảnh kết quả**: chụp thẻ tổng quan thành PNG ngay trên máy (không server)
+  để đăng nhóm săn mây; tên file giữ chữ Việt bỏ dấu đúng cách.
+- ⚡ **Tải nhanh**: code-split — SDK AI (~300KB) và màn kết quả chỉ tải khi cần;
+  meta/OG đầy đủ để link chia sẻ có preview đẹp.
 
 ## 📐 Engine (tóm tắt — chi tiết trong AGENTS.md)
 

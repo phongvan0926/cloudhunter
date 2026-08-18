@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CloudAnalysis, TerrainAnalysis, TerrainPoint, DailyForecast } from '../types';
 import { formatModelDisplayName } from '../services/modelDiscoveryService';
 import { SatellitePanel } from './SatellitePanel';
+import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
 import { moonInfoForDawn } from '../services/astroService';
 
@@ -28,6 +29,11 @@ const TRUSTED_DOMAINS = [
 const isTrustedSource = (uri: string) => {
     return TRUSTED_DOMAINS.some(domain => uri.toLowerCase().includes(domain));
 };
+
+// Tên file giữ được chữ Việt đọc được: bỏ dấu đúng cách thay vì nát thành "T__X_a"
+const vnSlug = (s: string) =>
+  s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'CloudHunter';
 
 const TerrainVisualizer: React.FC<{ 
   analysis: TerrainAnalysis;
@@ -152,7 +158,9 @@ const TerrainVisualizer: React.FC<{
                 <div className="border-t border-dashed border-slate-400 w-full"></div>
             </div>
 
-            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full cursor-pointer" preserveAspectRatio="none">
+            {/* Chữ trong SVG bị co theo viewBox (≈4.7px ở 390px) → mobile ẨN nhãn SVG,
+                thông tin tên/độ cao đã có ở hàng pill bên trên (audit #1) */}
+            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full cursor-pointer" preserveAspectRatio="none" aria-hidden="true">
                 <defs>
                     <linearGradient id="terrainGradient" x1="0" x2="0" y1="0" y2="1">
                         <stop offset="0%" stopColor="#0891b2" stopOpacity="0.3" />
@@ -191,22 +199,24 @@ const TerrainVisualizer: React.FC<{
                             <circle cx={cx} cy={cy} r={isSelected ? "9" : "6"} fill={pointColor} stroke="#0f172a" strokeWidth="3" className="drop-shadow-lg transition-all" />
                             <circle cx={cx} cy={cy} r={isSelected ? "16" : "10"} fill={pointColor} opacity={isSelected ? "0.5" : "0.2"} className="animate-pulse" />
                             
-                            <rect 
-                                x={cx - 30} 
-                                y={cy - 28} 
-                                width="60" 
-                                height="22" 
-                                rx="11" 
-                                fill="#0f172a" 
-                                stroke={pointColor} 
+                            <g className="hidden md:block">
+                            <rect
+                                x={cx - 30}
+                                y={cy - 28}
+                                width="60"
+                                height="22"
+                                rx="11"
+                                fill="#0f172a"
+                                stroke={pointColor}
                                 strokeWidth={isSelected ? "2.5" : "1.5"}
                                 fillOpacity="0.9"
                             />
                             <text x={cx} y={cy - 13} textAnchor="middle" fill={pointColor} fontSize="12" fontWeight="bold" fontFamily="monospace">
                                 {p.altitude}m
                             </text>
+                            </g>
 
-                            <g transform={`translate(${cx}, ${cy - staggerOffset})`}>
+                            <g className="hidden md:block" transform={`translate(${cx}, ${cy - staggerOffset})`}>
                                 <rect 
                                     x="-70" 
                                     y={p.description ? "-28" : "-16"} 
@@ -247,7 +257,7 @@ const TerrainVisualizer: React.FC<{
                                 <line x1="0" y1={p.description ? "20" : "10"} x2="0" y2={staggerOffset - 22} stroke={pointColor} strokeOpacity="0.5" strokeWidth="1" />
                             </g>
 
-                            <text x={cx} y={height - 15} textAnchor="middle" fill={isSelected ? "#38bdf8" : "#94a3b8"} fontSize="11" fontWeight="bold" letterSpacing="0.05em">
+                            <text className="hidden md:block" x={cx} y={height - 15} textAnchor="middle" fill={isSelected ? "#38bdf8" : "#94a3b8"} fontSize="11" fontWeight="bold" letterSpacing="0.05em">
                                 {p.type === 'VALLEY' ? 'THUNG LŨNG' : p.type === 'PEAK' ? 'ĐỈNH' : p.type === 'RIDGE' ? 'SỐNG NÚI' : 'SƯỜN'}
                             </text>
                         </g>
@@ -263,6 +273,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
   const [selectedWaypoint, setSelectedWaypoint] = useState<TerrainPoint | null>(null);
   const [filterGoldenOnly, setFilterGoldenOnly] = useState<boolean>(false);
   const [bookmarkedDates, setBookmarkedDates] = useState<string[]>([]);
+  const [sharing, setSharing] = useState<boolean>(false);
 
   const toggleBookmark = (date: string) => {
     setBookmarkedDates(prev => 
@@ -381,10 +392,38 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     return date.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'numeric' });
   };
 
+  // Chia sẻ thẻ tổng quan thành ảnh PNG (chụp cục bộ bằng modern-screenshot, không server)
+  const handleShareImage = async () => {
+    const el = document.getElementById('ch-share-card');
+    if (!el) return;
+    setSharing(true);
+    try {
+      const { domToPng } = await import('modern-screenshot');
+      const dataUrl = await domToPng(el as HTMLElement, { backgroundColor: '#020617', scale: 2 });
+      const fileName = `CloudHunter_${vnSlug(result.locationName)}.png`;
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], fileName, { type: 'image/png' });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: `CloudHunter — ${result.locationName}` });
+      } else {
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    } catch (e: any) {
+      if (e?.name !== 'AbortError') console.error('Chia sẻ ảnh thất bại:', e);
+    } finally {
+      setSharing(false);
+    }
+  };
+
   // Export GPX File Helper for Offline Trekking
   const handleExportGPX = () => {
     const waypoints = result.terrain_analysis?.elevation_profile || [];
-    const location = result.locationName.replace(/[^a-zA-Z0-9]/g, '_');
+    const location = vnSlug(result.locationName);
     // Tọa độ THẬT của địa điểm đã phân giải — các waypoint dùng chung tọa độ tham chiếu này
     // (app không có tọa độ riêng từng lán); độ cao <ele> là dữ liệu thật từng điểm.
     const lat = result.weather_data_source?.lat;
@@ -421,7 +460,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
 
   // Export Markdown Summary Text for Offline Reading
   const handleExportSummary = () => {
-    const location = result.locationName.replace(/[^a-zA-Z0-9]/g, '_');
+    const location = vnSlug(result.locationName);
     let text = `# CLOUDHUNTER AI FORECAST: ${result.locationName}\n`;
     text += `Chiến thuật tổng quan: ${result.overallStrategy}\n\n`;
     text += `## Dự báo từng ngày:\n`;
@@ -461,7 +500,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     <div className="max-w-6xl mx-auto space-y-6 animate-fade-in">
       
       {/* Top Section */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+      <div id="ch-share-card" className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 relative z-10">
@@ -491,7 +530,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
            <div className="mt-4 md:mt-0 flex flex-wrap gap-2 items-center">
              {result.bestDays.length > 0 && (
                <div className="bg-gradient-to-r from-emerald-900/60 to-green-900/60 border border-emerald-500/40 px-4 py-2.5 rounded-2xl shadow-lg shadow-emerald-900/20">
-                 <span className="block text-[9px] text-emerald-400 font-bold uppercase tracking-widest mb-0.5">NGÀY SĂN TỐT NHẤT</span>
+                 <span className="block text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-0.5">NGÀY SĂN TỐT NHẤT</span>
                  <div className="flex gap-2 text-white font-mono font-bold text-base">
                    {result.bestDays.map(d => (
                      <span key={d} className="bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">{formatDate(d)}</span>
@@ -505,7 +544,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                <button
                  onClick={handleExportGPX}
                  title="Tải tệp GPX xem lộ trình và độ cao trên ứng dụng trekking offline (Gaia GPS, Strava)"
-                 className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 hover:border-cyan-400 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
+                 className="min-h-11 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 hover:border-cyan-400 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
                >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                  Tải GPX Offline
@@ -513,10 +552,19 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                <button
                  onClick={handleExportSummary}
                  title="Tải bản tóm tắt text dự báo để đọc khi không có mạng"
-                 className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 hover:border-purple-400 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
+                 className="min-h-11 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 hover:border-purple-400 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
                >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                  Tóm Tắt Text
+               </button>
+               <button
+                 onClick={handleShareImage}
+                 disabled={sharing}
+                 title="Chụp thẻ tổng quan thành ảnh PNG để chia sẻ vào nhóm săn mây"
+                 className="min-h-11 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 hover:border-amber-400 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md disabled:opacity-50"
+               >
+                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                 {sharing ? 'Đang chụp...' : 'Chia sẻ ảnh'}
                </button>
              </div>
            </div>
@@ -586,18 +634,21 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
         )}
       </div>
 
-      {/* Vệ tinh thời gian thực — nowcasting trước khi xuất phát */}
+      {/* Vệ tinh + radar thời gian thực — nowcasting trước khi xuất phát */}
       <SatellitePanel />
+      {typeof result.weather_data_source?.lat === 'number' && typeof result.weather_data_source?.lon === 'number' && (
+        <RadarPanel lat={result.weather_data_source.lat} lon={result.weather_data_source.lon} />
+      )}
 
       {/* Filter & View Control */}
-      <div className="flex justify-between items-center px-2">
+      <div className="flex flex-wrap justify-between items-center gap-2 px-2">
         <h3 className="text-white font-bold text-lg flex items-center gap-2">
           <span>Dự báo chi tiết từng ngày</span>
           <span className="text-xs font-normal text-slate-400">({filteredForecasts.length} ngày)</span>
         </h3>
         <button
           onClick={() => setFilterGoldenOnly(!filterGoldenOnly)}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
+          className={`min-h-11 px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
             filterGoldenOnly 
               ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/20' 
               : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
@@ -665,6 +716,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
               <button
                 onClick={() => toggleBookmark(day.date)}
                 title={isBookmarked ? "Bỏ đánh dấu ngày này" : "Đánh dấu lưu ngày này"}
+                aria-label={isBookmarked ? `Bỏ đánh dấu ngày ${day.date}` : `Đánh dấu lưu ngày ${day.date}`}
+                aria-pressed={isBookmarked}
                 className={`absolute top-4 right-4 p-2 rounded-full border transition-all ${
                   isBookmarked ? 'bg-amber-500/20 border-amber-400 text-amber-400' : 'bg-slate-800/60 border-slate-700 text-slate-500 hover:text-amber-400'
                 }`}
@@ -723,52 +776,52 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                   {/* Technical Grid */}
                   <div className="grid grid-cols-2 lg:grid-cols-6 gap-2.5">
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">LCL Base</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">LCL Base</span>
                           <div className="font-mono font-bold text-white text-base">{day.technical_indices.LCL_base}</div>
-                          <div className="text-[9px] text-slate-500">Đáy mây</div>
+                          <div className="text-[10px] text-slate-500">Đáy mây</div>
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Cloud Top</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">Cloud Top</span>
                           <div className="font-mono font-bold text-purple-300 text-base">{day.technical_indices.cloud_top_estimated}</div>
-                          <div className="text-[9px] text-slate-500">Mặt mây</div>
+                          <div className="text-[10px] text-slate-500">Mặt mây</div>
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">FSI Score</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">FSI Score</span>
                           <div className={`font-mono font-bold text-base ${day.technical_indices.FSI_score < 30 ? 'text-green-400' : 'text-yellow-400'}`}>
                               {day.technical_indices.FSI_score}
                           </div>
-                          <div className="text-[9px] text-slate-500">Stability</div>
+                          <div className="text-[10px] text-slate-500">Stability</div>
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">VRII Bức Xạ</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">VRII Bức Xạ</span>
                           {/* KHÔNG bịa số: thiếu VRII thì hiện N/A, không mặc định 75 */}
                           {typeof day.technical_indices.vrii_score === 'number' ? (
                             <>
                               <div className={`font-mono font-bold text-base ${day.technical_indices.vrii_score >= 80 ? 'text-emerald-400' : 'text-cyan-300'}`}>
                                   {day.technical_indices.vrii_score}/100
                               </div>
-                              <div className="text-[9px] text-slate-500">{day.technical_indices.vrii_label || 'Thung lũng'}</div>
+                              <div className="text-[10px] text-slate-500">{day.technical_indices.vrii_label || 'Thung lũng'}</div>
                             </>
                           ) : (
                             <>
                               <div className="font-mono font-bold text-base text-slate-500">N/A</div>
-                              <div className="text-[9px] text-slate-500">Thiếu dữ liệu</div>
+                              <div className="text-[10px] text-slate-500">Thiếu dữ liệu</div>
                             </>
                           )}
                       </div>
                       <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Wind Impact</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">Wind Impact</span>
                           <div className={`font-mono font-bold text-base ${day.technical_indices.wind_impact_level === 'High' ? 'text-red-400' : 'text-slate-200'}`}>
                               {day.technical_indices.wind_impact_level}
                           </div>
-                          <div className="text-[9px] text-slate-500">Gió xé mây</div>
+                          <div className="text-[10px] text-slate-500">Gió xé mây</div>
                       </div>
                        <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-700/50">
-                          <span className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Moisture</span>
+                          <span className="block text-[10px] text-slate-400 uppercase font-bold mb-0.5">Moisture</span>
                           <div className={`font-mono font-bold text-base ${day.technical_indices.moisture_type === 'Deep' ? 'text-blue-400' : 'text-orange-300'}`}>
                               {day.technical_indices.moisture_type}
                           </div>
-                          <div className="text-[9px] text-slate-500">Ẩm tầng cao</div>
+                          <div className="text-[10px] text-slate-500">Ẩm tầng cao</div>
                       </div>
                   </div>
 
