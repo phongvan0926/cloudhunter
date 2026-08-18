@@ -11,18 +11,16 @@
  *  - Điểm nào thiếu dữ liệu thì bị loại khỏi bảng, không chèn số mặc định.
  */
 import { MOUNTAIN_DB } from '../constants/mountains';
-import { addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId } from './weatherService';
+import { NORTHWEST_PEAKS } from '../constants';
+import { addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS } from './weatherService';
 import { scoreOneModel, combineModels } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
 const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless'];
-const RANK_VARS = [
-  'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
-  'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
-  'wind_speed_925hPa', 'wind_speed_850hPa', 'wind_direction_850hPa',
-  'temperature_925hPa', 'temperature_850hPa', 'temperature_700hPa',
-  'relative_humidity_925hPa', 'relative_humidity_850hPa', 'relative_humidity_700hPa',
-];
+// Dùng CÙNG bộ 41 biến với phân tích đầy đủ: GFS+ICON chính là 2 model có đủ profile
+// 7 tầng + BLH → vật lý xếp hạng giống hệt bản đầy đủ, chỉ còn khác 2 vs 4 model.
+// (Đo 19/8: bộ 16 biến cũ lệch điểm max 11/100 vì thiếu profile — đã nâng lên 41 biến.)
+const RANK_VARS = HOURLY_VARS;
 const VALLEY_CACHE_KEY = 'cloudhunter_valley_dem_v1';
 
 export interface SpotRank {
@@ -55,7 +53,15 @@ export async function valleyElevationsForAll(
 ): Promise<Record<string, number>> {
   let cache: Record<string, number> = {};
   try { cache = JSON.parse(localStorage.getItem(VALLEY_CACHE_KEY) || '{}'); } catch { /* cache hỏng → đo lại */ }
-  const missing = Object.entries(MOUNTAIN_DB).filter(([k]) => typeof cache[k] !== 'number');
+  let missing = Object.entries(MOUNTAIN_DB).filter(([k]) => typeof cache[k] !== 'number');
+  // Ưu tiên mặt cắt ĐÃ XÁC THỰC: điểm nào có preset với điểm VALLEY thì dùng luôn
+  // (cùng nguồn với phân tích đầy đủ), chỉ điểm còn lại mới đo DEM.
+  for (const [key, mt] of missing) {
+    const preset = NORTHWEST_PEAKS.find(p => p.name === mt.name && p.elevation_profile?.length);
+    const valleys = (preset?.elevation_profile || []).filter(p => p.type === 'VALLEY').map(p => p.altitude);
+    if (valleys.length > 0) cache[key] = Math.max(80, Math.min(...valleys));
+  }
+  missing = missing.filter(([k]) => typeof cache[k] !== 'number');
   if (missing.length > 0) {
     onProgress?.(`Đo đáy thung lũng ${missing.length} điểm từ DEM (chỉ lần đầu)...`);
     const d = 0.03; // ≈ 3.3km

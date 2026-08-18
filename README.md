@@ -44,16 +44,17 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   Google Maps** + đối chiếu độ cao DEM — không bao giờ đưa tọa độ đoán vào thư viện.
 - 🔀 **Chọn model AI minh bạch**: dropdown chỉ hiện model phân tích văn bản (lọc model
   tạo ảnh/Live); model bạn chọn lỗi (429...) thì hạ bậc thang chất lượng (3.7 → flash-latest
-  → 3.6 → 3.5..., Lite luôn cuối) và app nói rõ model nào đã viết lời bình. Số liệu dự báo
-  không phụ thuộc model AI.
+  → 3.6 → 3.5..., Lite gần cuối, **Gemma tuyệt đối cuối cùng** — không chen vào bậc thang
+  Flash) và app nói rõ model nào đã viết lời bình. Số liệu dự báo không phụ thuộc model AI.
 - 🕐 **Ngày giờ neo theo Asia/Ho_Chi_Minh** — đúng ngày Việt Nam kể cả khi thiết bị đặt
   múi giờ khác.
 - 🕘 **Lịch sử dự báo** (localStorage): mở lại tức thì, và là nền tảng để đối chiếu
   "app đoán gì vs thực tế" sau chuyến đi.
 - 📥 **Xuất GPX/TXT offline** với tọa độ thật của địa điểm.
 - 🌄 **"Đêm nay đi đâu săn mây?"**: xếp hạng TOÀN BỘ thư viện cho rạng sáng mai trong
-  1 call batch (GFS+ICON, dữ liệu tại đáy thung lũng DEM từng điểm) — bấm điểm nào là
-  phân tích đầy đủ điểm đó.
+  1 call batch — cùng engine + cùng 41 biến (đủ profile 7 tầng) với bản đầy đủ, chỉ khác
+  dùng 2 mô hình GFS+ICON (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích đầy đủ
+  4 mô hình điểm đó.
 - 🛰️ **"Mây LÚC NÀY"**: vòng lặp ảnh vệ tinh Himawari-9 hồng ngoại (JMA, 10 phút/ảnh,
   nhìn được mây cả ban đêm) — kiểm tra biển mây đang thật sự hình thành trước khi xuất
   phát lúc 3-4h sáng.

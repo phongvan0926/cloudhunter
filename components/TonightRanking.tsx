@@ -98,8 +98,9 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
             </button>
           )}
           <p className="mt-2 text-[10px] text-slate-500">
-            {ranks.length}/{TOTAL_SPOTS} điểm có đủ dữ liệu · điểm số cùng engine với phân tích đầy đủ
-            (thiếu profile 7 tầng nên có thể lệch nhẹ so với bản đầy đủ).
+            {ranks.length}/{TOTAL_SPOTS} điểm có đủ dữ liệu · cùng engine + cùng 41 biến (đủ profile
+            7 tầng) với bản đầy đủ — chỉ khác dùng 2 mô hình GFS+ICON thay vì 4 nên điểm có thể
+            lệch vài đơn vị (đo thực tế: trung bình ~4/100).
           </p>
         </>
       )}

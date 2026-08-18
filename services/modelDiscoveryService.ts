@@ -346,7 +346,12 @@ export function fallbackPriority(id: string): number {
   let score = version * 10;
   if (lower.includes('latest')) score += 5;                                  // alias -latest nhỉnh hơn bản số cùng loại
   if (lower.includes('preview') || lower.includes('exp')) score -= 100;      // bản thử nghiệm sau bản ổn định
-  if (lower.includes('lite')) score -= 100000;                               // Lite = chất lượng thấp nhất → cuối hàng
+  if (lower.includes('lite')) score -= 100000;                               // Lite = gần cuối hàng
+  // Gemma là họ model khác (open-weights, nhỏ hơn) — KHÔNG được chen vào bậc thang Flash.
+  // Bug cũ: "gemma-3-27b" bắt số 3 → 30 điểm, cao hơn gemini-2.5-flash (25) → người dùng
+  // chọn 3.7 Flash quá tải lại bị đưa về Gemma thay vì 2.5 Flash. Gemma chỉ là phương án
+  // CUỐI CÙNG tuyệt đối (sau cả Lite), vì không có AI thì app vẫn đủ số liệu.
+  if (lower.includes('gemma')) score -= 1000000;
   return score;
 }
 

@@ -321,6 +321,25 @@ describe('buildFallbackChain — bậc thang đúng với danh sách model thậ
     expect(firstLite).toBeGreaterThanOrEqual(6); // toàn bộ flash thường + preview đứng trước Lite
   });
 
+  it('HỒI QUY: Gemma không được chen vào bậc thang Flash — mọi Gemini đứng trước mọi Gemma', async () => {
+    const { buildFallbackChain } = await import('../services/modelDiscoveryService');
+    const mk = (id: string) => ({ id, name: id, displayName: id, tier: 'flash' as const, tierLabel: '⚡' });
+    const mkC = (id: string) => ({ id, name: id, displayName: id, tier: 'custom' as const, tierLabel: '🔧' });
+    // Bug thật user gặp: gemma-3-27b bắt số "3" → 30 điểm > gemini-2.5-flash (25)
+    const models = [
+      mk('gemini-3.7-flash'), mk('gemini-3.6-flash'), mk('gemini-3.5-flash'),
+      mk('gemini-2.5-flash'), mk('gemini-flash-lite-latest'), mk('gemini-2.5-flash-lite'),
+      mkC('gemma-3-27b-it'), mkC('gemma-3n-e4b-it'),
+    ];
+    const chain = buildFallbackChain('gemini-3.7-flash', models);
+    expect(chain.slice(0, 4)).toEqual([
+      'gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-2.5-flash',
+    ]);
+    const firstGemma = chain.findIndex(id => id.includes('gemma'));
+    const lastGemini = chain.reduce((acc, id, i) => (id.includes('gemini') ? i : acc), 0);
+    expect(firstGemma).toBeGreaterThan(lastGemini); // Gemma sau TẤT CẢ Gemini, kể cả Lite
+  });
+
   it('isTextAnalysisModel loại model tạo ảnh (Nano Banana) và Live/audio khỏi danh sách', async () => {
     const { isTextAnalysisModel } = await import('../services/modelDiscoveryService');
     expect(isTextAnalysisModel('gemini-3.1-flash-image', 'Nano Banana 2')).toBe(false);

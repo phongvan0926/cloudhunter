@@ -91,7 +91,7 @@ export interface WeatherPackage {
   modelsCompared: string[];
 }
 
-const HOURLY_VARS = [
+export const HOURLY_VARS = [
   'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
   'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
   'wind_speed_925hPa', 'wind_speed_850hPa', 'wind_direction_850hPa',
