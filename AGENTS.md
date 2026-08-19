@@ -105,7 +105,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `components/VerificationPanel.tsx` | UI trúng/trượt/chờ từng ngày + tổng kết; nói rõ ERA5 là proxy, không phải mắt thấy. |
 | `tests/engine.test.ts` | 46 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
-| `components/AnalysisResult.tsx` | UI kết quả: quality badge, "Vì sao", consensus thật, mô phỏng ΔH theo waypoint, GPX/TXT export. |
+| `components/AnalysisResult.tsx` | UI kết quả **verdict-first**: khối phán quyết ĐI/KHÔNG ở đầu trang, thẻ ngày là `<details>` thu gọn (chỉ ngày tốt nhất mở sẵn — trang từng dài 11.1 màn hình mobile, nay ~5.8), quality badge, "Vì sao", consensus thật, ΔH theo waypoint, GPX/TXT/PNG export, banner dữ liệu cũ. |
 
 ## 🛠️ Quy tắc dev
 
@@ -117,6 +117,9 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
    app này; câu lệnh như vậy chỉ tạo ảo giác "đã nghiên cứu".
 5. Sửa engine xong PHẢI chạy: `npm run lint && npm test && npm run build`.
 6. UI giữ glassmorphism dark-mode; Tailwind build-time (index.css, không CDN).
+   **Trang kết quả phải verdict-first**: thêm khối mới thì đặt SAU phán quyết và mặc định
+   thu gọn (`<details>`); Header nhận `compact` khi đang xem kết quả (bỏ logo+chip ~400px).
+   Điểm chọn từ thư viện xác thực (source='DB') bỏ qua màn "Xác nhận địa điểm".
    **A11y bắt buộc:** phần tử bấm được là `<button>` thật với aria-label, tap target
    ≥44px (min-h-11), không dùng chữ <10px, modal phải có role=dialog + Esc + khóa scroll.
    Nhãn chữ TRONG SVG viewBox bị co theo màn hình → ẩn ở mobile (`hidden md:block`),

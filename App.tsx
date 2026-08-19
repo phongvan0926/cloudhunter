@@ -32,7 +32,7 @@ const App: React.FC = () => {
     if (saved) setAnalysis(saved);
   };
 
-  const handleInputSubmit = async (data: WeatherInput) => {
+  const handleInputSubmit = async (data: WeatherInput, autoConfirm = false) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -47,12 +47,15 @@ const App: React.FC = () => {
         const suggested = locAnalysis.suggested_observer_alt;
         obsAlt = typeof suggested === 'number' && suggested > 0 && suggested <= peak ? suggested : peak;
       }
-      setPendingInput({
-        ...data,
-        observerAlt: obsAlt,
-        lat: locAnalysis.lat,
-        lon: locAnalysis.lon
-      });
+      const confirmed = { ...data, observerAlt: obsAlt, lat: locAnalysis.lat, lon: locAnalysis.lon };
+      setPendingInput(confirmed);
+      // Điểm chọn từ THƯ VIỆN ĐÃ XÁC THỰC (vd bấm từ bảng xếp hạng): tọa độ đã chắc chắn,
+      // màn "Xác nhận địa điểm" chỉ là thuế 1 chạm → chạy thẳng phân tích
+      if (autoConfirm && locAnalysis.source === 'DB') {
+        setIsLoading(false);
+        runAnalysis(confirmed);
+        return;
+      }
     } catch (err: any) {
       const msg = err?.message || String(err);
       if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
@@ -71,13 +74,12 @@ const App: React.FC = () => {
     }
   };
 
-  const handleConfirmLocation = async (isRetry = false) => {
-    if (!pendingInput || !locationAnalysis) return;
+  const runAnalysis = async (input: WeatherInput, isRetry = false) => {
     setIsLoading(true);
     setError(null);
     try {
       const { analyzeWeatherData } = await import('./services/geminiService');
-      const result = await analyzeWeatherData(pendingInput);
+      const result = await analyzeWeatherData(input);
       setAnalysis(result);
       saveRun(result);
       setHistoryList(listRuns());
@@ -89,7 +91,7 @@ const App: React.FC = () => {
         // Open-Meteo giới hạn tần suất — tự thử lại 1 lần thay vì chết với lỗi thô (audit vòng 2)
         setError('⏳ Open-Meteo đang giới hạn tần suất — app tự thử lại sau 30 giây, bạn không cần làm gì...');
         setErrorNeedsKey(false);
-        setTimeout(() => { handleConfirmLocation(true); }, 30000);
+        setTimeout(() => { runAnalysis(input, true); }, 30000);
         return; // giữ isLoading? không — nhả nút để user có thể tự bấm sớm hơn
       }
       if (msg.includes('403') && !lower.includes('open-meteo')) {
@@ -109,6 +111,11 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleConfirmLocation = () => {
+    if (!pendingInput || !locationAnalysis) return;
+    runAnalysis(pendingInput);
   };
 
   const handleCancelLocation = () => {
@@ -132,7 +139,7 @@ const App: React.FC = () => {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 pb-12">
-        <Header onOpenApiKey={() => setIsApiKeyModalOpen(true)} />
+        <Header onOpenApiKey={() => setIsApiKeyModalOpen(true)} compact={!!analysis} />
         
         <main className="transition-all duration-500 ease-in-out">
           {error && (
@@ -155,22 +162,20 @@ const App: React.FC = () => {
               <LocationConfirm 
                 analysis={locationAnalysis} 
                 inputData={pendingInput} 
-                onConfirm={() => handleConfirmLocation()}
+                onConfirm={handleConfirmLocation}
                 onCancel={handleCancelLocation} 
                 isLoading={isLoading} 
               />
             ) : (
               <div className="animate-fade-in-up">
-                <InputForm onSubmit={handleInputSubmit} isLoading={isLoading} />
-
-                {/* "Đêm nay đi đâu?" — xếp hạng toàn thư viện cho rạng sáng mai */}
-                <div className="max-w-xl mx-auto mt-4">
+                {/* Giá trị tức thì, không cần nhập gì — đặt TRƯỚC form (audit vòng 2) */}
+                <div className="max-w-xl mx-auto mb-4">
                   <button
                     onClick={() => setShowTonight(v => !v)}
-                    className={`w-full min-h-11 py-3 rounded-xl font-bold text-sm transition-all border flex justify-center items-center gap-2 ${
+                    className={`w-full min-h-11 py-3.5 rounded-2xl font-bold text-sm transition-all border flex justify-center items-center gap-2 shadow-lg ${
                       showTonight
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
-                        : 'bg-slate-800/70 text-amber-300/90 border-slate-700 hover:border-amber-500/50'
+                        : 'bg-gradient-to-r from-amber-600/90 to-orange-600/90 text-white border-amber-400/50 hover:from-amber-500 hover:to-orange-500'
                     }`}
                   >
                     <span>🌄</span>
@@ -188,10 +193,14 @@ const App: React.FC = () => {
                         endDate: addDaysStr(vnTodayStr(), 2),
                         observerAlt: elevation,
                         model: undefined,
-                      });
+                      }, true); // điểm từ thư viện xác thực → bỏ màn xác nhận
                     }}
                   />
                 )}
+
+                <div className="mt-4">
+                  <InputForm onSubmit={handleInputSubmit} isLoading={isLoading} />
+                </div>
 
                 {historyList.length > 0 && (
                   <div className="max-w-xl mx-auto mt-4">

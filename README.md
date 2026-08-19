@@ -32,6 +32,9 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   mây LIÊN TỤC từ dưới lên; **boundary layer height đêm** (GFS) bắt không khí tù đọng;
   **mực đóng băng thật** → cảnh báo băng giá; nhiệt độ 2 điểm được API downscale theo
   đúng độ cao thung lũng/vị trí đứng (`&elevation=`).
+- 🎯 **Trang kết quả "phán quyết trước"**: màn hình đầu tiên trả lời thẳng ĐI hay KHÔNG
+  (ngày đẹp nhất, điểm, giờ có mặt, lời khuyên) — các ngày còn lại thu gọn 1 dòng, bấm mở
+  chi tiết; nút "Đêm nay đi đâu" nằm trên cùng, không cần nhập gì.
 - 🔍 **"Vì sao điểm này?"**: mỗi ngày liệt kê từng yếu tố cộng/trừ điểm (mây thấp bình minh,
   nghịch nhiệt, ẩm, gió theo vùng địa hình, mây cao che đêm, mưa, mùa) — minh bạch 100%.
 - ⛔ **Trung thực dữ liệu**: ngày ngoài phạm vi dự báo hiện UNKNOWN + "ngoài phạm vi dữ

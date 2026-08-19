@@ -490,6 +490,11 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
+  const ratedForecasts = sortedForecasts.filter(f => f.status_code !== 'UNKNOWN');
+  const heroBest = ratedForecasts.length
+    ? ratedForecasts.reduce((a, b) => (b.score > a.score ? b : a)) : null;
+  const heroBestDate = heroBest?.date;
+
   const filteredForecasts = filterGoldenOnly
     ? sortedForecasts.filter(day => day.score >= WORTH_GOING_SCORE || bookmarkedDates.includes(day.date))
     : sortedForecasts;
@@ -513,6 +518,41 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
           </span>
         </div>
       )}
+
+      {/* PHÁN QUYẾT — màn hình đầu tiên phải trả lời "đi hay không", không bắt cuộn */}
+      {(() => {
+        const best = heroBest;
+        const go = !!best && best.score >= WORTH_GOING_SCORE;
+        const near = !!best && !go && best.score >= 45;
+        return (
+          <div className={`rounded-3xl border p-5 md:p-6 shadow-2xl ${
+            go ? 'bg-gradient-to-br from-emerald-950/90 to-slate-900 border-emerald-500/50'
+               : near ? 'bg-gradient-to-br from-amber-950/80 to-slate-900 border-amber-500/40'
+                      : 'bg-gradient-to-br from-slate-900 to-slate-950 border-slate-700'}`}>
+            <div className="flex items-start gap-4">
+              <span className="text-4xl md:text-5xl leading-none">{go ? '🎉' : near ? '🤔' : '😕'}</span>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
+                  {go ? `Nên đi — ${formatDate(best!.date)} đẹp nhất`
+                      : near ? `Tạm được — ${formatDate(best!.date)} khá nhất, cân nhắc`
+                             : 'Chưa nên đi trong khoảng ngày này'}
+                </h2>
+                <p className="text-sm text-slate-300 mt-1 leading-relaxed">
+                  {best
+                    ? <><b className={go ? 'text-emerald-300' : near ? 'text-amber-300' : 'text-slate-200'}>{best.score}/100</b>
+                        {' · '}{best.status_text}
+                        {(go || near) && best.sun_times && <> · có mặt trước <b>{best.sun_times.sunrise}</b></>}
+                      </>
+                    : 'Không có ngày nào trong khoảng này có dữ liệu mô hình.'}
+                </p>
+                {best?.expert_advice && (
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">{best.expert_advice}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Top Section */}
       <div id="ch-share-card" className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
@@ -538,7 +578,6 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                      Độ tin cậy dữ liệu: {result.dataReliability}
                    </span>
                  )}
-                 <p className="text-slate-400 text-xs">Engine deterministic + Open-Meteo 6 mô hình toàn cầu</p>
               </div>
            </div>
 
@@ -723,10 +762,27 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
           const isBookmarked = bookmarkedDates.includes(day.date);
 
           return (
-            <div 
+            <details
               key={idx}
-              className={`backdrop-blur-md rounded-2xl border p-6 transition-all duration-300 hover:shadow-xl relative ${getCardStyle(day.status_code)}`}
+              open={day.date === heroBestDate || filteredForecasts.length === 1}
+              className={`backdrop-blur-md rounded-2xl border transition-all duration-300 hover:shadow-xl relative ${getCardStyle(day.status_code)}`}
             >
+              {/* Dòng tóm tắt luôn thấy — bấm để mở chi tiết (trang từng dài 11 màn hình) */}
+              <summary className="cursor-pointer select-none list-none px-5 py-4 min-h-11 flex items-center gap-3 pr-14">
+                <span className={`text-2xl font-black tracking-tighter shrink-0 ${getStatusColor(day.status_code)}`}>
+                  {day.status_code !== 'UNKNOWN' ? day.score : '—'}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-bold text-white">{formatDate(day.date)}</span>
+                  <span className={`block text-xs truncate ${getStatusColor(day.status_code)}`}>{day.status_text}</span>
+                </span>
+                {day.sun_times && day.status_code !== 'UNKNOWN' && (
+                  <span className="text-[11px] font-mono text-slate-400 shrink-0">🌄 {day.sun_times.sunrise}</span>
+                )}
+                <span className="text-slate-500 text-xs shrink-0">chi tiết ▾</span>
+              </summary>
+
+              <div className="px-5 pb-5">
               {/* Bookmark Star Icon */}
               <button
                 onClick={() => toggleBookmark(day.date)}
@@ -975,7 +1031,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                 </div>
 
               </div>
-            </div>
+              </div>
+            </details>
           );
         })}
       </div>
