@@ -83,6 +83,7 @@ export interface DayData {
   sun_times: SunTimes;
   hourly_profile?: HourlyLevelProfile;            // mây theo tầng × giờ cho biểu đồ (dữ liệu thật)
   ensemble?: EnsembleDay;                         // 51 kịch bản ECMWF (best-effort)
+  air?: AirQualityDay;                            // AOD/PM2.5 bình minh (best-effort)
 }
 
 export interface WeatherPackage {
@@ -509,6 +510,35 @@ export async function fetchEnsembleDays(
   return out;
 }
 
+/**
+ * Chất lượng không khí (CAMS qua Air Quality API) cho khung bình minh 4-9h — dùng cho
+ * chỉ số "cháy mây": khí quyển quá đục (AOD/bụi mịn cao) làm mặt trời mọc bị xỉn màu,
+ * quá sạch thì màu trong trẻo. Best-effort: lỗi → {} (app vẫn chạy đủ, không bịa).
+ */
+export interface AirQualityDay { aod: number; pm25: number }
+
+export async function fetchAirQualityDays(
+  lat: number, lon: number, startStr: string, endStr: string
+): Promise<Record<string, AirQualityDay>> {
+  const url =
+    `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
+    `&hourly=aerosol_optical_depth,pm2_5&start_date=${startStr}&end_date=${endStr}&timezone=Asia%2FBangkok`;
+  const data = await cachedJson(url);
+  const time: string[] = data?.hourly?.time || [];
+  const aodArr = data?.hourly?.aerosol_optical_depth;
+  const pmArr = data?.hourly?.pm2_5;
+  const out: Record<string, AirQualityDay> = {};
+  if (!Array.isArray(aodArr)) return out;
+  for (let dStr = startStr; dStr <= endStr; dStr = addDaysStr(dStr, 1)) {
+    const idxs = hourIndices(time, dStr, 4, 9);
+    const aod = idxs.map(i => aodArr[i]).filter(isNum);
+    const pm = Array.isArray(pmArr) ? idxs.map(i => pmArr[i]).filter(isNum) : [];
+    if (aod.length === 0) continue;
+    out[dStr] = { aod: +avg(aod).toFixed(2), pm25: pm.length ? Math.round(avg(pm)) : NaN };
+  }
+  return out;
+}
+
 /** Nhãn tin cậy theo khoảng cách dự báo. */
 export function qualityForDaysAhead(daysAhead: number): DataQuality {
   if (daysAhead < -2 || daysAhead > 15) return 'NO_DATA';
@@ -571,16 +601,20 @@ export async function fetchMountainWeather(
   let obsBlock: HourlyBlock | null = null;
   let dailyData: any = null;
   let ensembleDays: Record<string, EnsembleDay> = {};
+  let airDays: Record<string, AirQualityDay> = {};
   if (hasApiRange) {
     const qStart = formatDateStr(addDays(apiStart, -1)); // -1 ngày cho cửa sổ đêm
     const qEnd = formatDateStr(apiEnd);
-    const [valleyData, obsData, ens] = await Promise.all([
+    const [valleyData, obsData, ens, air] = await Promise.all([
       fetchPoint(mt.lat, mt.lon, valleyElevation, qStart, qEnd),
       fetchPoint(mt.lat, mt.lon, obsElev, qStart, qEnd, OBSERVER_VARS),
-      // ensemble là best-effort: lỗi thì bỏ qua (app vẫn đầy đủ), không bịa xác suất
+      // ensemble/không khí là best-effort: lỗi thì bỏ qua (app vẫn đầy đủ), không bịa
       fetchEnsembleDays(mt.lat, mt.lon, valleyElevation, formatDateStr(apiStart), qEnd)
         .catch(() => ({} as Record<string, EnsembleDay>)),
+      fetchAirQualityDays(mt.lat, mt.lon, formatDateStr(apiStart), qEnd)
+        .catch(() => ({} as Record<string, AirQualityDay>)),
     ]);
+    airDays = air;
     valleyBlock = makeHourlyBlock(valleyData.hourly);
     obsBlock = makeHourlyBlock(obsData.hourly);
     dailyData = obsData.daily || valleyData.daily || null;
@@ -622,6 +656,7 @@ export async function fetchMountainWeather(
     days.push({
       date: dateStr, quality: effQuality, daysAhead, models, sun_times: sunTimes,
       hourly_profile, ensemble: effQuality !== 'NO_DATA' ? ensembleDays[dateStr] : undefined,
+      air: effQuality !== 'NO_DATA' ? airDays[dateStr] : undefined,
     });
   }
 

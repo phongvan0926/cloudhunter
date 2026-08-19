@@ -53,6 +53,8 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
   cao hơn→RH700 (trước đây thung lũng 1800m đo RH850 = không khí dưới lòng đất).
 - **Lifted index** (GFS): ≤−4 trừ 6 điểm; ≤−2 thêm cảnh báo dông "xuống núi trước 13:00" —
   đối lưu đo thật thay vì đoán qua mùa.
+- **AOD/PM2.5** (Air Quality API, CAMS — best-effort): hiệu chỉnh `sunriseColorPotential`
+  (≥0.8 −25, ≥0.55 −15, ≥0.35 −6, ≤0.2 +5). Thiếu dữ liệu → giữ nguyên điểm, không bịa.
 - **Mực đóng băng thật** (`freezing_level_height`, GFS/ICON): vị trí đứng cao hơn → cảnh
   báo băng giá trong `warnings`.
 - Cửa sổ thời gian: pha bức xạ = **19h đêm trước → 6h sáng** (mây cao đêm, gió 925 đêm,
@@ -161,7 +163,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 67 golden tests engine
+npm test       # vitest — 69 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

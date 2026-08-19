@@ -1,6 +1,6 @@
 /**
- * Công cụ đo lệch giữa XẾP HẠNG NHANH (2 model, 16 biến, 1 điểm tại đáy thung lũng)
- * và PHÂN TÍCH ĐẦY ĐỦ (4 model, 41 biến, 2 điểm, profile 7 tầng) — cùng engine.
+ * Công cụ đo lệch giữa XẾP HẠNG NHANH (3 model GFS/ICON/UKMO, 1 điểm tại đáy thung lũng)
+ * và PHÂN TÍCH ĐẦY ĐỦ (6 model, 2 điểm) — cùng bộ biến HOURLY_VARS, cùng engine.
  * Chạy: npx vite-node scripts/compare-rank-vs-full.ts
  * (gọi API thật; dùng để hiệu chuẩn định kỳ, không phải unit test)
  */
@@ -15,7 +15,7 @@ const SAMPLE = [
   'TA_XUA_SON_LA', 'PHA_LUONG', 'HANG_KIA_PA_CO', 'PHINH_HO', 'DON_DEN',
   'BINH_LIEU', 'PHIA_OAC', 'BACH_MA', 'BA_DEN', 'MANG_DEN', 'LANG_BIANG', 'KEO_LOM',
 ];
-const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless'];
+const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_seamless'];
 import { HOURLY_VARS as RANK_VARS } from '../services/weatherService';
 
 async function main() {

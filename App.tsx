@@ -15,6 +15,27 @@ const AnalysisResult = React.lazy(() =>
   import('./components/AnalysisResult').then(m => ({ default: m.AnalysisResult }))
 );
 
+/**
+ * Permalink: ?spot=Tà+Xùa&from=2026-08-20&to=2026-08-22&alt=1600 — chia sẻ đúng kết quả
+ * cho bạn đồng hành mà không phải mô tả lại thao tác. Chỉ chứa tham số tra cứu, không key.
+ */
+function readPermalink(): WeatherInput | null {
+  try {
+    const q = new URLSearchParams(window.location.search);
+    const spot = q.get('spot');
+    if (!spot) return null;
+    const today = vnTodayStr();
+    const from = q.get('from') || today;
+    const to = q.get('to') || addDaysStr(from, 2);
+    const alt = Number(q.get('alt'));
+    return {
+      locationName: spot, startDate: from, endDate: to,
+      observerAlt: Number.isFinite(alt) && alt > 0 ? alt : undefined,
+      model: undefined,
+    };
+  } catch { return null; }
+}
+
 const App: React.FC = () => {
   const [analysis, setAnalysis] = useState<CloudAnalysis | null>(null);
   const [locationAnalysis, setLocationAnalysis] = useState<LocationAnalysis | null>(null);
@@ -26,6 +47,13 @@ const App: React.FC = () => {
   const [historyList, setHistoryList] = useState(() => listRuns());
   const [showTonight, setShowTonight] = useState(false);
   const [verifyTarget, setVerifyTarget] = useState<CloudAnalysis | null>(null);
+
+  // Mở app bằng link chia sẻ → chạy thẳng phân tích điểm đó
+  React.useEffect(() => {
+    const link = readPermalink();
+    if (link) handleInputSubmit(link, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLoadHistory = (id: string) => {
     const saved = loadRun(id);
@@ -84,6 +112,12 @@ const App: React.FC = () => {
       saveRun(result);
       setHistoryList(listRuns());
       setLocationAnalysis(null); // Hide confirmation after success
+      // URL phản ánh kết quả đang xem → copy thanh địa chỉ là chia sẻ được
+      try {
+        const q = new URLSearchParams({ spot: input.locationName, from: input.startDate, to: input.endDate });
+        if (input.observerAlt) q.set('alt', String(input.observerAlt));
+        window.history.replaceState(null, '', `${window.location.pathname}?${q}`);
+      } catch { /* trình duyệt chặn history → bỏ qua */ }
     } catch (err: any) {
       const msg = err?.message || String(err);
       const lower = msg.toLowerCase();
@@ -124,6 +158,7 @@ const App: React.FC = () => {
   };
 
   const handleReset = () => {
+    try { window.history.replaceState(null, '', window.location.pathname); } catch { /* bỏ qua */ }
     setAnalysis(null);
     setLocationAnalysis(null);
     setPendingInput(null);

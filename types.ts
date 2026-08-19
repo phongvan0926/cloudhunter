@@ -99,6 +99,7 @@ export interface DailyForecast {
   recommended_position?: string;
   hourly_profile?: HourlyLevelProfile; // biểu đồ mây theo độ cao (dữ liệu thật, có thể thiếu)
   ensemble?: EnsembleDay;              // 51 kịch bản ECMWF (best-effort, thiếu thì ẩn)
+  air_quality?: { aod: number; pm25: number }; // độ đục khí quyển bình minh (CAMS) — hiệu chỉnh cháy mây
   technical_indices: TechnicalIndices;
   weather_analysis: WeatherAnalysis;
   expert_advice: string;

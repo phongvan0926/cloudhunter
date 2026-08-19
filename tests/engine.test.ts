@@ -694,6 +694,23 @@ describe('engine-2.1 — sửa lỗi audit vòng 2', () => {
   });
 });
 
+describe('sunriseColorPotential + AOD (Đợt C)', () => {
+  it('khí quyển đục (AOD cao) hạ điểm cháy mây; rất trong thì cộng', () => {
+    const m = goldenNight({ cloud_high_dawn: 35, cloud_mid_dawn: 0 });
+    const base = sunriseColorPotential(m);
+    const hazy = sunriseColorPotential(m, { aod: 0.9, pm25: 60 });
+    const clean = sunriseColorPotential(m, { aod: 0.15, pm25: 5 });
+    expect(hazy).toBeLessThan(base - 20);
+    expect(clean).toBeGreaterThanOrEqual(base);
+    expect(hazy).toBeGreaterThanOrEqual(0);
+    expect(clean).toBeLessThanOrEqual(100);
+  });
+  it('thiếu dữ liệu không khí → giữ nguyên điểm cũ (không bịa hiệu chỉnh)', () => {
+    const m = goldenNight({ cloud_high_dawn: 35, cloud_mid_dawn: 0 });
+    expect(sunriseColorPotential(m, { aod: NaN, pm25: NaN })).toBe(sunriseColorPotential(m));
+  });
+});
+
 describe('historyService — dedup + schema version', () => {
   it('tra lại cùng điểm + cùng khoảng ngày thì THAY bản cũ, không chiếm thêm slot', async () => {
     const store: Record<string, string> = {};

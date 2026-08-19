@@ -191,12 +191,22 @@ export function computeVRII(m: DayModelData, inversionAnomaly: number): {
 }
 
 /** Tiềm năng "cháy mây" bình minh cho nhiếp ảnh: cần MỘT ÍT mây cao/trung để hứng màu. */
-export function sunriseColorPotential(m: DayModelData): number {
+export function sunriseColorPotential(m: DayModelData, air?: { aod: number; pm25: number }): number {
   const c = Math.max(m.cloud_mid_dawn * 0.7, m.cloud_high_dawn);
-  if (c >= 15 && c <= 55) return Math.round(95 - Math.abs(c - 35));
-  if (c < 15) return 45;   // trời trong — bình minh sạch nhưng màu nhạt
-  if (c <= 75) return 30;
-  return 10;               // trời phủ kín — mất bình minh
+  let base: number;
+  if (c >= 15 && c <= 55) base = Math.round(95 - Math.abs(c - 35));
+  else if (c < 15) base = 45;   // trời trong — bình minh sạch nhưng màu nhạt
+  else if (c <= 75) base = 30;
+  else base = 10;               // trời phủ kín — mất bình minh
+  // Độ đục khí quyển THẬT (AOD từ CAMS): mù khô/bụi làm mặt trời mọc xỉn màu, mất tương phản.
+  // AOD ≲0.25 = khí quyển trong (màu rực); ≳0.6 = đục nặng (thường mù khô mùa đốt nương).
+  if (air && Number.isFinite(air.aod)) {
+    if (air.aod >= 0.8) base -= 25;
+    else if (air.aod >= 0.55) base -= 15;
+    else if (air.aod >= 0.35) base -= 6;
+    else if (air.aod <= 0.2) base += 5;   // khí quyển rất trong — màu sạch, tương phản cao
+  }
+  return Math.max(0, Math.min(100, Math.round(base)));
 }
 
 // ---------------------------------------------------------- mùa (Module 7) ----
@@ -484,7 +494,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
   const cloudBase = computeCloudBase(rep, ctx.valleyElevation);
   const deltaH = combined.cloudTop !== null ? ctx.observerAlt - combined.cloudTop : null;
   const season = seasonAdjust(day.date, ctx.lat);
-  const colorPotential = sunriseColorPotential(rep);
+  const colorPotential = sunriseColorPotential(rep, day.air);
 
   const moisture: TechnicalIndices['moisture_type'] =
     Number.isFinite(rep.rh850) ? (rep.rh850 >= 80 ? 'Deep' : rep.rh850 <= 60 ? 'Shallow' : (rep.rh700 >= 70 ? 'Deep' : 'Shallow')) : 'Unknown';
@@ -544,6 +554,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
       reliability_note,
       reasons: combined.representative.reasons,
       sunrise_color_potential: colorPotential,
+      air_quality: day.air,
       hourly_profile: day.hourly_profile,
       ensemble: day.ensemble,
       recommended_position: recommendPosition(deltaH, combined.cloudTop, ctx),
