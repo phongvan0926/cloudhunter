@@ -46,6 +46,13 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
   (có test khóa). Fallback 3 mực RH như cũ khi thiếu profile.
 - **Boundary layer height đêm** (GFS mới có): BLH min đêm ≤200m = không khí tù đọng
   → +8; ≤500m → +4; ≥1200m → −5. Model khác không có BLH thì bỏ qua, không giả định.
+- **Trần quét nghịch nhiệt TƯƠNG ĐỐI** `max(2600, valley+1300)` + fallback xét 700hPa khi
+  thung lũng >1500m: trần cứng 2600m từng tạo khe hở chết cho thung lũng cao (Trạm Tôn
+  1900m của Fansipan → không bao giờ thấy nghịch nhiệt, trừ 5 điểm oan). Có test khóa.
+- **Ẩm "lớp biển mây"** chọn mực NGAY TRÊN đáy thung lũng: <900m→RH925, <1700m→RH850,
+  cao hơn→RH700 (trước đây thung lũng 1800m đo RH850 = không khí dưới lòng đất).
+- **Lifted index** (GFS): ≤−4 trừ 6 điểm; ≤−2 thêm cảnh báo dông "xuống núi trước 13:00" —
+  đối lưu đo thật thay vì đoán qua mùa.
 - **Mực đóng băng thật** (`freezing_level_height`, GFS/ICON): vị trí đứng cao hơn → cảnh
   báo băng giá trong `warnings`.
 - Cửa sổ thời gian: pha bức xạ = **19h đêm trước → 6h sáng** (mây cao đêm, gió 925 đêm,
@@ -128,6 +135,15 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
    người dùng chọn bị thay.
 10. **Ngày giờ**: mọi phép "hôm nay" dùng `vnTodayStr()` (Asia/Ho_Chi_Minh) — cấm
    `toISOString().split('T')` cho ngày hiển thị (đó là ngày UTC, lùi 1 ngày lúc 0-7h VN).
+   Hiển thị 1 ngày cụ thể: `new Date(d + 'T12:00:00+07:00')` (không `new Date(d)` = 0h UTC).
+11. **Ngân sách API Open-Meteo** (miễn phí: 600/phút, 5.000/giờ, 10.000/ngày; 1 call ≈
+   locations × vars/10 × models): 1 lần xếp hạng ≈ 600+ call quy đổi → BẮT BUỘC cache
+   (RANK_CACHE 30 phút) và không thêm biến vào `HOURLY_VARS` nếu engine không đọc.
+   Điểm quan sát chỉ xin `OBSERVER_VARS` (5 biến), không xin cả bộ profile.
+   Đáy thung lũng dùng chung cache `cloudhunter_valley_dem_v2` (CÓ vân tay lat/lon —
+   sửa tọa độ là tự đo lại) giữa xếp hạng và phân tích đầy đủ, tránh 429 chuỗi.
+12. **Ngưỡng "đáng đi" = `WORTH_GOING_SCORE`** (engine export) — cấm hard-code 60/65 rời rạc.
+   Hòa phiếu trạng thái → trạng thái AN TOÀN hơn thắng (`STATUS_SEVERITY`), không theo thứ tự model.
 
 ## 🚀 Backlog gợi ý
 
@@ -142,7 +158,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 58 golden tests engine
+npm test       # vitest — 67 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { rankSpotsForDawn, SpotRank } from '../services/rankingService';
-import { STATUS_TEXT } from '../services/cloudScoreEngine';
+import { STATUS_TEXT, WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
 import { MOUNTAIN_DB } from '../constants/mountains';
 
 const TOTAL_SPOTS = Object.keys(MOUNTAIN_DB).length;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const scoreBadge = (score: number) =>
-  score >= 65 ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/50'
+  score >= WORTH_GOING_SCORE ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/50'
   : score >= 45 ? 'bg-amber-900/50 text-amber-300 border-amber-500/40'
   : 'bg-slate-800 text-slate-400 border-slate-700';
 

@@ -7,41 +7,49 @@ import { CloudAnalysis } from '../types';
 
 const KEY = 'cloudhunter_history_v1';
 const MAX_RUNS = 5;
+// Bump khi shape CloudAnalysis đổi tới mức UI mới không render nổi bản cũ —
+// bản lưu khác version bị bỏ qua lúc đọc (an toàn hơn crash màn trắng)
+const SCHEMA_VERSION = 2;
 
 export interface HistoryEntry {
   id: string;
+  schemaVersion?: number;
   savedAt: string;        // ISO — thời điểm dự báo được tạo (để đối chiếu sau chuyến đi)
   locationName: string;
   dateRange: string;
   analysis: CloudAnalysis;
 }
 
-export function listRuns(): Omit<HistoryEntry, 'analysis'>[] {
+function readAll(): HistoryEntry[] {
   try {
     const all: HistoryEntry[] = JSON.parse(localStorage.getItem(KEY) || '[]');
-    return all.map(({ analysis, ...meta }) => meta);
+    return all.filter(e => e.schemaVersion === SCHEMA_VERSION);
   } catch { return []; }
 }
 
+export function listRuns(): Omit<HistoryEntry, 'analysis'>[] {
+  return readAll().map(({ analysis, ...meta }) => meta);
+}
+
 export function loadRun(id: string): CloudAnalysis | null {
-  try {
-    const all: HistoryEntry[] = JSON.parse(localStorage.getItem(KEY) || '[]');
-    return all.find(e => e.id === id)?.analysis || null;
-  } catch { return null; }
+  return readAll().find(e => e.id === id)?.analysis || null;
 }
 
 export function saveRun(analysis: CloudAnalysis): void {
   try {
     const dates = analysis.dailyForecasts.map(f => f.date);
+    const dateRange = dates.length ? `${dates[0]} → ${dates[dates.length - 1]}` : '';
     const entry: HistoryEntry = {
       id: `${Date.now()}`,
+      schemaVersion: SCHEMA_VERSION,
       savedAt: new Date().toISOString(),
       locationName: analysis.locationName,
-      dateRange: dates.length ? `${dates[0]} → ${dates[dates.length - 1]}` : '',
+      dateRange,
       analysis,
     };
-    let all: HistoryEntry[] = [];
-    try { all = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { /* hỏng thì làm mới */ }
+    let all = readAll();
+    // Dedup: tra lại cùng điểm + cùng khoảng ngày thì THAY bản cũ, không chiếm thêm slot
+    all = all.filter(e => !(e.locationName === entry.locationName && e.dateRange === dateRange));
     all.unshift(entry);
     all = all.slice(0, MAX_RUNS);
     localStorage.setItem(KEY, JSON.stringify(all));

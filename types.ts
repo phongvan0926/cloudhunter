@@ -184,6 +184,7 @@ export interface CloudAnalysis {
   modelFallbackNote?: string;  // giải thích trung thực vì sao phải đổi model
   aiNarrative?: boolean;   // false = AI không phản hồi, phần lời bình là văn bản do engine sinh
   engineVersion?: string;
+  dataAgeMinutes?: number; // tuổi dữ liệu khí tượng lúc phân tích — >90' hiện cảnh báo stale (offline/SW cache)
 }
 
 export interface PeakPreset {

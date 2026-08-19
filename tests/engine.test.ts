@@ -398,7 +398,7 @@ describe('fetchEnsembleDays — xác suất từ tổ hợp ECMWF (fetch mock)',
       hourly[`precipitation_member${String(m).padStart(2, '0')}`] = time.map(() => (m <= 5 ? 0.2 : 0));
     }
     const origFetch = globalThis.fetch;
-    globalThis.fetch = (async () => ({ ok: true, json: async () => ({ hourly }) })) as any;
+    globalThis.fetch = (async () => ({ ok: true, headers: new Headers(), json: async () => ({ hourly }) })) as any;
     try {
       const out = await fetchEnsembleDays(21.3, 104.3, 600, '2026-11-05', '2026-11-05');
       const d = out['2026-11-05'];
@@ -609,6 +609,112 @@ describe('engine-2.0 — profile tầng thật (geopotential + cloud cover từn
     const out = computeDayForecast(day, { ...CTX_A, observerAlt: 2800 });
     expect(out.warnings.join(' ')).toMatch(/đóng băng/);
     expect(out.forecast.technical_indices.inversion_height_m).not.toBeUndefined();
+  });
+});
+
+describe('engine-2.1 — sửa lỗi audit vòng 2', () => {
+  it('HỒI QUY: thung lũng CAO (Fansipan/Trạm Tôn 1900m) vẫn phát hiện được nghịch nhiệt', () => {
+    // Trước đây trần quét cứng 2600m + sàn valley+80 = khe hở 1980-2600m không có mực nào
+    // → luôn None → trừ 5 điểm oan vĩnh viễn cho mọi điểm quanh Fansipan.
+    const highValley = goldenNight({
+      t_valley_dawn: 8, t925: NaN, t850: NaN, t700: 5,
+      levels: [
+        { p: 800, h: 1950, hReal: true, t: 7.5, rh: 90, cc: 70 },   // dưới đáy+80 → bỏ
+        { p: 700, h: 3100, hReal: true, t: 5.0, rh: 40, cc: 0 },    // trong trần mới (1900+1300=3200)
+      ],
+    });
+    const inv = computeInversion(highValley, 1900);
+    // T kỳ vọng ở 3100m = 8 − 6.5×1.2 = 0.2 → t700=5 ấm hơn 4.8°C = nghịch nhiệt mạnh
+    expect(inv.strength).toBe('Strong');
+    expect(inv.height).toBe(3100);
+  });
+
+  it('fallback thung lũng cao không có profile: vẫn xét 700hPa thay vì bó tay', () => {
+    const inv = computeInversion(goldenNight({ t_valley_dawn: 8, t700: 5 }), 1900);
+    expect(inv.strength).not.toBe('None');
+    expect(inv.height).toBe(3100);
+  });
+
+  it('ẩm "lớp biển mây" dùng mực TRÊN đáy thung lũng (1800m → rh700, không phải rh850 dưới lòng đất)', () => {
+    const wetHigh = goldenNight({ rh850: 20, rh700: 95, cloud_low_dawn: 80 });
+    const r = scoreOneModel('gfs_seamless', wetHigh, { ...CTX_A, valleyElevation: 1800, observerAlt: 2800 }, '2026-11-05');
+    expect(r.reasons.join(' ')).toMatch(/Ẩm lớp biển mây rất cao \(RH 95%\)/);
+  });
+
+  it('lifted_index rất âm → trừ điểm bất ổn định + cảnh báo dông', () => {
+    const stormy = goldenNight({ lifted_index: -6 });
+    const r = scoreOneModel('gfs_seamless', stormy, CTX_A, '2026-11-05');
+    expect(r.reasons.join(' ')).toMatch(/Lifted Index -6/);
+    const day: DayData = {
+      date: '2026-11-05', quality: 'FORECAST', daysAhead: 1,
+      models: { gfs_seamless: goldenNight({ lifted_index: -3 }) },
+      sun_times: computeSunTimes(22.6, 103.6, '2026-11-05'),
+    };
+    expect(computeDayForecast(day, CTX_A).warnings.join(' ')).toMatch(/dông/);
+  });
+
+  it('HÒA PHIẾU: trạng thái AN TOÀN thắng (3 RAIN vs 3 STATIC → RAIN), không theo thứ tự model', () => {
+    const mk = (score: number, status: any) => ({ model: 'ecmwf_ifs025' as const, score, status, cloudTop: 1650, reasons: [] });
+    const c = combineModels([
+      mk(80, 'STATIC'), mk(78, 'STATIC'), mk(76, 'STATIC'),
+      mk(10, 'RAIN'), mk(8, 'RAIN'), mk(6, 'RAIN'),
+    ]);
+    expect(c.status).toBe('RAIN');
+    expect(c.agreement).toBe(50);
+  });
+
+  it('OBSERVER_VARS chỉ gồm các biến engine thật sự đọc từ điểm quan sát', async () => {
+    const { OBSERVER_VARS, HOURLY_VARS } = await import('../services/weatherService');
+    expect(OBSERVER_VARS.length).toBeLessThan(HOURLY_VARS.length / 4); // tiết kiệm rõ rệt
+    for (const v of OBSERVER_VARS) expect(HOURLY_VARS).toContain(v);
+    // các biến fetch-mà-không-dùng đã bị cắt khỏi bộ chính
+    expect(HOURLY_VARS).not.toContain('relative_humidity_2m');
+    expect(HOURLY_VARS).not.toContain('wind_direction_850hPa');
+    expect(HOURLY_VARS).toContain('lifted_index'); // giữ vì engine-2.1 DÙNG
+  });
+
+  it('cache đáy thung lũng có vân tay tọa độ — sửa tọa độ điểm là tự đo lại', async () => {
+    const { setCachedValley, getCachedValley } = await import('../services/weatherService');
+    const store: Record<string, string> = {};
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store[k] ?? null,
+      setItem: (k: string, v: string) => { store[k] = v; },
+    };
+    setCachedValley('TEST_SPOT', 21.5, 104.5, 700, 'DEM9');
+    expect(getCachedValley('TEST_SPOT', 21.5, 104.5)).toBe(700);
+    expect(getCachedValley('TEST_SPOT', 21.6, 104.5)).toBeNull(); // tọa độ đã đổi → không dùng số cũ
+    setCachedValley('TEST_SPOT', 21.5, 104.5, 999, 'DEM5');       // DEM5 không đè DEM9
+    expect(getCachedValley('TEST_SPOT', 21.5, 104.5)).toBe(700);
+    delete (globalThis as any).localStorage;
+  });
+
+  it('ngưỡng "đáng đi" là MỘT hằng số dùng chung (engine + UI)', async () => {
+    const { WORTH_GOING_SCORE } = await import('../services/cloudScoreEngine');
+    expect(WORTH_GOING_SCORE).toBe(60);
+  });
+});
+
+describe('historyService — dedup + schema version', () => {
+  it('tra lại cùng điểm + cùng khoảng ngày thì THAY bản cũ, không chiếm thêm slot', async () => {
+    const store: Record<string, string> = {};
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store[k] ?? null,
+      setItem: (k: string, v: string) => { store[k] = v; },
+    };
+    const { saveRun, listRuns } = await import('../services/historyService');
+    const mk = (loc: string) => ({
+      locationName: loc, overallStrategy: '', bestDays: [], gearChecklist: [],
+      terrain_analysis: { summary: '', cloud_trap_potential: 'High', elevation_profile: [] },
+      dailyForecasts: [{ date: '2026-11-05' }, { date: '2026-11-07' }],
+    }) as any;
+    saveRun(mk('Tà Xùa')); saveRun(mk('Tà Xùa')); saveRun(mk('Y Tý'));
+    const runs = listRuns();
+    expect(runs).toHaveLength(2);
+    expect(runs[0].locationName).toBe('Y Tý');
+    // bản lưu schema cũ bị bỏ qua thay vì làm crash UI mới
+    store['cloudhunter_history_v1'] = JSON.stringify([{ id: 'old', savedAt: '', locationName: 'Cũ', dateRange: '', analysis: {} }]);
+    expect(listRuns()).toHaveLength(0);
+    delete (globalThis as any).localStorage;
   });
 });
 

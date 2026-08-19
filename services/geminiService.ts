@@ -387,6 +387,7 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
     aiNarrative: false,
     modelUsed: undefined,
     engineVersion: ENGINE_VERSION,
+    dataAgeMinutes: pkg.servedAgeMin,
   };
 
   // 5) AI viết lời bình (best-effort) — thất bại thì trả kết quả engine nguyên vẹn

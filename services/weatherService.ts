@@ -91,12 +91,16 @@ export interface WeatherPackage {
   valleySource: 'PROFILE' | 'DEM';
   days: DayData[];
   modelsCompared: string[];
+  servedAgeMin?: number; // tuổi dữ liệu lớn nhất được phục vụ (phút) — >90' = cảnh báo stale
 }
 
+// Đã cắt các biến fetch-về-nhưng-không-dùng (audit vòng 2): relative_humidity_2m,
+// wind_direction_850hPa — mỗi biến thừa nhân chi phí quy đổi × mọi model × mọi lần gọi.
+// lifted_index GIỮ LẠI vì engine-2.1 dùng làm cảnh báo dông thật.
 export const HOURLY_VARS = [
-  'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
+  'temperature_2m', 'dew_point_2m',
   'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
-  'wind_speed_925hPa', 'wind_speed_850hPa', 'wind_direction_850hPa',
+  'wind_speed_925hPa', 'wind_speed_850hPa',
   // profile tầng: T + RH + cloud cover + geopotential thật cho mọi mực trong PRESSURE_LEVELS
   ...PRESSURE_LEVELS.flatMap(({ p }) => [
     `temperature_${p}hPa`, `relative_humidity_${p}hPa`,
@@ -104,6 +108,13 @@ export const HOURLY_VARS = [
   ]),
   // biến chẩn đoán (GFS có đủ; model khác trả null → bỏ qua trung thực)
   'boundary_layer_height', 'freezing_level_height', 'lifted_index',
+];
+
+// Điểm QUAN SÁT chỉ cần đúng các biến engine thực sự đọc từ nó — trước đây lặp nguyên
+// bộ 41 biến ×6 model cho cùng lat/lon (chỉ khác elevation), phí ~38% chi phí phân tích.
+export const OBSERVER_VARS = [
+  'temperature_2m', 'dew_point_2m', 'cloud_cover_high',
+  'wind_speed_850hPa', 'freezing_level_height',
 ];
 
 function formatDateStr(d: Date): string {
@@ -190,21 +201,62 @@ const isNum = (v: unknown): v is number => typeof v === 'number' && !Number.isNa
 
 // Cache in-memory theo URL (TTL 30 phút) — mô hình toàn cầu cập nhật 6h/lần nên 30 phút là an toàn,
 // tránh đập API khi người dùng tra đi tra lại cùng địa điểm trong một phiên.
-const FETCH_CACHE = new Map<string, { ts: number; data: any }>();
+const FETCH_CACHE = new Map<string, { ts: number; data: any; ageMin: number }>();
 const CACHE_TTL_MS = 30 * 60 * 1000;
+
+// Theo dõi TUỔI dữ liệu được phục vụ: khi offline/mạng chậm, service worker có thể trả
+// response cũ tới 12h — app phải NÓI THẬT điều đó thay vì đeo badge "tin cậy" (audit vòng 2).
+let maxServedAgeMin = 0;
+export function resetServedAgeTracking(): void { maxServedAgeMin = 0; }
+export function getMaxServedAgeMin(): number { return Math.round(maxServedAgeMin); }
 
 async function cachedJson(url: string): Promise<any> {
   const hit = FETCH_CACHE.get(url);
-  if (hit && Date.now() - hit.ts < CACHE_TTL_MS) return hit.data;
+  if (hit && Date.now() - hit.ts < CACHE_TTL_MS) {
+    maxServedAgeMin = Math.max(maxServedAgeMin, hit.ageMin + (Date.now() - hit.ts) / 60000);
+    return hit.data;
+  }
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status} từ ${new URL(url).hostname}`);
+  // Header Date là lúc server TẠO response — SW trả bản cache thì Date là quá khứ
+  const dateHdr = res.headers.get('date');
+  const ageMin = dateHdr ? Math.max(0, (Date.now() - new Date(dateHdr).getTime()) / 60000) : 0;
+  maxServedAgeMin = Math.max(maxServedAgeMin, ageMin);
   const data = await res.json();
-  FETCH_CACHE.set(url, { ts: Date.now(), data });
+  FETCH_CACHE.set(url, { ts: Date.now(), data, ageMin });
   if (FETCH_CACHE.size > 40) {
     const oldest = [...FETCH_CACHE.entries()].sort((a, b) => a[1].ts - b[1].ts)[0];
     if (oldest) FETCH_CACHE.delete(oldest[0]);
   }
   return data;
+}
+
+// ---- Cache đáy thung lũng VĨNH VIỄN (địa hình không đổi) — dùng chung với rankingService.
+// v2: có VÂN TAY TỌA ĐỘ — sửa tọa độ một điểm trong thư viện là tự đo lại, hết drift ngầm.
+const VALLEY_CACHE_KEY = 'cloudhunter_valley_dem_v2';
+export interface ValleyCacheEntry { lat: number; lon: number; v: number; src: 'DEM5' | 'DEM9' | 'PROFILE' }
+
+export function readValleyCache(): Record<string, ValleyCacheEntry> {
+  try { return JSON.parse(localStorage.getItem(VALLEY_CACHE_KEY) || '{}'); } catch { return {}; }
+}
+
+export function getCachedValley(key: string, lat: number, lon: number): number | null {
+  const e = readValleyCache()[key];
+  if (!e) return null;
+  if (Math.abs(e.lat - lat) > 5e-4 || Math.abs(e.lon - lon) > 5e-4) return null; // tọa độ đã đổi
+  return e.v;
+}
+
+export function setCachedValley(key: string, lat: number, lon: number, v: number, src: ValleyCacheEntry['src']): void {
+  try {
+    const all = readValleyCache();
+    const cur = all[key];
+    // DEM9 (9 điểm mẫu, chuẩn hơn) không bị DEM5 đè ngược khi tọa độ không đổi
+    if (cur && cur.src === 'DEM9' && src === 'DEM5' &&
+        Math.abs(cur.lat - lat) <= 5e-4 && Math.abs(cur.lon - lon) <= 5e-4) return;
+    all[key] = { lat, lon, v, src };
+    localStorage.setItem(VALLEY_CACHE_KEY, JSON.stringify(all));
+  } catch { /* private mode / node — bỏ qua */ }
 }
 
 /** Độ cao DEM thật của đúng 1 điểm. */
@@ -254,10 +306,13 @@ export function makeHourlyBlock(hourly: any): HourlyBlock {
   };
 }
 
-async function fetchPoint(lat: number, lon: number, elevation: number, startStr: string, endStr: string) {
+async function fetchPoint(
+  lat: number, lon: number, elevation: number, startStr: string, endStr: string,
+  varList: string[] = HOURLY_VARS,
+) {
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&elevation=${Math.round(elevation)}` +
-    `&hourly=${HOURLY_VARS.join(',')}` +
+    `&hourly=${varList.join(',')}` +
     `&daily=sunrise,sunset&models=${WEATHER_MODELS.join(',')}` +
     `&start_date=${startStr}&end_date=${endStr}&timezone=Asia%2FBangkok`;
   const data = await cachedJson(url);
@@ -481,8 +536,22 @@ export async function fetchMountainWeather(
     throw new Error(`Không có tọa độ cho "${locationName}" — vui lòng chọn địa điểm từ gợi ý hoặc kiểm tra lại tên.`);
   }
 
-  const { elevation: valleyElevation, source: valleySource } =
-    await estimateValleyElevation(mt.lat, mt.lon, profile);
+  resetServedAgeTracking();
+
+  // Đáy thung lũng: profile xác thực > cache vĩnh viễn (có thể do xếp hạng vừa đo — KHÔNG
+  // đo lại, tránh 429 ở luồng "xếp hạng → bấm điểm", lỗi audit vòng 2) > DEM 9 điểm mới
+  let valleyRes: { elevation: number; source: 'PROFILE' | 'DEM' } | null = null;
+  if (!(profile && profile.length > 0) && mountainKey) {
+    const cached = getCachedValley(mountainKey, mt.lat, mt.lon);
+    if (cached !== null) valleyRes = { elevation: cached, source: 'DEM' };
+  }
+  if (!valleyRes) {
+    valleyRes = await estimateValleyElevation(mt.lat, mt.lon, profile);
+    if (mountainKey && valleyRes.source === 'DEM') {
+      setCachedValley(mountainKey, mt.lat, mt.lon, valleyRes.elevation, 'DEM9');
+    }
+  }
+  const { elevation: valleyElevation, source: valleySource } = valleyRes;
   const obsElev = observerAlt || mt.elevation;
 
   // Phạm vi ngày người dùng yêu cầu
@@ -505,16 +574,16 @@ export async function fetchMountainWeather(
   if (hasApiRange) {
     const qStart = formatDateStr(addDays(apiStart, -1)); // -1 ngày cho cửa sổ đêm
     const qEnd = formatDateStr(apiEnd);
-    const [valleyRes, obsRes, ens] = await Promise.all([
+    const [valleyData, obsData, ens] = await Promise.all([
       fetchPoint(mt.lat, mt.lon, valleyElevation, qStart, qEnd),
-      fetchPoint(mt.lat, mt.lon, obsElev, qStart, qEnd),
+      fetchPoint(mt.lat, mt.lon, obsElev, qStart, qEnd, OBSERVER_VARS),
       // ensemble là best-effort: lỗi thì bỏ qua (app vẫn đầy đủ), không bịa xác suất
       fetchEnsembleDays(mt.lat, mt.lon, valleyElevation, formatDateStr(apiStart), qEnd)
         .catch(() => ({} as Record<string, EnsembleDay>)),
     ]);
-    valleyBlock = makeHourlyBlock(valleyRes.hourly);
-    obsBlock = makeHourlyBlock(obsRes.hourly);
-    dailyData = obsRes.daily || valleyRes.daily || null;
+    valleyBlock = makeHourlyBlock(valleyData.hourly);
+    obsBlock = makeHourlyBlock(obsData.hourly);
+    dailyData = obsData.daily || valleyData.daily || null;
     ensembleDays = ens;
   }
 
@@ -562,5 +631,6 @@ export async function fetchMountainWeather(
     valleySource,
     days,
     modelsCompared: WEATHER_MODELS.map(m => MODEL_LABELS[m]),
+    servedAgeMin: getMaxServedAgeMin(),
   };
 }

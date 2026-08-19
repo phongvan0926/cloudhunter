@@ -35,20 +35,31 @@ function buildFrames(): Frame[] {
 }
 
 export const SatellitePanel: React.FC = () => {
-  const frames = useMemo(buildFrames, []);
-  const [idx, setIdx] = useState(frames.length - 1);
+  // LAZY: không tải bất kỳ ảnh nào (12 × ~175KB ≈ 2.1MB!) cho tới khi user MỞ panel —
+  // với 4G trên núi đây từng là chi phí lớn nhất của trang kết quả (audit vòng 2).
+  // Khung thời gian dựng lại MỖI LẦN mở → không bị "đóng băng" nếu tab treo lâu.
+  const [open, setOpen] = useState(false);
+  const [frames, setFrames] = useState<Frame[]>([]);
+  const [idx, setIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [broken, setBroken] = useState<Set<number>>(new Set());
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // preload để loop mượt
+  // preload chỉ khi panel mở, để loop mượt
   useEffect(() => {
-    frames.forEach((f, i) => {
+    if (!open) return;
+    const fresh = buildFrames();
+    setFrames(fresh);
+    setIdx(fresh.length - 1);
+    setBroken(new Set());
+    let disposed = false;
+    fresh.forEach((f, i) => {
       const img = new Image();
-      img.onerror = () => setBroken(prev => new Set(prev).add(i));
+      img.onerror = () => { if (!disposed) setBroken(prev => new Set(prev).add(i)); };
       img.src = f.url;
     });
-  }, [frames]);
+    return () => { disposed = true; };
+  }, [open]);
 
   useEffect(() => {
     if (!playing) { if (timer.current) clearInterval(timer.current); return; }
@@ -66,10 +77,13 @@ export const SatellitePanel: React.FC = () => {
   }, [playing, frames.length, broken]);
 
   const current = frames[idx];
-  const allBroken = broken.size >= frames.length;
+  const allBroken = frames.length > 0 && broken.size >= frames.length;
 
   return (
-    <details className="bg-slate-900/70 border border-slate-700 rounded-2xl overflow-hidden group">
+    <details
+      className="bg-slate-900/70 border border-slate-700 rounded-2xl overflow-hidden group"
+      onToggle={e => setOpen((e.target as HTMLDetailsElement).open)}
+    >
       <summary className="cursor-pointer select-none px-4 py-3 min-h-11 flex items-center gap-2 text-sm font-bold text-cyan-300 hover:bg-slate-800/60 transition-colors">
         <span>🛰️</span>
         <span>Mây LÚC NÀY — vệ tinh Himawari-9 hồng ngoại (10 phút/ảnh)</span>
@@ -82,7 +96,9 @@ export const SatellitePanel: React.FC = () => {
           mây thấp/sương màu <b>xám nhạt</b>, mây dông cao màu <b>trắng sáng</b>.
           Nguồn: JMA (Cơ quan Khí tượng Nhật Bản), trễ ~20-45 phút.
         </p>
-        {allBroken ? (
+        {!current ? (
+          <p className="text-xs text-cyan-300">⏳ Đang tải khung ảnh vệ tinh...</p>
+        ) : allBroken ? (
           <p className="text-xs text-rose-300 bg-rose-950/50 border border-rose-700/50 rounded-xl p-3">
             Không tải được ảnh vệ tinh lúc này (mạng hoặc máy chủ JMA) — app không hiển thị ảnh thay thế.
           </p>

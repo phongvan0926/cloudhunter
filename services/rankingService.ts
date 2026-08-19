@@ -6,13 +6,19 @@
  * Trung thực dữ liệu:
  *  - Đây là XẾP HẠNG NHANH: 3 mô hình (GFS+ICON+UKMO), điểm dữ liệu tại tọa độ điểm săn mây
  *    với &elevation= ĐÁY THUNG LŨNG (nơi biển mây hình thành) — đúng vật lý của engine.
- *  - Đáy thung lũng ước tính từ DEM thật (min 5 điểm mẫu ~3km quanh đỉnh), cache
- *    localStorage vĩnh viễn (địa hình không đổi).
+ *  - Đáy thung lũng: ưu tiên profile VALLEY đã xác thực (join theo TOKEN chuẩn hóa tên —
+ *    so tên nguyên văn từng lệch 2 điểm), rồi cache chung cloudhunter_valley_dem_v2
+ *    (CÓ vân tay tọa độ, dùng chung với phân tích đầy đủ), cuối cùng mới đo DEM 5 điểm.
+ *  - KẾT QUẢ XẾP HẠNG cache 30 phút theo ngày đích — đóng/mở panel không nã lại API
+ *    (1 lần xếp hạng ≈ 600+ call quy đổi, từng vượt hạn mức phút của Open-Meteo).
  *  - Điểm nào thiếu dữ liệu thì bị loại khỏi bảng, không chèn số mặc định.
  */
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { NORTHWEST_PEAKS } from '../constants';
-import { addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS } from './weatherService';
+import {
+  addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS,
+  getCachedValley, setCachedValley,
+} from './weatherService';
 import { scoreOneModel, combineModels } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
@@ -21,7 +27,6 @@ const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_se
 // 7 tầng → vật lý xếp hạng giống hệt bản đầy đủ, chỉ còn khác 3 vs 6 model.
 // (Đo 19/8: bộ 16 biến cũ lệch điểm max 11/100 vì thiếu profile — đã nâng lên 41 biến.)
 const RANK_VARS = HOURLY_VARS;
-const VALLEY_CACHE_KEY = 'cloudhunter_valley_dem_v1';
 
 export interface SpotRank {
   key: string;
@@ -33,7 +38,7 @@ export interface SpotRank {
   zone: string;
   score: number;
   status: StatusCode;
-  agreement: number;    // % 2 mô hình đồng thuận trạng thái
+  agreement: number;    // % các mô hình xếp hạng đồng thuận trạng thái
 }
 
 async function fetchJson(url: string): Promise<any> {
@@ -44,30 +49,47 @@ async function fetchJson(url: string): Promise<any> {
   return data;
 }
 
+/** Chuẩn hóa tên thành tập token (bỏ dấu, bỏ ngoặc) — join preset bền hơn so nguyên văn. */
+function nameTokens(name: string): string[] {
+  return name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase()
+    .replace(/[()]/g, ' ').split(/[^a-z0-9]+/).filter(t => t.length > 1).sort();
+}
+function sameSpotName(a: string, b: string): boolean {
+  const ta = nameTokens(a), tb = nameTokens(b);
+  if (ta.join('|') === tb.join('|')) return true;
+  // một bên là tập con của bên kia (vd "Hang Kia - Pà Cò" ⊂ "Hang Kia - Pà Cò (Thung Mài)")
+  const [small, big] = ta.length <= tb.length ? [ta, tb] : [tb, ta];
+  return small.length >= 2 && small.every(t => big.includes(t));
+}
+
 /**
- * Đáy thung lũng DEM cho TOÀN BỘ thư viện — 5 điểm mẫu/điểm (~3km), lấy min,
- * cache localStorage vĩnh viễn (chỉ đo lại khi thư viện có điểm mới).
+ * Đáy thung lũng cho TOÀN BỘ thư viện: preset VALLEY xác thực → cache chung v2 (vân tay
+ * tọa độ) → DEM 5 điểm mẫu (~3km, lấy min) chỉ cho điểm còn thiếu.
  */
 export async function valleyElevationsForAll(
   onProgress?: (msg: string) => void
 ): Promise<Record<string, number>> {
-  let cache: Record<string, number> = {};
-  try { cache = JSON.parse(localStorage.getItem(VALLEY_CACHE_KEY) || '{}'); } catch { /* cache hỏng → đo lại */ }
-  let missing = Object.entries(MOUNTAIN_DB).filter(([k]) => typeof cache[k] !== 'number');
-  // Ưu tiên mặt cắt ĐÃ XÁC THỰC: điểm nào có preset với điểm VALLEY thì dùng luôn
-  // (cùng nguồn với phân tích đầy đủ), chỉ điểm còn lại mới đo DEM.
-  for (const [key, mt] of missing) {
-    const preset = NORTHWEST_PEAKS.find(p => p.name === mt.name && p.elevation_profile?.length);
+  const out: Record<string, number> = {};
+  const missing: [string, (typeof MOUNTAIN_DB)[string]][] = [];
+  for (const [key, mt] of Object.entries(MOUNTAIN_DB)) {
+    const cached = getCachedValley(key, mt.lat, mt.lon);
+    if (cached !== null) { out[key] = cached; continue; }
+    const preset = NORTHWEST_PEAKS.find(p => p.elevation_profile?.length && sameSpotName(p.name, mt.name));
     const valleys = (preset?.elevation_profile || []).filter(p => p.type === 'VALLEY').map(p => p.altitude);
-    if (valleys.length > 0) cache[key] = Math.max(80, Math.min(...valleys));
+    if (valleys.length > 0) {
+      out[key] = Math.max(80, Math.min(...valleys));
+      setCachedValley(key, mt.lat, mt.lon, out[key], 'PROFILE');
+      continue;
+    }
+    missing.push([key, mt]);
   }
-  missing = missing.filter(([k]) => typeof cache[k] !== 'number');
   if (missing.length > 0) {
     onProgress?.(`Đo đáy thung lũng ${missing.length} điểm từ DEM (chỉ lần đầu)...`);
     const d = 0.03; // ≈ 3.3km
     const coords = missing.flatMap(([key, mt]) => ([
       [mt.lat, mt.lon], [mt.lat + d, mt.lon], [mt.lat - d, mt.lon], [mt.lat, mt.lon + d], [mt.lat, mt.lon - d],
     ] as [number, number][]).map(([lat, lon]) => ({ key, lat, lon })));
+    const mins: Record<string, number> = {};
     for (let i = 0; i < coords.length; i += 100) {
       const chunk = coords.slice(i, i + 100);
       const url = `https://api.open-meteo.com/v1/elevation?latitude=${chunk.map(c => c.lat.toFixed(4)).join(',')}&longitude=${chunk.map(c => c.lon.toFixed(4)).join(',')}`;
@@ -76,24 +98,32 @@ export async function valleyElevationsForAll(
       chunk.forEach((c, j) => {
         const el = els[j];
         if (typeof el === 'number' && !Number.isNaN(el)) {
-          const cur = cache[c.key];
-          cache[c.key] = typeof cur === 'number' ? Math.min(cur, Math.round(el)) : Math.round(el);
+          mins[c.key] = typeof mins[c.key] === 'number' ? Math.min(mins[c.key], Math.round(el)) : Math.round(el);
         }
       });
     }
-    for (const [k] of missing) {
-      if (typeof cache[k] === 'number') cache[k] = Math.max(80, cache[k]);
+    for (const [key, mt] of missing) {
+      if (typeof mins[key] === 'number') {
+        out[key] = Math.max(80, mins[key]);
+        setCachedValley(key, mt.lat, mt.lon, out[key], 'DEM5');
+      }
     }
-    try { localStorage.setItem(VALLEY_CACHE_KEY, JSON.stringify(cache)); } catch { /* private mode */ }
   }
-  return cache;
+  return out;
 }
 
 /** Xếp hạng toàn thư viện cho rạng sáng targetDate (YYYY-MM-DD). */
+// Cache kết quả xếp hạng 30 phút — model toàn cầu cập nhật 6h/lần, đóng/mở panel không nã lại API
+let RANK_CACHE: { targetDate: string; ts: number; results: SpotRank[] } | null = null;
+const RANK_CACHE_TTL_MS = 30 * 60 * 1000;
+
 export async function rankSpotsForDawn(
   targetDate: string,
   onProgress?: (msg: string) => void
 ): Promise<SpotRank[]> {
+  if (RANK_CACHE && RANK_CACHE.targetDate === targetDate && Date.now() - RANK_CACHE.ts < RANK_CACHE_TTL_MS) {
+    return RANK_CACHE.results;
+  }
   const spots = Object.entries(MOUNTAIN_DB);
   const valleys = await valleyElevationsForAll(onProgress);
   const usable = spots.filter(([k]) => typeof valleys[k] === 'number');
@@ -132,5 +162,6 @@ export async function rankSpotsForDawn(
   });
 
   results.sort((a, b) => b.score - a.score);
+  RANK_CACHE = { targetDate, ts: Date.now(), results };
   return results;
 }

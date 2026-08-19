@@ -18,7 +18,10 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.0.0';
+export const ENGINE_VERSION = 'engine-2.1.0';
+
+/** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
+export const WORTH_GOING_SCORE = 60;
 
 // Độ cao XẤP XỈ các mực — CHỈ là fallback khi model không trả geopotential_height thật.
 // engine-2.0: khi DayModelData.levels có mặt, mọi phép tính dùng độ cao THẬT từng ngày.
@@ -62,11 +65,14 @@ export function computeInversion(m: DayModelData, valleyElev: number): {
 } {
   const expectAt = (h: number) => m.t_valley_dawn - (LAPSE_RATE * (h - valleyElev)) / 1000;
   const samples: { h: number; a: number }[] = [];
-  // Chỉ quét tầng THẤP (≤2600m): nắp nghịch nhiệt nhốt biển mây nằm trong ~2km đầu;
-  // ấm ở 700hPa (~3100m) là ấm tầng cao, KHÔNG được tính là nghịch nhiệt thung lũng
-  // (nếu tính sẽ tái phạm lỗi hệ thống "đỉnh cao nào cũng báo Strong" ở dạng khác).
+  // Chỉ quét tầng THẤP: nắp nghịch nhiệt nhốt biển mây nằm trong ~1-2km trên đáy thung lũng;
+  // ấm tầng cao hơn nữa KHÔNG được tính (tái phạm lỗi "đỉnh cao nào cũng Strong").
+  // Trần TƯƠNG ĐỐI max(2600, valley+1300): thung lũng cao (Trạm Tôn 1900m của Fansipan)
+  // từng rơi vào khe hở (1980-2600m không có mực nào) → không bao giờ phát hiện được
+  // nghịch nhiệt và bị trừ điểm oan vĩnh viễn — lỗi audit vòng 2, có test khóa.
+  const ceiling = Math.max(2600, valleyElev + 1300);
   const profile = (m.levels ?? []).filter(
-    l => Number.isFinite(l.t) && l.h > valleyElev + 80 && l.h <= 2600
+    l => Number.isFinite(l.t) && l.h > valleyElev + 80 && l.h <= ceiling
   );
   if (profile.length > 0) {
     for (const l of profile) samples.push({ h: l.h, a: l.t - expectAt(l.h) });
@@ -76,6 +82,10 @@ export function computeInversion(m: DayModelData, valleyElev: number): {
     }
     if (Number.isFinite(m.t850) && LEVEL_HEIGHTS.p850 > valleyElev + 80) {
       samples.push({ h: LEVEL_HEIGHTS.p850, a: m.t850 - expectAt(LEVEL_HEIGHTS.p850) });
+    }
+    // Thung lũng cao (>1500m): 925/850hPa nằm dưới/sát đáy → phải xét cả 700hPa
+    if (valleyElev > 1500 && Number.isFinite(m.t700) && LEVEL_HEIGHTS.p700 <= ceiling) {
+      samples.push({ h: LEVEL_HEIGHTS.p700, a: m.t700 - expectAt(LEVEL_HEIGHTS.p700) });
     }
   }
   if (samples.length === 0) return { strength: 'None', anomaly: 0, height: null };
@@ -290,7 +300,9 @@ export function scoreOneModel(
   const wind = assessWind(m.wind850_dawn_max, ctx.zone);
   const top = estimateCloudTop(m, ctx.valleyElevation);
   const spread = m.t_valley_dawn - m.td_valley_dawn;
-  const seaRH = ctx.valleyElevation < 900 ? m.rh925 : m.rh850;
+  // Ẩm "lớp biển mây" phải là mực NGAY TRÊN đáy thung lũng — thung lũng 1800-1900m mà
+  // dùng rh850 (~1500m) là đo không khí DƯỚI LÒNG ĐẤT (lỗi audit vòng 2)
+  const seaRH = ctx.valleyElevation < 900 ? m.rh925 : ctx.valleyElevation < 1700 ? m.rh850 : m.rh700;
 
   let score = 0;
   const add = (delta: number, why: string) => { score += delta; reasons.push(`${delta >= 0 ? '+' : ''}${Math.round(delta)} · ${why}`); };
@@ -331,6 +343,13 @@ export function scoreOneModel(
   else if (m.precip_dawn > 0.3) add(-8, `Mưa phùn sáng sớm ${m.precip_dawn}mm`);
   if (m.precip_night > 8) add(-15, `Mưa đêm lớn ${m.precip_night}mm`);
 
+  // Bất ổn định đối lưu THẬT từ mô hình (lifted index, GFS) — thay vì chỉ đoán qua "mùa":
+  // LI càng âm càng dễ dông phá biển mây/nguy hiểm buổi trưa-chiều
+  const li = m.lifted_index;
+  if (li !== undefined && Number.isFinite(li) && li <= -4) {
+    add(-6, `Bất ổn định đối lưu mạnh (Lifted Index ${li}) — nguy cơ dông phát triển`);
+  }
+
   const season = seasonAdjust(dateStr, ctx.lat);
   if (season.delta !== 0) add(season.delta, `Hiệu chỉnh mùa: ${season.label}`);
 
@@ -359,6 +378,13 @@ const median = (xs: number[]) => {
   return s.length % 2 ? s[mid] : Math.round((s[mid - 1] + s[mid]) / 2);
 };
 
+// Hòa phiếu giữa các trạng thái → trạng thái AN TOÀN HƠN thắng (RAIN > DISSIPATING > FOG...)
+// — trước đây hòa 3-3 thì model đứng đầu danh sách (ECMWF) thắng ngầm, kể cả RAIN vs STATIC.
+const STATUS_SEVERITY: Record<StatusCode, number> = {
+  RAIN: 8, DISSIPATING: 7, FOG: 6, ROLLING: 5, FLUCTUATING: 4,
+  CLEAR: 3, FLOWING: 2, STATIC: 1, UNKNOWN: 0,
+};
+
 export function combineModels(perModel: ModelDayScore[]): {
   score: number; status: StatusCode; cloudTop: number | null;
   agreement: number; scoreSpread: number; representative: ModelDayScore;
@@ -369,7 +395,11 @@ export function combineModels(perModel: ModelDayScore[]): {
   for (const p of perModel) counts.set(p.status, (counts.get(p.status) || 0) + 1);
   let status: StatusCode = perModel[0].status;
   let best = 0;
-  for (const [st, c] of counts) if (c > best) { best = c; status = st; }
+  for (const [st, c] of counts) {
+    if (c > best || (c === best && STATUS_SEVERITY[st] > STATUS_SEVERITY[status])) {
+      best = c; status = st;
+    }
+  }
   const agreement = Math.round((best / perModel.length) * 100);
   const scoreSpread = Math.max(...scores) - Math.min(...scores);
   // Đại diện: mô hình cùng trạng thái đa số, điểm gần median nhất
@@ -465,6 +495,10 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
   // Mực đóng băng thật từ mô hình (GFS/ICON) — cảnh báo băng giá khi vị trí đứng ở trên nó
   if (rep.freezing_level !== undefined && Number.isFinite(rep.freezing_level) && ctx.observerAlt >= rep.freezing_level) {
     warnings.push(`Vị trí đứng ${ctx.observerAlt}m ở TRÊN mực đóng băng (~${Math.round(rep.freezing_level)}m) — nguy cơ băng giá, mặt đá/ván gỗ trơn trượt.`);
+  }
+  // Lifted index đo bất ổn định đối lưu THẬT — cảnh báo dông thay vì chỉ đoán theo mùa
+  if (rep.lifted_index !== undefined && Number.isFinite(rep.lifted_index) && rep.lifted_index <= -2) {
+    warnings.push(`⚡ Khí quyển bất ổn định (Lifted Index ${rep.lifted_index}) — nguy cơ dông từ trưa, nên xuống núi/về lán trước 13:00.`);
   }
 
   const reliability_note =
@@ -582,7 +616,7 @@ export function computeTripSummary(outputs: EngineDayOutput[]): {
 } {
   const withData = outputs.filter(o => o.forecast.data_quality !== 'NO_DATA');
   const bestDays = withData
-    .filter(o => o.forecast.score >= 60)
+    .filter(o => o.forecast.score >= WORTH_GOING_SCORE)
     .sort((a, b) => b.forecast.score - a.forecast.score)
     .slice(0, 3)
     .map(o => o.forecast.date);

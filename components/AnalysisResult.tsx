@@ -5,6 +5,7 @@ import { SatellitePanel } from './SatellitePanel';
 import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
 import { moonInfoForDawn } from '../services/astroService';
+import { WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
 
 interface AnalysisResultProps {
   result: CloudAnalysis;
@@ -388,7 +389,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
   };
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    // neo giữa trưa giờ VN — new Date('YYYY-MM-DD') là 0h UTC, lệch thứ ở múi giờ tây UTC
+    const date = new Date(dateStr + 'T12:00:00+07:00');
     return date.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'numeric' });
   };
 
@@ -489,7 +491,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
   );
 
   const filteredForecasts = filterGoldenOnly
-    ? sortedForecasts.filter(day => day.score >= 65 || bookmarkedDates.includes(day.date))
+    ? sortedForecasts.filter(day => day.score >= WORTH_GOING_SCORE || bookmarkedDates.includes(day.date))
     : sortedForecasts;
   
   const sources = result.sources || [];
@@ -498,7 +500,20 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-fade-in">
-      
+
+      {/* Trung thực dữ liệu: offline/mạng chậm → service worker có thể trả dữ liệu cũ,
+          phải NÓI RÕ thay vì đeo badge "tin cậy" như dữ liệu mới (audit vòng 2) */}
+      {typeof result.dataAgeMinutes === 'number' && result.dataAgeMinutes >= 90 && (
+        <div className="bg-amber-950/60 border border-amber-500/50 rounded-2xl p-4 text-amber-200 text-sm leading-relaxed flex items-start gap-2">
+          <span>📴</span>
+          <span>
+            Dữ liệu khí tượng của kết quả này được tải cách đây
+            <b> ~{Math.round(result.dataAgeMinutes / 60)} giờ</b> (offline hoặc mạng chậm — app dùng bản
+            đã lưu). Mô hình toàn cầu cập nhật 6h/lần: hãy tải lại khi có mạng trước khi quyết định đi.
+          </span>
+        </div>
+      )}
+
       {/* Top Section */}
       <div id="ch-share-card" className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
@@ -654,7 +669,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
               : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
           }`}
         >
-          <span>⭐ Chỉ xem Ngày Đáng Đi (Score ≥ 65)</span>
+          <span>⭐ Chỉ xem Ngày Đáng Đi (Score ≥ {WORTH_GOING_SCORE})</span>
         </button>
       </div>
 
@@ -662,7 +677,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       {filteredForecasts.length === 0 && (
         <div className="bg-slate-900/70 border border-slate-700 rounded-2xl p-8 text-center space-y-3">
           <p className="text-slate-300 text-sm leading-relaxed">
-            😕 Không có ngày nào đạt ≥65 điểm trong khoảng đã tra — điều kiện biển mây kém
+            😕 Không có ngày nào đạt ≥{WORTH_GOING_SCORE} điểm trong khoảng đã tra — điều kiện biển mây kém
             (thường gặp mùa mưa). Xem tất cả các ngày để biết vì sao điểm thấp.
           </p>
           <button
@@ -846,19 +861,27 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                       <span className="font-mono font-bold">{day.sunrise_color_potential}/100</span>
                     </div>
                   )}
-                  {day.ensemble && day.status_code !== 'UNKNOWN' && (
-                    <div className={`rounded-lg p-2.5 text-[11px] border leading-relaxed ${
-                      day.ensemble.probCloudSea >= 70
+                  {day.ensemble && day.status_code !== 'UNKNOWN' && (() => {
+                    // Màu chip theo PHÁN QUYẾT của ngày: ngày mưa/0 điểm mà chip xanh "100% có mây"
+                    // là tín hiệu mâu thuẫn (mây có thật nhưng bạn sẽ ướt trong nó) — audit vòng 2
+                    const badDay = day.status_code === 'RAIN' || day.ensemble!.probRain >= 50;
+                    const cls = badDay
+                      ? 'bg-slate-800/40 border-slate-700 text-slate-400'
+                      : day.ensemble!.probCloudSea >= 70
                         ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
-                        : day.ensemble.probCloudSea >= 40
+                        : day.ensemble!.probCloudSea >= 40
                           ? 'bg-amber-950/30 border-amber-600/30 text-amber-200'
-                          : 'bg-slate-800/40 border-slate-700 text-slate-400'
-                    }`}>
-                      🎲 <b>{day.ensemble.probCloudSea}%</b> trong {day.ensemble.members} kịch bản tổ hợp ECMWF
-                      có mây thấp ≥40% lúc bình minh (dải P10–P90: {day.ensemble.p10}–{day.ensemble.p90}%)
-                      {day.ensemble.probRain >= 30 && <> · ⚠️ {day.ensemble.probRain}% kịch bản có mưa sáng sớm</>}
-                    </div>
-                  )}
+                          : 'bg-slate-800/40 border-slate-700 text-slate-400';
+                    return (
+                      <div className={`rounded-lg p-2.5 text-[11px] border leading-relaxed ${cls}`}>
+                        🎲 <b>{day.ensemble!.probCloudSea}%</b> trong {day.ensemble!.members} kịch bản tổ hợp ECMWF
+                        có mây thấp ≥40% lúc bình minh (dải P10–P90: {day.ensemble!.p10}–{day.ensemble!.p90}%)
+                        {badDay
+                          ? <> — <b>nhưng {day.ensemble!.probRain}% kịch bản kèm mưa: mây sẽ có mà không săn được.</b></>
+                          : day.ensemble!.probRain >= 30 && <> · ⚠️ {day.ensemble!.probRain}% kịch bản có mưa sáng sớm</>}
+                      </div>
+                    );
+                  })()}
                   {moon && (
                     <div className={`rounded-lg p-2.5 text-[11px] border flex flex-wrap items-center justify-between gap-2 ${
                       moon.milkyWayWindow || (moon.moonUpAtDawn && moon.illumination >= 60)
@@ -906,7 +929,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                   )}
 
                   {/* Sun & Golden Hour Info Banner */}
-                  {day.sun_times && day.status_code !== 'UNKNOWN' && (
+                  {day.sun_times && day.status_code !== 'UNKNOWN' && day.status_code !== 'RAIN' && (
                     <div className="bg-gradient-to-r from-amber-950/40 to-orange-950/40 rounded-xl p-3 border border-amber-500/30 flex flex-wrap justify-between items-center text-xs text-amber-200 gap-2">
                       <div className="flex items-center gap-3">
                         <span>🌄 <b>Bình minh:</b> {day.sun_times.sunrise}</span>

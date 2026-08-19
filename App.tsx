@@ -5,6 +5,7 @@ import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
 import { VerificationPanel } from './components/VerificationPanel';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { listRuns, loadRun, saveRun } from './services/historyService';
 import { vnTodayStr, addDaysStr } from './services/weatherService';
@@ -70,7 +71,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleConfirmLocation = async () => {
+  const handleConfirmLocation = async (isRetry = false) => {
     if (!pendingInput || !locationAnalysis) return;
     setIsLoading(true);
     setError(null);
@@ -83,10 +84,21 @@ const App: React.FC = () => {
       setLocationAnalysis(null); // Hide confirmation after success
     } catch (err: any) {
       const msg = err?.message || String(err);
-      if (msg.includes('403') || msg.includes('leaked') || msg.includes('Xác thực thất bại')) {
+      const lower = msg.toLowerCase();
+      if (lower.includes('429') && !isRetry) {
+        // Open-Meteo giới hạn tần suất — tự thử lại 1 lần thay vì chết với lỗi thô (audit vòng 2)
+        setError('⏳ Open-Meteo đang giới hạn tần suất — app tự thử lại sau 30 giây, bạn không cần làm gì...');
+        setErrorNeedsKey(false);
+        setTimeout(() => { handleConfirmLocation(true); }, 30000);
+        return; // giữ isLoading? không — nhả nút để user có thể tự bấm sớm hơn
+      }
+      if (msg.includes('403') && !lower.includes('open-meteo')) {
         setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
         setErrorNeedsKey(true);
-      } else if (msg.includes('Open-Meteo') || msg.includes('Elevation')) {
+      } else if (lower.includes('leaked') || msg.includes('Xác thực thất bại')) {
+        setError("⚠️ API Key Gemini không hợp lệ hoặc đã bị vô hiệu hóa. Nhấp nút bên dưới để nhập API Key cá nhân.");
+        setErrorNeedsKey(true);
+      } else if (lower.includes('open-meteo') || lower.includes('elevation') || lower.includes('http')) {
         setError(`Không lấy được dữ liệu khí tượng (${msg}). Kiểm tra kết nối mạng rồi thử lại — app không hiển thị số liệu bịa thay thế.`);
         setErrorNeedsKey(false);
       } else {
@@ -143,7 +155,7 @@ const App: React.FC = () => {
               <LocationConfirm 
                 analysis={locationAnalysis} 
                 inputData={pendingInput} 
-                onConfirm={handleConfirmLocation} 
+                onConfirm={() => handleConfirmLocation()}
                 onCancel={handleCancelLocation} 
                 isLoading={isLoading} 
               />
@@ -194,7 +206,7 @@ const App: React.FC = () => {
                             className="px-3 py-1.5 text-xs text-slate-300 hover:text-cyan-300 hover:bg-slate-800 transition-all"
                             title={`Dự báo lưu lúc ${new Date(h.savedAt).toLocaleString('vi-VN')}`}
                           >
-                            {h.locationName} · {h.dateRange}
+                            {h.locationName} · {h.dateRange.replace(/(\d{4})-(\d{2})-(\d{2})/g, (_, _y, m, d) => `${+d}/${+m}`)}
                           </button>
                           <button
                             onClick={() => setVerifyTarget(loadRun(h.id))}
@@ -215,9 +227,11 @@ const App: React.FC = () => {
               </div>
             )
           ) : (
-            <React.Suspense fallback={<p className="text-center text-cyan-300 text-sm py-10">Đang mở kết quả...</p>}>
-              <AnalysisResult result={analysis} onReset={handleReset} />
-            </React.Suspense>
+            <ErrorBoundary onReset={handleReset}>
+              <React.Suspense fallback={<p className="text-center text-cyan-300 text-sm py-10">Đang mở kết quả...</p>}>
+                <AnalysisResult result={analysis} onReset={handleReset} />
+              </React.Suspense>
+            </ErrorBoundary>
           )}
         </main>
         
@@ -229,7 +243,9 @@ const App: React.FC = () => {
       <ApiKeyModal
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}
-        onKeyUpdated={() => window.location.reload()}
+        // KHÔNG reload trang (từng nuốt mất thông báo thành công + kết quả đang xem):
+        // key được đọc lại ở MỖI lần gọi AI; chỉ cần báo ModelSelector nạp lại danh sách model
+        onKeyUpdated={() => window.dispatchEvent(new Event('ch-api-key-updated'))}
       />
     </div>
   );

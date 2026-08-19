@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-58_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-67_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-6_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -35,7 +35,8 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 - 🔍 **"Vì sao điểm này?"**: mỗi ngày liệt kê từng yếu tố cộng/trừ điểm (mây thấp bình minh,
   nghịch nhiệt, ẩm, gió theo vùng địa hình, mây cao che đêm, mưa, mùa) — minh bạch 100%.
 - ⛔ **Trung thực dữ liệu**: ngày ngoài phạm vi dự báo hiện UNKNOWN + "ngoài phạm vi dữ
-  liệu" thay vì số bịa; ngày xa (4–15 ngày) dán nhãn "chỉ là xu hướng".
+  liệu" thay vì số bịa; ngày xa (4–15 ngày) dán nhãn "chỉ là xu hướng"; **dữ liệu tải từ
+  cache offline cũ hơn 1.5h hiện banner "tải cách đây ~X giờ"** thay vì đeo badge tin cậy.
 - 📸 **Chỉ số "cháy mây" bình minh** riêng cho nhiếp ảnh (một ít mây cao 15–55% = trời đẹp
   nhất để hứng màu).
 - 📍 **Phân giải địa danh nhiều tầng có nhãn nguồn**: thư viện **58 điểm đã xác thực phủ
@@ -100,7 +101,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 58 golden tests: engine + mùa 3 miền + ensemble + đối chiếu ERA5 + trăng + fallback + múi giờ + alias
+npm test         # 67 golden tests: engine + mùa 3 miền + ensemble + ERA5 + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 ```
 

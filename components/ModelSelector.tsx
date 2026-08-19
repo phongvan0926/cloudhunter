@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { discoverModels, DiscoveredModel, getStoredModel, setStoredModel } from '../services/modelDiscoveryService';
 
 interface ModelSelectorProps {
-  selectedModel: string;
+  selectedModel?: string; // undefined lúc chưa discover xong — select có fallback '' để luôn controlled
   onSelectModel: (modelId: string) => void;
   compact?: boolean;
 }
@@ -48,6 +48,10 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
   useEffect(() => {
     fetchModels();
+    // Đổi/lưu API key trong modal → nạp lại danh sách model, KHÔNG reload trang
+    const onKeyUpdated = () => { fetchModels(); };
+    window.addEventListener('ch-api-key-updated', onKeyUpdated);
+    return () => window.removeEventListener('ch-api-key-updated', onKeyUpdated);
   }, []);
 
   const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,7 +76,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
           onClick={fetchModels}
           disabled={loading}
           title="Tải lại danh sách model mới nhất từ nhà cung cấp"
-          className="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-600 flex items-center gap-1.5 transition-all font-sans font-medium disabled:opacity-50"
+          className="text-[11px] min-h-11 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 rounded-lg border border-slate-600 flex items-center gap-1.5 transition-all font-sans font-medium disabled:opacity-50"
         >
           <span className={loading ? 'animate-spin' : ''}>🔄</span>
           <span>Cập nhật</span>
@@ -87,7 +91,8 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
       <div className="relative">
         <select
-          value={selectedModel}
+          value={selectedModel ?? ''}
+          aria-label="Chọn model AI viết lời bình"
           onChange={handleModelChange}
           disabled={loading}
           className="w-full bg-slate-950 text-cyan-300 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm font-sans font-semibold focus:outline-none focus:border-cyan-500 transition-all appearance-none cursor-pointer pr-9 shadow-inner"
@@ -105,7 +110,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
       {activeModelObj && (
         <div className="mt-2.5 text-xs text-slate-400 flex justify-between items-center font-sans">
-          <span className="truncate max-w-[300px] italic font-light">{activeModelObj.description}</span>
+          <span className="truncate min-w-0 flex-1 italic font-light">{activeModelObj.description}</span>
           <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold border flex items-center gap-1 ${
             activeModelObj.tier === 'flash' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-700/60' :
             activeModelObj.tier === 'pro' ? 'bg-purple-950/60 text-purple-300 border-purple-700/60' :
