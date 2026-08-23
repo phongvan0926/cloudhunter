@@ -1,0 +1,190 @@
+[
+  {
+    "key": "FANSIPAN",
+    "name": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-08-21",
+    "verdict": "FOGGED_IN",
+    "observerAlt": 3143,
+    "valleyElevation": 1900,
+    "cloudTopMedian_m": 13992,
+    "frames": [
+      {
+        "vn": "04:00",
+        "top_m": 15517,
+        "emiss": 0.17
+      },
+      {
+        "vn": "04:30",
+        "top_m": 15111,
+        "emiss": 0.2
+      },
+      {
+        "vn": "05:00",
+        "top_m": 14000,
+        "emiss": 0.23
+      },
+      {
+        "vn": "05:30",
+        "top_m": 13288,
+        "emiss": 0.32
+      },
+      {
+        "vn": "06:00",
+        "top_m": 13992,
+        "emiss": 0.27
+      },
+      {
+        "vn": "06:30",
+        "top_m": 13479,
+        "emiss": 0.28
+      },
+      {
+        "vn": "07:00",
+        "top_m": 13749,
+        "emiss": 0.2
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LAO_THAN",
+    "name": "Lảo Thẩn (Y Tý)",
+    "date": "2026-08-21",
+    "verdict": "FOGGED_IN",
+    "observerAlt": 2860,
+    "valleyElevation": 1800,
+    "cloudTopMedian_m": 13991,
+    "frames": [
+      {
+        "vn": "04:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "04:30",
+        "top_m": 16080,
+        "emiss": 0.04
+      },
+      {
+        "vn": "05:00",
+        "top_m": 2759,
+        "emiss": 0.03
+      },
+      {
+        "vn": "05:30",
+        "top_m": 14274,
+        "emiss": 0.07
+      },
+      {
+        "vn": "06:00",
+        "top_m": 13991,
+        "emiss": 0.09
+      },
+      {
+        "vn": "06:30",
+        "top_m": 16854,
+        "emiss": 0.09
+      },
+      {
+        "vn": "07:00",
+        "top_m": 10907,
+        "emiss": 0.08
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_XUA_SON_LA",
+    "name": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-08-21",
+    "verdict": "BLOCKED_HIGH",
+    "observerAlt": 1600,
+    "valleyElevation": 700,
+    "cloudTopMedian_m": 14027,
+    "frames": [
+      {
+        "vn": "04:00",
+        "top_m": 15019,
+        "emiss": 0.67
+      },
+      {
+        "vn": "04:30",
+        "top_m": 16367,
+        "emiss": 0.49
+      },
+      {
+        "vn": "05:00",
+        "top_m": 14538,
+        "emiss": 0.87
+      },
+      {
+        "vn": "05:30",
+        "top_m": 14027,
+        "emiss": 0.88
+      },
+      {
+        "vn": "06:00",
+        "top_m": 13541,
+        "emiss": 0.83
+      },
+      {
+        "vn": "06:30",
+        "top_m": 12943,
+        "emiss": 0.63
+      },
+      {
+        "vn": "07:00",
+        "top_m": 13562,
+        "emiss": 0.59
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHINH_HO",
+    "name": "Phình Hồ (Trạm Tấu)",
+    "date": "2026-08-21",
+    "verdict": "BLOCKED_HIGH",
+    "observerAlt": 1080,
+    "valleyElevation": 180,
+    "cloudTopMedian_m": 14049,
+    "frames": [
+      {
+        "vn": "04:00",
+        "top_m": 14680,
+        "emiss": 0.55
+      },
+      {
+        "vn": "04:30",
+        "top_m": 15110,
+        "emiss": 0.57
+      },
+      {
+        "vn": "05:00",
+        "top_m": 14626,
+        "emiss": 0.54
+      },
+      {
+        "vn": "05:30",
+        "top_m": 13995,
+        "emiss": 0.63
+      },
+      {
+        "vn": "06:00",
+        "top_m": 14049,
+        "emiss": 0.63
+      },
+      {
+        "vn": "06:30",
+        "top_m": 13923,
+        "emiss": 0.52
+      },
+      {
+        "vn": "07:00",
+        "top_m": 13424,
+        "emiss": 0.77
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  }
+]

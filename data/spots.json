@@ -1,0 +1,552 @@
+[
+  {
+    "key": "TA_XUA_SON_LA",
+    "name": "Tà Xùa (Sống lưng Khủng Long)",
+    "lat": 21.2796,
+    "lon": 104.4326,
+    "elevation": 1600,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 700,
+    "needsReview": null
+  },
+  {
+    "key": "PHA_LUONG",
+    "name": "Đỉnh Pha Luông",
+    "lat": 20.6727,
+    "lon": 104.6346,
+    "elevation": 1880,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1400,
+    "needsReview": null
+  },
+  {
+    "key": "HANG_KIA_PA_CO",
+    "name": "Hang Kia - Pà Cò (Thung Mài)",
+    "lat": 20.741,
+    "lon": 104.931,
+    "elevation": 985,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 800,
+    "needsReview": null
+  },
+  {
+    "key": "XIM_VANG",
+    "name": "Xím Vàng",
+    "lat": 21.3559,
+    "lon": 104.3204,
+    "elevation": 1250,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1000,
+    "needsReview": null
+  },
+  {
+    "key": "PU_NHI_FARM",
+    "name": "Pu Nhi Farm",
+    "lat": 21.173,
+    "lon": 104.316,
+    "elevation": 470,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 300,
+    "needsReview": null
+  },
+  {
+    "key": "FANSIPAN",
+    "name": "Fansipan (Nóc nhà Đông Dương)",
+    "lat": 22.3033,
+    "lon": 103.775,
+    "elevation": 3143,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 1900,
+    "needsReview": null
+  },
+  {
+    "key": "LAO_THAN",
+    "name": "Lảo Thẩn (Y Tý)",
+    "lat": 22.61,
+    "lon": 103.685,
+    "elevation": 2860,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1800,
+    "needsReview": null
+  },
+  {
+    "key": "KY_QUAN_SAN",
+    "name": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "lat": 22.505,
+    "lon": 103.585,
+    "elevation": 3046,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 900,
+    "needsReview": null
+  },
+  {
+    "key": "NHIU_CO_SAN",
+    "name": "Nhìu Cồ San (Sừng Trâu)",
+    "lat": 22.584,
+    "lon": 103.5833,
+    "elevation": 2965,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1000,
+    "needsReview": null
+  },
+  {
+    "key": "NGU_CHI_SON",
+    "name": "Ngũ Chỉ Sơn",
+    "lat": 22.4097,
+    "lon": 103.7426,
+    "elevation": 2858,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 1200,
+    "needsReview": null
+  },
+  {
+    "key": "SAPA_HAM_RONG",
+    "name": "Thị trấn Sapa (Hàm Rồng)",
+    "lat": 22.3364,
+    "lon": 103.8438,
+    "elevation": 1600,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1200,
+    "needsReview": null
+  },
+  {
+    "key": "NGAI_THAU_THUONG",
+    "name": "Ngải Thầu Thượng (Y Tý)",
+    "lat": 22.67,
+    "lon": 103.625,
+    "elevation": 2190,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1500,
+    "needsReview": null
+  },
+  {
+    "key": "CU_NHU_SAN",
+    "name": "Đỉnh Cú Nhù San",
+    "lat": 22.5954,
+    "lon": 103.6204,
+    "elevation": 2662,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1200,
+    "needsReview": null
+  },
+  {
+    "key": "NAM_KANG_HO_TAO",
+    "name": "Nam Kang Ho Tao",
+    "lat": 22.1504,
+    "lon": 103.9704,
+    "elevation": 2881,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "BAN_HANG_DA",
+    "name": "Bản Hang Đá (Sapa)",
+    "lat": 22.311,
+    "lon": 103.878,
+    "elevation": 1020,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1300,
+    "needsReview": null
+  },
+  {
+    "key": "PHU_SA_PHIN",
+    "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+    "lat": 21.4089,
+    "lon": 104.3256,
+    "elevation": 2865,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "TA_CHI_NHU",
+    "name": "Tà Chì Nhù (Đồi hoa tím)",
+    "lat": 21.5707,
+    "lon": 104.3065,
+    "elevation": 2979,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1200,
+    "needsReview": null
+  },
+  {
+    "key": "LUNG_CUNG",
+    "name": "Lùng Cúng",
+    "lat": 21.9025,
+    "lon": 104.2309,
+    "elevation": 2913,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1100,
+    "needsReview": null
+  },
+  {
+    "key": "DEO_KHAU_PHA",
+    "name": "Đèo Khau Phạ",
+    "lat": 21.758,
+    "lon": 104.275,
+    "elevation": 940,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 600,
+    "needsReview": null
+  },
+  {
+    "key": "DOI_MAM_XOI",
+    "name": "Đồi Mâm Xôi (Mù Cang Chải)",
+    "lat": 21.7941,
+    "lon": 104.1519,
+    "elevation": 1225,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 700,
+    "needsReview": null
+  },
+  {
+    "key": "PUTALENG",
+    "name": "Putaleng",
+    "lat": 22.4232,
+    "lon": 103.6036,
+    "elevation": 3049,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 800,
+    "needsReview": null
+  },
+  {
+    "key": "PUSILUNG",
+    "name": "Pusilung (Biên giới)",
+    "lat": 22.628,
+    "lon": 102.784,
+    "elevation": 3083,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "TA_LIEN_SON",
+    "name": "Tả Liên Sơn (Cổ Trâu)",
+    "lat": 22.4632,
+    "lon": 103.5561,
+    "elevation": 2996,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 1000,
+    "needsReview": null
+  },
+  {
+    "key": "DEO_O_QUY_HO",
+    "name": "Đèo Ô Quy Hồ",
+    "lat": 22.355,
+    "lon": 103.774,
+    "elevation": 2035,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 1700,
+    "needsReview": null
+  },
+  {
+    "key": "SI_THAU_CHAI",
+    "name": "Sì Thâu Chải",
+    "lat": 22.3616,
+    "lon": 103.6017,
+    "elevation": 1460,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "DEO_PHA_DIN",
+    "name": "Đèo Pha Đin",
+    "lat": 21.5558,
+    "lon": 103.5193,
+    "elevation": 1300,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "CUC_TAY_A_PA_CHAI",
+    "name": "Cực Tây A Pa Chải",
+    "lat": 22.401,
+    "lon": 102.143,
+    "elevation": 1864,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "LUNG_VAN",
+    "name": "Lũng Vân (Nóc nhà xứ Mường)",
+    "lat": 20.612,
+    "lon": 105.183,
+    "elevation": 630,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "DEO_THUNG_KHE",
+    "name": "Đèo Thung Khe (Đèo Đá Trắng)",
+    "lat": 20.6725,
+    "lon": 105.1211,
+    "elevation": 830,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "DEO_MA_PI_LENG",
+    "name": "Đèo Mã Pí Lèng (Mèo Vạc)",
+    "lat": 23.2389,
+    "lon": 105.3283,
+    "elevation": 1400,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 350,
+    "needsReview": null
+  },
+  {
+    "key": "CHIEU_LAU_THI",
+    "name": "Đỉnh Chiêu Lầu Thi",
+    "lat": 22.6611,
+    "lon": 104.6028,
+    "elevation": 2402,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1000,
+    "needsReview": null
+  },
+  {
+    "key": "TAY_CON_LINH",
+    "name": "Tây Côn Lĩnh",
+    "lat": 22.8019,
+    "lon": 104.8063,
+    "elevation": 2428,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": 800,
+    "needsReview": null
+  },
+  {
+    "key": "DONG_VAN",
+    "name": "Cao nguyên đá Đồng Văn",
+    "lat": 23.2783,
+    "lon": 105.3615,
+    "elevation": 1060,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1100,
+    "needsReview": null
+  },
+  {
+    "key": "PU_LUONG",
+    "name": "Pù Luông",
+    "lat": 20.4657,
+    "lon": 105.0971,
+    "elevation": 1700,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 400,
+    "needsReview": null
+  },
+  {
+    "key": "TAM_DAO",
+    "name": "Tam Đảo",
+    "lat": 21.4583,
+    "lon": 105.6458,
+    "elevation": 970,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 200,
+    "needsReview": null
+  },
+  {
+    "key": "BA_VI",
+    "name": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "lat": 21.058,
+    "lon": 105.3673,
+    "elevation": 1296,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 100,
+    "needsReview": null
+  },
+  {
+    "key": "MAU_SON",
+    "name": "Mẫu Sơn (Lạng Sơn)",
+    "lat": 21.8497,
+    "lon": 106.9172,
+    "elevation": 1155,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 300,
+    "needsReview": null
+  },
+  {
+    "key": "SA_MU_U_BO",
+    "name": "Sa Mu - U Bò (2756m)",
+    "lat": 21.355,
+    "lon": 104.4267,
+    "elevation": 2756,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 1400,
+    "needsReview": null
+  },
+  {
+    "key": "BINH_LIEU",
+    "name": "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+    "lat": 21.5203,
+    "lon": 107.4883,
+    "elevation": 1429,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "PHIA_OAC",
+    "name": "Phia Oắc (Cao Bằng)",
+    "lat": 22.6153,
+    "lon": 105.8636,
+    "elevation": 1931,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "BACH_MA",
+    "name": "Bạch Mã (Vọng Hải Đài)",
+    "lat": 16.175,
+    "lon": 107.8381,
+    "elevation": 1448,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "BA_DEN",
+    "name": "Núi Bà Đen (Tây Ninh)",
+    "lat": 11.3824,
+    "lon": 106.1702,
+    "elevation": 986,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "MANG_DEN",
+    "name": "Măng Đen",
+    "lat": 14.5772,
+    "lon": 108.2775,
+    "elevation": 1200,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "CAU_DAT",
+    "name": "Đồi chè Cầu Đất (Đà Lạt)",
+    "lat": 11.8829,
+    "lon": 108.5519,
+    "elevation": 1500,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "LANG_BIANG",
+    "name": "Núi Lang Biang",
+    "lat": 12.0473,
+    "lon": 108.4406,
+    "elevation": 2167,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "LINH_QUY_PHAP_AN",
+    "name": "Linh Quy Pháp Ấn (Bảo Lộc)",
+    "lat": 11.435,
+    "lon": 107.8159,
+    "elevation": 850,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "TA_NANG",
+    "name": "Tà Năng - Phan Dũng",
+    "lat": 11.5942,
+    "lon": 108.4906,
+    "elevation": 1100,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "PHINH_HO",
+    "name": "Phình Hồ (Trạm Tấu)",
+    "lat": 21.5221,
+    "lon": 104.5418,
+    "elevation": 1080,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "LANG_NHI",
+    "name": "Làng Nhì (Trạm Tấu)",
+    "lat": 21.4952,
+    "lon": 104.5394,
+    "elevation": 950,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "TA_LENG_SAN_MAY",
+    "name": "Đồi săn mây Tả Lèng (Lai Châu)",
+    "lat": 22.43069,
+    "lon": 103.50131,
+    "elevation": 1360,
+    "zone": "B_WIND_TUNNEL",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "NGOC_SON_LAC_SON",
+    "name": "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+    "lat": 20.44256,
+    "lon": 105.38106,
+    "elevation": 390,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "KEO_LOM",
+    "name": "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+    "lat": 21.0542,
+    "lon": 104.0422,
+    "elevation": 860,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "DON_DEN",
+    "name": "Đồn Đèn (Ba Bể)",
+    "lat": 22.42481,
+    "lon": 105.67906,
+    "elevation": 660,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "BAN_NA",
+    "name": "Điểm săn mây Bản Nà (Tân Yên)",
+    "lat": 21.00219,
+    "lon": 104.55731,
+    "elevation": 740,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "CHIENG_CONG",
+    "name": "Điểm săn mây Chiềng Công (Mường La)",
+    "lat": 21.43931,
+    "lon": 104.19894,
+    "elevation": 1350,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  }
+]

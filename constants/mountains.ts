@@ -92,10 +92,8 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['ngải thầu', 'ngải thầu thượng', 'y tý', 'bát xát', 'ngai thau']
   },
   CU_NHU_SAN: {
-    needsReview: 'Chưa tìm được nguồn toạ độ đáng tin (OSM không có node; DEM tại toạ độ hiện tại '
-      + 'chỉ 1.247m so với 2.662m khai báo). Kết quả cho điểm này có thể của một nơi khác.',
     name: "Đỉnh Cú Nhù San",
-    lat: 22.5450, lon: 103.5350, elevation: 2662,
+    lat: 22.5954, lon: 103.6204, elevation: 2662,   // nguồn: Plus Code 7PJ5HJWC+55 (Dền Sáng, Bát Xát) do người dùng định vị — đúng cực đại DEM 2519m
     zone: "A_CLOUD_TRAP",
     aliases: ['cú nhù san', 'cu nhu san', 'y tý']
   },

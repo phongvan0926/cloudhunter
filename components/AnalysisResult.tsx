@@ -6,6 +6,7 @@ import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
 import { moonInfoForDawn } from '../services/astroService';
 import { WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
+import { FieldReportPanel } from './FieldReportPanel';
 
 interface AnalysisResultProps {
   result: CloudAnalysis;
@@ -1056,6 +1057,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
          </div>
 
       </div>
+
+      <FieldReportPanel result={result} />
 
       <div className="text-center pt-8">
         <button 

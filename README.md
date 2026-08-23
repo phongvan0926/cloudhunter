@@ -118,7 +118,31 @@ npx vite-node scripts/audit-coords.ts              # đối chiếu toạ độ 
 npx vite-node scripts/snapshot-dem.ts              # chụp lại DEM cho test offline
 npx vite-node scripts/hindcast.ts TA_XUA_SON_LA    # soi lại 1 ngày: engine chấm gì, vì sao
 npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng ngoài trình duyệt
+
+# VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC (chạy hằng ngày)
+npx vite-node scripts/snapshot-forecast.ts                            # ~20h: chụp dự báo rạng sáng mai
+~/.venvs/ch-verify/bin/python tools/verify_satellite.py 2026-08-24    # ~8h : nhãn thật từ vệ tinh
+npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app
 ```
+
+### 🔁 App tự biết mình sai ở đâu
+
+Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để chấm mô hình**:
+
+1. **Báo cáo thực địa** — sau chuyến đi bấm một nút ngay trong trang kết quả:
+   *đứng trên biển mây / mây ngang tầm mắt / chìm trong mây / trời quang*. Đúng bằng đại lượng
+   engine dự báo (mặt mây so với chỗ đứng). Lưu trong máy bạn, xuất JSON để hiệu chuẩn.
+2. **Vệ tinh Himawari-9** — NOAA phát công khai độ cao đỉnh mây 2km/10 phút trên S3 (không cần
+   khoá). `tools/verify_satellite.py` dán nhãn tự động cho mọi điểm mỗi ngày.
+   Trung thực: hồng ngoại chỉ thấy lớp trên cùng, hôm nào có mây tầng cao che thì trả
+   `BLOCKED_ABOVE` và **bị loại khỏi phép chấm** thay vì đoán bừa.
+3. **`scripts/calibrate.ts`** ghép hai nguồn trên với dự báo đã chụp, in ra tỉ lệ đúng,
+   danh sách ngày **BỎ SÓT** và ngày **BÁO NHẦM** — chỉnh hằng số nào là nhìn thẳng vào đó.
+
+> Không cào Facebook/TikTok: API tìm bài công khai của Facebook đã đóng từ 2018, CrowdTangle
+> ngừng hẳn 14/8/2024, bản thay thế chỉ mở cho nghiên cứu học thuật; TikTok tương tự.
+> Cào bằng trình duyệt thì vi phạm điều khoản và vỡ liên tục. Một nút trong app cho dữ liệu
+> sạch hơn nhiều.
 
 > **Kiểm chứng thực địa 23/8/2026 (Tà Xùa, Bắc Yên):** người dùng thấy biển mây cả ngày,
 > app cũ trả `0/100 · RAIN`. Truy ra 5 lỗi độc lập — toạ độ lệch 16km, bỏ sót tín hiệu bão hoà,

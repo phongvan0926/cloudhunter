@@ -1,0 +1,224 @@
+[
+  {
+    "key": "LAO_THAN",
+    "name": "Lảo Thẩn (Y Tý)",
+    "date": "2026-02-08",
+    "verdict": "SEA_CONFIRMED",
+    "observerAlt": 2860,
+    "valleyElevation": 1800,
+    "cloudTopMedian_m": 2873,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 2353,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:00",
+        "top_m": 2659,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:30",
+        "top_m": 2873,
+        "emiss": 0.65
+      },
+      {
+        "vn": "06:00",
+        "top_m": 3159,
+        "emiss": 0.65
+      },
+      {
+        "vn": "06:30",
+        "top_m": 3497,
+        "emiss": 0.65
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "FANSIPAN",
+    "name": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-02-08",
+    "verdict": "FOGGED_IN",
+    "observerAlt": 3143,
+    "valleyElevation": 1900,
+    "cloudTopMedian_m": 3869,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 3531,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:00",
+        "top_m": 5551,
+        "emiss": 0.78
+      },
+      {
+        "vn": "05:30",
+        "top_m": 4349,
+        "emiss": 0.65
+      },
+      {
+        "vn": "06:00",
+        "top_m": 3869,
+        "emiss": 0.65
+      },
+      {
+        "vn": "06:30",
+        "top_m": 3442,
+        "emiss": 0.65
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_XUA_SON_LA",
+    "name": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-02-08",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1600,
+    "valleyElevation": 700,
+    "cloudTopMedian_m": 5642,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5881,
+        "emiss": 0.79
+      },
+      {
+        "vn": "05:00",
+        "top_m": 5610,
+        "emiss": 0.79
+      },
+      {
+        "vn": "05:30",
+        "top_m": 5667,
+        "emiss": 0.79
+      },
+      {
+        "vn": "06:00",
+        "top_m": 5597,
+        "emiss": 0.79
+      },
+      {
+        "vn": "06:30",
+        "top_m": 5642,
+        "emiss": 0.79
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "HANG_KIA_PA_CO",
+    "name": "Hang Kia - Pà Cò (Thung Mài)",
+    "date": "2026-02-08",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 985,
+    "valleyElevation": 800,
+    "cloudTopMedian_m": 3236,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 3236,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": 3295,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:30",
+        "top_m": 2141,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": 2926,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:30",
+        "top_m": 3425,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "SAPA_HAM_RONG",
+    "name": "Thị trấn Sapa (Hàm Rồng)",
+    "date": "2026-02-08",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1600,
+    "valleyElevation": 1200,
+    "cloudTopMedian_m": 3666,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 3297,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:00",
+        "top_m": 5200,
+        "emiss": 0.78
+      },
+      {
+        "vn": "05:30",
+        "top_m": 5584,
+        "emiss": 0.78
+      },
+      {
+        "vn": "06:00",
+        "top_m": 3666,
+        "emiss": 0.65
+      },
+      {
+        "vn": "06:30",
+        "top_m": 3003,
+        "emiss": 0.65
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHINH_HO",
+    "name": "Phình Hồ (Trạm Tấu)",
+    "date": "2026-02-08",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1080,
+    "valleyElevation": 180,
+    "cloudTopMedian_m": 5892,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5873,
+        "emiss": 0.79
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6048,
+        "emiss": 0.79
+      },
+      {
+        "vn": "05:30",
+        "top_m": 5951,
+        "emiss": 0.79
+      },
+      {
+        "vn": "06:00",
+        "top_m": 5887,
+        "emiss": 0.79
+      },
+      {
+        "vn": "06:30",
+        "top_m": 5892,
+        "emiss": 0.79
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  }
+]

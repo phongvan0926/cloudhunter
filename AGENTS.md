@@ -61,6 +61,56 @@ không được phép xoá kết luận — chúng chỉ còn nói "đi có sư�
 > ⚠️ Thang gió Zone A và hệ số giảm phạt mưa hiện dựa trên **một** ngày kiểm chứng thật.
 > Có thêm báo cáo thực địa thì phải hiệu chuẩn lại, đừng coi là hằng số thiêng.
 
+### 🔁 Vòng kiểm chứng độ chính xác (24/8/2026)
+
+Không được lấy mô hình dự báo ra chấm chính mô hình — ô lưới 9-25km không phân giải nổi
+biển mây thung lũng, đó chính là lỗ hổng đã làm app trượt ngày 23/8. Nên app có **ba nguồn
+sự thật độc lập**, xếp theo độ tin cậy:
+
+| Nguồn | Tin cậy | Độ phủ | Điểm mù |
+| :--- | :--- | :--- | :--- |
+| Báo cáo thực địa người dùng (`FieldReportPanel`) | cao nhất | thưa | chỉ có khi có người đi |
+| Vệ tinh Himawari-9 (`tools/verify_satellite.py`) | cao | mọi điểm, mỗi ngày | **mù khi có tầng mây cao che phía trên** |
+| Mô hình dự báo | — | — | *không dùng làm sự thật* |
+
+**Vệ tinh đo đúng đại lượng engine dự báo.** Sản phẩm NOAA `AHI-L2-FLDK-Clouds/CldTopHght`
+(Himawari-9, 2km, 10 phút/lần, S3 công khai không cần khoá) cho **độ cao đỉnh mây**; so với
+`observerAlt` là ra ngay "đứng trên biển mây" hay "chìm trong mây". Chiếu toạ độ bằng phép
+chiếu địa tĩnh chuẩn (đã kiểm bằng mắt: mũi Hải Nam rơi đúng vào đảo).
+
+Hồng ngoại **chỉ đọc được lớp mây trên cùng** → hôm nào có tầng mây cao (mùa mưa Tây Bắc gần
+như ngày nào cũng có) thì tool trả `BLOCKED_ABOVE` và bị **loại khỏi phép chấm**, tuyệt đối
+không đoán bừa. Thực đo tháng 8/2026: 10/10 điểm đều `BLOCKED_ABOVE`; kênh này phát huy tác
+dụng mùa khô (khoảng tháng 10-4), đúng mùa săn mây chính.
+
+**Nhịp chạy hằng ngày** (mắt xích quan trọng nhất là chụp dự báo TRƯỚC, vì Open-Meteo chỉ
+phục vụ lại quá khứ gần — chụp muộn là mất bằng chứng vĩnh viễn):
+
+```bash
+npx vite-node scripts/snapshot-forecast.ts                  # ~20h: app dự báo gì cho rạng sáng mai
+~/.venvs/ch-verify/bin/python tools/verify_satellite.py $(date +%F)   # ~8h: thực tế ra sao
+npx vite-node scripts/calibrate.ts                          # bất cứ lúc nào: chấm điểm chính app
+```
+
+`data/observations/` là **kho dữ liệu tích luỹ, phải commit** — mỗi ngày trôi qua mà không
+chụp là một ngày không bao giờ lấy lại được.
+
+`scripts/calibrate.ts` in ra tỉ lệ đúng, **số ngày BỎ SÓT** (thực tế có mà app không báo) và
+**số ngày BÁO NHẦM**, kèm chi tiết từng ca để biết chỉnh hằng số nào. Bỏ sót nguy hiểm hơn
+báo nhầm: người dùng bỏ lỡ chuyến đi đẹp và mất niềm tin vào app.
+
+### 🚫 Vì sao KHÔNG cào Facebook/TikTok
+
+Đã tra kỹ, không phải ngại làm:
+- Facebook đóng API tìm bài công khai từ 2018; **CrowdTangle ngừng hẳn 14/8/2024**; bản thay
+  thế Meta Content Library chỉ mở cho nghiên cứu học thuật/phi lợi nhuận có duyệt hồ sơ.
+- TikTok Research API cũng chỉ cấp cho học thuật; Display API chỉ đọc được nội dung của
+  chính tài khoản mình.
+- Cào bằng trình duyệt vi phạm điều khoản, vỡ mỗi lần Meta đổi DOM, và dễ bị khoá tài khoản.
+
+Thay vào đó: người dùng thấy bài trên Facebook thì bấm **một nút trong app** để ghi lại —
+mất 5 giây, dữ liệu sạch hơn hẳn scraping (có toạ độ, có ngày, có mốc so với chỗ đứng).
+
 ### 🗺️ Toạ độ điểm — quy tắc bắt buộc khi thêm/sửa
 
 - Toạ độ phải có **nguồn** ghi ngay trong comment (node OSM có tên, hoặc cực đại DEM có mốc đối chiếu).

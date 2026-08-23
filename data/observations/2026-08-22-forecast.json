@@ -1,0 +1,502 @@
+{
+  "date": "2026-08-22",
+  "engineVersion": "engine-2.2.0",
+  "snapshotAt": "2026-08-23T17:50:38.028Z",
+  "spots": [
+    {
+      "key": "LANG_BIANG",
+      "name": "Núi Lang Biang",
+      "score": 35,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 2167,
+      "valleyElevation": 1467
+    },
+    {
+      "key": "SI_THAU_CHAI",
+      "name": "Sì Thâu Chải",
+      "score": 33,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1460,
+      "valleyElevation": 718
+    },
+    {
+      "key": "NAM_KANG_HO_TAO",
+      "name": "Nam Kang Ho Tao",
+      "score": 32,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 2881,
+      "valleyElevation": 1702
+    },
+    {
+      "key": "DOI_MAM_XOI",
+      "name": "Đồi Mâm Xôi (Mù Cang Chải)",
+      "score": 31,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1225,
+      "valleyElevation": 700
+    },
+    {
+      "key": "PHU_SA_PHIN",
+      "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+      "score": 30,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 2865,
+      "valleyElevation": 1735
+    },
+    {
+      "key": "TA_CHI_NHU",
+      "name": "Tà Chì Nhù (Đồi hoa tím)",
+      "score": 27,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 2979,
+      "valleyElevation": 1200
+    },
+    {
+      "key": "PUSILUNG",
+      "name": "Pusilung (Biên giới)",
+      "score": 24,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 3083,
+      "valleyElevation": 1561
+    },
+    {
+      "key": "CUC_TAY_A_PA_CHAI",
+      "name": "Cực Tây A Pa Chải",
+      "score": 24,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1864,
+      "valleyElevation": 941
+    },
+    {
+      "key": "CHIEU_LAU_THI",
+      "name": "Đỉnh Chiêu Lầu Thi",
+      "score": 22,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 2402,
+      "valleyElevation": 1000
+    },
+    {
+      "key": "TA_XUA_SON_LA",
+      "name": "Tà Xùa (Sống lưng Khủng Long)",
+      "score": 19,
+      "status": "DISSIPATING",
+      "agreement": 33,
+      "observerAlt": 1600,
+      "valleyElevation": 700
+    },
+    {
+      "key": "MANG_DEN",
+      "name": "Măng Đen",
+      "score": 19,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 1200,
+      "valleyElevation": 1031
+    },
+    {
+      "key": "PHA_LUONG",
+      "name": "Đỉnh Pha Luông",
+      "score": 14,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 1880,
+      "valleyElevation": 1400
+    },
+    {
+      "key": "SA_MU_U_BO",
+      "name": "Sa Mu - U Bò (2756m)",
+      "score": 14,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 2756,
+      "valleyElevation": 1400
+    },
+    {
+      "key": "XIM_VANG",
+      "name": "Xím Vàng",
+      "score": 12,
+      "status": "RAIN",
+      "agreement": 100,
+      "observerAlt": 1250,
+      "valleyElevation": 1000
+    },
+    {
+      "key": "LINH_QUY_PHAP_AN",
+      "name": "Linh Quy Pháp Ấn (Bảo Lộc)",
+      "score": 12,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 850,
+      "valleyElevation": 729
+    },
+    {
+      "key": "TA_LENG_SAN_MAY",
+      "name": "Đồi săn mây Tả Lèng (Lai Châu)",
+      "score": 12,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1360,
+      "valleyElevation": 786
+    },
+    {
+      "key": "SAPA_HAM_RONG",
+      "name": "Thị trấn Sapa (Hàm Rồng)",
+      "score": 11,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 1200
+    },
+    {
+      "key": "TA_LIEN_SON",
+      "name": "Tả Liên Sơn (Cổ Trâu)",
+      "score": 11,
+      "status": "CLEAR",
+      "agreement": 67,
+      "observerAlt": 2996,
+      "valleyElevation": 1000
+    },
+    {
+      "key": "PHINH_HO",
+      "name": "Phình Hồ (Trạm Tấu)",
+      "score": 11,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 1080,
+      "valleyElevation": 377
+    },
+    {
+      "key": "DON_DEN",
+      "name": "Đồn Đèn (Ba Bể)",
+      "score": 11,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 660,
+      "valleyElevation": 173
+    },
+    {
+      "key": "KY_QUAN_SAN",
+      "name": "Ky Quan San (Bạch Mộc Lương Tử)",
+      "score": 10,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 3046,
+      "valleyElevation": 900
+    },
+    {
+      "key": "TA_NANG",
+      "name": "Tà Năng - Phan Dũng",
+      "score": 10,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1100,
+      "valleyElevation": 924
+    },
+    {
+      "key": "LANG_NHI",
+      "name": "Làng Nhì (Trạm Tấu)",
+      "score": 10,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 950,
+      "valleyElevation": 945
+    },
+    {
+      "key": "LAO_THAN",
+      "name": "Lảo Thẩn (Y Tý)",
+      "score": 9,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 2860,
+      "valleyElevation": 1800
+    },
+    {
+      "key": "DEO_MA_PI_LENG",
+      "name": "Đèo Mã Pí Lèng (Mèo Vạc)",
+      "score": 9,
+      "status": "CLEAR",
+      "agreement": 67,
+      "observerAlt": 1400,
+      "valleyElevation": 350
+    },
+    {
+      "key": "BAN_HANG_DA",
+      "name": "Bản Hang Đá (Sapa)",
+      "score": 6,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 1020,
+      "valleyElevation": 1300
+    },
+    {
+      "key": "CHIENG_CONG",
+      "name": "Điểm săn mây Chiềng Công (Mường La)",
+      "score": 6,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1350,
+      "valleyElevation": 656
+    },
+    {
+      "key": "NHIU_CO_SAN",
+      "name": "Nhìu Cồ San (Sừng Trâu)",
+      "score": 5,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 2965,
+      "valleyElevation": 1000
+    },
+    {
+      "key": "NGAI_THAU_THUONG",
+      "name": "Ngải Thầu Thượng (Y Tý)",
+      "score": 5,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 2190,
+      "valleyElevation": 1500
+    },
+    {
+      "key": "CU_NHU_SAN",
+      "name": "Đỉnh Cú Nhù San",
+      "score": 5,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 2662,
+      "valleyElevation": 1200
+    },
+    {
+      "key": "KEO_LOM",
+      "name": "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+      "score": 5,
+      "status": "RAIN",
+      "agreement": 100,
+      "observerAlt": 860,
+      "valleyElevation": 753
+    },
+    {
+      "key": "FANSIPAN",
+      "name": "Fansipan (Nóc nhà Đông Dương)",
+      "score": 4,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 3143,
+      "valleyElevation": 1900
+    },
+    {
+      "key": "DEO_O_QUY_HO",
+      "name": "Đèo Ô Quy Hồ",
+      "score": 4,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 2035,
+      "valleyElevation": 1700
+    },
+    {
+      "key": "BINH_LIEU",
+      "name": "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+      "score": 4,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 1429,
+      "valleyElevation": 367
+    },
+    {
+      "key": "LUNG_CUNG",
+      "name": "Lùng Cúng",
+      "score": 2,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 2913,
+      "valleyElevation": 1100
+    },
+    {
+      "key": "TAY_CON_LINH",
+      "name": "Tây Côn Lĩnh",
+      "score": 1,
+      "status": "DISSIPATING",
+      "agreement": 33,
+      "observerAlt": 2428,
+      "valleyElevation": 800
+    },
+    {
+      "key": "TAM_DAO",
+      "name": "Tam Đảo",
+      "score": 1,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 970,
+      "valleyElevation": 200
+    },
+    {
+      "key": "HANG_KIA_PA_CO",
+      "name": "Hang Kia - Pà Cò (Thung Mài)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 100,
+      "observerAlt": 985,
+      "valleyElevation": 800
+    },
+    {
+      "key": "PU_NHI_FARM",
+      "name": "Pu Nhi Farm",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 100,
+      "observerAlt": 470,
+      "valleyElevation": 300
+    },
+    {
+      "key": "NGU_CHI_SON",
+      "name": "Ngũ Chỉ Sơn",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 2858,
+      "valleyElevation": 1200
+    },
+    {
+      "key": "DEO_KHAU_PHA",
+      "name": "Đèo Khau Phạ",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 940,
+      "valleyElevation": 600
+    },
+    {
+      "key": "PUTALENG",
+      "name": "Putaleng",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 3049,
+      "valleyElevation": 800
+    },
+    {
+      "key": "DEO_PHA_DIN",
+      "name": "Đèo Pha Đin",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 1300,
+      "valleyElevation": 760
+    },
+    {
+      "key": "LUNG_VAN",
+      "name": "Lũng Vân (Nóc nhà xứ Mường)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 630,
+      "valleyElevation": 138
+    },
+    {
+      "key": "DEO_THUNG_KHE",
+      "name": "Đèo Thung Khe (Đèo Đá Trắng)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 830,
+      "valleyElevation": 343
+    },
+    {
+      "key": "DONG_VAN",
+      "name": "Cao nguyên đá Đồng Văn",
+      "score": 0,
+      "status": "CLEAR",
+      "agreement": 67,
+      "observerAlt": 1060,
+      "valleyElevation": 1100
+    },
+    {
+      "key": "PU_LUONG",
+      "name": "Pù Luông",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 1700,
+      "valleyElevation": 400
+    },
+    {
+      "key": "BA_VI",
+      "name": "Đỉnh Ba Vì (Đỉnh Vua)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 1296,
+      "valleyElevation": 100
+    },
+    {
+      "key": "MAU_SON",
+      "name": "Mẫu Sơn (Lạng Sơn)",
+      "score": 0,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 1155,
+      "valleyElevation": 300
+    },
+    {
+      "key": "PHIA_OAC",
+      "name": "Phia Oắc (Cao Bằng)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 33,
+      "observerAlt": 1931,
+      "valleyElevation": 918
+    },
+    {
+      "key": "BACH_MA",
+      "name": "Bạch Mã (Vọng Hải Đài)",
+      "score": 0,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1448,
+      "valleyElevation": 211
+    },
+    {
+      "key": "BA_DEN",
+      "name": "Núi Bà Đen (Tây Ninh)",
+      "score": 0,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 986,
+      "valleyElevation": 80
+    },
+    {
+      "key": "CAU_DAT",
+      "name": "Đồi chè Cầu Đất (Đà Lạt)",
+      "score": 0,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 1500,
+      "valleyElevation": 1350
+    },
+    {
+      "key": "NGOC_SON_LAC_SON",
+      "name": "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 100,
+      "observerAlt": 390,
+      "valleyElevation": 80
+    },
+    {
+      "key": "BAN_NA",
+      "name": "Điểm săn mây Bản Nà (Tân Yên)",
+      "score": 0,
+      "status": "RAIN",
+      "agreement": 67,
+      "observerAlt": 740,
+      "valleyElevation": 469
+    }
+  ]
+}
