@@ -313,6 +313,11 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
     data.lat, data.lon, data.observerAlt, matchedPreset?.elevation_profile,
   );
 
+  // Toạ độ chưa xác minh → nói thẳng ngay từ đầu, đừng để người dùng tin một dự báo nhầm chỗ
+  const coordWarning = pkg.mountainInfo.needsReview
+    ? [`⚠️ Toạ độ điểm này CHƯA được xác minh: ${pkg.mountainInfo.needsReview}`]
+    : [];
+
   const zone = pkg.mountainInfo.zone;
   const observerAlt = data.observerAlt || pkg.mountainInfo.elevation;
 
@@ -327,7 +332,7 @@ export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnaly
   }));
   const trip = computeTripSummary(dayOutputs);
   const season = seasonAdjust(data.startDate, pkg.mountainInfo.lat);
-  const warnings = [...new Set(dayOutputs.flatMap(o => o.warnings))];
+  const warnings = [...new Set([...coordWarning, ...dayOutputs.flatMap(o => o.warnings)])];
 
   // 4) Địa hình: thư viện xác thực, hoặc mặt cắt tối thiểu từ dữ liệu THẬT (DEM + geocode)
   let terrain: TerrainAnalysis;

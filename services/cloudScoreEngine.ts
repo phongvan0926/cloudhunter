@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.1.0';
+export const ENGINE_VERSION = 'engine-2.2.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -107,8 +107,46 @@ export function computeCloudBase(m: DayModelData, valleyElev: number): number {
  * kết hợp RH≥80%, trên độ cao geopotential thật; fallback 3 mực RH xấp xỉ như cũ.
  * Trả null nếu mô hình không nhìn thấy mây tầng thấp (không có biển mây).
  */
+/**
+ * TÍN HIỆU BÃO HOÀ THUNG LŨNG — bộ dò biển mây thứ HAI, độc lập với cloud_cover_low.
+ *
+ * Vì sao cần (đo thật 23/8/2026 tại Tà Xùa, Bắc Yên — hôm người dùng thấy biển mây cả ngày):
+ * phân tích best_match cho RH 96–99%, T−Td = 0,2–0,5°C ở cao độ đáy thung lũng, tức KHÔNG KHÍ
+ * ĐÃ BÃO HOÀ — nhưng cloud_cover_low chỉ 0–55%. Lý do: mô hình toàn cầu có ô lưới 9–25km,
+ * không phân giải nổi lớp sương dày 300–800m nằm lọt trong thung lũng hẹp Tây Bắc. Nếu chỉ
+ * tin cloud_cover_low thì engine bỏ sót đúng loại biển mây phổ biến nhất ở Việt Nam.
+ *
+ * Ở đây T−Td ≈ 0 nghĩa là mực ngưng tụ nằm NGAY TRÊN mặt đất thung lũng → có mây/sương tại chỗ.
+ */
+export interface SaturationSignal {
+  spread: number;      // T−Td tại đáy thung lũng lúc bình minh
+  seaRH: number;       // RH mực ngay trên đáy thung lũng
+  nightRH: number;     // RH 2m trong thung lũng ban đêm
+  saturated: boolean;  // đủ điều kiện ngưng tụ tại chỗ
+  points: number;      // điểm quy đổi, so sánh ngang với cloud_cover_low × 0,45
+}
+
+export function valleySaturation(m: DayModelData, valleyElev: number): SaturationSignal {
+  const spread = m.t_valley_dawn - m.td_valley_dawn;
+  const seaRH = valleyElev < 900 ? m.rh925 : valleyElev < 1700 ? m.rh850 : m.rh700;
+  const nightRH = m.rh2m_valley_night;
+  const rhOk = Number.isFinite(seaRH) ? seaRH >= 88 : false;
+  const nightOk = Number.isFinite(nightRH) ? nightRH >= 92 : false;
+  const saturated = spread <= 1.0 && (rhOk || nightOk);
+  let points = 0;
+  if (saturated) {
+    points = spread <= 0.4 ? 34 : spread <= 0.7 ? 28 : 22;
+    if (!(Number.isFinite(seaRH) && seaRH >= 95) && !(Number.isFinite(nightRH) && nightRH >= 96)) {
+      points = Math.round(points * 0.85);
+    }
+  }
+  return { spread: +spread.toFixed(1), seaRH, nightRH, saturated, points };
+}
+
 export function estimateCloudTop(m: DayModelData, valleyElev: number): number | null {
-  if (m.cloud_low_dawn < 15) return null;
+  // Cổng cloud_cover_low một mình từng làm engine trả "CLEAR" cho ngày thung lũng bão hoà
+  // (AIFS 23/8/2026 báo mây thấp 7% giữa lúc RH 99%) → nhận thêm tín hiệu bão hoà.
+  if (m.cloud_low_dawn < 15 && !valleySaturation(m, valleyElev).saturated) return null;
   const base = computeCloudBase(m, valleyElev);
   const profile = (m.levels ?? [])
     .filter(l => l.h > valleyElev)
@@ -165,9 +203,13 @@ export function assessWind(wind850: number, zone: Zone): WindAssessment {
     if (wind850 <= 15) return { level: 'High', impact: wind850 * 1.5, detail: `${wind850}km/h — xáo trộn cơ học trong ống gió` };
     return { level: 'Destructive', impact: wind850 * 2, detail: `${wind850}km/h — gió xé nát cấu trúc mây` };
   }
-  if (wind850 < 10) return { level: 'Low', impact: 0, detail: `${wind850}km/h — lặng, mây tĩnh` };
-  if (wind850 < 15) return { level: 'Medium', impact: wind850, detail: `${wind850}km/h — mây luồn đẹp` };
-  if (wind850 <= 20) return { level: 'High', impact: wind850, detail: `${wind850}km/h — mây bị đẩy mạnh` };
+  // Hiệu chỉnh 23/8/2026: thang cũ (Destructive từ >20km/h) chấm "phá vỡ biển mây" cho ngày
+  // Tà Xùa gió 22-23km/h — hôm đó biển mây thực tế nằm nguyên cả ngày. 23km/h ≈ 6,4m/s ở
+  // 1.500m là gió vừa; muốn xé nát một lớp mây bị nghịch nhiệt nhốt thường phải >28km/h.
+  // ⚠️ Thang này mới dựa trên MỘT ngày kiểm chứng thật — cần thêm quan sát để chốt.
+  if (wind850 < 12) return { level: 'Low', impact: 0, detail: `${wind850}km/h — lặng, mây tĩnh` };
+  if (wind850 < 18) return { level: 'Medium', impact: wind850, detail: `${wind850}km/h — mây luồn đẹp` };
+  if (wind850 <= 26) return { level: 'High', impact: wind850, detail: `${wind850}km/h — mây bị đẩy mạnh` };
   return { level: 'Destructive', impact: wind850 * 2, detail: `${wind850}km/h — phá vỡ biển mây` };
 }
 
@@ -307,17 +349,45 @@ export function scoreOneModel(
 ): ModelDayScore {
   const reasons: string[] = [];
   const inv = computeInversion(m, ctx.valleyElevation);
-  const wind = assessWind(m.wind850_dawn_max, ctx.zone);
   const top = estimateCloudTop(m, ctx.valleyElevation);
+  // GIÓ NÀO mới phá được biển mây? Nắp nghịch nhiệt tồn tại chính là để CHẶN xáo trộn thẳng
+  // đứng. Khi mặt biển mây nằm hẳn dưới nắp, gió 850hPa (~1500m) thổi ở tầng BÊN TRÊN nắp,
+  // không với xuống lớp mây được — lúc đó gió quyết định là gió TRONG lớp mây (925hPa ~760m).
+  // (Tà Xùa 23/8/2026: gió 850 22km/h bị engine cũ chấm "phá vỡ biển mây" trong khi gió 925
+  // chỉ 3-9km/h và biển mây thực tế nằm nguyên cả ngày dưới nắp nghịch nhiệt +5°C tại 1450m.)
+  const seaCapped = (inv.strength === 'Strong' || inv.strength === 'Moderate')
+    && inv.height !== null && inv.height <= LEVEL_HEIGHTS.p850 + 100
+    && top !== null && top <= inv.height + 150
+    && LEVEL_HEIGHTS.p925 > ctx.valleyElevation
+    && Number.isFinite(m.wind925_dawn_max);
+  const windLevel = seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
+  const wind = assessWind(seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max, ctx.zone);
   const spread = m.t_valley_dawn - m.td_valley_dawn;
   // Ẩm "lớp biển mây" phải là mực NGAY TRÊN đáy thung lũng — thung lũng 1800-1900m mà
   // dùng rh850 (~1500m) là đo không khí DƯỚI LÒNG ĐẤT (lỗi audit vòng 2)
   const seaRH = ctx.valleyElevation < 900 ? m.rh925 : ctx.valleyElevation < 1700 ? m.rh850 : m.rh700;
+  const sat = valleySaturation(m, ctx.valleyElevation);
+  const blhNight = m.blh_night_min;
+  // "Chữ ký biển mây": thung lũng bão hoà + có nắp nghịch nhiệt + người đứng CAO HƠN mặt mây.
+  // Đây là định nghĩa vật lý của biển mây; khi cả ba có mặt thì các hình phạt gián tiếp
+  // (mây cao ban đêm, mưa) không được phép xoá kết luận — chúng chỉ còn ý nghĩa "đi có sướng không".
+  const seaSignature = sat.saturated
+    && (inv.strength === 'Strong' || inv.strength === 'Moderate'
+        || (blhNight !== undefined && Number.isFinite(blhNight) && blhNight <= 300))
+    && ctx.observerAlt >= computeCloudBase(m, ctx.valleyElevation) + 300;
 
   let score = 0;
   const add = (delta: number, why: string) => { score += delta; reasons.push(`${delta >= 0 ? '+' : ''}${Math.round(delta)} · ${why}`); };
 
-  add(m.cloud_low_dawn * 0.45, `Mây tầng thấp bình minh ${m.cloud_low_dawn}% (mô hình "nhìn thấy" biển mây)`);
+  // Hai bộ dò cùng đo MỘT thứ (có mây trong thung lũng hay không) — lấy bộ nào thấy rõ hơn.
+  // cloud_cover_low của mô hình toàn cầu bỏ sót sương thung lũng hẹp (xem valleySaturation).
+  const lowCloudPts = m.cloud_low_dawn * 0.45;
+  if (sat.points > lowCloudPts) {
+    add(sat.points, `Thung lũng BÃO HOÀ lúc bình minh (T−Td = ${sat.spread}°C, RH ${Math.round(sat.seaRH)}%) — `
+      + `ngưng tụ ngay trên mặt đất, dù mô hình toàn cầu chỉ "thấy" ${m.cloud_low_dawn}% mây tầng thấp`);
+  } else {
+    add(lowCloudPts, `Mây tầng thấp bình minh ${m.cloud_low_dawn}% (mô hình "nhìn thấy" biển mây)`);
+  }
   if (inv.strength === 'Strong') add(18, `Nghịch nhiệt mạnh (+${inv.anomaly}°C so với suy giảm chuẩn) — mây bị "nhốt" trong thung lũng`);
   else if (inv.strength === 'Moderate') add(10, `Nghịch nhiệt vừa (+${inv.anomaly}°C)`);
   else if (inv.strength === 'Weak') add(3, `Nghịch nhiệt yếu (${inv.anomaly}°C)`);
@@ -341,17 +411,47 @@ export function scoreOneModel(
     else if (blh >= 1200) add(-5, `Lớp biên đêm dày (${Math.round(blh)}m) — khí quyển xáo trộn, khó giữ mây trong thung lũng`);
   }
 
-  if (wind.level === 'Medium') add(-6, `Gió 850hPa: ${wind.detail}`);
-  else if (wind.level === 'High') add(-14, `Gió 850hPa: ${wind.detail}`);
-  else if (wind.level === 'Destructive') add(-28, `Gió 850hPa: ${wind.detail}`);
-  else reasons.push(`±0 · Gió 850hPa: ${wind.detail}`);
+  if (wind.level === 'Medium') add(-6, `Gió ${windLevel}: ${wind.detail}`);
+  else if (wind.level === 'High') add(-14, `Gió ${windLevel}: ${wind.detail}`);
+  else if (wind.level === 'Destructive') add(-28, `Gió ${windLevel}: ${wind.detail}`);
+  else reasons.push(`±0 · Gió ${windLevel}: ${wind.detail}` + (seaCapped ? ' — gió trên nắp nghịch nhiệt không với xuống được' : ''));
 
-  if (m.cloud_high_night >= 60) add(-15, `Mây cao che ${m.cloud_high_night}% ban đêm — chặn bức xạ, khó hình thành nghịch nhiệt`);
-  else if (m.cloud_high_night >= 30) add(-7, `Mây cao ban đêm ${m.cloud_high_night}% — bức xạ giảm một phần`);
+  // Mây cao ban đêm chỉ là BIẾN THAY THẾ để đoán "sẽ không có nghịch nhiệt". Nếu mô hình đã
+  // nói thẳng nghịch nhiệt CÓ (hoặc lớp biên đêm mỏng dính) thì phỏng đoán đó đã sai — trừ
+  // tiếp là phạt hai lần cùng một cơ chế (Tà Xùa 23/8/2026: mây cao 100% mà nghịch nhiệt +4,6°C).
+  const inversionObserved = inv.strength === 'Strong' || inv.strength === 'Moderate'
+    || (blhNight !== undefined && Number.isFinite(blhNight) && blhNight <= 300);
+  if (m.cloud_high_night >= 60) {
+    add(inversionObserved ? -5 : -15,
+      `Mây cao che ${m.cloud_high_night}% ban đêm — chặn bức xạ`
+      + (inversionObserved ? ', nhưng nghịch nhiệt vẫn hình thành nên chỉ trừ nhẹ' : ', khó hình thành nghịch nhiệt'));
+  } else if (m.cloud_high_night >= 30) {
+    add(inversionObserved ? -2 : -7, `Mây cao ban đêm ${m.cloud_high_night}% — bức xạ giảm một phần`);
+  }
 
-  if (m.precip_dawn > 1.5) add(-25, `Mưa sáng sớm ${m.precip_dawn}mm`);
-  else if (m.precip_dawn > 0.3) add(-8, `Mưa phùn sáng sớm ${m.precip_dawn}mm`);
-  if (m.precip_night > 8) add(-15, `Mưa đêm lớn ${m.precip_night}mm`);
+  // MƯA — chỉnh lại theo đúng vật lý mùa mưa Tây Bắc (bằng chứng: Tà Xùa 23/8/2026 mưa phùn
+  // rạng sáng mà biển mây dày cả ngày). Mưa KHÔNG phải bằng chứng chống lại biển mây; nó làm
+  // thung lũng bão hoà, tức là bằng chứng THUẬN. Mưa chỉ trừ điểm ở mức "đi có sướng không",
+  // và khi chữ ký biển mây đã đủ thì mức trừ giảm còn 40%.
+  const dawnRate = m.precip_dawn / 5;              // mm/giờ trung bình cửa sổ 04–09h
+  let rainPenalty = 0;
+  let rainWhy = '';
+  if (dawnRate >= 1.0)      { rainPenalty = -25; rainWhy = `Mưa to sáng sớm ${m.precip_dawn}mm (${dawnRate.toFixed(1)}mm/h)`; }
+  else if (dawnRate >= 0.3) { rainPenalty = -15; rainWhy = `Mưa sáng sớm ${m.precip_dawn}mm (${dawnRate.toFixed(1)}mm/h)`; }
+  else if (dawnRate >= 0.06){ rainPenalty = -8;  rainWhy = `Mưa phùn sáng sớm ${m.precip_dawn}mm`; }
+  if (rainPenalty !== 0) {
+    add(seaSignature ? Math.round(rainPenalty * 0.4) : rainPenalty,
+        rainWhy + (seaSignature ? ' — nhưng thung lũng đã bão hoà dưới nắp nghịch nhiệt, mưa nuôi biển mây chứ không phá' : ''));
+  }
+  // Mưa đêm TẠNH trước bình minh là kịch bản "biển mây sau mưa" kinh điển: hơi ẩm nạp đầy
+  // thung lũng rồi trời hửng — chỉ phạt khi mưa còn kéo sang cửa sổ săn mây.
+  if (m.precip_night > 8) {
+    if (dawnRate < 0.3 && sat.saturated) {
+      add(-3, `Mưa đêm ${m.precip_night}mm nhưng tạnh trước bình minh — thung lũng bão hoà, kịch bản "biển mây sau mưa"`);
+    } else {
+      add(-15, `Mưa đêm lớn ${m.precip_night}mm, kéo sang cả sáng`);
+    }
+  }
 
   // Bất ổn định đối lưu THẬT từ mô hình (lifted index, GFS) — thay vì chỉ đoán qua "mùa":
   // LI càng âm càng dễ dông phá biển mây/nguy hiểm buổi trưa-chiều
@@ -369,7 +469,11 @@ export function scoreOneModel(
   let status: StatusCode;
   const deltaH = top !== null ? ctx.observerAlt - top : null;
   const deepOvercast = Number.isFinite(m.rh700) && m.rh700 >= 85 && m.cloud_mid_dawn >= 70;
-  if (m.precip_dawn > 1.5 || m.precip_night > 8) status = 'RAIN';
+  // MƯA không còn là nút chặn tuyệt đối: nếu chữ ký biển mây đã đủ thì vẫn báo đúng loại
+  // biển mây và đẩy chuyện mưa sang cảnh báo — trước đây một cơn mưa phùn xoá sạch kết luận,
+  // khiến ngày 23/8/2026 ở Tà Xùa (biển mây cả ngày) bị app trả về "RAIN — hoãn kế hoạch".
+  const rainy = m.precip_dawn / 5 >= 0.3 || (m.precip_night > 8 && m.precip_dawn / 5 >= 0.06);
+  if (rainy && !seaSignature) status = 'RAIN';
   else if (wind.level === 'Destructive') status = 'DISSIPATING';
   else if (deepOvercast) status = 'FOG';
   else if (top === null) status = 'CLEAR';
@@ -501,7 +605,17 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
 
   const warnings: string[] = [...season.warnings];
   if (wind.level === 'Destructive') warnings.push(`Gió tầng 1.500m tới ${rep.wind850_dawn_max}km/h — nguy hiểm khi đứng sống núi/mỏm đá.`);
-  if (combined.status === 'RAIN') warnings.push('Có mưa trong khung giờ săn mây — đường trơn, vách đá nguy hiểm.');
+  // Cảnh báo mưa bám vào LƯỢNG MƯA THẬT, không bám vào trạng thái: từ engine-2.2 một ngày
+  // vẫn có thể là STATIC/FLOWING (biển mây thật) trong khi trời mưa phùn — người đi vẫn phải
+  // biết là đường trơn. Bám theo status như trước sẽ nuốt mất cảnh báo đúng lúc cần nhất.
+  if (rep.precip_dawn / 5 >= 0.3) {
+    warnings.push(`Có mưa trong khung giờ săn mây (${rep.precip_dawn}mm) — đường trơn, vách đá nguy hiểm.`);
+  } else if (rep.precip_dawn > 0.3) {
+    warnings.push(`Mưa phùn trong khung giờ săn mây (${rep.precip_dawn}mm) — mang áo mưa, giữ khô máy ảnh.`);
+  }
+  if (rep.precip_night > 8 && rep.precip_dawn / 5 < 0.3) {
+    warnings.push(`Đêm trước mưa ${rep.precip_night}mm — đường mòn lầy trơn dù sáng đã tạnh.`);
+  }
   // Mực đóng băng thật từ mô hình (GFS/ICON) — cảnh báo băng giá khi vị trí đứng ở trên nó
   if (rep.freezing_level !== undefined && Number.isFinite(rep.freezing_level) && ctx.observerAlt >= rep.freezing_level) {
     warnings.push(`Vị trí đứng ${ctx.observerAlt}m ở TRÊN mực đóng băng (~${Math.round(rep.freezing_level)}m) — nguy cơ băng giá, mặt đá/ván gỗ trơn trượt.`);

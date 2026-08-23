@@ -124,7 +124,9 @@ export async function rankSpotsForDawn(
   if (RANK_CACHE && RANK_CACHE.targetDate === targetDate && Date.now() - RANK_CACHE.ts < RANK_CACHE_TTL_MS) {
     return RANK_CACHE.results;
   }
-  const spots = Object.entries(MOUNTAIN_DB);
+  // Điểm chưa xác minh được toạ độ thì KHÔNG đưa vào bảng xếp hạng: một toạ độ lệch 15km
+  // vẫn trả về đủ số liệu "hợp lý" nhưng của nơi khác — sai âm thầm, người dùng không thể biết.
+  const spots = Object.entries(MOUNTAIN_DB).filter(([, m]) => !m.needsReview);
   const valleys = await valleyElevationsForAll(onProgress);
   const usable = spots.filter(([k]) => typeof valleys[k] === 'number');
   if (usable.length === 0) throw new Error('Không đo được độ cao thung lũng từ DEM — kiểm tra kết nối mạng.');

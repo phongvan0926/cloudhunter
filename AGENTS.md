@@ -28,6 +28,48 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 
 ## 🔬 Vật lý biển mây (ràng buộc khi sửa engine)
 
+### ⚠️ engine-2.2 (23/8/2026) — hiệu chỉnh sau ca kiểm chứng thật đầu tiên
+
+Người dùng báo **Tà Xùa (Bắc Yên, Sơn La) có biển mây CẢ NGÀY 23/8/2026**, app trả về
+`0/100 · RAIN · "hoãn kế hoạch săn mây"`. Mổ xẻ ra **năm** lỗi độc lập, mỗi lỗi nay có test khóa:
+
+1. **Toạ độ sai 16km** — `TA_XUA_SON_LA` ghi `21.2655,104.2800` (DEM 324m) trong khi khu du
+   lịch ở `21.2796,104.4326` (DEM 1.556m). Rà cả thư viện: **28/56 điểm sai >300m**. Xem
+   `scripts/audit-coords.ts` + test ảnh chụp DEM.
+2. **`cloud_cover_low` KHÔNG đủ để dò biển mây Việt Nam.** Ô lưới 9–25km của mô hình toàn cầu
+   không phân giải nổi lớp sương dày 300–800m trong thung lũng hẹp. Hôm đó phân tích cho
+   RH 96–99%, T−Td 0,2–0,5°C (**đã bão hoà**) mà `cloud_cover_low` chỉ 0–55%.
+   → thêm `valleySaturation()`; engine lấy **max(tín hiệu mây thấp, tín hiệu bão hoà)**.
+3. **Phạt hai lần cùng một cơ chế.** "Mây cao ban đêm ≥60% → −15" chỉ là *biến thay thế* để
+   đoán "sẽ không có nghịch nhiệt". Hôm đó mây cao 100% mà nghịch nhiệt vẫn +4,6°C và lớp biên
+   đêm 20m → phỏng đoán đã sai, không được trừ tiếp. Nay chỉ trừ −5 khi nghịch nhiệt đã hiện diện.
+4. **Mưa bị coi là bằng chứng CHỐNG biển mây.** Ở mùa mưa Tây Bắc thì ngược lại: mưa nạp ẩm
+   cho thung lũng, tạnh trước bình minh là kịch bản *"biển mây sau mưa"* kinh điển. Nay:
+   phạt theo **cường độ mm/h** thay vì ngưỡng cứng, giảm còn 40% khi có "chữ ký biển mây",
+   mưa đêm tạnh trước sáng chỉ −3, và **`RAIN` không còn xoá kết luận biển mây** — nhưng
+   cảnh báo mưa thì bám vào **lượng mưa thật**, không bám vào trạng thái (không được nuốt cảnh báo).
+5. **Chọn sai tầng gió.** Nắp nghịch nhiệt sinh ra chính là để **chặn xáo trộn thẳng đứng**;
+   khi mặt biển mây nằm hẳn dưới nắp thì gió 850hPa (~1.500m) thổi ở tầng *bên trên*, không
+   với xuống lớp mây. Hôm đó gió 850 = 22km/h (bị chấm "phá vỡ biển mây") còn gió 925 trong
+   lớp mây chỉ 3–9km/h. Nay engine tự chọn **925hPa khi biển mây bị nhốt**, 850hPa khi không.
+   Thang gió Zone A cũng nới `10/15/20` → `12/18/26` km/h.
+
+**Chữ ký biển mây** (`seaSignature`) = thung lũng bão hoà **+** có nắp nghịch nhiệt (hoặc lớp
+biên đêm ≤300m) **+** người đứng cao hơn đáy mây ≥300m. Khi đủ ba, các hình phạt *gián tiếp*
+không được phép xoá kết luận — chúng chỉ còn nói "đi có sướng không".
+
+> ⚠️ Thang gió Zone A và hệ số giảm phạt mưa hiện dựa trên **một** ngày kiểm chứng thật.
+> Có thêm báo cáo thực địa thì phải hiệu chuẩn lại, đừng coi là hằng số thiêng.
+
+### 🗺️ Toạ độ điểm — quy tắc bắt buộc khi thêm/sửa
+
+- Toạ độ phải có **nguồn** ghi ngay trong comment (node OSM có tên, hoặc cực đại DEM có mốc đối chiếu).
+- Chạy `npx vite-node scripts/snapshot-dem.ts` rồi `npm test`: lệch |khai báo − DEM| > 400m là **fail**.
+- Không chắc thì gắn `needsReview: '<lý do>'` — điểm đó **bị loại khỏi bảng xếp hạng** và
+  hiện cảnh báo khi phân tích. Thà nói "chưa chắc chỗ này" còn hơn dự báo tự tin cho nhầm nơi.
+- Đỉnh núi: toạ độ = chóp, độ cao = số đo đã công bố (DEM 90m làm tù đỉnh nhọn 100–250m là bình thường).
+  Bản/đèo/điểm ngắm: toạ độ = chính chỗ đứng, độ cao = **đúng DEM** (đừng lấy số quảng cáo du lịch).
+
 - Biển mây bức xạ hình thành trong **THUNG LŨNG**; đỉnh chỉ là vị trí quan sát.
   Mọi chỉ số ẩm/nghịch nhiệt tham chiếu **đáy thung lũng** (estimateValleyElevation:
   profile VALLEY đã xác thực, hoặc min DEM 9 điểm bán kính ~4km).

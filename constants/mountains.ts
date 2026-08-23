@@ -5,46 +5,48 @@ export interface MountainInfo {
   elevation: number;
   zone: "A_CLOUD_TRAP" | "B_WIND_TUNNEL";
   aliases?: string[];
+  /**
+   * Lý do điểm này CHƯA xác minh được toạ độ (DEM tại toạ độ lệch quá xa độ cao khai báo).
+   * Điểm có cờ này bị LOẠI khỏi bảng xếp hạng và phải hiện cảnh báo khi phân tích —
+   * thà nói "chưa chắc chỗ này" còn hơn dự báo tự tin cho nhầm một thung lũng khác.
+   */
+  needsReview?: string;
 }
 
 export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- SƠN LA ---
   TA_XUA_SON_LA: {
     name: "Tà Xùa (Sống lưng Khủng Long)",
-    lat: 21.2655, lon: 104.2800, elevation: 1600,
+    lat: 21.2796, lon: 104.4326, elevation: 1600,   // nguồn: OSM viewpoint "ta xua" — cụm homestay/Sống lưng KL (DEM 1556m)
     zone: "A_CLOUD_TRAP",
     aliases: ['ta xua', 'khung long', 'song lung', 'bac yen', 'thiên đường mây', 'tà xùa', 'bắc yên', 'sống lưng khủng long', 'ta xua son la']
   },
   PHA_LUONG: {
     name: "Đỉnh Pha Luông",
-    lat: 20.6861, lon: 104.6056, elevation: 2000,
+    lat: 20.6727, lon: 104.6346, elevation: 1880,   // nguồn: OSM node "Núi Pha Luông" ele=1880 (DEM 1858m)
     zone: "A_CLOUD_TRAP",
     aliases: ['pha luong', 'moc chau', 'đỉnh pha luông', 'nóc nhà mộc châu', 'mộc châu', 'cửa khẩu lóng sập']
   },
   HANG_KIA_PA_CO: {
     name: "Hang Kia - Pà Cò (Thung Mài)",
-    lat: 20.7410, lon: 104.9310, elevation: 1200,
+    lat: 20.7410, lon: 104.9310, elevation: 985,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình', 'thung mài', 'thung mai', 'săn mây thung mài']
   },
   XIM_VANG: {
     name: "Xím Vàng",
-    lat: 21.3250, lon: 104.2510, elevation: 1500,
+    lat: 21.3559, lon: 104.3204, elevation: 1250,   // nguồn: OSM ranh giới Xã Xím Vàng (DEM 1246m)
     zone: "A_CLOUD_TRAP",
     aliases: ['xim vang', 'ruong bac thang', 'xím vàng', 'bắc yên']
   },
   PU_NHI_FARM: {
     name: "Pu Nhi Farm",
-    lat: 21.1730, lon: 104.3160, elevation: 700,
+    lat: 21.1730, lon: 104.3160, elevation: 470,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['pu nhi', 'pu nhi farm', 'bắc yên', 'đồi pu nhi']
   },
-  DINH_U_BO: {
-    name: "Đỉnh U Bò",
-    lat: 21.2380, lon: 104.3410, elevation: 1500,
-    zone: "A_CLOUD_TRAP",
-    aliases: ['u bò', 'đỉnh u bò', 'bắc yên', 'tà xùa']
-  },
+  // (DINH_U_BO đã GỘP vào SA_MU_U_BO ngày 23/8/2026 — trùng một khối núi trong KBT Tà Xùa,
+  //  toạ độ cũ 21.2380,104.3410 rơi xuống lòng thung lũng 253m nên mọi dự báo đều sai chỗ.)
 
   // --- LÀO CAI ---
   FANSIPAN: {
@@ -55,7 +57,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   LAO_THAN: {
     name: "Lảo Thẩn (Y Tý)",
-    lat: 22.6105, lon: 103.6258, elevation: 2860,
+    lat: 22.61, lon: 103.685, elevation: 2860,   // nguồn: cực đại DEM vùng Y Tý (2749m) — OSM chưa có node
     zone: "A_CLOUD_TRAP",
     aliases: ['lao than', 'y ty', 'hau thao', 'lảo thẩn', 'mây y tý', 'đỉnh nhọn', 'y tý']
   },
@@ -67,13 +69,13 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   NHIU_CO_SAN: {
     name: "Nhìu Cồ San (Sừng Trâu)",
-    lat: 22.5833, lon: 103.5167, elevation: 2965,
+    lat: 22.584, lon: 103.5833, elevation: 2965,   // nguồn: OSM node "Núi Nhìu Cồ San" ele=2965 (DEM 2922m)
     zone: "A_CLOUD_TRAP",
     aliases: ['nhiu co san', 'sung trau', 'trinh tuong', 'nhìu cồ san', 'nhiu cồ san']
   },
   NGU_CHI_SON: {
     name: "Ngũ Chỉ Sơn",
-    lat: 22.4286, lon: 103.7125, elevation: 2858,
+    lat: 22.4097, lon: 103.7426, elevation: 2858,   // nguồn: OSM node "Núi Ngũ Chỉ Sơn" ele=2858 (DEM 2639m)
     zone: "B_WIND_TUNNEL",
     aliases: ['ngu chi son', 'ban tay phat', 'ngũ chỉ sơn', 'tả giàng phình']
   },
@@ -85,11 +87,13 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   NGAI_THAU_THUONG: {
     name: "Ngải Thầu Thượng (Y Tý)",
-    lat: 22.6780, lon: 103.6010, elevation: 2100,
+    lat: 22.67, lon: 103.625, elevation: 2190,   // nguồn: cực đại DEM sườn Ngải Thầu (2191m)
     zone: "A_CLOUD_TRAP",
     aliases: ['ngải thầu', 'ngải thầu thượng', 'y tý', 'bát xát', 'ngai thau']
   },
   CU_NHU_SAN: {
+    needsReview: 'Chưa tìm được nguồn toạ độ đáng tin (OSM không có node; DEM tại toạ độ hiện tại '
+      + 'chỉ 1.247m so với 2.662m khai báo). Kết quả cho điểm này có thể của một nơi khác.',
     name: "Đỉnh Cú Nhù San",
     lat: 22.5450, lon: 103.5350, elevation: 2662,
     zone: "A_CLOUD_TRAP",
@@ -97,45 +101,48 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   NAM_KANG_HO_TAO: {
     name: "Nam Kang Ho Tao",
-    lat: 22.1814, lon: 103.8822, elevation: 2881,
+    lat: 22.1504, lon: 103.9704, elevation: 2881,   // nguồn: OSM node "Núi Nam Kang Ho Tao" ele=2881 (DEM 2842m)
     zone: "B_WIND_TUNNEL",
     aliases: ['nam kang ho tao', 'nam kang', 'nậm cang']
   },
   BAN_HANG_DA: {
     name: "Bản Hang Đá (Sapa)",
-    lat: 22.3110, lon: 103.8780, elevation: 1800,
+    lat: 22.3110, lon: 103.8780, elevation: 1020,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['hang đá', 'bản hang đá', 'sapa', 'hầu thào']
   },
 
   // --- YÊN BÁI ---
-  TA_XUA_YEN_BAI: {
-    name: "Tà Xùa (Phu Sa Phìn - Yên Bái)",
-    lat: 21.5300, lon: 104.3200, elevation: 2865,
+  // Đỉnh 2865m bên Yên Bái nay gọi là PHU SA PHÌN — tách hẳn tên khỏi "Tà Xùa" của Sơn La
+  // để người dùng gõ "Tà Xùa" luôn ra khu du lịch Bắc Yên (Sơn La), không nhảy sang đỉnh trek.
+  PHU_SA_PHIN: {
+    name: "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+    lat: 21.4089, lon: 104.3256, elevation: 2865,   // nguồn: OSM node "Núi Phu Sa Phìn" ele=2879 (DEM 2845m)
     zone: "A_CLOUD_TRAP",
-    aliases: ['ta xua trek', 'tram tau', 'phu sa phin', 'trạm tấu', 'tà xùa yên bái', 'ta xua yen bai']
+    aliases: ['phu sa phin', 'phu sa phìn', 'ta xua trek', 'tà xùa trek', 'tram tau', 'trạm tấu',
+              'tà xùa yên bái', 'ta xua yen bai', 'đỉnh tà xùa', 'dinh ta xua', 'ta xua 2865']
   },
   TA_CHI_NHU: {
     name: "Tà Chì Nhù (Đồi hoa tím)",
-    lat: 21.5639, lon: 104.3000, elevation: 2979,
+    lat: 21.5707, lon: 104.3065, elevation: 2979,   // nguồn: OSM node ele=2985 TRÙNG đúng cực đại DEM 2939m
     zone: "A_CLOUD_TRAP",
     aliases: ['ta chi nhu', 'phu song sung', 'doi hoa tim', 'chung chua nha', 'tà chì nhù', 'chi pâu']
   },
   LUNG_CUNG: {
     name: "Lùng Cúng",
-    lat: 21.8906, lon: 104.2694, elevation: 2913,
+    lat: 21.9025, lon: 104.2309, elevation: 2913,   // nguồn: OSM node "Núi Lùng Cúng" ele=2913 (DEM 2861m)
     zone: "A_CLOUD_TRAP",
     aliases: ['lung cung', 'mu cang chai', 'lùng cúng', 'mù cang chải', 'tu san']
   },
   DEO_KHAU_PHA: {
     name: "Đèo Khau Phạ",
-    lat: 21.7580, lon: 104.2750, elevation: 1200,
+    lat: 21.7580, lon: 104.2750, elevation: 940,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['khau phạ', 'đèo khau phạ', 'mù cang chải', 'khau pha']
   },
   DOI_MAM_XOI: {
     name: "Đồi Mâm Xôi (Mù Cang Chải)",
-    lat: 21.8410, lon: 104.1480, elevation: 1000,
+    lat: 21.7941, lon: 104.1519, elevation: 1225,   // nguồn: OSM viewpoint "Mam xoi" — độ cao lấy đúng DEM
     zone: "A_CLOUD_TRAP",
     aliases: ['mâm xôi', 'la pán tẩn', 'mù cang chải', 'mam xoi']
   },
@@ -143,7 +150,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- LAI CHÂU ---
   PUTALENG: {
     name: "Putaleng",
-    lat: 22.4250, lon: 103.6250, elevation: 3049,
+    lat: 22.4232, lon: 103.6036, elevation: 3049,   // nguồn: OSM node "Núi Pu Ta Leng" ele=3049 (DEM 3037m)
     zone: "B_WIND_TUNNEL",
     aliases: ['putaleng', 'pu ta leng', 'tả lèng', 'tam đường']
   },
@@ -155,7 +162,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   TA_LIEN_SON: {
     name: "Tả Liên Sơn (Cổ Trâu)",
-    lat: 22.4550, lon: 103.5500, elevation: 2996,
+    lat: 22.4632, lon: 103.5561, elevation: 2996,   // nguồn: OSM node "Núi Tả Liên Sơn" ele=2996 (DEM 2952m)
     zone: "B_WIND_TUNNEL",
     aliases: ['ta lien son', 'co trau', 'ta leng', 'tả liên', 'tả liên sơn']
   },
@@ -167,7 +174,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   SI_THAU_CHAI: {
     name: "Sì Thâu Chải",
-    lat: 22.3210, lon: 103.6330, elevation: 1400,
+    lat: 22.3616, lon: 103.6017, elevation: 1460,   // nguồn: OSM bản "Sì Thâu Chải" — độ cao lấy đúng DEM
     zone: "B_WIND_TUNNEL",
     aliases: ['sì thâu chải', 'tam đường', 'si thau chai']
   },
@@ -175,7 +182,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- ĐIỆN BIÊN ---
   DEO_PHA_DIN: {
     name: "Đèo Pha Đin",
-    lat: 21.5720, lon: 103.5230, elevation: 1048,
+    lat: 21.5558, lon: 103.5193, elevation: 1300,   // nguồn: OSM "Pha Đin Lộng Gió" — độ cao lấy đúng DEM
     zone: "A_CLOUD_TRAP",
     aliases: ['pha đin', 'đèo pha đin', 'pha din']
   },
@@ -189,13 +196,13 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- HÒA BÌNH ---
   LUNG_VAN: {
     name: "Lũng Vân (Nóc nhà xứ Mường)",
-    lat: 20.6120, lon: 105.1830, elevation: 1200,
+    lat: 20.6120, lon: 105.1830, elevation: 630,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['lũng vân', 'tân lạc', 'lung van', 'nóc nhà xứ mường']
   },
   DEO_THUNG_KHE: {
     name: "Đèo Thung Khe (Đèo Đá Trắng)",
-    lat: 20.7290, lon: 105.1320, elevation: 1000,
+    lat: 20.6725, lon: 105.1211, elevation: 830,   // nguồn: OSM "Đèo Thung Khe" — độ cao lấy đúng DEM
     zone: "A_CLOUD_TRAP",
     aliases: ['thung khe', 'đèo đá trắng', 'mai châu', 'thung khe pass']
   },
@@ -209,19 +216,19 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   },
   CHIEU_LAU_THI: {
     name: "Đỉnh Chiêu Lầu Thi",
-    lat: 22.6658, lon: 104.6644, elevation: 2402,
+    lat: 22.6611, lon: 104.6028, elevation: 2402,   // nguồn: OSM node "Núi Chiêu Lầu Thi" ele=2402 (DEM 2341m)
     zone: "A_CLOUD_TRAP",
     aliases: ['chiêu lầu thi', 'chieu lau thi', 'hoàng su phì', 'hoang su phi']
   },
   TAY_CON_LINH: {
     name: "Tây Côn Lĩnh",
-    lat: 22.8050, lon: 104.8140, elevation: 2427,
+    lat: 22.8019, lon: 104.8063, elevation: 2428,   // nguồn: OSM node "Núi Tây Côn Lĩnh" ele=2428 (DEM 2405m)
     zone: "B_WIND_TUNNEL",
     aliases: ['tây côn lĩnh', 'tay con linh', 'nóc nhà hà giang']
   },
   DONG_VAN: {
     name: "Cao nguyên đá Đồng Văn",
-    lat: 23.2786, lon: 105.3619, elevation: 1500,
+    lat: 23.2783, lon: 105.3615, elevation: 1060,   // nguồn: OSM thị trấn Đồng Văn — độ cao lấy đúng DEM
     zone: "A_CLOUD_TRAP",
     aliases: ['đồng văn', 'dong van', 'mèo vạc', 'cao nguyên đá']
   },
@@ -229,7 +236,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- THANH HÓA ---
   PU_LUONG: {
     name: "Pù Luông",
-    lat: 20.4439, lon: 105.1583, elevation: 1700,
+    lat: 20.4657, lon: 105.0971, elevation: 1700,   // nguồn: cực đại DEM dãy Pù Luông, Bá Thước (1468m)
     zone: "A_CLOUD_TRAP",
     aliases: ['pù luông', 'pu luong', 'bá thước', 'đỉnh pù luông']
   },
@@ -237,19 +244,19 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- VĨNH PHÚC & HÀ NỘI ---
   TAM_DAO: {
     name: "Tam Đảo",
-    lat: 21.4583, lon: 105.6458, elevation: 1200,
+    lat: 21.4583, lon: 105.6458, elevation: 970,   // độ cao lấy đúng DEM tại toạ độ cũ
     zone: "A_CLOUD_TRAP",
     aliases: ['tam đảo', 'tam dao', 'thị trấn tam đảo']
   },
   BA_VI: {
     name: "Đỉnh Ba Vì (Đỉnh Vua)",
-    lat: 21.0800, lon: 105.3600, elevation: 1280,
+    lat: 21.058, lon: 105.3673, elevation: 1296,   // nguồn: OSM node "Đỉnh Vua" ele=1296 (DEM 1251m)
     zone: "A_CLOUD_TRAP",
     aliases: ['ba vì', 'ba vi', 'đỉnh vua', 'núi ba vì', 'cốt 1100', 'cot 1100', 'vườn quốc gia ba vì']
   },
   MAU_SON: {
     name: "Mẫu Sơn (Lạng Sơn)",
-    lat: 21.8419, lon: 106.9208, elevation: 1500,
+    lat: 21.8497, lon: 106.9172, elevation: 1155,   // nguồn: OSM "Khu du lịch Mẫu Sơn" — độ cao lấy đúng DEM
     zone: "A_CLOUD_TRAP",
     aliases: ['mẫu sơn', 'mau son', 'lạng sơn', 'núi cha', 'phja pò', 'phặt chỉ', 'sống lưng khủng long mẫu sơn']
   },
@@ -257,9 +264,10 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- BỔ SUNG 8/2026: các điểm hot 2025-2026, tọa độ xác minh qua OSM/Nominatim + DEM ---
   SA_MU_U_BO: {
     name: "Sa Mu - U Bò (2756m)",
-    lat: 21.3491, lon: 104.4127, elevation: 2756, // đường mòn Sa Mu (OSM), đỉnh 2756m KBT Tà Xùa
+    lat: 21.355, lon: 104.4267, elevation: 2756,   // nguồn: DEM cực đại khối Sa Mu, trùng "Sa Mu Trail" của OSM (DEM 2686m) // đường mòn Sa Mu (OSM), đỉnh 2756m KBT Tà Xùa
     zone: "A_CLOUD_TRAP",
-    aliases: ['sa mu', 'samu', 'sa mu u bò', 'u bò 2756', 'háng đồng', 'khu bảo tồn tà xùa', 'sa mu u bo']
+    aliases: ['sa mu', 'samu', 'sa mu u bò', 'u bò 2756', 'háng đồng', 'khu bảo tồn tà xùa', 'sa mu u bo',
+              'u bò', 'u bo', 'đỉnh u bò', 'dinh u bo']
   },
   BINH_LIEU: {
     name: "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",

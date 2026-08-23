@@ -98,8 +98,11 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | ΔH | vị_trí_đứng − top → STATIC / FLUCTUATING(±250m) / FOG |
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
-| Gió theo vùng | Zone A: 10/15/20 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
-| Điểm ngày | mây thấp bình minh (nặng nhất) + nghịch nhiệt + ẩm + lớp biên đêm mỏng − gió − mây cao đêm − mưa ± mùa |
+| Gió theo vùng | Zone A: 12/18/26 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
+| Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
+| Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |
+| Điểm ngày | **max(mây thấp, bão hoà)** + nghịch nhiệt + ẩm + lớp biên đêm mỏng − gió − mây cao đêm − mưa(theo mm/h) ± mùa |
+| Mưa | không còn xoá kết luận biển mây; phạt theo cường độ, giảm 40% khi có "chữ ký biển mây"; cảnh báo mưa luôn hiện theo lượng mưa thật |
 
 ## 🚀 Chạy & kiểm tra
 
@@ -107,9 +110,20 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 69 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 78 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
+
+# công cụ kiểm chứng (gọi API thật, không phải unit test)
+npx vite-node scripts/audit-coords.ts              # đối chiếu toạ độ thư viện với DEM
+npx vite-node scripts/snapshot-dem.ts              # chụp lại DEM cho test offline
+npx vite-node scripts/hindcast.ts TA_XUA_SON_LA    # soi lại 1 ngày: engine chấm gì, vì sao
+npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng ngoài trình duyệt
 ```
+
+> **Kiểm chứng thực địa 23/8/2026 (Tà Xùa, Bắc Yên):** người dùng thấy biển mây cả ngày,
+> app cũ trả `0/100 · RAIN`. Truy ra 5 lỗi độc lập — toạ độ lệch 16km, bỏ sót tín hiệu bão hoà,
+> phạt hai lần cùng một cơ chế, coi mưa là bằng chứng chống biển mây, và xét sai tầng gió.
+> Chi tiết + ràng buộc mới trong `AGENTS.md`. Toàn bộ thư viện điểm đã được rà lại bằng DEM.
 
 AI (tùy chọn): nhập Gemini API Key qua nút 🔑 trong app (lưu localStorage máy bạn —
 không nhúng key vào code/bundle). **Dùng nhiều thiết bị:** trong modal 🔑 bấm

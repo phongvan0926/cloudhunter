@@ -53,8 +53,16 @@ describe('computeCloudBase & estimateCloudTop', () => {
     expect(computeCloudBase(goldenNight(), 600)).toBe(600 + Math.round(125 * 0.8));
   });
 
-  it('không có mây tầng thấp → không có biển mây (top = null), KHÔNG bịa số', () => {
-    expect(estimateCloudTop(goldenNight({ cloud_low_dawn: 5 }), 600)).toBeNull();
+  it('không mây tầng thấp VÀ thung lũng khô → không có biển mây (top = null), KHÔNG bịa số', () => {
+    const dry = goldenNight({ cloud_low_dawn: 5, td_valley_dawn: 4.0, rh925: 55, rh2m_valley_night: 60 });
+    expect(estimateCloudTop(dry, 600)).toBeNull();
+  });
+
+  it('engine-2.2: mô hình chỉ thấy 5% mây thấp NHƯNG thung lũng bão hòa → vẫn có biển mây', () => {
+    // Ô lưới 9-25km của mô hình toàn cầu không phân giải nổi sương dày vài trăm mét trong
+    // thung lũng hẹp. Đo thật 23/8/2026 tại Tà Xùa: RH 96-99%, T−Td 0,2-0,5°C mà
+    // cloud_cover_low chỉ 0-55% — người dùng thấy biển mây cả ngày.
+    expect(estimateCloudTop(goldenNight({ cloud_low_dawn: 5 }), 600)).not.toBeNull();
   });
 
   it('ẩm bão hòa tới 850hPa → mặt mây quanh 1650m', () => {
@@ -77,9 +85,12 @@ describe('assessWind — ngưỡng theo vùng địa hình (Module 6)', () => {
     expect(assessWind(5, 'B_WIND_TUNNEL').level).toBe('Low');
     expect(assessWind(6, 'B_WIND_TUNNEL').level).toBe('Medium');
   });
-  it('gió >20km/h là Destructive ở mọi vùng', () => {
-    expect(assessWind(25, 'A_CLOUD_TRAP').level).toBe('Destructive');
+  it('gió rất mạnh là Destructive ở mọi vùng (ngưỡng Zone A nới lên >26km/h từ engine-2.2)', () => {
+    expect(assessWind(30, 'A_CLOUD_TRAP').level).toBe('Destructive');
     expect(assessWind(25, 'B_WIND_TUNNEL').level).toBe('Destructive');
+    // 25km/h ở Zone A chỉ là "mây bị đẩy mạnh" — kiểm chứng thật Tà Xùa 23/8/2026:
+    // gió 850hPa 22-23km/h mà biển mây vẫn nằm nguyên cả ngày.
+    expect(assessWind(25, 'A_CLOUD_TRAP').level).toBe('High');
   });
 });
 
@@ -123,15 +134,55 @@ describe('scoreOneModel — cây trạng thái', () => {
     expect(r.reasons.length).toBeGreaterThan(3);
   });
 
-  it('mưa sáng → RAIN bất kể các chỉ số khác đẹp', () => {
-    const r = scoreOneModel('ecmwf_ifs025', goldenNight({ precip_dawn: 4 }), CTX_A, '2026-11-05');
-    expect(r.status).toBe('RAIN');
+  it('mưa sáng khi thung lũng KHÔ (không có chữ ký biển mây) → RAIN', () => {
+    const dry = goldenNight({ precip_dawn: 4, td_valley_dawn: 4.0, rh925: 55, rh2m_valley_night: 60, cloud_low_dawn: 20 });
+    expect(scoreOneModel('ecmwf_ifs025', dry, CTX_A, '2026-11-05').status).toBe('RAIN');
+  });
+
+  it('HỒI QUY Tà Xùa 23/8/2026: mưa phùn sáng KHÔNG được xóa kết luận biển mây', () => {
+    // Ngày thật: thung lũng bão hòa, nghịch nhiệt mạnh, người đứng cao hơn mặt mây,
+    // mưa phùn rạng sáng — thực tế biển mây dày cả ngày, engine cũ trả về "RAIN, hoãn đi".
+    const r = scoreOneModel('ecmwf_ifs025', goldenNight({ precip_dawn: 4, precip_night: 12 }), CTX_A, '2026-11-05');
+    expect(r.status).not.toBe('RAIN');
+    expect(r.reasons.some(x => x.includes('Mưa'))).toBe(true);   // vẫn phải nói rõ là có mưa
+  });
+
+  it('engine-2.2: mưa vẫn luôn ra CẢNH BÁO dù trạng thái không còn là RAIN', () => {
+    const day: DayData = {
+      date: '2026-11-05', quality: 'FORECAST', daysAhead: 1,
+      models: { ecmwf_ifs025: goldenNight({ precip_dawn: 4 }) },
+      sun_times: computeSunTimes(21.28, 104.43, '2026-11-05'),
+    };
+    const out = computeDayForecast(day, CTX_A);
+    expect(out.forecast.status_code).not.toBe('RAIN');
+    expect(out.warnings.some(w => w.includes('mưa') || w.includes('Mưa'))).toBe(true);
   });
 
   it('Zone B gió 18km/h → gió phá mây (DISSIPATING), Zone A cùng gió thì chưa', () => {
-    const windy = goldenNight({ wind850_dawn_max: 18 });
+    // gió mạnh ở CẢ hai tầng để phép thử này chỉ nói về ngưỡng theo vùng, không lẫn với
+    // quy tắc chọn tầng gió của engine-2.2
+    const windy = goldenNight({ wind850_dawn_max: 18, wind925_dawn_max: 18 });
     expect(scoreOneModel('gfs_seamless', windy, CTX_B, '2026-11-05').status).toBe('DISSIPATING');
     expect(scoreOneModel('gfs_seamless', windy, CTX_A, '2026-11-05').status).not.toBe('DISSIPATING');
+  });
+
+  it('engine-2.2: gió mạnh TRÊN nắp nghịch nhiệt không phá được biển mây bị nhốt bên dưới', () => {
+    // Tà Xùa 23/8/2026: gió 850hPa 22km/h (engine cũ trừ -28, kết luận DISSIPATING) trong khi
+    // gió 925hPa trong lớp mây chỉ 4km/h và nắp nghịch nhiệt +5°C nằm ở ~1450m — biển mây
+    // thực tế nằm nguyên cả ngày. Nắp nghịch nhiệt tồn tại chính là để chặn xáo trộn thẳng đứng.
+    const shear = goldenNight({ wind850_dawn_max: 22, wind925_dawn_max: 4 });
+    const r = scoreOneModel('gfs_seamless', shear, CTX_A, '2026-11-05');
+    expect(r.status).not.toBe('DISSIPATING');
+    expect(r.reasons.some(x => x.includes('925hPa'))).toBe(true);
+  });
+
+  it('engine-2.2: KHÔNG có nắp nghịch nhiệt thì vẫn xét gió 850hPa như cũ', () => {
+    const noCap = goldenNight({
+      wind850_dawn_max: 22, wind925_dawn_max: 4,
+      t_valley_dawn: 15, t925: 13.9, t850: 9.1, t700: -1,   // suy giảm chuẩn → không có nắp
+    });
+    const r = scoreOneModel('gfs_seamless', noCap, CTX_A, '2026-11-05');
+    expect(r.reasons.some(x => x.includes('850hPa'))).toBe(true);
   });
 
   it('khô + không mây thấp → CLEAR điểm thấp', () => {
@@ -262,7 +313,8 @@ describe('MOUNTAIN_DB mở rộng 8/2026 — nhận diện đúng điểm mới,
     expect(findBestMatchingMountain('Tà Xùa')?.key).toBe('TA_XUA_SON_LA');
     // 'Sapa' vốn match FANSIPAN (cùng khu vực, alias 'sapa' có từ trước) — chỉ cần không rơi ra ngoài vùng Sapa
     expect(['FANSIPAN', 'SAPA_HAM_RONG']).toContain(findBestMatchingMountain('Sapa')?.key);
-    expect(findBestMatchingMountain('đỉnh u bò')?.key).toBe('DINH_U_BO');
+    // DINH_U_BO đã gộp vào SA_MU_U_BO (23/8/2026) — cùng khối núi KBT Tà Xùa; alias phải theo sang
+    expect(findBestMatchingMountain('đỉnh u bò')?.key).toBe('SA_MU_U_BO');
   });
 
   it('tọa độ mọi entry nằm trong lãnh thổ VN và độ cao hợp lệ', async () => {
@@ -808,5 +860,51 @@ describe('aggregateDayModel — parser dữ liệu Open-Meteo', () => {
     expect(l850.cc).toBe(60);
     expect(agg.blh_night_min).toBe(80);
     expect(agg.freezing_level).toBe(4200);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Toạ độ thư viện điểm — chống lỗi "dự báo đúng công thức nhưng nhầm chỗ"
+// ---------------------------------------------------------------------------
+describe('MOUNTAIN_DB — toạ độ phải khớp độ cao DEM thật', () => {
+  // Ảnh chụp DEM (Open-Meteo Elevation, Copernicus 90m) tại đúng toạ độ từng điểm.
+  // Chụp lại bằng: npx vite-node scripts/snapshot-dem.ts
+  //
+  // Vì sao khoá test này (phát hiện 23/8/2026): 28/56 điểm có toạ độ sai, nặng nhất là
+  // Tà Xùa Sơn La ghi 21.2655,104.2800 — cách khu du lịch ~16km về phía tây, DEM chỉ 324m
+  // trong khi khai báo 1.600m. Mọi dự báo cho điểm đó là của một thung lũng khác, mà
+  // người dùng KHÔNG có cách nào nhận ra vì các con số vẫn "trông hợp lý".
+  const TOL = 400; // m — DEM 90m làm tù đỉnh nhọn; >400m gần như chắc chắn là sai toạ độ
+  it('mọi điểm đều có ảnh chụp DEM (điểm mới bắt buộc phải chụp trước khi lên app)', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const dem = (await import('./fixtures/dem-elevations.json')).default as Record<string, number>;
+    const missing = Object.keys(MOUNTAIN_DB).filter(k => typeof dem[k] !== 'number');
+    expect(missing, 'thiếu ảnh chụp DEM — chạy scripts/snapshot-dem.ts').toEqual([]);
+  });
+
+  it('độ cao khai báo không lệch DEM quá 400m (trừ điểm đã gắn cờ needsReview)', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const dem = (await import('./fixtures/dem-elevations.json')).default as Record<string, number>;
+    const bad = Object.entries(MOUNTAIN_DB)
+      .filter(([k, m]) => !m.needsReview && typeof dem[k] === 'number' && Math.abs(m.elevation - dem[k]) > TOL)
+      .map(([k, m]) => `${k}: khai báo ${m.elevation}m vs DEM ${Math.round(dem[k])}m`);
+    expect(bad).toEqual([]);
+  });
+
+  it('HỒI QUY: Tà Xùa Sơn La nằm ở Bắc Yên (kinh độ ~104.43), không phải thung lũng sông Đà', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const tx = MOUNTAIN_DB.TA_XUA_SON_LA;
+    expect(tx.lon).toBeGreaterThan(104.40);
+    expect(tx.lat).toBeGreaterThan(21.24);
+    expect(tx.lat).toBeLessThan(21.36);
+  });
+
+  it('đỉnh 2865m bên Yên Bái mang tên Phu Sa Phìn, và "Tà Xùa" trỏ về Sơn La', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const { findBestMatchingMountain } = await import('../services/geminiService');
+    expect(MOUNTAIN_DB.PHU_SA_PHIN?.name).toContain('Phu Sa Phìn');
+    expect(MOUNTAIN_DB.TA_XUA_YEN_BAI).toBeUndefined();
+    expect(findBestMatchingMountain('Tà Xùa')?.key).toBe('TA_XUA_SON_LA');
+    expect(findBestMatchingMountain('Phu Sa Phìn')?.key).toBe('PHU_SA_PHIN');
   });
 });
