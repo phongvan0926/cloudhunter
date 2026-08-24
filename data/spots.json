@@ -24,10 +24,10 @@
     "name": "Hang Kia - Pà Cò (Thung Mài)",
     "lat": 20.741,
     "lon": 104.931,
-    "elevation": 985,
+    "elevation": 1200,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 800,
-    "needsReview": null
+    "needsReview": "Toạ độ hiện tại (DEM 983m) chỉ cao hơn đáy thung lũng đã xác thực 800m có 185m — điểm ngắm Thung Mài phải ở trên cao nguyên ~1.200m. Cần toạ độ thật."
   },
   {
     "key": "XIM_VANG",
@@ -44,10 +44,10 @@
     "name": "Pu Nhi Farm",
     "lat": 21.173,
     "lon": 104.316,
-    "elevation": 470,
+    "elevation": 700,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 300,
-    "needsReview": null
+    "needsReview": "Toạ độ hiện tại (DEM 469m) chỉ cao hơn đáy thung lũng đã xác thực 300m có 170m. Nhiều khả năng bị lệch giống lỗi Tà Xùa (kinh độ ~104.3 thay vì ~104.4). Cần toạ độ thật."
   },
   {
     "key": "FANSIPAN",
@@ -144,10 +144,10 @@
     "name": "Bản Hang Đá (Sapa)",
     "lat": 22.311,
     "lon": 103.878,
-    "elevation": 1020,
+    "elevation": 1800,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 1300,
-    "needsReview": null
+    "needsReview": "Toạ độ hiện tại nằm DƯỚI đáy thung lũng Mường Hoa (DEM 1.023m so với đáy 1.300m đã xác thực trong mặt cắt địa hình) — điểm ngắm phải ở TRÊN thung lũng. Cần toạ độ thật của bản Hang Đá."
   },
   {
     "key": "PHU_SA_PHIN",
@@ -274,10 +274,10 @@
     "name": "Lũng Vân (Nóc nhà xứ Mường)",
     "lat": 20.612,
     "lon": 105.183,
-    "elevation": 630,
+    "elevation": 1200,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": null,
-    "needsReview": null
+    "needsReview": "Cả vùng quanh toạ độ hiện tại chỉ cao tối đa 610m (quét DEM 24/8/2026) — không thể chứa \"nóc nhà xứ Mường\" 1.200m. Toạ độ đang trỏ nhầm khu vực."
   },
   {
     "key": "DEO_THUNG_KHE",
@@ -324,10 +324,10 @@
     "name": "Cao nguyên đá Đồng Văn",
     "lat": 23.2783,
     "lon": 105.3615,
-    "elevation": 1060,
+    "elevation": 1500,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 1100,
-    "needsReview": null
+    "needsReview": "Toạ độ đang trỏ vào thị trấn Đồng Văn (DEM 1.059m) — chính là \"đáy thung lũng\" Phố Cổ 1.100m trong mặt cắt địa hình, không phải điểm ngắm ở trên cao nguyên đá."
   },
   {
     "key": "PU_LUONG",

@@ -54,7 +54,7 @@ function nameTokens(name: string): string[] {
   return name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase()
     .replace(/[()]/g, ' ').split(/[^a-z0-9]+/).filter(t => t.length > 1).sort();
 }
-function sameSpotName(a: string, b: string): boolean {
+export function sameSpotName(a: string, b: string): boolean {
   const ta = nameTokens(a), tb = nameTokens(b);
   if (ta.join('|') === tb.join('|')) return true;
   // một bên là tập con của bên kia (vd "Hang Kia - Pà Cò" ⊂ "Hang Kia - Pà Cò (Thung Mài)")
@@ -127,8 +127,23 @@ export async function rankSpotsForDawn(
   // Điểm chưa xác minh được toạ độ thì KHÔNG đưa vào bảng xếp hạng: một toạ độ lệch 15km
   // vẫn trả về đủ số liệu "hợp lý" nhưng của nơi khác — sai âm thầm, người dùng không thể biết.
   const spots = Object.entries(MOUNTAIN_DB).filter(([, m]) => !m.needsReview);
+  // Rào chắn vật lý: người đứng phải CAO HƠN đáy thung lũng, nếu không thì "biển mây dưới
+  // chân" là vô nghĩa. Phát hiện 24/8/2026: Bản Hang Đá ghi đứng 1.020m trong khi đáy thung
+  // lũng Mường Hoa đã xác thực là 1.300m — chấm điểm cho tổ hợp đó chỉ ra số vô nghĩa.
+  //
+  // Ngưỡng CHỈ chặn cái bất khả thi (đứng ngang/dưới đáy), KHÔNG đòi chênh lệch lớn: nhiều
+  // điểm săn mây thật nằm ở địa hình thoải — Linh Quy Pháp Ấn, Măng Đen, đồi chè Cầu Đất
+  // chỉ cao hơn xung quanh 120-170m mà biển mây vẫn dày. Đặt 250m thì loại oan hết nhóm này.
+  const MIN_GAP_M = 80;
   const valleys = await valleyElevationsForAll(onProgress);
-  const usable = spots.filter(([k]) => typeof valleys[k] === 'number');
+  const inconsistent = spots.filter(([k, m]) =>
+    typeof valleys[k] === 'number' && valleys[k] > m.elevation - MIN_GAP_M);
+  if (inconsistent.length > 0) {
+    onProgress?.(`Bỏ ${inconsistent.length} điểm có dữ liệu độ cao mâu thuẫn: `
+      + inconsistent.map(([, m]) => m.name).join(', '));
+  }
+  const bad = new Set(inconsistent.map(([k]) => k));
+  const usable = spots.filter(([k]) => typeof valleys[k] === 'number' && !bad.has(k));
   if (usable.length === 0) throw new Error('Không đo được độ cao thung lũng từ DEM — kiểm tra kết nối mạng.');
 
   onProgress?.(`Tải dự báo GFS+ICON+UKMO cho ${usable.length} điểm (1 call batch)...`);

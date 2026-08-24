@@ -908,3 +908,25 @@ describe('MOUNTAIN_DB — toạ độ phải khớp độ cao DEM thật', () =>
     expect(findBestMatchingMountain('Phu Sa Phìn')?.key).toBe('PHU_SA_PHIN');
   });
 });
+
+describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO HƠN đáy thung lũng', () => {
+  // Phát hiện 24/8/2026 khi chạy bảng xếp hạng: "Bản Hang Đá đứng 1.020m / đáy 1.300m".
+  // Đứng thấp hơn đáy thung lũng thì mọi chỉ số của engine (ΔH, đáy mây, nghịch nhiệt tham
+  // chiếu thung lũng) đều thành số vô nghĩa — mà kết quả vẫn "trông hợp lý" nên không ai thấy.
+  const MIN_GAP_M = 250;
+  it('mọi điểm khớp preset đều có đáy thung lũng thấp hơn chỗ đứng ít nhất 250m', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const { NORTHWEST_PEAKS } = await import('../constants');
+    const { sameSpotName } = await import('../services/rankingService');
+    const bad: string[] = [];
+    for (const [key, m] of Object.entries(MOUNTAIN_DB)) {
+      if (m.needsReview) continue;
+      const preset = NORTHWEST_PEAKS.find(p => p.elevation_profile?.length && sameSpotName(p.name, m.name));
+      const valleys = (preset?.elevation_profile || []).filter(p => p.type === 'VALLEY').map(p => p.altitude);
+      if (!valleys.length) continue;
+      const v = Math.min(...valleys);
+      if (v > m.elevation - MIN_GAP_M) bad.push(`${key}: đứng ${m.elevation}m / đáy ${v}m (${preset!.name})`);
+    }
+    expect(bad).toEqual([]);
+  });
+});

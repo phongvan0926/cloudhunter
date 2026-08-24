@@ -28,8 +28,9 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['pha luong', 'moc chau', 'đỉnh pha luông', 'nóc nhà mộc châu', 'mộc châu', 'cửa khẩu lóng sập']
   },
   HANG_KIA_PA_CO: {
+    needsReview: 'Toạ độ hiện tại (DEM 983m) chỉ cao hơn đáy thung lũng đã xác thực 800m có 185m — điểm ngắm Thung Mài phải ở trên cao nguyên ~1.200m. Cần toạ độ thật.',
     name: "Hang Kia - Pà Cò (Thung Mài)",
-    lat: 20.7410, lon: 104.9310, elevation: 985,   // độ cao lấy đúng DEM tại toạ độ cũ
+    lat: 20.7410, lon: 104.9310, elevation: 1200,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
     zone: "A_CLOUD_TRAP",
     aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình', 'thung mài', 'thung mai', 'săn mây thung mài']
   },
@@ -40,8 +41,9 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['xim vang', 'ruong bac thang', 'xím vàng', 'bắc yên']
   },
   PU_NHI_FARM: {
+    needsReview: 'Toạ độ hiện tại (DEM 469m) chỉ cao hơn đáy thung lũng đã xác thực 300m có 170m. Nhiều khả năng bị lệch giống lỗi Tà Xùa (kinh độ ~104.3 thay vì ~104.4). Cần toạ độ thật.',
     name: "Pu Nhi Farm",
-    lat: 21.1730, lon: 104.3160, elevation: 470,   // độ cao lấy đúng DEM tại toạ độ cũ
+    lat: 21.1730, lon: 104.3160, elevation: 700,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
     zone: "A_CLOUD_TRAP",
     aliases: ['pu nhi', 'pu nhi farm', 'bắc yên', 'đồi pu nhi']
   },
@@ -104,8 +106,11 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['nam kang ho tao', 'nam kang', 'nậm cang']
   },
   BAN_HANG_DA: {
+    needsReview: 'Toạ độ hiện tại nằm DƯỚI đáy thung lũng Mường Hoa (DEM 1.023m so với đáy '
+      + '1.300m đã xác thực trong mặt cắt địa hình) — điểm ngắm phải ở TRÊN thung lũng. '
+      + 'Cần toạ độ thật của bản Hang Đá.',
     name: "Bản Hang Đá (Sapa)",
-    lat: 22.3110, lon: 103.8780, elevation: 1020,   // độ cao lấy đúng DEM tại toạ độ cũ
+    lat: 22.3110, lon: 103.8780, elevation: 1800,   // giữ số GỐC — sai là ở TOẠ ĐỘ (xem needsReview)
     zone: "A_CLOUD_TRAP",
     aliases: ['hang đá', 'bản hang đá', 'sapa', 'hầu thào']
   },
@@ -193,8 +198,9 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
 
   // --- HÒA BÌNH ---
   LUNG_VAN: {
+    needsReview: 'Cả vùng quanh toạ độ hiện tại chỉ cao tối đa 610m (quét DEM 24/8/2026) — không thể chứa "nóc nhà xứ Mường" 1.200m. Toạ độ đang trỏ nhầm khu vực.',
     name: "Lũng Vân (Nóc nhà xứ Mường)",
-    lat: 20.6120, lon: 105.1830, elevation: 630,   // độ cao lấy đúng DEM tại toạ độ cũ
+    lat: 20.6120, lon: 105.1830, elevation: 1200,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
     zone: "A_CLOUD_TRAP",
     aliases: ['lũng vân', 'tân lạc', 'lung van', 'nóc nhà xứ mường']
   },
@@ -225,8 +231,10 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['tây côn lĩnh', 'tay con linh', 'nóc nhà hà giang']
   },
   DONG_VAN: {
+    needsReview: 'Toạ độ đang trỏ vào thị trấn Đồng Văn (DEM 1.059m) — chính là "đáy thung lũng" '
+      + 'Phố Cổ 1.100m trong mặt cắt địa hình, không phải điểm ngắm ở trên cao nguyên đá.',
     name: "Cao nguyên đá Đồng Văn",
-    lat: 23.2783, lon: 105.3615, elevation: 1060,   // nguồn: OSM thị trấn Đồng Văn — độ cao lấy đúng DEM
+    lat: 23.2783, lon: 105.3615, elevation: 1500,   // giữ số GỐC — sai là ở TOẠ ĐỘ (xem needsReview)
     zone: "A_CLOUD_TRAP",
     aliases: ['đồng văn', 'dong van', 'mèo vạc', 'cao nguyên đá']
   },
