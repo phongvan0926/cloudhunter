@@ -23,6 +23,7 @@ interface Row {
   date: string; key: string; name: string;
   truth: Truth; truthSrc: string; truthDetail: string;
   score: number; status: string; agreement: number;
+  perModel?: { model: string; score: number; status: string; cloudTop: number | null }[];
 }
 
 /** Trạng thái engine nào nghĩa là "ngắm được biển mây". FOG = chìm trong mây, KHÔNG tính. */
@@ -64,7 +65,7 @@ function main() {
       const truth: Truth = (o.verdict === 'SEA_CONFIRMED' || o.verdict === 'SEA_MARGINAL') ? 'SEA' : 'NO_SEA';
       rows.push({ date: o.date, key: o.key, name: o.name, truth, truthSrc: 'vệ tinh',
         truthDetail: `${o.verdict}, đỉnh mây ${o.cloudTopMedian_m ?? '—'}m`,
-        score: p.score, status: p.status, agreement: p.agreement });
+        score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel });
     }
   }
 
@@ -86,7 +87,7 @@ function main() {
       const i = rows.findIndex(x => x.date === r.date && x.key === key);
       const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName, truth,
         truthSrc: 'người đi', truthDetail: r.seaLevel + (r.note ? ` — "${r.note}"` : ''),
-        score, status, agreement: p?.agreement ?? 0 };
+        score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel };
       if (i >= 0) rows[i] = row; else rows.push(row);
     }
   }
@@ -122,6 +123,21 @@ function main() {
 
   evalOne(`Theo TRẠNG THÁI (STATIC/FLOWING/FLUCTUATING/ROLLING = có biển mây)`, r => SEA_STATUS.has(r.status));
   evalOne(`Theo NGƯỠNG ĐIỂM (>= ${WORTH_GOING_SCORE}/100 = khuyên đi)`, r => r.score >= WORTH_GOING_SCORE);
+
+  // Mô hình nào đúng? — bảng này là căn cứ để sau này quyết định có nên trọng số hoá mô hình.
+  const perModel: Record<string, { hit: number; n: number }> = {};
+  for (const r of rows) {
+    for (const pm of r.perModel || []) {
+      const s = (perModel[pm.model] ||= { hit: 0, n: 0 });
+      s.n++;
+      if ((r.truth === 'SEA') === SEA_STATUS.has(pm.status)) s.hit++;
+    }
+  }
+  const pmRows = Object.entries(perModel).sort((a, b) => (b[1].hit / b[1].n) - (a[1].hit / a[1].n));
+  if (pmRows.length) {
+    console.log(`\n  TỪNG MÔ HÌNH đúng bao nhiêu ngày (chưa đủ số liệu để trọng số hoá, chỉ để theo dõi):`);
+    for (const [m, v] of pmRows) console.log(`     ${m.padEnd(22)} ${v.hit}/${v.n}`);
+  }
 
   const misses = rows.filter(r => r.truth === 'SEA' && !SEA_STATUS.has(r.status));
   const alarms = rows.filter(r => r.truth === 'NO_SEA' && SEA_STATUS.has(r.status));

@@ -70,9 +70,21 @@ describe('computeCloudBase & estimateCloudTop', () => {
     expect(top).toBe(1650); // 1500 (850hPa) + 150
   });
 
-  it('ẩm sâu tới 700hPa → mây trùm rất dày', () => {
+  it('ẩm sâu tới 700hPa mà KHÔNG có nắp nghịch nhiệt → mây trùm rất dày', () => {
+    // khí quyển suy giảm chuẩn: không có nắp nào chặn, mây phát triển suốt cột
+    const noCap = goldenNight({ rh700: 90, t_valley_dawn: 15, t925: 13.9, t850: 9.1, t700: -1 });
+    expect(estimateCloudTop(noCap, 600)).toBeGreaterThanOrEqual(3100);
+  });
+
+  it('engine-2.3: ẩm sâu tới 700hPa NHƯNG có nắp nghịch nhiệt → mặt mây bị kẹp tại nắp', () => {
+    // Lỗi thật Tà Xùa 24/8/2026: trời mưa nên RH ≥80% liên tục từ thung lũng lên 700hPa,
+    // 5/6 mô hình cho đỉnh mây 3.499m → engine bảo người đứng 1.600m "chìm trong mây",
+    // trong khi thực tế họ đứng TRÊN biển mây cả buổi sáng. Mây thấp không vươn qua nắp được.
     const top = estimateCloudTop(goldenNight({ rh700: 90 }), 600);
-    expect(top).toBeGreaterThanOrEqual(3100);
+    expect(top).not.toBeNull();
+    expect(top!).toBeLessThan(2000);
+    const inv = computeInversion(goldenNight({ rh700: 90 }), 600);
+    expect(top!).toBeLessThanOrEqual(inv.height! + 1);
   });
 });
 

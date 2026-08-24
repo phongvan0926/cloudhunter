@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.2.0';
+export const ENGINE_VERSION = 'engine-2.3.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -143,6 +143,27 @@ export function valleySaturation(m: DayModelData, valleyElev: number): Saturatio
   return { spread: +spread.toFixed(1), seaRH, nightRH, saturated, points };
 }
 
+/**
+ * Mặt biển mây KHÔNG THỂ cao hơn nắp nghịch nhiệt — đó chính là định nghĩa của nắp.
+ *
+ * Vì sao phải kẹp (lỗi thật, Tà Xùa 24/8/2026): hôm đó trời mưa nên RH ≥80% liên tục từ
+ * thung lũng lên tận 700hPa, khiến "lớp mây liên tục" chạy suốt cột khí và 5/6 mô hình đều
+ * ra đỉnh mây 3.499m → engine kết luận người đứng 1.600m "chìm trong mây". Thực tế người
+ * dùng đứng TRÊN biển mây cả buổi sáng. Cột khí mưa thì đúng là có mây từ dưới lên trên
+ * thật, nhưng cái người săn mây nhìn thấy là LỚP THẤP bị nhốt dưới nắp; mọi thứ phía trên
+ * nắp là tầng mây khác. GFS — mô hình duy nhất đặt đỉnh mây dưới chỗ đứng — đã đúng.
+ */
+function capByInversion(top: number, m: DayModelData, valleyElev: number, base: number): number {
+  const inv = computeInversion(m, valleyElev);
+  if (inv.height === null) return top;
+  if (inv.strength !== 'Strong' && inv.strength !== 'Moderate') return top;
+  if (inv.height <= base + 100) return top;      // nắp quá sát đáy mây → không tin
+  // CHỈ can thiệp khi ước lượng vượt HẲN nắp (>300m). Vượt chút ít là phần đệm bình thường
+  // của phép ước lượng; vượt cả cây số nghĩa là đã gộp nhầm một tầng mây khác vào lớp thấp.
+  if (top <= inv.height + 300) return top;
+  return inv.height;
+}
+
 export function estimateCloudTop(m: DayModelData, valleyElev: number): number | null {
   // Cổng cloud_cover_low một mình từng làm engine trả "CLEAR" cho ngày thung lũng bão hoà
   // (AIFS 23/8/2026 báo mây thấp 7% giữa lúc RH 99%) → nhận thêm tín hiệu bão hoà.
@@ -169,7 +190,7 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
     if (moistTop < 0) top = base + 350;              // mây thấp nông, không tầng nào rõ mây
     else if (moistTop >= 2900) top = moistTop + 400; // lớp mây liên tục tới ~700hPa → trùm dày
     else top = moistTop + 150;
-    return Math.max(top, base + 100);
+    return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
   }
   const levels = [
     { h: LEVEL_HEIGHTS.p925, rh: m.rh925 },
@@ -186,7 +207,7 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
   } else {
     top = moistTop + 150;
   }
-  return Math.max(top, base + 100);
+  return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
 }
 
 export interface WindAssessment {
@@ -448,6 +469,11 @@ export function scoreOneModel(
   if (m.precip_night > 8) {
     if (dawnRate < 0.3 && sat.saturated) {
       add(-3, `Mưa đêm ${m.precip_night}mm nhưng tạnh trước bình minh — thung lũng bão hoà, kịch bản "biển mây sau mưa"`);
+    } else if (seaSignature) {
+      // Kiểm chứng thật 23 VÀ 24/8/2026 tại Tà Xùa: mưa suốt đêm 21mm rồi sáng vẫn mưa ~2mm/h,
+      // mà biển mây vẫn dày cả hai hôm. Mưa dầm dưới nắp nghịch nhiệt là mưa TRONG/TRÊN lớp mây,
+      // không phải đối lưu xé mây — phạt nặng ở đây là phạt nhầm hiện tượng.
+      add(-6, `Mưa đêm ${m.precip_night}mm kéo sang sáng — nhưng dưới nắp nghịch nhiệt, thung lũng vẫn bão hoà`);
     } else {
       add(-15, `Mưa đêm lớn ${m.precip_night}mm, kéo sang cả sáng`);
     }
@@ -461,7 +487,15 @@ export function scoreOneModel(
   }
 
   const season = seasonAdjust(dateStr, ctx.lat);
-  if (season.delta !== 0) add(season.delta, `Hiệu chỉnh mùa: ${season.label}`);
+  if (season.delta !== 0) {
+    // Hiệu chỉnh mùa là TIÊN NGHIỆM khí hậu: "mùa này thường ít/nhiều biển mây". Khi các
+    // trường của mô hình đã cho thấy TẬN MẮT chữ ký biển mây (thung lũng bão hoà + nắp
+    // nghịch nhiệt + người đứng trên mặt mây) thì bằng chứng cụ thể đã thay thế tiên nghiệm —
+    // trừ tiếp cả 12 điểm là đếm hai lần cùng một thứ. Chỉ giảm phạt, KHÔNG tăng thưởng.
+    const delta = seaSignature && season.delta < 0 ? Math.round(season.delta / 2) : season.delta;
+    add(delta, `Hiệu chỉnh mùa: ${season.label}`
+      + (delta !== season.delta ? ' (giảm nửa vì đã thấy rõ chữ ký biển mây)' : ''));
+  }
 
   score = Math.round(Math.max(0, Math.min(100, score)));
 
@@ -475,8 +509,12 @@ export function scoreOneModel(
   const rainy = m.precip_dawn / 5 >= 0.3 || (m.precip_night > 8 && m.precip_dawn / 5 >= 0.06);
   if (rainy && !seaSignature) status = 'RAIN';
   else if (wind.level === 'Destructive') status = 'DISSIPATING';
-  else if (deepOvercast) status = 'FOG';
-  else if (top === null) status = 'CLEAR';
+  // "Ẩm sâu tới 700hPa + mây tầng giữa dày" CHỈ có nghĩa khi ta chưa biết mặt biển mây ở đâu.
+  // Khi đã tính được đỉnh mây thì ΔH mới là câu trả lời: mây tầng giữa ở 3.000m không hề đặt
+  // người đứng 1.600m vào trong mây, nếu mặt biển mây nằm ở 1.582m dưới chân họ.
+  // (Lỗi thật: Tà Xùa 24/8/2026 — GFS tính đỉnh mây 1.582m < chỗ đứng 1.600m, tức ĐỨNG TRÊN
+  //  biển mây, nhưng bị deepOvercast đè thành "Mù trùm — bạn chìm trong mây".)
+  else if (top === null) status = deepOvercast ? 'FOG' : 'CLEAR';
   else if (deltaH !== null && deltaH > 250) status = wind.level === 'Low' ? 'STATIC' : 'FLOWING';
   else if (deltaH !== null && deltaH >= -250) status = wind.level === 'Low' ? 'FLUCTUATING' : 'ROLLING';
   else status = 'FOG';

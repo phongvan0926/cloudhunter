@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-08-24-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-08-24",
+    "seaLevel": "BELOW",
+    "note": "Người dùng báo trực tiếp: sáng 24/8 Tà Xùa lại có biển mây, ngày thứ hai liên tiếp. Phân tích best_match cho thấy đêm mưa 21mm và sáng vẫn mưa ~2mm/h — mưa và biển mây cùng tồn tại.",
+    "reportedAt": "2026-08-24T11:30:00+07:00"
+  },
+  {
     "id": "2026-08-23-taxua",
     "spotKey": "TA_XUA_SON_LA",
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",

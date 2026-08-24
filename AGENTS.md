@@ -111,6 +111,52 @@ báo nhầm: người dùng bỏ lỡ chuyến đi đẹp và mất niềm tin v
 Thay vào đó: người dùng thấy bài trên Facebook thì bấm **một nút trong app** để ghi lại —
 mất 5 giây, dữ liệu sạch hơn hẳn scraping (có toạ độ, có ngày, có mốc so với chỗ đứng).
 
+### ⚠️ engine-2.3 (24/8/2026) — ca kiểm chứng thứ hai, cùng một điểm
+
+Tà Xùa **lại** có biển mây sáng 24/8 (ngày thứ hai liên tiếp), app trả `22/100 · FOG`.
+Lần này phân tích best_match cho thấy **đêm mưa 21mm và sáng vẫn mưa ~2mm/h** trong khi
+thung lũng bão hoà liên tục (RH 96-98%, T−Td 0,3-0,6°C). Tức là **mưa dầm và biển mây cùng
+tồn tại** — không phải ngoại lệ, mà là kiểu thời tiết đặc trưng của mùa mưa Tây Bắc.
+
+Ba lỗi nữa, đều có test khoá:
+
+1. **`deepOvercast` đè lên ΔH đã biết.** Quy tắc "RH700 ≥85% + mây tầng giữa ≥70% ⇒ FOG"
+   chạy TRƯỚC cả nhánh ΔH, nên GFS tính được mặt mây 1.582m < chỗ đứng 1.600m (đúng thực tế)
+   vẫn bị đổi thành "Mù trùm — bạn chìm trong mây". Mây tầng giữa ở 3.000m không đặt người
+   đứng 1.600m vào trong mây. Nay `deepOvercast` chỉ còn dùng khi **chưa** tính được đỉnh mây.
+
+2. **Mặt mây không bị kẹp bởi nắp nghịch nhiệt.** Trời mưa ⇒ RH ≥80% liên tục từ thung lũng
+   lên 700hPa ⇒ "lớp mây liên tục" chạy suốt cột ⇒ **5/6 mô hình đều ra đỉnh mây 3.499m**.
+   Nhưng mây thấp *không vươn qua nắp được* — đó là định nghĩa của nắp. Nay `estimateCloudTop`
+   kẹp trần về `inv.height` khi ước lượng vượt nắp **hơn 300m** (vượt ít là phần đệm bình
+   thường của phép ước lượng; vượt cả cây số là đã gộp nhầm một tầng mây khác vào lớp thấp).
+
+3. **Phạt chồng phạt.** Mưa đêm kéo sang sáng vẫn bị −15 dù có chữ ký biển mây (nay −6), và
+   hiệu chỉnh mùa hè −12 vẫn cộng dồn (nay giảm nửa khi có chữ ký). Hiệu chỉnh mùa là
+   **tiên nghiệm khí hậu**; khi các trường của mô hình đã cho thấy tận mắt chữ ký biển mây thì
+   bằng chứng cụ thể đã thay thế tiên nghiệm — trừ tiếp là đếm hai lần. *Chỉ giảm phạt,
+   không bao giờ tăng thưởng.*
+
+**Sau sửa**: GFS cho `65/100 · FLUCTUATING` — vượt ngưỡng đáng đi, đúng thực tế.
+Bản gộp vẫn thấp vì **các mô hình bất đồng tận gốc** (đồng thuận 33-50%): chỉ GFS phân giải
+được lớp mây nông, ICON/UKMO/JMA/ECMWF đặt mặt mây lên trên đầu người đứng. **Đây là giới hạn
+của dữ liệu, không phải của công thức** — không quy tắc gộp nào cứu được nếu đa số sai.
+
+### 📈 Theo dõi độ chính xác TỪNG MÔ HÌNH (chưa trọng số hoá)
+
+`snapshot-forecast.ts` nay lưu kết quả **từng mô hình**, `calibrate.ts` in bảng đúng/sai
+theo mô hình. Số liệu hiện tại (n=5, quá ít để kết luận):
+
+```
+gfs_seamless    5/5
+icon_seamless   1/5
+ukmo_seamless   1/5
+```
+
+⚠️ **KHÔNG trọng số hoá mô hình cho tới khi có ≥30 ngày kiểm chứng**, và phải gồm cả ngày
+CÓ lẫn ngày KHÔNG có biển mây — hiện 3/5 dòng là ngày dễ (không có biển mây). Trọng số hoá
+sớm dựa trên vài ngày ở một điểm là cách chắc chắn nhất để tạo ra một lỗi hệ thống mới.
+
 ### 🗺️ Toạ độ điểm — quy tắc bắt buộc khi thêm/sửa
 
 - Toạ độ phải có **nguồn** ghi ngay trong comment (node OSM có tên, hoặc cực đại DEM có mốc đối chiếu).

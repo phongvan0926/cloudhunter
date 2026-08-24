@@ -99,6 +99,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
 | Gió theo vùng | Zone A: 12/18/26 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
+| Mặt mây bị kẹp | không vươn qua nắp nghịch nhiệt được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây" |
 | Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
 | Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |
 | Điểm ngày | **max(mây thấp, bão hoà)** + nghịch nhiệt + ẩm + lớp biên đêm mỏng − gió − mây cao đêm − mưa(theo mm/h) ± mùa |
@@ -110,7 +111,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 78 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 80 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

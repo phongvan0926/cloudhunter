@@ -39,6 +39,13 @@ export interface SpotRank {
   score: number;
   status: StatusCode;
   agreement: number;    // % các mô hình xếp hạng đồng thuận trạng thái
+  /**
+   * Kết quả TỪNG mô hình, để về sau chấm được mô hình nào đúng trên các ngày đã kiểm chứng.
+   * Cần vì ngày 23-24/8/2026 tại Tà Xùa cho thấy các mô hình bất đồng tận gốc: chỉ GFS
+   * phân giải được lớp mây nông bị nhốt dưới nắp nghịch nhiệt, còn ICON/UKMO đặt mặt mây
+   * lên trên đầu người đứng. Không có thống kê theo mô hình thì không thể biết nên tin ai.
+   */
+  perModel: { model: string; score: number; status: StatusCode; cloudTop: number | null }[];
 }
 
 async function fetchJson(url: string): Promise<any> {
@@ -175,6 +182,7 @@ export async function rankSpotsForDawn(
       key, name: mt.name, lat: mt.lat, lon: mt.lon, elevation: mt.elevation,
       valleyElev: Math.round(valleys[key]), zone: mt.zone,
       score: c.score, status: c.status, agreement: c.agreement,
+      perModel: per.map(x => ({ model: x.model, score: x.score, status: x.status, cloudTop: x.cloudTop })),
     });
   });
 
