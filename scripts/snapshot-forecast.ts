@@ -17,16 +17,30 @@ if (typeof (globalThis as any).localStorage === 'undefined') {
     removeItem: (k: string) => { mem.delete(k); },
   };
 }
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'fs';
 import { rankSpotsForDawn } from '../services/rankingService';
 import { vnTodayStr, addDaysStr } from '../services/weatherService';
 import { ENGINE_VERSION } from '../services/cloudScoreEngine';
 
-const DATE = process.argv[2] || addDaysStr(vnTodayStr(), 1);
+const DATE = process.argv.filter(a => a !== '--force')[2] || addDaysStr(vnTodayStr(), 1);
+const FORCE = process.argv.includes('--force');
+
+// TÍNH TOÀN VẸN CỦA VÒNG KIỂM CHỨNG: bản chụp là BẰNG CHỨNG "app đã nói gì TRƯỚC khi biết
+// sự thật". Nếu chạy lại đè lên được thì mỗi engine mới sẽ tự viết lại lịch sử của chính nó
+// rồi chấm điểm mình trên đó — bảng hiệu chuẩn lập tức thành vô nghĩa mà không ai thấy.
+// Muốn xem engine mới chấm ngày cũ thế nào thì dùng scripts/hindcast.ts, đừng đè bản chụp.
+const path = `data/observations/${DATE}-forecast.json`;
+if (existsSync(path) && !FORCE) {
+  const old = JSON.parse(readFileSync(path, 'utf-8'));
+  console.error(`❌ Đã có bản chụp cho ${DATE} (${old.engineVersion}, chụp lúc ${old.snapshotAt}).`);
+  console.error('   Không đè: bản chụp là bằng chứng dự báo, không phải kết quả tính lại.');
+  console.error('   Muốn soi engine hiện tại trên ngày này: npx vite-node scripts/hindcast.ts <KEY> ' + DATE);
+  console.error('   Thật sự cần ghi đè (vd bản chụp hỏng): thêm --force');
+  process.exit(1);
+}
 
 rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
   mkdirSync('data/observations', { recursive: true });
-  const path = `data/observations/${DATE}-forecast.json`;
   writeFileSync(path, JSON.stringify({
     date: DATE,
     engineVersion: ENGINE_VERSION,

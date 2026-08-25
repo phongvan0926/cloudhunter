@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast,
+  computeDayForecast, rootedLowLayer, seaLayerRH,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -15,7 +15,7 @@ function goldenNight(overrides: Partial<DayModelData> = {}): DayModelData {
   return {
     t_valley_dawn: 12.0, td_valley_dawn: 11.2, t_obs_dawn: 8.0, td_obs_dawn: 6.0,
     cloud_low_dawn: 85, cloud_mid_dawn: 10, cloud_high_dawn: 20,
-    precip_dawn: 0, wind850_dawn_max: 5, wind925_dawn_max: 4, wind_dir850: 90,
+    precip_dawn: 0, wind850_dawn_max: 5, wind925_dawn_max: 4,
     // thung lũng 600m, T kỳ vọng tại 850hPa (1500m) = 12 − 6.5×0.9 ≈ 6.15 → t850=10 là nghịch nhiệt mạnh (+3.9)
     t925: 11.5, t850: 10.0, t700: 2.0,
     rh925: 95, rh850: 88, rh700: 30,
@@ -654,14 +654,28 @@ describe('engine-2.0 — profile tầng thật (geopotential + cloud cover từn
     expect(top!).toBeLessThan(2000);
   });
 
-  it('lớp biên đêm mỏng (GFS) cộng điểm; lớp biên dày trừ điểm', () => {
+  // engine-2.4: lớp biên đêm CHỈ còn trừ điểm, không còn cộng.
+  // Lý do đo được (25/8/2026, toàn thư viện 50 điểm): 46/50 ca của GFS có BLH ≤ 200m
+  // (trung vị 15m) còn ICON/UKMO không có biến này ở ca nào → phần thưởng +8 không phân
+  // biệt ngày tốt/xấu, nó chỉ nâng GFS lên 8 điểm trong hầu hết mọi so sánh. Mà chính
+  // bảng so sánh giữa các mô hình là thứ app dùng để tự hiệu chuẩn, nên thiên vị này ăn
+  // thẳng vào vòng học của app.
+  it('lớp biên đêm KHÔNG còn cộng điểm (thiên vị GFS), chỉ còn trừ khi lớp biên dày', () => {
     const base = scoreOneModel('gfs_seamless', goldenNight(), CTX_A, '2026-11-05');
     const thin = scoreOneModel('gfs_seamless', goldenNight({ blh_night_min: 150 }), CTX_A, '2026-11-05');
+    expect(thin.score).toBe(base.score);
+    expect(thin.reasons.join(' ')).not.toMatch(/Lớp biên đêm/);
+
     const thick = scoreOneModel('gfs_seamless', goldenNight({ blh_night_min: 1500, cloud_low_dawn: 40 }), CTX_A, '2026-11-05');
     const thickBase = scoreOneModel('gfs_seamless', goldenNight({ cloud_low_dawn: 40 }), CTX_A, '2026-11-05');
-    expect(thin.score).toBeGreaterThanOrEqual(base.score); // đêm vàng có thể đã kịch 100 → chỉ cần không giảm
-    expect(thin.reasons.join(' ')).toMatch(/Lớp biên đêm rất mỏng/);
     expect(thick.score).toBeLessThan(thickBase.score);
+    expect(thick.reasons.join(' ')).toMatch(/Lớp biên đêm dày/);
+  });
+
+  it('mô hình CÓ blh và mô hình KHÔNG có blh phải chấm bằng nhau khi mọi biến khác giống hệt', () => {
+    const withBlh = scoreOneModel('gfs_seamless', goldenNight({ blh_night_min: 15 }), CTX_A, '2026-11-05');
+    const without = scoreOneModel('icon_seamless', goldenNight({ blh_night_min: NaN }), CTX_A, '2026-11-05');
+    expect(withBlh.score).toBe(without.score);
   });
 
   it('vị trí đứng trên mực đóng băng thật → cảnh báo băng giá', () => {
@@ -731,10 +745,29 @@ describe('engine-2.1 — sửa lỗi audit vòng 2', () => {
     const { OBSERVER_VARS, HOURLY_VARS } = await import('../services/weatherService');
     expect(OBSERVER_VARS.length).toBeLessThan(HOURLY_VARS.length / 4); // tiết kiệm rõ rệt
     for (const v of OBSERVER_VARS) expect(HOURLY_VARS).toContain(v);
-    // các biến fetch-mà-không-dùng đã bị cắt khỏi bộ chính
-    expect(HOURLY_VARS).not.toContain('relative_humidity_2m');
-    expect(HOURLY_VARS).not.toContain('wind_direction_850hPa');
+    expect(HOURLY_VARS).not.toContain('wind_direction_850hPa'); // không ai đọc
     expect(HOURLY_VARS).toContain('lifted_index'); // giữ vì engine-2.1 DÙNG
+    // CHÍNH TEST NÀY từng khoá con bug: nó khẳng định relative_humidity_2m đã bị cắt khỏi
+    // HOURLY_VARS là ĐÚNG, trong khi valleySaturation vẫn đọc nó qua rh2m_valley_night →
+    // biến luôn NaN, nhánh "ẩm sát đất ban đêm ≥ 92%" chết lặng suốt nhiều ngày mà cả 80
+    // test vẫn xanh (fixture gán thẳng số, không đi qua tầng fetch). Bài học: điều kiện
+    // đúng không phải "biến này có/không có trong danh sách" mà là ĐỐI CHIẾU HAI CHIỀU
+    // giữa cái fetch về và cái engine thật sự đọc — xem scripts/audit-vars.ts.
+    expect(HOURLY_VARS).toContain('relative_humidity_2m');
+  });
+
+  it('mọi biến engine ĐỌC đều phải được FETCH (đối chiếu hai chiều — lỗi câm 25/8/2026)', async () => {
+    const { HOURLY_VARS, OBSERVER_VARS, PRESSURE_LEVELS } = await import('../services/weatherService');
+    const fs = await import('fs');
+    const src = fs.readFileSync('services/weatherService.ts', 'utf-8');
+    const read = new Set<string>();
+    for (const mm of src.matchAll(/pick\((?:valley|observer), '([^']+)'/g)) read.add(mm[1]);
+    for (const mm of src.matchAll(/pick\((?:valley|observer), `([a-z_]+)_\$\{p\}hPa`/g)) {
+      for (const { p } of PRESSURE_LEVELS) read.add(`${mm[1]}_${p}hPa`);
+    }
+    const fetched = new Set<string>([...HOURLY_VARS, ...OBSERVER_VARS].map(String));
+    const missing = [...read].filter(v => !fetched.has(v)).sort();
+    expect(missing, 'biến engine đọc mà không hề fetch → luôn NaN').toEqual([]);
   });
 
   it('cache đáy thung lũng có vân tay tọa độ — sửa tọa độ điểm là tự đo lại', async () => {
@@ -940,5 +973,72 @@ describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO H
       if (v > m.elevation - MIN_GAP_M) bad.push(`${key}: đứng ${m.elevation}m / đáy ${v}m (${preset!.name})`);
     }
     expect(bad).toEqual([]);
+  });
+});
+
+/**
+ * engine-2.4 (25/8/2026) — ca kiểm chứng thứ BA: Thảo nguyên Suôi Thầu (Xín Mần),
+ * điểm người dùng cung cấp bằng plus code, trước đó chưa có trong thư viện.
+ * Profile dưới đây là số THẬT lấy từ Open-Meteo cho 06h ngày 25/8/2026, đáy thung lũng 274m.
+ */
+function suoiThau(overrides: Partial<DayModelData> = {}): DayModelData {
+  return {
+    t_valley_dawn: 26.3, td_valley_dawn: 25.0, t_obs_dawn: 20.5, td_obs_dawn: 19.5,
+    cloud_low_dawn: 0,           // <-- mô hình toàn cầu KHÔNG "thấy" mây thấp nào
+    cloud_mid_dawn: 10, cloud_high_dawn: 36,
+    precip_dawn: 0, wind850_dawn_max: 19.6, wind925_dawn_max: 1.6,
+    t925: 26.7, t850: 22.6, t700: 8.0,
+    rh925: 80, rh850: 72, rh700: 91,
+    cloud_high_night: 14, wind925_night: 2, precip_night: 0.9, rh2m_valley_night: 93,
+    levels: [
+      { p: 975, h: 237, hReal: true, t: 27.0, rh: 80, cc: 0 },
+      { p: 950, h: 469, hReal: true, t: 25.5, rh: 80, cc: 0 },
+      { p: 925, h: 706, hReal: true, t: 26.7, rh: 80, cc: 0 },
+      { p: 900, h: 948, hReal: true, t: 25.4, rh: 80, cc: 0 },
+      { p: 850, h: 1449, hReal: true, t: 22.6, rh: 72, cc: 0 },   // <-- lớp ẩm KẾT THÚC ở đây
+      { p: 800, h: 1975, hReal: true, t: 19.5, rh: 81, cc: 14 },
+      { p: 700, h: 3110, hReal: true, t: 8.0, rh: 91, cc: 45 },   // <-- mây tầng cao, KHÔNG phải biển mây
+    ],
+    ...overrides,
+  };
+}
+const CTX_SUOI = { valleyElevation: 274, observerAlt: 1200, zone: 'A_CLOUD_TRAP' as const, lat: 22.68 };
+
+describe('engine-2.4 — lớp mây bám gốc thung lũng (ca Suôi Thầu 25/8/2026)', () => {
+  it('nhận ra lớp ẩm dày 470→948m dù cloud_cover_low = 0%', () => {
+    const r = rootedLowLayer(suoiThau(), 274);
+    expect(r.rooted).toBe(true);
+    expect(r.top).toBe(948);
+  });
+
+  it('KHÔNG nhận nhầm mây tầng cao 3.110m là biển mây (điều kiện "bám gốc")', () => {
+    const highOnly = suoiThau({
+      levels: suoiThau().levels!.map(l => (l.h < 3000 ? { ...l, rh: 45, cc: 0 } : l)),
+    });
+    expect(rootedLowLayer(highOnly, 274).rooted).toBe(false);
+    expect(estimateCloudTop(highOnly, 274)).toBeNull();
+  });
+
+  it('HỒI QUY: engine cũ trả CLEAR cho ngày này — nay phải ra mặt mây DƯỚI chỗ đứng', () => {
+    const top = estimateCloudTop(suoiThau(), 274);
+    expect(top).not.toBeNull();
+    expect(top!).toBeLessThan(1200);          // người đứng 1.200m ở TRÊN biển mây
+    const s = scoreOneModel('ukmo_seamless', suoiThau(), CTX_SUOI, '2026-08-25');
+    expect(s.status).not.toBe('CLEAR');
+  });
+
+  it('ẩm "lớp biển mây" đo ở mực gần ĐÁY MÂY, không cứng nhắc 925hPa theo độ cao thung lũng', () => {
+    // đáy thung lũng 274m, T−Td = 1.3 → đáy mây ≈ 437m → mực gần nhất là 950hPa (469m),
+    // KHÔNG phải 925hPa (706m) như quy tắc cũ "đáy < 900m ⇒ luôn rh925".
+    const m = suoiThau({
+      levels: suoiThau().levels!.map(l => (l.p === 950 ? { ...l, rh: 96 } : l)),
+    });
+    expect(seaLayerRH(m, 274)).toBe(96);
+  });
+
+  it('không có profile tầng → quay về quy tắc cũ theo độ cao thung lũng', () => {
+    const m = suoiThau({ levels: undefined });
+    expect(seaLayerRH(m, 274)).toBe(80);      // rh925
+    expect(seaLayerRH(m, 1800)).toBe(91);     // rh700
   });
 });

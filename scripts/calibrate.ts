@@ -24,6 +24,7 @@ interface Row {
   truth: Truth; truthSrc: string; truthDetail: string;
   score: number; status: string; agreement: number;
   perModel?: { model: string; score: number; status: string; cloudTop: number | null }[];
+  engineVersion?: string;   // engine nào đã TẠO RA bản chụp — để cảnh báo số liệu cũ
 }
 
 /** Trạng thái engine nào nghĩa là "ngắm được biển mây". FOG = chìm trong mây, KHÔNG tính. */
@@ -48,7 +49,7 @@ function main() {
   const fc: Record<string, Record<string, { score: number; status: string; agreement: number }>> = {};
   for (const f of files.filter(f => f.endsWith('-forecast.json'))) {
     const j = JSON.parse(readFileSync(`${DIR}/${f}`, 'utf-8'));
-    fc[j.date] = Object.fromEntries(j.spots.map((s: any) => [s.key, s]));
+    fc[j.date] = Object.fromEntries(j.spots.map((s: any) => [s.key, { ...s, engineVersion: j.engineVersion }]));
   }
 
   const rows: Row[] = [];
@@ -65,7 +66,8 @@ function main() {
       const truth: Truth = (o.verdict === 'SEA_CONFIRMED' || o.verdict === 'SEA_MARGINAL') ? 'SEA' : 'NO_SEA';
       rows.push({ date: o.date, key: o.key, name: o.name, truth, truthSrc: 'vệ tinh',
         truthDetail: `${o.verdict}, đỉnh mây ${o.cloudTopMedian_m ?? '—'}m`,
-        score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel });
+        score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel,
+        engineVersion: (p as any).engineVersion });
     }
   }
 
@@ -87,7 +89,8 @@ function main() {
       const i = rows.findIndex(x => x.date === r.date && x.key === key);
       const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName, truth,
         truthSrc: 'người đi', truthDetail: r.seaLevel + (r.note ? ` — "${r.note}"` : ''),
-        score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel };
+        score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel,
+        engineVersion: (p as any)?.engineVersion };
       if (i >= 0) rows[i] = row; else rows.push(row);
     }
   }
@@ -137,6 +140,14 @@ function main() {
   if (pmRows.length) {
     console.log(`\n  TỪNG MÔ HÌNH đúng bao nhiêu ngày (chưa đủ số liệu để trọng số hoá, chỉ để theo dõi):`);
     for (const [m, v] of pmRows) console.log(`     ${m.padEnd(22)} ${v.hit}/${v.n}`);
+    const stale = rows.filter(r => r.engineVersion && r.engineVersion < 'engine-2.4').length;
+    if (stale > 0) {
+      console.log(`     ⚠️  ${stale}/${rows.length} dòng đến từ bản chụp engine ≤2.3, thời điểm mà GFS được`);
+      console.log(`        cộng thêm +8 "lớp biên đêm mỏng" trong 92% số ca còn ICON/UKMO không bao giờ có`);
+      console.log(`        biến đó. Phần chênh lệch giữa GFS và các mô hình khác vì thế CÓ PHẦN là do`);
+      console.log(`        thiên vị của engine, không thuần tuý là mô hình giỏi hơn. Thiên vị đã bỏ ở`);
+      console.log(`        engine-2.4 — chỉ tin bảng này sau khi đủ ngày chụp bằng engine ≥2.4.`);
+    }
   }
 
   const misses = rows.filter(r => r.truth === 'SEA' && !SEA_STATUS.has(r.status));

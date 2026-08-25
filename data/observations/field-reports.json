@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-08-25-suoithau",
+    "spotKey": "SUOI_THAU",
+    "locationName": "Thảo nguyên Suôi Thầu (Xín Mần)",
+    "date": "2026-08-25",
+    "seaLevel": "BELOW",
+    "note": "Người dùng báo trực tiếp: sáng 25/8 có biển mây ở Thảo nguyên Suôi Thầu, kèm plus code MCJQ+7R (Pà Vầy Sủ) — điểm này trước đó CHƯA có trong thư viện. Ca này làm lộ 4 lỗi của engine-2.3, trong đó có lỗi câm relative_humidity_2m không hề được fetch.",
+    "reportedAt": "2026-08-25T12:00:00+07:00"
+  },
+  {
     "id": "2026-08-24-taxua",
     "spotKey": "TA_XUA_SON_LA",
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",

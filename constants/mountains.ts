@@ -378,5 +378,11 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     lat: 21.43931, lon: 104.19894, elevation: 1350, // plus code C5QX+PH6 user cung cấp, DEM 1354m; đáy thung lũng 464m
     zone: "A_CLOUD_TRAP",
     aliases: ['chiềng công', 'chieng cong', 'chiềng hoa', 'mường la', 'săn mây chiềng công']
+  },
+  SUOI_THAU: {
+    name: "Thảo nguyên Suôi Thầu (Xín Mần)",
+    lat: 22.68069, lon: 104.43956, elevation: 1200, // plus code 7PJ6MCJQ+7R user cung cấp, DEM 1199m; đáy thung lũng sông Chảy dưới 274m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['suôi thầu', 'suoi thau', 'suối thầu', 'thảo nguyên suôi thầu', 'xín mần', 'xin man', 'pà vầy sủ', 'pa vay su', 'hà giang', 'tuyên quang']
   }
 };

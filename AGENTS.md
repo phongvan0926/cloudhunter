@@ -142,6 +142,84 @@ Bản gộp vẫn thấp vì **các mô hình bất đồng tận gốc** (đồ
 được lớp mây nông, ICON/UKMO/JMA/ECMWF đặt mặt mây lên trên đầu người đứng. **Đây là giới hạn
 của dữ liệu, không phải của công thức** — không quy tắc gộp nào cứu được nếu đa số sai.
 
+### ⚠️ engine-2.4 (25/8/2026) — ca kiểm chứng thứ ba, ĐIỂM MỚI: Thảo nguyên Suôi Thầu
+
+Người dùng báo biển mây ở Suôi Thầu (Xín Mần) và đưa plus code `MCJQ+7R` — điểm này **chưa
+hề có trong thư viện**. Giải mã ra `22.68069, 104.43956`, DEM 1.199m (khớp con số 1.200m thường
+được ghi cho thảo nguyên này), đáy thung lũng sông Chảy 274m. Hindcast engine-2.3: `12/100 · RAIN`.
+
+Ca này khác hẳn hai ca Tà Xùa: **các mô hình không hề bất đồng**. Cả GFS, ICON và UKMO đều cho
+RH 80-85% **liên tục từ 250m lên 948m rồi rớt xuống 64-72% tại 1.441m** — tức chính chúng đang
+mô tả một lớp ẩm dày ~700m nằm gọn DƯỚI chỗ đứng 1.200m. Engine không bao giờ đọc tới đó.
+
+Bốn lỗi, mỗi lỗi đều có SỐ ĐO đi kèm chứ không chỉ lý lẽ:
+
+1. **Lỗi câm: `relative_humidity_2m` được ĐỌC nhưng chưa bao giờ được FETCH.**
+   `valleySaturation` đọc `rh2m_valley_night`, nhưng biến không có trong `HOURLY_VARS` → luôn
+   `NaN` → nhánh "ẩm sát đất ban đêm ≥92%" **chưa từng chạy một lần nào** trong thực tế.
+   80 test vẫn xanh vì fixture gán thẳng số, không đi qua tầng fetch. Nay có
+   `scripts/audit-vars.ts` đối chiếu HAI CHIỀU + một test làm điều tương tự.
+   *Bài học: test đơn vị không bảo vệ được ranh giới giữa "cái ta gọi API xin" và "cái ta đọc".*
+
+2. **Cổng vào bỏ qua chính profile tầng mà engine tin ở mọi chỗ khác.** `estimateCloudTop`
+   chỉ hỏi `cloud_cover_low` (0%) và T−Td tại 2m rồi trả `null` ⇒ trạng thái `CLEAR`. Nghịch lý
+   lộ liễu: cùng lúc ấy engine vẫn cộng +18 nghịch nhiệt mạnh và +12 "thung lũng cận bão hoà" —
+   cộng điểm cho nguyên liệu rồi kết luận không có mây. Nay có bộ dò thứ ba `rootedLowLayer`:
+   lớp mây/ẩm liên tục **bắt đầu sát đáy thung lũng**. Điều kiện "bám gốc" là then chốt — lớp ẩm
+   ở 3.110m (ICON hôm đó RH 94%) là mây tầng cao, không phải biển mây.
+
+   *Đã đo trước khi giữ (50 điểm × 3 mô hình):* cổng cũ bật 64%, cổng mới 80% → cứu thêm 16%,
+   trong đó 18/24 ca người đứng cao hơn mặt mây. Trên bảng xếp hạng thật ngày 25/8: **6/50 → 19/50**
+   điểm có trạng thái nhóm CÓ MÂY, còn **điểm số thì GIẢM** (cao nhất 50 → 43). Đây là dấu hiệu
+   tốt: sửa làm engine *nhìn thấy* mây nhiều hơn chứ không *lạc quan* hơn.
+
+3. **RH xác nhận đo sai tầng.** Mực xác nhận chọn theo độ cao ĐÁY THUNG LŨNG: đáy <900m ⇒ luôn
+   dùng 925hPa ≈ 760m. Suôi Thầu đáy 274m, đáy mây ~440m, lớp sương chỉ dày tới ~950m — đo RH ở
+   760m là đo gần ĐỈNH lớp mây; với thung lũng nông hơn thì đo hẳn không khí BÊN TRÊN nó. Điều
+   kiện ấy vì thế **chỉ có thể bác bỏ, không bao giờ khẳng định được**. Nay `seaLayerRH` lấy mực
+   có geopotential thật gần `đáy mây + 100m`.
+
+4. **`boundary_layer_height` tạo thiên vị GIỮA CÁC MÔ HÌNH.** Thưởng +8 khi BLH ≤200m. Nhưng đo
+   trên toàn thư viện: **46/50 ca của GFS có BLH ≤200m (trung vị 15m), còn ICON/UKMO không có biến
+   này ở ca nào**. Phần thưởng ấy không phân biệt ngày tốt với ngày xấu — nó chỉ nâng GFS lên 8
+   điểm trong hầu hết mọi so sánh. Mà chính bảng "mô hình nào đúng hơn" là thứ app dùng để tự hiệu
+   chuẩn ⇒ thiên vị ăn thẳng vào vòng học. Đã bỏ phần thưởng (giữ phần phạt BLH ≥1200m vì nó hiếm:
+   0/50 ca, nên khi bật thì thực sự có nghĩa), và bỏ luôn BLH khỏi `seaSignature` / `inversionObserved`.
+
+   **Hệ quả phải nói thẳng:** bảng `gfs 5/5 · icon 1/5 · ukmo 1/5` báo cáo ngày 24/8 **có phần là
+   sản phẩm của thiên vị này**, không thuần tuý là GFS giỏi hơn. `calibrate.ts` nay tự in cảnh báo đó.
+
+**Kết quả (hindcast — xem `data/observations/hindcast-engine-2.4.json`):**
+
+| ngày | điểm | engine ghi nhận lúc đó | engine-2.4 |
+|---|---|---|---|
+| 23/8 | Tà Xùa | 27 · DISSIPATING | 35 · FOG (4/6 mô hình đặt mặt mây dưới chỗ đứng, 2 vẫn trên) |
+| 24/8 | Tà Xùa | 25 · RAIN | 23 · RAIN — **vẫn bỏ sót** |
+| 25/8 | Suôi Thầu | 12 · RAIN | **24 · FLUCTUATING** — trạng thái ĐÚNG |
+
+⚠️ **Ba dòng trên KHÔNG phải bằng chứng engine-2.4 tốt hơn** — đó là chấm lại chính những ca đã
+dùng để sửa engine. engine-2.4 hiện có **đúng 0 ngày kiểm chứng độc lập**.
+
+⚠️ Bỏ +8 của GFS khiến Tà Xùa 24/8 tụt từ 65 (engine-2.3) xuống 51. Giữ lại phần thưởng đó để
+"cứu" một ca chính là kiểu chiều dữ liệu mà tài liệu này cấm — thiên vị đo được thì phải bỏ, kể
+cả khi bỏ xong bảng điểm nhìn xấu đi.
+
+### 🔒 Bản chụp dự báo là BẰNG CHỨNG, không được ghi đè
+
+`snapshot-forecast.ts` nay **từ chối đè** file đã có (cần `--force`). Lý do: bản chụp trả lời câu
+"app đã nói gì TRƯỚC khi biết sự thật". Nếu chạy lại đè được thì mỗi engine mới sẽ tự viết lại
+lịch sử của chính nó rồi chấm điểm mình trên đó — bảng hiệu chuẩn thành vô nghĩa mà không ai thấy.
+Muốn xem engine hiện tại chấm ngày cũ ra sao thì dùng `hindcast.ts` và ghi vào file `hindcast-*.json`
+có nhãn rõ ràng.
+
+### 🚧 Ngưỡng "đáng đi" 60/100 trong mùa mưa — CHƯA đụng vào, và vì sao
+
+Ngày 25/8, **0/50 điểm** đạt 60 dù người dùng nhìn thấy biển mây thật. Ba báo cáo thực địa đã có
+đều là ngày CÓ biển mây. Cám dỗ là hạ ngưỡng hoặc nới hiệu chỉnh mùa — **không làm**, vì bộ báo cáo
+hiện tại **thiên lệch một chiều theo đúng nghĩa thống kê**: người ta báo hôm thấy mây, không báo hôm
+leo lên rồi về không. Hiệu chỉnh ngưỡng bằng toàn mẫu dương tính chỉ đảm bảo một điều — app sẽ khuyên
+đi mọi ngày. Cần báo cáo **ngày KHÔNG có** trước đã.
+
 ### 📈 Theo dõi độ chính xác TỪNG MÔ HÌNH (chưa trọng số hoá)
 
 `snapshot-forecast.ts` nay lưu kết quả **từng mô hình**, `calibrate.ts` in bảng đúng/sai

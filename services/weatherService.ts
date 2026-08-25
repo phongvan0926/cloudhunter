@@ -60,7 +60,6 @@ export interface DayModelData {
   precip_dawn: number;        // mm tổng 04–09h
   wind850_dawn_max: number;   // km/h
   wind925_dawn_max: number;
-  wind_dir850: number;        // độ
   t925: number; t850: number; t700: number;    // lúc 06h (nhiệt tầng)
   rh925: number; rh850: number; rh700: number; // lúc 06h (ẩm tầng)
   // Cửa sổ đêm trước 19:00 (D-1) → 06:00 (D) — pha bức xạ hình thành nghịch nhiệt
@@ -95,11 +94,17 @@ export interface WeatherPackage {
   servedAgeMin?: number; // tuổi dữ liệu lớn nhất được phục vụ (phút) — >90' = cảnh báo stale
 }
 
-// Đã cắt các biến fetch-về-nhưng-không-dùng (audit vòng 2): relative_humidity_2m,
-// wind_direction_850hPa — mỗi biến thừa nhân chi phí quy đổi × mọi model × mọi lần gọi.
+// Cắt biến thừa là đúng (mỗi biến nhân chi phí quy đổi × mọi model × mọi lần gọi), nhưng
+// PHẢI đối chiếu hai chiều: danh sách fetch ↔ danh sách engine thật sự đọc. wind_direction_850hPa
+// cắt đúng (không ai đọc, nay đã bỏ luôn trường wind_dir850); relative_humidity_2m cắt SAI —
+// valleySaturation vẫn đọc nó. Quy tắc: sửa HOURLY_VARS thì chạy lại scripts/audit-vars.ts.
 // lifted_index GIỮ LẠI vì engine-2.1 dùng làm cảnh báo dông thật.
 export const HOURLY_VARS = [
-  'temperature_2m', 'dew_point_2m',
+  // relative_humidity_2m TỪNG BỊ QUÊN: engine đọc nó cho rh2m_valley_night nhưng biến không
+  // hề được yêu cầu → luôn NaN, tức nhánh "ẩm sát đất ban đêm >= 92%" của bộ dò bão hoà
+  // CHƯA BAO GIỜ chạy trong thực tế. Test không bắt được vì fixture gán thẳng giá trị,
+  // không đi qua tầng fetch. (Phát hiện 25/8/2026, ca Suôi Thầu.)
+  'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
   'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
   'wind_speed_925hPa', 'wind_speed_850hPa',
   // profile tầng: T + RH + cloud cover + geopotential thật cho mọi mực trong PRESSURE_LEVELS
@@ -374,7 +379,6 @@ export function aggregateDayModel(
   const wind850 = pick(observer, 'wind_speed_850hPa', model, dawnIdxO);
   const wind925Dawn = pick(valley, 'wind_speed_925hPa', model, dawnIdxV);
   const wind925Night = pick(valley, 'wind_speed_925hPa', model, nightIdxV);
-  const windDir = pick(observer, 'wind_direction_850hPa', model, coreIdxO);
   const rh2mNight = pick(valley, 'relative_humidity_2m', model, nightIdxV);
 
   // Profile tầng lúc ~06h: chỉ đưa vào các mực model này THẬT SỰ có nhiệt độ;
@@ -411,7 +415,6 @@ export function aggregateDayModel(
     precip_dawn: precipDawn.length ? +sum(precipDawn).toFixed(1) : 0,
     wind850_dawn_max: wind850.length ? +Math.max(...wind850).toFixed(1) : 0,
     wind925_dawn_max: wind925Dawn.length ? +Math.max(...wind925Dawn).toFixed(1) : 0,
-    wind_dir850: windDir.length ? Math.round(avg(windDir)) : 0,
     t925: t925.length ? +avg(t925).toFixed(1) : NaN,
     t850: +avg(t850).toFixed(1),
     t700: t700.length ? +avg(t700).toFixed(1) : NaN,

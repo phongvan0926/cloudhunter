@@ -102,7 +102,10 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Mặt mây bị kẹp | không vươn qua nắp nghịch nhiệt được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây" |
 | Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
 | Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |
-| Điểm ngày | **max(mây thấp, bão hoà)** + nghịch nhiệt + ẩm + lớp biên đêm mỏng − gió − mây cao đêm − mưa(theo mm/h) ± mùa |
+| Lớp mây bám gốc | bộ dò thứ ba: lớp ẩm/mây **liên tục bắt đầu sát đáy thung lũng** trên profile 7 mực. Cần vì mô hình có thể báo `cloud_cover_low = 0%` trong khi chính nó cho RH 80-85% suốt từ đáy lên 950m rồi rớt hẳn ở 1.450m — đúng một biển mây dày 700m |
+| Ẩm lớp biển mây | đo ở mực gần **đáy mây + 100m** (geopotential thật), không chọn cứng theo độ cao thung lũng — thung lũng 274m mà đo ở 760m là đo gần đỉnh lớp sương, có khi đo hẳn không khí bên trên nó |
+| Điểm ngày | **max(mây thấp, bão hoà)** + nghịch nhiệt + ẩm − gió − mây cao đêm − mưa(theo mm/h) ± mùa |
+| Lớp biên đêm | **chỉ còn trừ điểm**, không thưởng: chỉ GFS có biến này và 46/50 ca của GFS đều ≤200m ⇒ thưởng +8 không phân biệt được ngày tốt/xấu, chỉ nâng riêng GFS lên trong mọi so sánh — mà so sánh giữa các mô hình chính là thứ app dùng để tự hiệu chuẩn |
 | Mưa | không còn xoá kết luận biển mây; phạt theo cường độ, giảm 40% khi có "chữ ký biển mây"; cảnh báo mưa luôn hiện theo lượng mưa thật |
 
 ## 🚀 Chạy & kiểm tra
@@ -111,7 +114,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 80 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 87 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -119,6 +122,8 @@ npx vite-node scripts/audit-coords.ts              # đối chiếu toạ độ 
 npx vite-node scripts/snapshot-dem.ts              # chụp lại DEM cho test offline
 npx vite-node scripts/hindcast.ts TA_XUA_SON_LA    # soi lại 1 ngày: engine chấm gì, vì sao
 npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng ngoài trình duyệt
+npx vite-node scripts/audit-vars.ts                # đối chiếu 2 chiều: biến FETCH ↔ biến engine ĐỌC
+npx vite-node scripts/gate-power.ts                # đo sức phân biệt của các ngưỡng trước khi nới
 
 # VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC (chạy hằng ngày)
 npx vite-node scripts/snapshot-forecast.ts                            # ~20h: chụp dự báo rạng sáng mai
@@ -144,6 +149,15 @@ Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để ch
 > ngừng hẳn 14/8/2024, bản thay thế chỉ mở cho nghiên cứu học thuật; TikTok tương tự.
 > Cào bằng trình duyệt thì vi phạm điều khoản và vỡ liên tục. Một nút trong app cho dữ liệu
 > sạch hơn nhiều.
+
+> **Kiểm chứng thực địa 25/8/2026 (Thảo nguyên Suôi Thầu, Xín Mần):** người dùng báo biển mây
+> kèm plus code cho một điểm **chưa hề có trong thư viện**. Ca này lộ ra bốn lỗi nữa, đáng nhớ nhất
+> là một **lỗi câm**: engine đọc `relative_humidity_2m` nhưng biến đó chưa bao giờ được xin từ API →
+> luôn `NaN` → cả một nhánh của bộ dò bão hoà chưa từng chạy, mà 80 test vẫn xanh vì fixture gán
+> thẳng số. Nay có `scripts/audit-vars.ts` đối chiếu hai chiều. Sau sửa: `12/100 · RAIN` →
+> `24/100 · FLUCTUATING` (trạng thái đúng), và trên toàn bảng xếp hạng số điểm **giảm** trong khi số
+> điểm nhận ra được biển mây **tăng** — engine nhìn rõ hơn chứ không lạc quan hơn. Chi tiết + số đo
+> trong `AGENTS.md`.
 
 > **Kiểm chứng thực địa 23/8/2026 (Tà Xùa, Bắc Yên):** người dùng thấy biển mây cả ngày,
 > app cũ trả `0/100 · RAIN`. Truy ra 5 lỗi độc lập — toạ độ lệch 16km, bỏ sót tín hiệu bão hoà,

@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.3.0';
+export const ENGINE_VERSION = 'engine-2.4.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -126,9 +126,58 @@ export interface SaturationSignal {
   points: number;      // điểm quy đổi, so sánh ngang với cloud_cover_low × 0,45
 }
 
+/**
+ * ẨM CỦA CHÍNH LỚP BIỂN MÂY — lấy ở mực gần ngay trên ĐÁY MÂY, dùng geopotential thật.
+ *
+ * Lỗi cũ (Suôi Thầu 25/8/2026): mực xác nhận được chọn theo độ cao ĐÁY THUNG LŨNG —
+ * đáy < 900m thì luôn dùng 925hPa ≈ 760m. Thảo nguyên Suôi Thầu có đáy 274m và đáy mây
+ * ~440m, nên lớp sương chỉ dày tới ~700-950m; đo RH ở 760m là đo gần ĐỈNH lớp mây, và
+ * với thung lũng nông hơn nữa thì đo hẳn không khí BÊN TRÊN nó. Điều kiện xác nhận vì
+ * thế chỉ có thể bác bỏ, không bao giờ khẳng định được.
+ */
+export function seaLayerRH(m: DayModelData, valleyElev: number): number {
+  const target = computeCloudBase(m, valleyElev) + 100;
+  const cands = (m.levels ?? []).filter(l => Number.isFinite(l.rh) && l.h > valleyElev);
+  if (cands.length > 0) {
+    const best = cands.reduce((a, b) => (Math.abs(a.h - target) <= Math.abs(b.h - target) ? a : b));
+    return best.rh;
+  }
+  return valleyElev < 900 ? m.rh925 : valleyElev < 1700 ? m.rh850 : m.rh700;
+}
+
+/**
+ * LỚP MÂY BÁM GỐC THUNG LŨNG — bộ dò thứ BA, và là bộ mạnh nhất vì nó dùng đúng thứ dữ
+ * liệu mà engine đã tin ở mọi chỗ khác: profile mây/ẩm theo từng mực áp suất.
+ *
+ * Vì sao cần (Suôi Thầu 25/8/2026 — ngày người dùng thấy biển mây thật):
+ * cả GFS, ICON và UKMO đều cho RH 80-85% liên tục từ 250m lên 950m rồi RỚT xuống 64-72%
+ * tại 1.441m. Tức là chính các mô hình đó đang mô tả một lớp ẩm dày ~700m nằm gọn DƯỚI
+ * chỗ đứng 1.200m — đúng định nghĩa biển mây. Nhưng engine không bao giờ đọc tới đó: cổng
+ * vào chỉ hỏi `cloud_cover_low` (0%) và T−Td tại 2m (1,3-2,6°C) rồi trả null → trạng thái
+ * CLEAR. Nghịch lý lộ liễu: cùng lúc ấy engine vẫn cộng +18 nghịch nhiệt mạnh và +12
+ * "thung lũng cận bão hoà" — cộng điểm cho nguyên liệu rồi kết luận không có mây.
+ *
+ * "Bám gốc" là điều kiện then chốt: lớp ẩm phải BẮT ĐẦU sát đáy thung lũng. Một lớp ẩm
+ * ở 3.100m (ICON hôm đó cho RH 94% ở 700hPa) là mây tầng cao, không phải biển mây.
+ */
+export function rootedLowLayer(m: DayModelData, valleyElev: number): { rooted: boolean; top: number | null } {
+  const profile = (m.levels ?? []).filter(l => l.h > valleyElev).sort((a, b) => a.h - b.h);
+  if (profile.length === 0) return { rooted: false, top: null };
+  const isCloudy = (l: { rh: number; cc: number }) =>
+    (Number.isFinite(l.cc) && l.cc >= 45) || (Number.isFinite(l.rh) && l.rh >= 80);
+  const first = profile.findIndex(isCloudy);
+  if (first < 0) return { rooted: false, top: null };
+  const base = computeCloudBase(m, valleyElev);
+  // Mực có mây thấp nhất phải nằm quanh đáy mây ước tính, chứ không lơ lửng trên cao.
+  if (profile[first].h > Math.max(base + 300, valleyElev + 500)) return { rooted: false, top: null };
+  let i = first, top = profile[first].h;
+  while (i < profile.length && isCloudy(profile[i])) { top = profile[i].h; i++; }
+  return { rooted: true, top };
+}
+
 export function valleySaturation(m: DayModelData, valleyElev: number): SaturationSignal {
   const spread = m.t_valley_dawn - m.td_valley_dawn;
-  const seaRH = valleyElev < 900 ? m.rh925 : valleyElev < 1700 ? m.rh850 : m.rh700;
+  const seaRH = seaLayerRH(m, valleyElev);
   const nightRH = m.rh2m_valley_night;
   const rhOk = Number.isFinite(seaRH) ? seaRH >= 88 : false;
   const nightOk = Number.isFinite(nightRH) ? nightRH >= 92 : false;
@@ -167,7 +216,9 @@ function capByInversion(top: number, m: DayModelData, valleyElev: number, base: 
 export function estimateCloudTop(m: DayModelData, valleyElev: number): number | null {
   // Cổng cloud_cover_low một mình từng làm engine trả "CLEAR" cho ngày thung lũng bão hoà
   // (AIFS 23/8/2026 báo mây thấp 7% giữa lúc RH 99%) → nhận thêm tín hiệu bão hoà.
-  if (m.cloud_low_dawn < 15 && !valleySaturation(m, valleyElev).saturated) return null;
+  if (m.cloud_low_dawn < 15
+      && !valleySaturation(m, valleyElev).saturated
+      && !rootedLowLayer(m, valleyElev).rooted) return null;
   const base = computeCloudBase(m, valleyElev);
   const profile = (m.levels ?? [])
     .filter(l => l.h > valleyElev)
@@ -384,18 +435,25 @@ export function scoreOneModel(
   const windLevel = seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
   const wind = assessWind(seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max, ctx.zone);
   const spread = m.t_valley_dawn - m.td_valley_dawn;
-  // Ẩm "lớp biển mây" phải là mực NGAY TRÊN đáy thung lũng — thung lũng 1800-1900m mà
-  // dùng rh850 (~1500m) là đo không khí DƯỚI LÒNG ĐẤT (lỗi audit vòng 2)
-  const seaRH = ctx.valleyElevation < 900 ? m.rh925 : ctx.valleyElevation < 1700 ? m.rh850 : m.rh700;
+  // Ẩm "lớp biển mây" phải đo Ở CHÍNH LỚP MÂY — xem seaLayerRH.
+  const seaRH = seaLayerRH(m, ctx.valleyElevation);
   const sat = valleySaturation(m, ctx.valleyElevation);
-  const blhNight = m.blh_night_min;
-  // "Chữ ký biển mây": thung lũng bão hoà + có nắp nghịch nhiệt + người đứng CAO HƠN mặt mây.
-  // Đây là định nghĩa vật lý của biển mây; khi cả ba có mặt thì các hình phạt gián tiếp
-  // (mây cao ban đêm, mưa) không được phép xoá kết luận — chúng chỉ còn ý nghĩa "đi có sướng không".
-  const seaSignature = sat.saturated
-    && (inv.strength === 'Strong' || inv.strength === 'Moderate'
-        || (blhNight !== undefined && Number.isFinite(blhNight) && blhNight <= 300))
-    && ctx.observerAlt >= computeCloudBase(m, ctx.valleyElevation) + 300;
+  const rooted = rootedLowLayer(m, ctx.valleyElevation);
+  // "Chữ ký biển mây": có lớp mây bám gốc thung lũng + có nắp nghịch nhiệt + người đứng CAO
+  // HƠN MẶT MÂY. Đây là định nghĩa vật lý của biển mây; khi cả ba có mặt thì các hình phạt
+  // gián tiếp (mây cao ban đêm, mưa, hiệu chỉnh mùa) không được phép xoá kết luận — chúng
+  // chỉ còn ý nghĩa "đi có sướng không".
+  //
+  // Hai chỗ sửa ngày 25/8/2026:
+  //  · KHÔNG còn nhận lớp biên đêm mỏng thay cho nghịch nhiệt. boundary_layer_height chỉ GFS
+  //    có, và đo trên toàn thư viện thì 92% số ca của GFS nằm dưới 200m — điều kiện gần như
+  //    luôn đúng, nên nó không "thay thế" nghịch nhiệt mà chỉ xoá bỏ yêu cầu đó, RIÊNG cho GFS.
+  //  · Điều kiện độ cao so với ĐÁY mây (nay đổi thành MẶT mây khi biết) — chú thích vẫn ghi
+  //    "cao hơn mặt mây" trong khi code so với đáy, tức là dễ dãi hơn hẳn ý định.
+  const seaSignature = (sat.saturated || rooted.rooted)
+    && (inv.strength === 'Strong' || inv.strength === 'Moderate')
+    && ctx.observerAlt >= computeCloudBase(m, ctx.valleyElevation) + 300
+    && (top === null || ctx.observerAlt >= top);
 
   let score = 0;
   const add = (delta: number, why: string) => { score += delta; reasons.push(`${delta >= 0 ? '+' : ''}${Math.round(delta)} · ${why}`); };
@@ -423,13 +481,16 @@ export function scoreOneModel(
     else if (seaRH >= 80) add(4, `Ẩm lớp biển mây tốt (RH ${seaRH}%)`);
   }
 
-  // Lớp biên đêm (boundary layer height — hiện chỉ GFS cung cấp): BLH mỏng ban đêm
-  // = không khí lạnh tù đọng sát đáy thung lũng — chỉ báo trực tiếp của nghịch nhiệt bức xạ
+  // Lớp biên đêm (boundary layer height) — CHỈ GFS cung cấp, và đó chính là vấn đề.
+  // Đo trên toàn thư viện ngày 25/8/2026: 46/50 ca của GFS có BLH ≤ 200m (trung vị 15m),
+  // trong khi ICON và UKMO không có biến này ở bất kỳ ca nào. Phần thưởng +8 vì thế không
+  // phân biệt được ngày tốt với ngày xấu — nó chỉ cộng thêm 8 điểm cho RIÊNG GFS trong hầu
+  // hết mọi so sánh, tức là làm lệch chính cái bảng "mô hình nào đúng hơn" mà app đang dùng
+  // để tự hiệu chuẩn. Đã bỏ phần thưởng; GIỮ phần phạt vì nó hiếm (0/50 ca) nên khi bật thì
+  // thực sự có nghĩa: lớp biên dày ban đêm = khí quyển xáo trộn.
   const blh = m.blh_night_min;
-  if (blh !== undefined && Number.isFinite(blh)) {
-    if (blh <= 200) add(8, `Lớp biên đêm rất mỏng (${Math.round(blh)}m) — không khí lạnh tù đọng trong thung lũng`);
-    else if (blh <= 500) add(4, `Lớp biên đêm mỏng (${Math.round(blh)}m) — thuận lợi cho nghịch nhiệt`);
-    else if (blh >= 1200) add(-5, `Lớp biên đêm dày (${Math.round(blh)}m) — khí quyển xáo trộn, khó giữ mây trong thung lũng`);
+  if (blh !== undefined && Number.isFinite(blh) && blh >= 1200) {
+    add(-5, `Lớp biên đêm dày (${Math.round(blh)}m) — khí quyển xáo trộn, khó giữ mây trong thung lũng`);
   }
 
   if (wind.level === 'Medium') add(-6, `Gió ${windLevel}: ${wind.detail}`);
@@ -440,8 +501,7 @@ export function scoreOneModel(
   // Mây cao ban đêm chỉ là BIẾN THAY THẾ để đoán "sẽ không có nghịch nhiệt". Nếu mô hình đã
   // nói thẳng nghịch nhiệt CÓ (hoặc lớp biên đêm mỏng dính) thì phỏng đoán đó đã sai — trừ
   // tiếp là phạt hai lần cùng một cơ chế (Tà Xùa 23/8/2026: mây cao 100% mà nghịch nhiệt +4,6°C).
-  const inversionObserved = inv.strength === 'Strong' || inv.strength === 'Moderate'
-    || (blhNight !== undefined && Number.isFinite(blhNight) && blhNight <= 300);
+  const inversionObserved = inv.strength === 'Strong' || inv.strength === 'Moderate';
   if (m.cloud_high_night >= 60) {
     add(inversionObserved ? -5 : -15,
       `Mây cao che ${m.cloud_high_night}% ban đêm — chặn bức xạ`
