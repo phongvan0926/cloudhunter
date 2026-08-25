@@ -96,6 +96,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Nghịch nhiệt | anomaly = T_tầng − (T_valley − 6.5°C/km × Δh) trên profile 7 mực (độ cao thật, chỉ tầng ≤2600m); ≥3°C = Strong + độ cao tầng |
 | Mặt mây (top) | đỉnh LỚP MÂY LIÊN TỤC từ dưới lên (cc tầng ≥45% / RH≥80%) +150m, không nhảy cóc lên lớp mây tách rời |
 | ΔH | vị_trí_đứng − top → STATIC / FLUCTUATING(±250m) / FOG |
+| Gộp nhiều mô hình | bỏ phiếu **hai bước**: chọn KẾT LUẬN (có biển mây / chìm trong mây / trời quang / bị chặn) trước, rồi mới chọn nhãn chi tiết trong nhóm thắng. Bốn nhãn STATIC/FLOWING/FLUCTUATING/ROLLING là MỘT kết luận, không phải bốn ý kiến — trước đây đa số 4-2 bị chia phiếu nội bộ 2-2 nên thua FOG có 2 phiếu |
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
 | Gió theo vùng | Zone A: 12/18/26 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
@@ -114,7 +115,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 87 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 92 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -124,6 +125,7 @@ npx vite-node scripts/hindcast.ts TA_XUA_SON_LA    # soi lại 1 ngày: engine c
 npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng ngoài trình duyệt
 npx vite-node scripts/audit-vars.ts                # đối chiếu 2 chiều: biến FETCH ↔ biến engine ĐỌC
 npx vite-node scripts/gate-power.ts                # đo sức phân biệt của các ngưỡng trước khi nới
+npx vite-node scripts/ab-combine.ts                # so luật gộp cũ/mới trên cùng 1 lần lấy dữ liệu
 
 # VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC (chạy hằng ngày)
 npx vite-node scripts/snapshot-forecast.ts                            # ~20h: chụp dự báo rạng sáng mai
@@ -149,6 +151,12 @@ Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để ch
 > ngừng hẳn 14/8/2024, bản thay thế chỉ mở cho nghiên cứu học thuật; TikTok tương tự.
 > Cào bằng trình duyệt thì vi phạm điều khoản và vỡ liên tục. Một nút trong app cho dữ liệu
 > sạch hơn nhiều.
+
+> **Kiểm chứng thực địa 25/8/2026 (Tà Xùa — ngày thứ BA liên tiếp):** app ghi `34/100 · FOG`
+> từ hôm trước. Truy ra lỗi gộp phiếu: 4/6 mô hình đặt mặt mây **dưới** chỗ đứng nhưng chia
+> nhau hai nhãn nên hoà 2-2-2, rồi thua `FOG` chỉ có 2 phiếu — trong khi app vẫn hiển thị mặt
+> mây trung vị 1.446m dưới chỗ đứng 1.600m. Nay gộp theo KẾT LUẬN trước, nhãn chi tiết sau:
+> ra `FLUCTUATING`, đồng thuận 67%. Đo trên 50 điểm: chỉ 3 điểm đổi nhãn, không phải cửa xả.
 
 > **Kiểm chứng thực địa 25/8/2026 (Thảo nguyên Suôi Thầu, Xín Mần):** người dùng báo biển mây
 > kèm plus code cho một điểm **chưa hề có trong thư viện**. Ca này lộ ra bốn lỗi nữa, đáng nhớ nhất

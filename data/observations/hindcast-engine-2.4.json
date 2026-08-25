@@ -1,25 +1,72 @@
 {
-  "_": "KHÔNG PHẢI BẰNG CHỨNG DỰ BÁO. Đây là kết quả chấm LẠI ba ngày đã biết sự thật bằng engine-2.4 — tức là chấm trên chính những ca đã dùng để sửa engine. Ghi lại để so trước/sau, KHÔNG được đưa vào bảng hiệu chuẩn: engine-2.4 hiện có ĐÚNG 0 ngày kiểm chứng độc lập.",
-  "engineVersion": "engine-2.4.0",
+  "_": "KHÔNG PHẢI BẰNG CHỨNG DỰ BÁO. Đây là kết quả chấm LẠI ba ngày đã biết sự thật bằng engine-2.4/2.5 — tức là chấm trên chính những ca đã dùng để sửa engine. Ghi lại để so trước/sau, KHÔNG được đưa vào bảng hiệu chuẩn: engine-2.4/2.5 hiện có ĐÚNG 0 ngày kiểm chứng độc lập.",
+  "engineVersion": "engine-2.5.0",
   "hindcastAt": "2026-08-25",
   "days": [
     {
-      "date": "2026-08-23", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
-      "recorded": { "engine": "engine-2.1", "score": 27, "status": "DISSIPATING" },
-      "hindcast": { "score": 35, "status": "FOG" },
+      "date": "2026-08-23",
+      "spot": "TA_XUA_SON_LA",
+      "truth": "BELOW (người dùng)",
+      "recorded": {
+        "engine": "engine-2.1",
+        "score": 27,
+        "status": "DISSIPATING"
+      },
+      "hindcast": {
+        "score": 35,
+        "status": "FOG"
+      },
       "note": "4/6 mô hình nay đặt mặt mây dưới chỗ đứng 1600m (1450/1097/1102/869m); 2 mô hình vẫn đặt trên (1974/3519m) nên trạng thái gộp vẫn sai."
     },
     {
-      "date": "2026-08-24", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
-      "recorded": { "engine": "engine-2.2", "score": 25, "status": "RAIN" },
-      "hindcast": { "score": 23, "status": "RAIN" },
+      "date": "2026-08-24",
+      "spot": "TA_XUA_SON_LA",
+      "truth": "BELOW (người dùng)",
+      "recorded": {
+        "engine": "engine-2.2",
+        "score": 25,
+        "status": "RAIN"
+      },
+      "hindcast": {
+        "score": 23,
+        "status": "RAIN"
+      },
       "note": "GFS 51/100 FLUCTUATING (engine-2.3 cho 65 — chênh lệch chính là +8 thưởng lớp biên đêm đã bỏ vì thiên vị GFS). Vẫn BỎ SÓT."
     },
     {
-      "date": "2026-08-25", "spot": "SUOI_THAU", "truth": "BELOW (người dùng)",
-      "recorded": { "engine": "engine-2.3", "score": 12, "status": "RAIN", "note": "điểm chưa có trong thư viện lúc đó — số này là hindcast engine-2.3" },
-      "hindcast": { "score": 24, "status": "FLUCTUATING" },
+      "date": "2026-08-25",
+      "spot": "SUOI_THAU",
+      "truth": "BELOW (người dùng)",
+      "recorded": {
+        "engine": "engine-2.3",
+        "score": 12,
+        "status": "RAIN",
+        "note": "điểm chưa có trong thư viện lúc đó — số này là hindcast engine-2.3"
+      },
+      "hindcast": {
+        "score": 24,
+        "status": "FLUCTUATING"
+      },
       "note": "4/6 mô hình đặt mặt mây 865-1098m, đều dưới chỗ đứng 1200m. Trạng thái ĐÚNG, điểm vẫn dưới ngưỡng 60."
+    },
+    {
+      "date": "2026-08-25",
+      "spot": "TA_XUA_SON_LA",
+      "truth": "BELOW (người dùng)",
+      "recorded": {
+        "engine": "engine-2.2",
+        "score": 34,
+        "status": "FOG",
+        "rank": "8/49",
+        "note": "bản chụp thật, làm từ 24/8 — đây là bằng chứng dự báo"
+      },
+      "hindcast": {
+        "engine": "engine-2.5",
+        "score": 32,
+        "status": "FLUCTUATING",
+        "agreement": 67
+      },
+      "note": "4/6 mô hình đặt mặt mây dưới chỗ đứng 1600m (1444/1087/1097/1448m), 2/6 đặt trên (1966/3509m). engine-2.4 vẫn ra FOG vì 4 mô hình đó chia nhau hai nhãn STATIC/FLUCTUATING → hoà 2-2-2 → luật 'hoà lấy nhãn nặng hơn' trao cho FOG. engine-2.5 bỏ phiếu theo KẾT LUẬN trước nên ra đúng. ĐIỂM vẫn 32, dưới ngưỡng 60."
     }
   ]
 }

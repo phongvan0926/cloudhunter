@@ -204,6 +204,59 @@ dùng để sửa engine. engine-2.4 hiện có **đúng 0 ngày kiểm chứng 
 "cứu" một ca chính là kiểu chiều dữ liệu mà tài liệu này cấm — thiên vị đo được thì phải bỏ, kể
 cả khi bỏ xong bảng điểm nhìn xấu đi.
 
+### ⚠️ engine-2.5 (25/8/2026) — ca thứ tư: Tà Xùa, ngày thứ BA liên tiếp
+
+Bản chụp engine-2.2 (làm từ 24/8) ghi `34/100 · FOG`, hạng 8/49. Thực tế có biển mây.
+
+**Lỗi: đếm phiếu theo NHÃN thay vì theo KẾT LUẬN.** Hôm đó 6 mô hình cho mặt mây
+1.444 · 1.087 · 1.966 · 3.509 · 1.097 · 1.448m so với chỗ đứng 1.600m — tức **4/6 nói bạn
+đứng TRÊN biển mây**, 2/6 nói chìm trong mây. Đa số 4-2. Nhưng bốn mô hình đó chia nhau hai
+nhãn (`STATIC` ×2 khi ΔH > 250m, `FLUCTUATING` ×2 khi ΔH nhỏ hơn), nên đếm phiếu theo nhãn
+ra **hoà ba bên 2-2-2**, và luật "hoà thì lấy nhãn nặng hơn" trao chiến thắng cho `FOG` với
+đúng 2 phiếu. App kết luận "Mù trùm — bạn chìm trong mây" trong khi **chính nó tính mặt mây
+trung vị 1.446m, thấp hơn chỗ đứng 154m**. Tự mâu thuẫn ngay trong một màn hình.
+
+Gốc rễ: `STATIC / FLOWING / FLUCTUATING / ROLLING` **không phải bốn ý kiến khác nhau** — cả
+bốn nói cùng một điều ("mặt mây dưới chân bạn"), chỉ khác khoảng hở và gió. Chúng không được
+cạnh tranh phiếu với `FOG` như thể là giả thuyết đối lập.
+
+`combineModels` nay bỏ phiếu **hai bước**: (1) chọn KẾT LUẬN (`SEA` / `IN_CLOUD` /
+`NO_CLOUD` / `BLOCKED`), (2) trong nhóm thắng mới chọn nhãn chi tiết. Hoà phiếu **giữa các
+kết luận** vẫn nghiêng về phía xấu hơn (thà khuyên ở nhà nhầm còn hơn bắt người ta dậy 3h
+sáng) — chỉ bỏ đúng phần "đa số bị chia phiếu nội bộ nên thua oan". `agreement` nay báo theo
+kết luận (67%) thay vì theo nhãn (33%), và `cloudTop` lấy trung vị **trong nhóm thắng** chứ
+không trộn đỉnh mây của nhóm bất đồng.
+
+*Đã đo trước khi giữ* (`scripts/ab-combine.ts`, 50 điểm × 3 mô hình, cùng một lần lấy dữ
+liệu chấm bằng cả hai luật): kết luận CÓ biển mây **14/50 → 17/50**, chỉ **3/50 điểm đổi
+nhãn** — cả ba đều đúng kiểu "2 mô hình SEA vs 1 mô hình khác". Không phải cửa xả.
+
+### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
+
+Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm
+một ngày biển mây HOÀN HẢO bằng cùng một bộ số, chỉ đổi tháng:
+
+```
+01/2026  79/100 ✅      07/2026  73/100 ✅      10/2026  87/100 ✅
+04/2026  76/100 ✅      08/2026  73/100 ✅      11/2026  87/100 ✅
+```
+
+Mùa hè vẫn thừa sức vượt 60. Và ngày Tà Xùa 25/8 thật, nếu đem sang tháng 10, cũng chỉ lên
+48 — **bỏ sạch hiệu chỉnh mùa vẫn không tới 60**. Nguyên nhân điểm thấp là nguyên liệu thật:
+T−Td 1,0°C (không phải ~0), RH lớp biển mây 88% (không phải 98%), mây cao ban đêm 95%, có mưa.
+
+Kết luận đúng: **thang điểm đang đo "nguyên liệu sương bức xạ có sách vở không", chứ không đo
+"có biển mây dưới chân bạn không".** Hai thứ này TÁCH NHAU trong mùa mưa: biển mây sau mưa
+hình thành nhờ nạp ẩm + nắp nghịch nhiệt, không nhờ trời quang bức xạ đêm.
+
+⚠️ **Bằng chứng cho thấy chỗ cần sửa tiếp: ΔH — khoảng cách từ chỗ đứng xuống mặt mây, con số
+quyết định nhất — hiện đóng góp ĐÚNG 0 điểm.** Nó chỉ chọn nhãn, không vào điểm. Một ngày
+đứng cao hơn mặt mây 500m và một ngày chìm dưới mặt mây 20m có thể ra cùng một điểm.
+**CHƯA sửa** vì thêm trọng số cho ΔH là quyết định có hệ số tuỳ chọn, mà bộ kiểm chứng hiện
+tại **toàn mẫu dương tính** (4/4 báo cáo đều là ngày CÓ biển mây, 0 báo cáo ngày KHÔNG có).
+Đặt hệ số bằng cảm tính rồi tự chấm điểm mình trên 4 ca đã dùng để sửa engine thì chắc chắn
+"đẹp" mà vô nghĩa. Cần báo cáo ngày KHÔNG có biển mây trước.
+
 ### 🔒 Bản chụp dự báo là BẰNG CHỨNG, không được ghi đè
 
 `snapshot-forecast.ts` nay **từ chối đè** file đã có (cần `--force`). Lý do: bản chụp trả lời câu

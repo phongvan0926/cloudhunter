@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-08-25-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-08-25",
+    "seaLevel": "BELOW",
+    "note": "Người dùng báo trực tiếp: 25/8 Tà Xùa lại có biển mây — ngày thứ BA liên tiếp. Bản chụp dự báo engine-2.2 (chụp 24/8) ghi 34/100 FOG, hạng 8/49. Ca này làm lộ lỗi gộp phiếu: 4/6 mô hình đặt mặt mây dưới chỗ đứng nhưng chia nhau hai nhãn nên thua FOG 2 phiếu.",
+    "reportedAt": "2026-08-25T19:30:00+07:00"
+  },
+  {
     "id": "2026-08-25-suoithau",
     "spotKey": "SUOI_THAU",
     "locationName": "Thảo nguyên Suôi Thầu (Xín Mần)",

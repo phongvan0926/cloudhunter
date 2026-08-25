@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast, rootedLowLayer, seaLayerRH,
+  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -1040,5 +1040,70 @@ describe('engine-2.4 — lớp mây bám gốc thung lũng (ca Suôi Thầu 25/8
     const m = suoiThau({ levels: undefined });
     expect(seaLayerRH(m, 274)).toBe(80);      // rh925
     expect(seaLayerRH(m, 1800)).toBe(91);     // rh700
+  });
+});
+
+/**
+ * engine-2.5 (25/8/2026) — ca kiểm chứng thứ TƯ: Tà Xùa, ngày thứ ba liên tiếp có biển mây.
+ * Số liệu dưới đây là kết quả THẬT của 6 mô hình hôm đó (người đứng 1.600m).
+ */
+describe('engine-2.5 — gộp theo KẾT LUẬN trước, nhãn chi tiết sau', () => {
+  const mk = (model: any, score: number, status: any, cloudTop: number | null) =>
+    ({ model, score, status, cloudTop, reasons: [] });
+
+  it('HỒI QUY Tà Xùa 25/8: 4/6 mô hình đặt mặt mây DƯỚI chỗ đứng → phải kết luận CÓ biển mây', () => {
+    // Bốn mô hình "có biển mây" chia nhau 2 nhãn (STATIC vì ΔH>250m, FLUCTUATING vì ΔH nhỏ)
+    // → luật cũ đếm phiếu theo nhãn ra hoà 2-2-2 rồi trao chiến thắng cho FOG với 2 phiếu.
+    const per = [
+      mk('ecmwf_ifs025', 34, 'FLUCTUATING', 1444),
+      mk('gfs_seamless', 30, 'STATIC', 1087),
+      mk('icon_seamless', 46, 'FOG', 1966),
+      mk('jma_seamless', 0, 'FOG', 3509),
+      mk('ukmo_seamless', 33, 'STATIC', 1097),
+      mk('ecmwf_aifs025_single', 32, 'FLUCTUATING', 1448),
+    ];
+    const c = combineModels(per);
+    expect(verdictOf(c.status)).toBe('SEA');
+    expect(c.status).toBe('FLUCTUATING');    // nhãn nặng hơn trong nhóm thắng (hoà 2-2)
+    expect(c.agreement).toBe(67);            // 4/6 đồng ý CÓ biển mây, không phải 33%
+    // mặt mây đại diện lấy từ nhóm thắng → phải nằm dưới chỗ đứng 1.600m
+    expect(c.cloudTop!).toBeLessThan(1600);
+  });
+
+  it('mặt mây đại diện KHÔNG trộn đỉnh mây của nhóm bất đồng', () => {
+    const per = [
+      mk('gfs_seamless', 40, 'STATIC', 1000),
+      mk('ukmo_seamless', 38, 'STATIC', 1100),
+      mk('jma_seamless', 0, 'FOG', 9000),
+    ];
+    expect(combineModels(per).cloudTop).toBe(1050);   // trung vị của 1000/1100, không dính 9000
+  });
+
+  it('hoà phiếu GIỮA CÁC KẾT LUẬN vẫn nghiêng về phía xấu hơn (thà ở nhà nhầm)', () => {
+    const per = [
+      mk('gfs_seamless', 50, 'STATIC', 1000),
+      mk('icon_seamless', 20, 'FOG', 2000),
+    ];
+    expect(combineModels(per).status).toBe('FOG');
+    expect(combineModels(per).agreement).toBe(50);
+  });
+
+  it('đa số thật cho FOG vẫn ra FOG — sửa lỗi chia phiếu, KHÔNG thiên vị biển mây', () => {
+    const per = [
+      mk('gfs_seamless', 40, 'STATIC', 1000),
+      mk('icon_seamless', 20, 'FOG', 2000),
+      mk('jma_seamless', 15, 'FOG', 2200),
+    ];
+    expect(combineModels(per).status).toBe('FOG');
+  });
+
+  it('nhóm bốn nhãn biển mây là MỘT kết luận, không phải bốn ý kiến', () => {
+    for (const st of ['STATIC', 'FLOWING', 'FLUCTUATING', 'ROLLING'] as const) {
+      expect(verdictOf(st)).toBe('SEA');
+    }
+    expect(verdictOf('FOG')).toBe('IN_CLOUD');
+    expect(verdictOf('RAIN')).toBe('BLOCKED');
+    expect(verdictOf('DISSIPATING')).toBe('BLOCKED');
+    expect(verdictOf('CLEAR')).toBe('NO_CLOUD');
   });
 });

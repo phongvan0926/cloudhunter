@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.4.0';
+export const ENGINE_VERSION = 'engine-2.5.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -597,29 +597,79 @@ const STATUS_SEVERITY: Record<StatusCode, number> = {
   CLEAR: 3, FLOWING: 2, STATIC: 1, UNKNOWN: 0,
 };
 
+/**
+ * NHÓM KẾT LUẬN — bốn nhãn STATIC/FLOWING/FLUCTUATING/ROLLING KHÔNG phải bốn ý kiến khác
+ * nhau: cả bốn đều nói CÙNG một điều — "mặt mây nằm dưới chỗ bạn đứng, có biển mây để
+ * ngắm" — chỉ khác nhau ở khoảng hở và gió. Chúng không được phép cạnh tranh phiếu với
+ * FOG như thể là các giả thuyết đối lập.
+ */
+export type Verdict = 'SEA' | 'IN_CLOUD' | 'NO_CLOUD' | 'BLOCKED';
+
+export function verdictOf(st: StatusCode): Verdict {
+  if (st === 'STATIC' || st === 'FLOWING' || st === 'FLUCTUATING' || st === 'ROLLING') return 'SEA';
+  if (st === 'FOG') return 'IN_CLOUD';
+  if (st === 'RAIN' || st === 'DISSIPATING') return 'BLOCKED';
+  return 'NO_CLOUD';
+}
+
+const VERDICT_SEVERITY: Record<Verdict, number> = {
+  BLOCKED: 3, IN_CLOUD: 2, NO_CLOUD: 1, SEA: 0,
+};
+
 export function combineModels(perModel: ModelDayScore[]): {
   score: number; status: StatusCode; cloudTop: number | null;
   agreement: number; scoreSpread: number; representative: ModelDayScore;
 } {
   const scores = perModel.map(p => p.score);
   const score = median(scores);
+
+  // BƯỚC 1 — bỏ phiếu cho KẾT LUẬN, không phải cho nhãn chi tiết.
+  //
+  // Lỗi thật (Tà Xùa 25/8/2026, ngày thứ BA liên tiếp người dùng thấy biển mây): 4/6 mô
+  // hình đặt mặt mây dưới chỗ đứng 1.600m (1.444 · 1.087 · 1.097 · 1.448m) và 2/6 đặt lên
+  // trên (1.966 · 3.509m). Tức đa số 4-2 nói CÓ biển mây. Nhưng 4 mô hình đó chia nhau hai
+  // nhãn — STATIC ×2 (ΔH > 250m) và FLUCTUATING ×2 (ΔH nhỏ hơn) — nên khi đếm phiếu theo
+  // nhãn thì thành hoà ba bên 2-2-2, và luật "hoà thì lấy nhãn nặng hơn" trao chiến thắng
+  // cho FOG với đúng 2 phiếu. App kết luận "Mù trùm — bạn chìm trong mây" trong khi chính
+  // nó tính mặt mây trung vị 1.446m, tức THẤP HƠN chỗ đứng 154m. Tự mâu thuẫn.
+  const vCounts = new Map<Verdict, number>();
+  for (const p of perModel) {
+    const v = verdictOf(p.status);
+    vCounts.set(v, (vCounts.get(v) || 0) + 1);
+  }
+  let verdict: Verdict = verdictOf(perModel[0].status);
+  let vBest = 0;
+  for (const [v, c] of vCounts) {
+    // Hoà phiếu vẫn nghiêng về kết luận XẤU HƠN — thà khuyên ở nhà nhầm còn hơn bắt người
+    // ta dậy từ 3h sáng leo núi. Chỉ bỏ phần "chia phiếu nội bộ làm thua oan".
+    if (c > vBest || (c === vBest && VERDICT_SEVERITY[v] > VERDICT_SEVERITY[verdict])) {
+      vBest = c; verdict = v;
+    }
+  }
+
+  // BƯỚC 2 — trong nhóm thắng mới chọn nhãn chi tiết (mode, hoà thì lấy nhãn nặng hơn).
+  const inGroup = perModel.filter(p => verdictOf(p.status) === verdict);
   const counts = new Map<StatusCode, number>();
-  for (const p of perModel) counts.set(p.status, (counts.get(p.status) || 0) + 1);
-  let status: StatusCode = perModel[0].status;
+  for (const p of inGroup) counts.set(p.status, (counts.get(p.status) || 0) + 1);
+  let status: StatusCode = inGroup[0].status;
   let best = 0;
   for (const [st, c] of counts) {
     if (c > best || (c === best && STATUS_SEVERITY[st] > STATUS_SEVERITY[status])) {
       best = c; status = st;
     }
   }
-  const agreement = Math.round((best / perModel.length) * 100);
+
+  // Đồng thuận báo theo KẾT LUẬN (có biển mây hay không) chứ không theo nhãn chi tiết —
+  // đó mới là con số người dùng cần để quyết định đi hay ở. Trước đây ngày 25/8 hiện
+  // "đồng thuận 33%" trong khi thực chất 4/6 mô hình đồng ý là có biển mây (67%).
+  const agreement = Math.round((vBest / perModel.length) * 100);
   const scoreSpread = Math.max(...scores) - Math.min(...scores);
-  // Đại diện: mô hình cùng trạng thái đa số, điểm gần median nhất
-  const candidates = perModel.filter(p => p.status === status);
-  const representative = candidates.reduce((a, b) =>
+  const representative = inGroup.reduce((a, b) =>
     Math.abs(a.score - score) <= Math.abs(b.score - score) ? a : b);
-  const tops = perModel.map(p => p.cloudTop).filter((t): t is number => t !== null);
-  const cloudTop = status === 'CLEAR' ? null : tops.length ? median(tops) : null;
+  // Mặt mây đại diện lấy từ CHÍNH NHÓM THẮNG: gộp cả đỉnh mây của mô hình bất đồng vào
+  // trung vị thì ra một con số không mô tả kịch bản nào cả.
+  const tops = inGroup.map(p => p.cloudTop).filter((t): t is number => t !== null);
+  const cloudTop = verdict === 'NO_CLOUD' ? null : tops.length ? median(tops) : null;
   return { score, status, cloudTop, agreement, scoreSpread, representative };
 }
 
