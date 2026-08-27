@@ -1,5 +1,14 @@
 [
   {
+    "id": "2026-08-27-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-08-27",
+    "seaLevel": "BELOW",
+    "note": "Người dùng báo trực tiếp: 27/8 Tà Xùa lại có biển mây ĐẸP, trong khi đồng bằng bên dưới đang mưa dầm nhiều ngày. Engine-2.5 chấm 5/100 RAIN — cú trượt nặng nhất từ trước tới nay (0/5 báo cáo thực địa được app dự báo đúng). Ca này làm lộ lỗi \"độ cao nghịch nhiệt\" thật ra là trần cửa sổ quét (94% số ca), nhưng mặt cắt áp suất cho thấy 5/6 mô hình có RH 85-95% liên tục từ 250m lên 3.100m — cột khí ẩm đều, không mô hình toàn cầu 25km nào phân giải nổi mặt biển mây dưới 1.600m.",
+    "reportedAt": "2026-08-27T21:00:00+07:00"
+  },
+  {
     "id": "2026-08-25-taxua",
     "spotKey": "TA_XUA_SON_LA",
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",

@@ -543,11 +543,24 @@ export async function fetchAirQualityDays(
 }
 
 /** Nhãn tin cậy theo khoảng cách dự báo. */
-export function qualityForDaysAhead(daysAhead: number): DataQuality {
-  if (daysAhead < -2 || daysAhead > 15) return 'NO_DATA';
+export function qualityForDaysAhead(daysAhead: number, pastDays: number = APP_PAST_DAYS): DataQuality {
+  if (daysAhead < -pastDays || daysAhead > 15) return 'NO_DATA';
   if (daysAhead <= 3) return 'FORECAST';
   return 'UNCERTAIN';
 }
+
+/**
+ * Cửa sổ QUÁ KHỨ của app: 2 ngày. Đủ cho người dùng ("hôm qua thế nào?") mà không kéo dài
+ * thời gian tải.
+ *
+ * Nhưng Open-Meteo giữ tới ~92 ngày, và `scripts/hindcast.ts` — công cụ CHÍNH để soi lại một
+ * ngày đã trượt — trước đây dùng chung con số 2 này nên **im lặng trả NO_DATA cho mọi ngày cũ
+ * hơn 48 giờ** (phát hiện 28/8/2026: 3 báo cáo thực địa đầu tiên không còn soi lại được, dù
+ * API vẫn trả đủ dữ liệu cho cả 6 mô hình). Vòng kiểm chứng mà tự mất trí nhớ sau hai ngày
+ * thì không kiểm chứng được gì. Nay hindcast truyền pastDays lớn hơn.
+ */
+export const APP_PAST_DAYS = 2;
+export const API_MAX_PAST_DAYS = 90;
 
 export async function fetchMountainWeather(
   mountainKey: string | null,
@@ -558,6 +571,7 @@ export async function fetchMountainWeather(
   lon?: number,
   observerAlt?: number,
   profile?: TerrainPoint[],
+  pastDays: number = APP_PAST_DAYS,
 ): Promise<WeatherPackage> {
   let mt: MountainInfo;
   if (mountainKey && MOUNTAIN_DB[mountainKey]) {
@@ -593,8 +607,8 @@ export async function fetchMountainWeather(
   // Mốc "hôm nay" neo theo giờ Việt Nam (địa bàn của app), không theo múi giờ thiết bị
   const today = new Date(vnTodayStr() + 'T00:00:00');
 
-  // Phạm vi API hợp lệ: [hôm nay - 2, hôm nay + 15]; lùi thêm 1 ngày để có cửa sổ đêm-trước
-  const apiMin = addDays(today, -2);
+  // Phạm vi API hợp lệ: [hôm nay − pastDays, hôm nay + 15]; lùi thêm 1 ngày để có cửa sổ đêm-trước
+  const apiMin = addDays(today, -Math.max(0, Math.min(API_MAX_PAST_DAYS, pastDays)));
   const apiMax = addDays(today, 15);
   let apiStart = reqStart < apiMin ? apiMin : reqStart;
   let apiEnd = reqEnd > apiMax ? apiMax : reqEnd;
@@ -629,7 +643,7 @@ export async function fetchMountainWeather(
     const dateStr = formatDateStr(d);
     const prevStr = formatDateStr(addDays(d, -1));
     const daysAhead = Math.round((d.getTime() - today.getTime()) / 86400000);
-    const quality = qualityForDaysAhead(daysAhead);
+    const quality = qualityForDaysAhead(daysAhead, pastDays);
 
     // Sunrise/sunset: ưu tiên số liệu API (chính xác hơn phép xấp xỉ)
     let sunTimes = computeSunTimes(mt.lat, mt.lon, dateStr);

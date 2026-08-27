@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf,
+  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -272,6 +272,16 @@ describe('qualityForDaysAhead — nhãn tin cậy theo horizon', () => {
     expect(qualityForDaysAhead(15)).toBe('UNCERTAIN');
     expect(qualityForDaysAhead(16)).toBe('NO_DATA');
     expect(qualityForDaysAhead(-3)).toBe('NO_DATA');
+  });
+
+  it('cửa sổ quá khứ MỞ RỘNG ĐƯỢC — hindcast không bị kẹt trong 2 ngày của app', () => {
+    // Lỗi thật (28/8/2026): scripts/hindcast.ts dùng chung cửa sổ 2 ngày của giao diện nên
+    // im lặng trả NO_DATA cho mọi ngày cũ hơn 48h — tức 3 báo cáo thực địa đầu tiên không
+    // còn soi lại được, dù Open-Meteo vẫn trả đủ dữ liệu 6 mô hình. Một vòng kiểm chứng mất
+    // trí nhớ sau hai ngày thì không kiểm chứng được gì.
+    expect(qualityForDaysAhead(-5)).toBe('NO_DATA');        // mặc định của app: vẫn 2 ngày
+    expect(qualityForDaysAhead(-5, 90)).toBe('FORECAST');   // công cụ soi lại: mở tới 90 ngày
+    expect(qualityForDaysAhead(-91, 90)).toBe('NO_DATA');
   });
 });
 
@@ -1105,5 +1115,74 @@ describe('engine-2.5 — gộp theo KẾT LUẬN trước, nhãn chi tiết sau'
     expect(verdictOf('RAIN')).toBe('BLOCKED');
     expect(verdictOf('DISSIPATING')).toBe('BLOCKED');
     expect(verdictOf('CLEAR')).toBe('NO_CLOUD');
+  });
+});
+
+describe('engine-2.6 — "độ cao nghịch nhiệt" từng là trần cửa sổ quét', () => {
+  /** Mặt cắt THẬT của GFS tại Tà Xùa rạng sáng 27/8/2026 — hôm người dùng thấy biển mây đẹp
+   *  trong khi đồng bằng mưa dầm, còn app chấm 5/100 RAIN. */
+  function gfs27(): DayModelData {
+    return {
+      t_valley_dawn: 23.1, td_valley_dawn: 22.3, t_obs_dawn: 18.2, td_obs_dawn: 17.0,
+      cloud_low_dawn: 16, cloud_mid_dawn: 80, cloud_high_dawn: 100,
+      precip_dawn: 4.6, wind850_dawn_max: 5.8, wind925_dawn_max: 4.0,
+      t925: 23.2, t850: 20.9, t700: 12.0,
+      rh925: 92, rh850: 85, rh700: 93,
+      cloud_high_night: 100, wind925_night: 2.6, precip_night: 12.2, rh2m_valley_night: 95,
+      levels: [
+        { p: 975, h: 258, hReal: true, t: 26.0, rh: 92, cc: 0 },
+        { p: 950, h: 481, hReal: true, t: 24.6, rh: 92, cc: 0 },
+        { p: 925, h: 712, hReal: true, t: 23.2, rh: 92, cc: 0 },
+        { p: 900, h: 951, hReal: true, t: 22.1, rh: 90, cc: 1 },
+        { p: 850, h: 1449, hReal: true, t: 20.9, rh: 85, cc: 0 },
+        { p: 800, h: 1973, hReal: true, t: 18.1, rh: 86, cc: 0 },
+        { p: 700, h: 3108, hReal: true, t: 12.0, rh: 93, cc: 0 },
+      ],
+    };
+  }
+
+  it('cột khí ẩm đều: anomaly chỉ TĂNG DẦN tới mép cửa sổ, không có đỉnh nghịch nhiệt thật', () => {
+    const inv = computeInversion(gfs27(), 700);
+    expect(inv.ramp).toBe(true);
+    expect(inv.anomalyHeight).toBe(1973);   // đúng bằng mực cao nhất trong cửa sổ quét (trần 2600m)
+    // …nên KHÔNG được dùng con số đó làm nắp. Nắp thật nằm ở tầng ổn định cục bộ 951→1449m.
+    expect(inv.height).toBe(951);
+  });
+
+  it('nắp thật = tầng có suy giảm bất thường (Γ ≤ 3,5°C/km), không phải tầng ấm nhất', () => {
+    // 951→1449m: (22,1 − 20,9)/0,498 = 2,4°C/km — ổn định hơn hẳn đoạn nhiệt ẩm ~5.
+    expect(capLayerBase(gfs27(), 700)).toBe(951);
+    // 712→951m: (23,2 − 22,1)/0,239 = 4,6°C/km — nền chung, không phải nắp.
+  });
+
+  it('kẹp đúng nắp → người đứng 1.600m ở TRÊN mặt biển mây, không phải chìm trong mây', () => {
+    const top = estimateCloudTop(gfs27(), 700);
+    expect(top).toBe(951);
+    const r = scoreOneModel('gfs_seamless', gfs27(),
+      { valleyElevation: 700, observerAlt: 1600, zone: 'A_CLOUD_TRAP' }, '2026-08-27');
+    expect(verdictOf(r.status)).toBe('SEA');
+    // …và vì chữ ký biển mây đã đủ, mưa 12mm đêm + 4,6mm sáng chỉ còn là cảnh báo.
+    expect(r.reasons.join(' ')).toMatch(/mưa nuôi biển mây chứ không phá/);
+  });
+
+  it('KHÔNG bịa nắp: cột khí suy giảm đều 5°C/km thì trả về "không xác định"', () => {
+    const uniform = gfs27();
+    uniform.levels = uniform.levels!.map((l, i) => ({ ...l, t: 26.0 - 5.0 * (l.h - 258) / 1000 }));
+    const inv = computeInversion(uniform, 700);
+    expect(inv.ramp).toBe(true);
+    expect(inv.height).toBeNull();      // thà nói không biết còn hơn kẹp đỉnh mây ở chỗ bịa ra
+  });
+
+  it('có đỉnh anomaly THẬT (tầng trên lạnh/khô hẳn) thì vẫn dùng đỉnh đó làm nắp', () => {
+    const inv = computeInversion(goldenNight({
+      levels: [
+        { p: 925, h: 745, hReal: true, t: 11.5, rh: 95, cc: 80 },
+        { p: 900, h: 985, hReal: true, t: 11.8, rh: 92, cc: 70 },
+        { p: 850, h: 1462, hReal: true, t: 10.0, rh: 88, cc: 55 },
+        { p: 800, h: 1940, hReal: true, t: 4.5, rh: 40, cc: 5 },
+      ],
+    }), 600);
+    expect(inv.ramp).toBe(false);       // anomaly tụt ở 1.940m → có đỉnh thật
+    expect(inv.height).toBe(1462);
   });
 });

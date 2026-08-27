@@ -33,8 +33,9 @@ async function main() {
   // Đi ĐÚNG đường của app thật: có truyền mặt cắt địa hình đã xác thực (App gọi qua
   // geminiService.analyzeWeatherData và luôn kèm matchedPreset.elevation_profile).
   const preset = findBestMatchingPeak(mt.name);
+  // pastDays = 90: hindcast tồn tại để soi NGÀY ĐÃ QUA, nên không dùng cửa sổ 2 ngày của app.
   const pkg = await fetchMountainWeather(KEY, mt.name, DATE, DATE, undefined, undefined,
-                                         undefined, preset?.elevation_profile);
+                                         undefined, preset?.elevation_profile, 90);
   const day = pkg.days.find(d => d.date === DATE);
   if (!day) throw new Error('Không có dữ liệu cho ngày này');
   const ctx = { valleyElevation: pkg.valleyElevation, observerAlt: mt.elevation, zone: mt.zone,
@@ -63,9 +64,18 @@ async function main() {
     const top = estimateCloudTop(m, ctx.valleyElevation);
     const w = assessWind(m.wind850_dawn_max, ctx.zone);
     console.log(`\n  ${id}: ${s.score}/100  ${s.status}`);
-    console.log(`     nghịch nhiệt: ${inv.strength} (anomaly ${inv.anomaly}°C tại ${inv.height ?? '—'}m)`);
+    console.log(`     ổn định cột: ${inv.strength} (anomaly ${inv.anomaly}°C, đỉnh anomaly ${inv.anomalyHeight ?? '—'}m`
+      + `${inv.ramp ? ' — DỐC, không phải đỉnh thật' : ''}) | nắp dùng để kẹp: ${inv.height ?? 'KHÔNG XÁC ĐỊNH'}`);
     console.log(`     đáy mây ${Math.round(base)}m | đỉnh mây ${top === null ? '—' : Math.round(top) + 'm'} | người đứng ${mt.elevation}m`);
     console.log(`     gió850 ${m.wind850_dawn_max.toFixed(0)}km/h → ${w.level} (${w.detail})`);
+    // Mặt cắt áp suất là thứ engine-2.4 trở đi dùng để tìm MẶT biển mây; không in ra thì
+    // không thể kiểm chứng vì sao đỉnh mây lại ra con số đó.
+    if (m.levels?.length) {
+      const prof = [...m.levels].sort((a, b) => a.h - b.h)
+        .map(l => `${Math.round(l.h)}m:rh${Math.round(l.rh)}${Number.isFinite(l.cc) ? '/cc' + Math.round(l.cc) : ''}${Number.isFinite(l.t) ? '/T' + l.t.toFixed(1) : ''}`)
+        .join('  ');
+      console.log(`     mặt cắt: ${prof}`);
+    }
     s.reasons.forEach(r => console.log(`     • ${r}`));
   }
 

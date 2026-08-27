@@ -93,14 +93,15 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Chỉ số | Công thức / cách tính |
 | :--- | :--- |
 | LCL (đáy mây) | `thung_lũng + 125 × (T_valley − Td_valley)` |
-| Nghịch nhiệt | anomaly = T_tầng − (T_valley − 6.5°C/km × Δh) trên profile 7 mực (độ cao thật, chỉ tầng ≤2600m); ≥3°C = Strong + độ cao tầng |
+| Ổn định cột khí | anomaly = T_tầng − (T_valley − 6.5°C/km × Δh) trên profile 7 mực (độ cao thật, chỉ tầng ≤2600m); ≥3°C = Strong. Đo **cả cột ổn định hơn chuẩn bao nhiêu** — có thật, nhưng KHÔNG có địa chỉ |
+| Đáy nắp chặn | mực thấp nhất từ đáy mây trở lên có Γ ≤ 3,5°C/km (đoạn nhiệt ẩm ~5 ⇒ ≤3,5 là ổn định hẳn). Không tìm thấy thì trả `null`, **không bịa số**. Cần vì anomaly cộng dồn theo độ cao nên "tầng cực đại" rơi vào mực cao nhất cửa sổ ở **113/120 ca đo được (94%)** — một trần cửa sổ quét, không phải phép đo |
 | Mặt mây (top) | đỉnh LỚP MÂY LIÊN TỤC từ dưới lên (cc tầng ≥45% / RH≥80%) +150m, không nhảy cóc lên lớp mây tách rời |
 | ΔH | vị_trí_đứng − top → STATIC / FLUCTUATING(±250m) / FOG |
 | Gộp nhiều mô hình | bỏ phiếu **hai bước**: chọn KẾT LUẬN (có biển mây / chìm trong mây / trời quang / bị chặn) trước, rồi mới chọn nhãn chi tiết trong nhóm thắng. Bốn nhãn STATIC/FLOWING/FLUCTUATING/ROLLING là MỘT kết luận, không phải bốn ý kiến — trước đây đa số 4-2 bị chia phiếu nội bộ 2-2 nên thua FOG có 2 phiếu |
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
 | Gió theo vùng | Zone A: 12/18/26 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
-| Mặt mây bị kẹp | không vươn qua nắp nghịch nhiệt được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây" |
+| Mặt mây bị kẹp | không vươn qua **đáy nắp** được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây". Kẹp bằng đỉnh anomaly khi có đỉnh THẬT, bằng tầng ổn định cục bộ khi anomaly chỉ là một cái dốc |
 | Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
 | Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |
 | Lớp mây bám gốc | bộ dò thứ ba: lớp ẩm/mây **liên tục bắt đầu sát đáy thung lũng** trên profile 7 mực. Cần vì mô hình có thể báo `cloud_cover_low = 0%` trong khi chính nó cho RH 80-85% suốt từ đáy lên 950m rồi rớt hẳn ở 1.450m — đúng một biển mây dày 700m |
@@ -115,7 +116,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 92 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 97 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -126,6 +127,9 @@ npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng 
 npx vite-node scripts/audit-vars.ts                # đối chiếu 2 chiều: biến FETCH ↔ biến engine ĐỌC
 npx vite-node scripts/gate-power.ts                # đo sức phân biệt của các ngưỡng trước khi nới
 npx vite-node scripts/ab-combine.ts                # so luật gộp cũ/mới trên cùng 1 lần lấy dữ liệu
+npx vite-node scripts/inversion-probe.ts           # "độ cao nghịch nhiệt" là phép đo hay là trần cửa sổ quét?
+npx vite-node scripts/dump-rank.ts truoc.json …    # kết xuất bảng xếp hạng để so TRƯỚC/SAU một thay đổi engine
+npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác bao nhiêu điểm đổi nhãn/kết luận
 
 # VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC (chạy hằng ngày)
 npx vite-node scripts/snapshot-forecast.ts                            # ~20h: chụp dự báo rạng sáng mai

@@ -1,0 +1,31 @@
+{
+  "_": "KHÔNG PHẢI BẰNG CHỨNG DỰ BÁO. Đây là kết quả chấm LẠI năm ngày đã biết sự thật bằng engine-2.6 — tức chấm trên chính những ca đã dùng để sửa engine (in-sample). Ghi lại để so trước/sau, KHÔNG được đưa vào bảng hiệu chuẩn. engine-2.6 hiện có ĐÚNG 0 ngày kiểm chứng độc lập.",
+  "engineVersion": "engine-2.6.0",
+  "hindcastAt": "2026-08-28",
+  "note": "Chạy được ba ngày cũ nhất là nhờ sửa cửa sổ quá khứ của hindcast (trước đó mọi ngày cũ hơn 48h trả NO_DATA).",
+  "summary": {
+    "verdictDung": "4/5 (đúng KẾT LUẬN 'có biển mây')",
+    "vuotNguong60": "0/5",
+    "ketLuan": "Nhãn nay thường đúng; ĐIỂM mới là thứ chưa đúng. Xem mục 'Ngưỡng đáng đi' trong AGENTS.md."
+  },
+  "days": [
+    { "date": "2026-08-23", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
+      "recorded": { "engine": "engine-2.1", "score": 27, "status": "DISSIPATING" },
+      "hindcast": { "score": 35, "status": "STATIC", "agreement": 67 },
+      "verdictDung": true },
+    { "date": "2026-08-24", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
+      "hindcast": { "score": 35, "status": "FLUCTUATING", "agreement": 83 },
+      "verdictDung": true },
+    { "date": "2026-08-25", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
+      "recorded": { "engine": "engine-2.2", "score": 34, "status": "FOG" },
+      "hindcast": { "score": 32, "status": "FLUCTUATING", "agreement": 67 },
+      "verdictDung": true },
+    { "date": "2026-08-25", "spot": "SUOI_THAU", "truth": "BELOW (người dùng)",
+      "hindcast": { "score": 24, "status": "FLUCTUATING", "agreement": 67 },
+      "verdictDung": true },
+    { "date": "2026-08-27", "spot": "TA_XUA_SON_LA", "truth": "BELOW (người dùng)",
+      "hindcast": { "score": 5, "status": "RAIN", "agreement": 50 },
+      "verdictDung": false,
+      "note": "GFS đi từ 10/RAIN lên 34/STATIC nhờ tìm được nắp thật ở 951m. Năm mô hình còn lại cho RH 81-95% liên tục từ 250m lên 3.100m — cột khí ẩm đều, không có nắp nào để tìm. Đây là giới hạn phân giải của mô hình toàn cầu 25km trên sống núi 1.600m, không phải một ngưỡng chưa chỉnh." }
+  ]
+}

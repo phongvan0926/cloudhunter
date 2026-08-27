@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.5.0';
+export const ENGINE_VERSION = 'engine-2.6.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -61,7 +61,9 @@ export interface EngineDayResult {
 export function computeInversion(m: DayModelData, valleyElev: number): {
   strength: 'Strong' | 'Moderate' | 'Weak' | 'None';
   anomaly: number;
-  height: number | null; // m ASL của tầng anomaly cực đại (null nếu None)
+  height: number | null;        // m ASL của NẮP đáng tin — null khi không xác định được
+  anomalyHeight: number | null; // m ASL của tầng anomaly cực đại (chỉ để chẩn đoán)
+  ramp: boolean;                // anomaly chỉ TĂNG ĐỀU tới mép cửa sổ → không có đỉnh thật
 } {
   const expectAt = (h: number) => m.t_valley_dawn - (LAPSE_RATE * (h - valleyElev)) / 1000;
   const samples: { h: number; a: number }[] = [];
@@ -88,11 +90,56 @@ export function computeInversion(m: DayModelData, valleyElev: number): {
       samples.push({ h: LEVEL_HEIGHTS.p700, a: m.t700 - expectAt(LEVEL_HEIGHTS.p700) });
     }
   }
-  if (samples.length === 0) return { strength: 'None', anomaly: 0, height: null };
+  if (samples.length === 0) {
+    return { strength: 'None', anomaly: 0, height: null, anomalyHeight: null, ramp: false };
+  }
   const best = samples.reduce((a, b) => (b.a > a.a ? b : a));
   const anomaly = best.a;
   const strength = anomaly >= 3 ? 'Strong' : anomaly >= 1 ? 'Moderate' : anomaly >= -1 ? 'Weak' : 'None';
-  return { strength, anomaly: +anomaly.toFixed(1), height: strength === 'None' ? null : Math.round(best.h) };
+
+  // "DỐC" thay vì "ĐỈNH" — xem chú thích capLayerBase. Khi anomaly chỉ tăng đều lên tới mực
+  // cao nhất của cửa sổ thì không hề có đỉnh nghịch nhiệt; con số best.h chỉ là mép cửa sổ.
+  // Cần ≥3 mực mới kết luận được là "dốc": với 1-2 mực thì tăng đơn điệu là chuyện đương nhiên.
+  const byH = [...samples].sort((a, b) => a.h - b.h);
+  const ramp = byH.length >= 3 && byH.every((s, i) => i === 0 || s.a > byH[i - 1].a);
+
+  const height = ramp
+    ? capLayerBase(m, valleyElev)                       // không có đỉnh → tìm tầng ổn định cục bộ
+    : (strength === 'Strong' || strength === 'Moderate') ? Math.round(best.h) : null;
+  return { strength, anomaly: +anomaly.toFixed(1), height, anomalyHeight: Math.round(best.h), ramp };
+}
+
+/**
+ * ĐÁY NẮP CHẶN — mực thấp nhất (từ đáy mây trở lên) mà ngay phía trên nó khí quyển ổn định
+ * bất thường. Dùng khi phép đo anomaly không cho ra đỉnh nào (xem `ramp`).
+ *
+ * Vì sao phải có (lỗi thật, Tà Xùa 27/8/2026): anomaly được đo so với suy giảm chuẩn
+ * 6,5°C/km TÍNH TỪ ĐÁY THUNG LŨNG, nên nó CỘNG DỒN theo độ cao. Trong cột khí ẩm mùa mưa
+ * (suy giảm thực ~5°C/km suốt cột) anomaly tăng đơn điệu và "tầng cực đại" luôn rơi vào mực
+ * CAO NHẤT của cửa sổ quét — dù chẳng có nắp nào. Đo trên 120 ca (50 điểm × 3 mô hình ×
+ * 4 ngày): **94% số ca có height đúng bằng mực cao nhất trong cửa sổ**, và 86% số ca được
+ * chấm Strong/Moderate. Tức là trước đây "độ cao nghịch nhiệt" là trần cửa sổ quét chứ không
+ * phải một phép đo, và capByInversion kẹp đỉnh mây ở sai chỗ.
+ *
+ * Ngưỡng: đoạn nhiệt ẩm ở nền nhiệt Tây Bắc mùa hè ~5°C/km, nên Γ ≤ 3,5°C/km là ổn định
+ * HƠN HẲN nền chung — đó mới đáng gọi là nắp. Không tìm thấy thì trả null (KHÔNG bịa số).
+ */
+export const CAP_LAPSE_RATE = 3.5;
+
+export function capLayerBase(m: DayModelData, valleyElev: number): number | null {
+  const prof = (m.levels ?? [])
+    .filter(l => Number.isFinite(l.t) && l.h > valleyElev)
+    .sort((a, b) => a.h - b.h);
+  if (prof.length < 2) return null;
+  const base = computeCloudBase(m, valleyElev);
+  const ceiling = Math.max(2600, valleyElev + 1300);
+  for (let i = 0; i + 1 < prof.length; i++) {
+    if (prof[i].h > ceiling) break;
+    if (prof[i].h < base - 100) continue;   // nắp không thể nằm dưới đáy mây
+    const lapse = (prof[i].t - prof[i + 1].t) / (prof[i + 1].h - prof[i].h) * 1000;
+    if (lapse <= CAP_LAPSE_RATE) return Math.round(prof[i].h);
+  }
+  return null;
 }
 
 /** LCL từ THUNG LŨNG → đáy mây ASL (m). */
@@ -204,8 +251,9 @@ export function valleySaturation(m: DayModelData, valleyElev: number): Saturatio
  */
 function capByInversion(top: number, m: DayModelData, valleyElev: number, base: number): number {
   const inv = computeInversion(m, valleyElev);
+  // inv.height nay ĐÃ là "nắp đáng tin": hoặc đỉnh anomaly thật, hoặc tầng ổn định cục bộ.
+  // Cổng `strength` đã chuyển vào computeInversion (đỉnh yếu → height = null).
   if (inv.height === null) return top;
-  if (inv.strength !== 'Strong' && inv.strength !== 'Moderate') return top;
   if (inv.height <= base + 100) return top;      // nắp quá sát đáy mây → không tin
   // CHỈ can thiệp khi ước lượng vượt HẲN nắp (>300m). Vượt chút ít là phần đệm bình thường
   // của phép ước lượng; vượt cả cây số nghĩa là đã gộp nhầm một tầng mây khác vào lớp thấp.

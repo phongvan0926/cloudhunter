@@ -231,6 +231,111 @@ không trộn đỉnh mây của nhóm bất đồng.
 liệu chấm bằng cả hai luật): kết luận CÓ biển mây **14/50 → 17/50**, chỉ **3/50 điểm đổi
 nhãn** — cả ba đều đúng kiểu "2 mô hình SEA vs 1 mô hình khác". Không phải cửa xả.
 
+### ⚠️ engine-2.6 (27/8/2026) — ca thứ NĂM: "độ cao nghịch nhiệt" là trần cửa sổ quét
+
+Người dùng báo biển mây đẹp ở Tà Xùa trong khi đồng bằng bên dưới mưa dầm nhiều ngày.
+Engine-2.5 chấm **5/100 · RAIN — "hoãn kế hoạch săn mây"**. Cú trượt nặng nhất từ trước tới
+nay, và là báo cáo thực địa thứ 5 liên tiếp app dự báo sai (**0/5**).
+
+**Lỗi: `computeInversion` trả về "độ cao nghịch nhiệt" mà 94% số ca chỉ là mép trên của cửa
+sổ quét.** anomaly được đo so với suy giảm chuẩn 6,5°C/km **tính từ đáy thung lũng**, nên nó
+**cộng dồn theo độ cao**. Trong cột khí ẩm mùa mưa (suy giảm thực ~5°C/km suốt cột) anomaly
+tăng đơn điệu, và "tầng anomaly cực đại" **luôn** rơi vào mực cao nhất trong cửa sổ — dù
+chẳng có nắp nào. Đo thật (`scripts/inversion-probe.ts`, 50 điểm × 3 mô hình × 4 ngày = 120 ca):
+
+```
+inv.height ĐÚNG BẰNG mực cao nhất trong cửa sổ quét   113/120  (94%)
+được chấm Strong/Moderate                             103/120  (86%)
+  … trong đó height nằm ở mực cao nhất                 97/103  (94%)
+đối chứng: có tầng ổn định cục bộ Γ ≤ 3,5°C/km          54/120  (45%)
+  … trong đó nắp nằm DƯỚI chỗ đứng                      39/54   (72%)
+```
+
+Hai hệ quả, đều nghiêm trọng: `capByInversion` kẹp mặt biển mây **ở sai độ cao**, và điều
+kiện "có nghịch nhiệt" của `seaSignature` **bật gần như luôn luôn** (86%) nên gần như không
+mang thông tin. Ngày 27/8 GFS bị kẹp ở 1.973m trong khi tầng ổn định thật nằm ở 951→1.449m
+(Γ = 2,4°C/km, ổn định hơn hẳn đoạn nhiệt ẩm ~5) — tức mặt biển mây ở **951m, dưới chỗ đứng
+1.600m**. Đúng như người dùng nhìn thấy.
+
+Sửa: tách hẳn hai đại lượng vốn bị gộp làm một.
+
+| | ý nghĩa | dùng để |
+|---|---|---|
+| `anomaly` / `strength` | cả cột khí ổn định hơn chuẩn bao nhiêu — có thật, nhưng **không có địa chỉ** | chấm điểm (giữ nguyên) |
+| `anomalyHeight` | mực anomaly cực đại | **chỉ chẩn đoán** |
+| `ramp` | anomaly chỉ tăng đều tới mép cửa sổ → **không có đỉnh thật** | chọn cách tìm nắp |
+| `height` | ĐÁY NẮP đáng tin, `null` khi không xác định được | kẹp mặt mây, `seaCapped` |
+
+Khi `ramp = false` (có đỉnh thật, tầng trên lạnh/khô hẳn) thì vẫn dùng đỉnh anomaly như cũ.
+Khi `ramp = true` thì chuyển sang `capLayerBase()` — mực thấp nhất từ đáy mây trở lên mà ngay
+phía trên nó Γ ≤ 3,5°C/km. **Không tìm thấy thì trả `null`, KHÔNG bịa số.** Cần ≥3 mực mới
+kết luận được là "dốc": với 1-2 mực thì tăng đơn điệu là chuyện đương nhiên, không phải bằng chứng.
+
+*Đã đo trước khi giữ* (`dump-rank.ts` + `diff-rank.ts`, 50 điểm × 3 ngày = 150 cặp):
+
+```
+đổi NHÃN         7/150  (5%)
+đổi KẾT LUẬN     6/150  (4%)
+"có biển mây"   46 → 48
+điểm             tăng 11 · giảm 2 · trung bình +0,9
+```
+
+Quan trọng hơn con số tổng: **thay đổi đi CẢ HAI CHIỀU** — Putaleng và Tây Côn Lĩnh
+`FLOWING → RAIN`, Linh Quy Pháp Ấn `DISSIPATING → RAIN`. Một sửa đổi chỉ-nới-lỏng thì không
+bao giờ làm ngày nào xấu đi; cái này có, nên nó là **thay đổi về khả năng nhìn**, không phải
+bơm lạc quan. Và trên ngày kiểm chứng thật 24/8 — ngày lần này KHÔNG hề dùng để chỉnh —
+Tà Xùa đi từ `5/100 RAIN` lên `43/100 STATIC`.
+
+⚠️ **Nhưng 27/8 VẪN trượt, và đây mới là điều đáng nói.** Mặt cắt áp suất hôm đó:
+
+```
+GFS   258m:rh92  481m:rh92  712m:rh92  951m:rh90  1449m:rh85  1973m:rh86  3108m:rh93
+ICON  255m:rh90  479m:rh90  711m:rh90  950m:rh87  1448m:rh90  1972m:rh91  3107m:rh86
+UKMO  253m:rh81  484m:rh81  719m:rh81  960m:rh93  1458m:rh95  1980m:rh95  3113m:rh94
+```
+
+**RH 81-95% liên tục từ 250m lên 3.100m trong cả 6 mô hình.** Chỉ GFS có một tầng ổn định
+cục bộ đủ rõ; 5 mô hình còn lại cho cột khí suy giảm đều ~5°C/km — không có nắp nào để tìm.
+Với dữ liệu đó, "biển mây đỉnh 1.400m dưới sống lưng khủng long" và "cả sống lưng chìm trong
+mây" là **hai hiện thực khác nhau ứng với cùng một cột số liệu**. Ô lưới 25km làm phẳng địa
+hình Tà Xùa xuống còn ~1.000m; mô hình toàn cầu không có cách nào phân giải chuyện đó.
+
+Đây là **giới hạn của dữ liệu, không phải một ngưỡng chưa chỉnh**. Ghi lại rõ ràng ở đây để
+lần sau không ai (kể cả AI) nới thêm một cổng nữa với hy vọng bắt được ngày 27/8 — cách duy
+nhất bắt được nó bằng dữ liệu hiện có là nới tới mức app nói "có" với mọi ngày mùa mưa.
+
+### 🧠 Vòng kiểm chứng từng mất trí nhớ sau 48 giờ (28/8/2026)
+
+`hindcast.ts` — công cụ CHÍNH để soi lại một ngày đã trượt — dùng chung cửa sổ quá khứ 2 ngày
+của giao diện (`qualityForDaysAhead` chặn `daysAhead < -2`, `fetchMountainWeather` kẹp
+`apiMin = today − 2`). Hậu quả: **mọi ngày cũ hơn 48 giờ trả về `NO_DATA` và `0/100 UNKNOWN`**,
+tức ba báo cáo thực địa đầu tiên không còn soi lại được — trong khi Open-Meteo vẫn trả đủ dữ
+liệu cho cả 6 mô hình (đã kiểm bằng curl: 48/48 giờ, đủ cả 7 mực áp suất).
+
+Nay cả hai hàm nhận tham số `pastDays` (mặc định `APP_PAST_DAYS = 2` cho giao diện — **hành vi
+app không đổi**), hindcast truyền 90. Có test khoá.
+
+Bài học ghi lại vì nó sẽ tái diễn: **một hằng số hợp lý cho giao diện có thể vô hiệu hoá công
+cụ kiểm chứng mà không báo lỗi gì cả.** Triệu chứng duy nhất là "0/100 UNKNOWN" — trông y hệt
+một ngày thời tiết xấu.
+
+### 📊 Cả năm ca kiểm chứng, chấm lại bằng engine-2.6
+
+```
+23/8 Tà Xùa      35/100  STATIC       đồng thuận 67%   kết luận ĐÚNG
+24/8 Tà Xùa      35/100  FLUCTUATING  đồng thuận 83%   kết luận ĐÚNG
+25/8 Tà Xùa      32/100  FLUCTUATING  đồng thuận 67%   kết luận ĐÚNG
+25/8 Suôi Thầu   24/100  FLUCTUATING  đồng thuận 67%   kết luận ĐÚNG
+27/8 Tà Xùa       5/100  RAIN         đồng thuận 50%   TRƯỢT
+```
+
+⚠️ **In-sample** — đây là chấm lại trên chính những ca đã dùng để sửa engine, KHÔNG phải kiểm
+chứng độc lập. Nhưng nó cho thấy rất rõ chỗ hỏng đã DỊCH CHUYỂN:
+
+**NHÃN nay đúng 4/5. ĐIỂM đúng 0/5** — không ngày nào chạm ngưỡng "đáng đi" 60, kể cả những
+ngày app tự nhận là "biển mây tĩnh, thảm mây phẳng, bạn đứng trên mặt mây". App vừa nói
+"có biển mây dưới chân bạn" vừa khuyên "đừng đi". Đó là mâu thuẫn nội bộ, không phải thận trọng.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm
@@ -253,8 +358,8 @@ hình thành nhờ nạp ẩm + nắp nghịch nhiệt, không nhờ trời quan
 quyết định nhất — hiện đóng góp ĐÚNG 0 điểm.** Nó chỉ chọn nhãn, không vào điểm. Một ngày
 đứng cao hơn mặt mây 500m và một ngày chìm dưới mặt mây 20m có thể ra cùng một điểm.
 **CHƯA sửa** vì thêm trọng số cho ΔH là quyết định có hệ số tuỳ chọn, mà bộ kiểm chứng hiện
-tại **toàn mẫu dương tính** (4/4 báo cáo đều là ngày CÓ biển mây, 0 báo cáo ngày KHÔNG có).
-Đặt hệ số bằng cảm tính rồi tự chấm điểm mình trên 4 ca đã dùng để sửa engine thì chắc chắn
+tại **toàn mẫu dương tính** (5/5 báo cáo đều là ngày CÓ biển mây, 0 báo cáo ngày KHÔNG có).
+Đặt hệ số bằng cảm tính rồi tự chấm điểm mình trên 5 ca đã dùng để sửa engine thì chắc chắn
 "đẹp" mà vô nghĩa. Cần báo cáo ngày KHÔNG có biển mây trước.
 
 ### 🔒 Bản chụp dự báo là BẰNG CHỨNG, không được ghi đè
@@ -267,8 +372,9 @@ có nhãn rõ ràng.
 
 ### 🚧 Ngưỡng "đáng đi" 60/100 trong mùa mưa — CHƯA đụng vào, và vì sao
 
-Ngày 25/8, **0/50 điểm** đạt 60 dù người dùng nhìn thấy biển mây thật. Ba báo cáo thực địa đã có
-đều là ngày CÓ biển mây. Cám dỗ là hạ ngưỡng hoặc nới hiệu chỉnh mùa — **không làm**, vì bộ báo cáo
+Ngày 25/8, **0/50 điểm** đạt 60 dù người dùng nhìn thấy biển mây thật. **Năm** báo cáo thực địa đã có
+đều là ngày CÓ biển mây. Bảng chấm lại bằng engine-2.6 ở trên cho thêm một dữ kiện: **4/5 ca nay
+đúng NHÃN nhưng 0/5 vượt ngưỡng** — tức ngưỡng theo điểm đang phủ nhận chính kết luận của engine. Cám dỗ là hạ ngưỡng hoặc nới hiệu chỉnh mùa — **không làm**, vì bộ báo cáo
 hiện tại **thiên lệch một chiều theo đúng nghĩa thống kê**: người ta báo hôm thấy mây, không báo hôm
 leo lên rồi về không. Hiệu chỉnh ngưỡng bằng toàn mẫu dương tính chỉ đảm bảo một điều — app sẽ khuyên
 đi mọi ngày. Cần báo cáo **ngày KHÔNG có** trước đã.
