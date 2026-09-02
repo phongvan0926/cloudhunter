@@ -1,0 +1,83 @@
+# VÒNG KIỂM CHỨNG TỰ CHẠY — vì bằng chứng dự báo biến mất sau 48 giờ.
+#
+# Vì sao cần (28/8/2026): ba báo cáo thực địa đầu tiên không còn soi lại được vì không ai
+# chụp dự báo đúng ngày; tới 03/09 vẫn chưa có bản chụp nào cho các ngày 26/8→03/09. Một
+# vòng kiểm chứng phụ thuộc vào việc "nhớ chạy lệnh mỗi tối" thì không phải vòng kiểm chứng.
+#
+# Hai việc, hai giờ (cron của GitHub tính theo UTC; giờ VN = UTC+7):
+#   20:00 VN  snapshot-forecast.ts  → chụp app đã nói gì cho rạng sáng NGÀY MAI (trước khi biết sự thật)
+#   08:30 VN  verify_satellite.py   → nhãn thật từ Himawari cho rạng sáng HÔM NAY, rồi calibrate
+# Kết quả commit thẳng vào data/observations/ (deploy.yml bỏ qua thư mục này nên không build lại site).
+name: Vòng kiểm chứng hằng ngày
+
+on:
+  schedule:
+    - cron: '0 13 * * *'    # 20:00 VN — chụp dự báo
+    - cron: '30 1 * * *'    # 08:30 VN — nhãn vệ tinh + calibrate
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'snapshot | satellite'
+        required: false
+        default: 'snapshot'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-loop
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    if: github.event.schedule == '0 13 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'snapshot')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Chụp dự báo rạng sáng ngày mai
+        # Không --force: đã có bản chụp thì script tự từ chối đè (bản chụp là bằng chứng).
+        run: npx vite-node scripts/snapshot-forecast.ts
+      - name: Commit bản chụp
+        run: |
+          git config user.name  "cloudhunter-verify[bot]"
+          git config user.email "cloudhunter-verify[bot]@users.noreply.github.com"
+          git add data/observations/
+          git diff --cached --quiet && echo "không có gì mới" && exit 0
+          git commit -m "chụp dự báo $(TZ=Asia/Ho_Chi_Minh date -d tomorrow +%F) [bot]"
+          git pull --rebase origin main
+          git push
+
+  satellite:
+    if: github.event.schedule == '30 1 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'satellite')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install h5py fsspec requests
+      - name: Nhãn thật từ vệ tinh Himawari cho rạng sáng hôm nay
+        # Dữ liệu NOAA trên S3 đôi khi trễ vài giờ; lỗi ở đây không được làm hỏng job —
+        # ngày thiếu sẽ hiện trong calibrate là "không có nhãn", không bịa.
+        run: python tools/verify_satellite.py "$(TZ=Asia/Ho_Chi_Minh date +%F)" || echo "::warning::vệ tinh chưa có dữ liệu, thử lại tay sau"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Bảng hiệu chuẩn (đọc trong log của job)
+        run: npx vite-node scripts/calibrate.ts || true
+      - name: Commit nhãn vệ tinh
+        run: |
+          git config user.name  "cloudhunter-verify[bot]"
+          git config user.email "cloudhunter-verify[bot]@users.noreply.github.com"
+          git add data/observations/
+          git diff --cached --quiet && echo "không có gì mới" && exit 0
+          git commit -m "nhãn vệ tinh $(TZ=Asia/Ho_Chi_Minh date +%F) [bot]"
+          git pull --rebase origin main
+          git push

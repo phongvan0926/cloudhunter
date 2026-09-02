@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    # Bot vòng kiểm chứng commit dữ liệu 2 lần/ngày vào data/observations — không cần build lại site.
+    paths-ignore:
+      - 'data/observations/**'
 
 permissions:
   contents: write

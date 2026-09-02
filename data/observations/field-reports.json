@@ -5,7 +5,7 @@
     "locationName": "Khe Cải (Tà Xùa)",
     "date": "2026-09-02",
     "seaLevel": "BELOW",
-    "duration": "NGAN",
+    "duration": "SHORT",
     "note": "Người dùng đính chính: sáng 02/09 Khe Cải (Tà Xùa) VẪN có biển mây, nhưng chỉ tồn tại khoảng 5-6h sáng rồi tan nhanh khi nắng lên. App chấm 6/100 CLEAR — TRƯỢT. Đã kiểm dữ liệu thô: cả 3 mô hình cho cloud_cover_low = 0% ở MỌI giờ 3-11h, và T−Td đáy thung lũng 3,7-6,4°C (RH 67-80%) lúc 5-7h. Không có tín hiệu nào để bắt — không phải lỗi cửa sổ trung bình, mà là mô hình 25km không thấy lớp sương mỏng ngắn hạn trong thung lũng hẹp.",
     "reportedAt": "2026-09-03T10:00:00+07:00"
   },
@@ -15,7 +15,7 @@
     "locationName": "Đồn Đèn (Ba Bể)",
     "date": "2026-09-02",
     "seaLevel": "BELOW",
-    "duration": "NGAN",
+    "duration": "SHORT",
     "note": "Người dùng đính chính: sáng 02/09 Đồn Đèn (Ba Bể) có biển mây, chỉ 5-6h rồi tan nhanh. App chấm 0/100 DISSIPATING — TRƯỢT. Dữ liệu thô: cloud_cover_low = 0% mọi giờ ở cả 3 mô hình; T−Td đáy thung lũng UKMO 1,6-1,8°C (RH 90-93%) là mô hình DUY NHẤT thấy gần bão hoà, GFS 3,4°C, ICON 5,6°C.",
     "reportedAt": "2026-09-03T10:00:00+07:00"
   },
@@ -34,7 +34,7 @@
     "spotKey": "FANSIPAN",
     "locationName": "Fansipan (Nóc nhà Đông Dương)",
     "date": "2026-09-02",
-    "seaLevel": "IN_CLOUD",
+    "seaLevel": "ABOVE",
     "note": "Người dùng báo trực tiếp: sáng 02/09 đỉnh Fansipan bị mây mù bao trùm. BÁO CÁO ÂM TÍNH ĐẦU TIÊN — trước đó 5/5 báo cáo đều là ngày CÓ biển mây. Engine-2.6 chấm 0/100 CLEAR 'Trời quang, không có biển mây': nó ĐÚNG ở chỗ không có biển mây (thung lũng 1.900m khô, T−Td 3-6°C, mây thấp 0-15%) nhưng bỏ sót mây ĐỘI ĐỈNH — cả 6 mô hình đều cho RH 73-93% ngay tại mực ~3.136m, đúng cao độ người đứng. Engine chỉ đi tìm lớp mây bám gốc thung lũng nên chưa bao giờ hỏi 'chỗ tôi đứng có mây không'. Ca này sinh ra bộ dò summitCloud (engine-2.7).",
     "reportedAt": "2026-09-03T09:00:00+07:00"
   },

@@ -33,6 +33,7 @@ export const FieldReportPanel: React.FC<{ result: CloudAnalysis }> = ({ result }
   );
   const [date, setDate] = useState<string>(reportableDates[0] || today);
   const [note, setNote] = useState<string>('');
+  const [shortLived, setShortLived] = useState<boolean>(false);
   const [saved, setSaved] = useState<FieldReport | null>(() => findReport(null, result.locationName, reportableDates[0] || today));
   const [count, setCount] = useState<number>(() => listReports().length);
   const [msg, setMsg] = useState<string>('');
@@ -52,6 +53,8 @@ export const FieldReportPanel: React.FC<{ result: CloudAnalysis }> = ({ result }
       locationName: result.locationName,
       date,
       seaLevel: v,
+      // Chỉ có nghĩa khi thật sự CÓ mây để mà tan; trời quang thì bỏ trống.
+      duration: v === 'NONE' ? undefined : (shortLived ? 'SHORT' : 'LONG'),
       note: note.trim() || undefined,
       predictedScore: f?.score,
       predictedStatus: f?.status_code,
@@ -127,6 +130,12 @@ export const FieldReportPanel: React.FC<{ result: CloudAnalysis }> = ({ result }
         ))}
       </div>
 
+      <label className="flex items-center gap-2 mt-3 text-xs text-slate-300 cursor-pointer select-none">
+        <input type="checkbox" checked={shortLived} onChange={e => setShortLived(e.target.checked)}
+          className="accent-emerald-500 w-4 h-4" />
+        <span>⏱️ Mây <b>tan nhanh</b> khi nắng lên — chỉ có lúc ~5–7h (bấm trước rồi mới chọn ô trên)</span>
+      </label>
+
       <input
         value={note} onChange={e => setNote(e.target.value)}
         placeholder="Ghi chú (tuỳ chọn): mấy giờ mây lên/tan, độ dày, hôm trước có mưa không..."
@@ -136,6 +145,7 @@ export const FieldReportPanel: React.FC<{ result: CloudAnalysis }> = ({ result }
       {saved && (
         <p className="text-xs text-emerald-300/90 mt-3">
           ✅ Đã ghi cho {saved.date}: {SEA_LEVEL_TEXT[saved.seaLevel]}
+          {saved.duration === 'SHORT' ? ' · tan nhanh khi nắng lên' : ''}
           {saved.note ? ` — “${saved.note}”` : ''}
         </p>
       )}

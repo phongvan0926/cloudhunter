@@ -481,6 +481,27 @@ kiểm chứng được từng lời khuyên; `snapshot-forecast.ts` lưu thêm 
 calibrate chấm được luật mới trên bản chụp về sau (bản chụp cũ thiếu ΔH → tính là "không khuyên",
 là cận DƯỚI của độ nhạy, calibrate có ghi chú).
 
+### 🤖 Vòng kiểm chứng tự chạy trên GitHub Actions (03/09/2026)
+
+Từ 28/8 đã biết bằng chứng dự báo biến mất sau 48 giờ, và tới 03/09 vẫn **không có bản chụp nào**
+cho 26/8→03/09 — tức 4 báo cáo thực địa gần nhất đều không có "app đã nói gì TRƯỚC" để đối chiếu,
+chỉ có hindcast (in-sample). Một vòng kiểm chứng phụ thuộc vào việc nhớ chạy lệnh mỗi tối thì không
+phải vòng kiểm chứng. `.github/workflows/verify-loop.yml`:
+
+| giờ VN | việc | ghi vào |
+|---|---|---|
+| 20:00 | `snapshot-forecast.ts` — chụp dự báo rạng sáng **ngày mai** | `data/observations/<mai>-forecast.json` |
+| 08:30 | `verify_satellite.py <hôm nay>` rồi `calibrate.ts` (đọc trong log) | `data/observations/<nay>-satellite.json` |
+
+Bot commit thẳng vào `main`; `deploy.yml` có `paths-ignore: data/observations/**` nên không build lại
+site 2 lần/ngày. Snapshot không bao giờ `--force` — đã có bản chụp thì script tự từ chối (bản chụp là
+bằng chứng). Vệ tinh trễ thì job chỉ cảnh báo, không bịa nhãn. Chạy tay: tab Actions → "Vòng kiểm
+chứng hằng ngày" → Run workflow → chọn `snapshot` hoặc `satellite`.
+
+Kèm theo: báo cáo thực địa có thêm `duration: SHORT | LONG` (ô "mây tan nhanh khi nắng lên"), vì
+02/09 cho thấy câu hỏi thật của người đi là "có, nhưng được mấy tiếng?". Kho báo cáo trong repo
+đã chuẩn hoá về đúng từ vựng của app (`ABOVE` = chìm trong mây, không dùng `IN_CLOUD` nữa).
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

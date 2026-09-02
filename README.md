@@ -136,7 +136,7 @@ npx vite-node scripts/summit-cloud-probe.ts        # đo tần suất bật củ
 npx vite-node scripts/dump-rank.ts truoc.json …    # kết xuất bảng xếp hạng để so TRƯỚC/SAU một thay đổi engine
 npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác bao nhiêu điểm đổi nhãn/kết luận
 
-# VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC (chạy hằng ngày)
+# VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC — GitHub Actions tự chạy 2 lần/ngày (.github/workflows/verify-loop.yml); chạy tay:
 npx vite-node scripts/snapshot-forecast.ts                            # ~20h: chụp dự báo rạng sáng mai
 ~/.venvs/ch-verify/bin/python tools/verify_satellite.py 2026-08-24    # ~8h : nhãn thật từ vệ tinh
 npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app

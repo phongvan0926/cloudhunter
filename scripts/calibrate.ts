@@ -89,7 +89,7 @@ function main() {
       const truth: Truth = (r.seaLevel === 'BELOW' || r.seaLevel === 'AT_EYE') ? 'SEA' : 'NO_SEA';
       const i = rows.findIndex(x => x.date === r.date && x.key === key);
       const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName, truth,
-        truthSrc: 'người đi', truthDetail: r.seaLevel + (r.note ? ` — "${r.note}"` : ''),
+        truthSrc: 'người đi', truthDetail: r.seaLevel + (r.duration === 'SHORT' ? ' (tan nhanh)' : '') + (r.note ? ` — "${r.note}"` : ''),
         score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel,
         engineVersion: (p as any)?.engineVersion };
       if (i >= 0) rows[i] = row; else rows.push(row);

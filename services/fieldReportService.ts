@@ -25,6 +25,10 @@ export interface FieldReport {
   locationName: string;
   date: string;                // YYYY-MM-DD — ngày RẠNG SÁNG quan sát
   seaLevel: SeaLevelRelative;
+  /** 02/09/2026: biển mây Khe Cải/Đồn Đèn chỉ sống 5-6h rồi tan khi nắng lên. Engine trả
+   *  lời "có/không", còn người đi cần "có, nhưng được mấy tiếng?" — phải ghi lại thì mới
+   *  có ngày đo được. SHORT = tan trước ~8h; LONG = còn tới giữa buổi. */
+  duration?: 'SHORT' | 'LONG';
   note?: string;
   /** Điểm & trạng thái app đã dự báo cho đúng ngày đó (chốt lại lúc báo cáo, để đối chiếu sau) */
   predictedScore?: number;
