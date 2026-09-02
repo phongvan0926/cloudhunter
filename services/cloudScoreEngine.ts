@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.6.0';
+export const ENGINE_VERSION = 'engine-2.7.0';
 
 /** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
 export const WORTH_GOING_SCORE = 60;
@@ -307,6 +307,48 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
     top = moistTop + 150;
   }
   return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
+}
+
+/**
+ * MÂY ĐỘI ĐỈNH — mây do NÂNG ĐỊA HÌNH sinh ra ngay tại đỉnh, trong khi thung lũng bên dưới
+ * quang. KHÔNG phải biển mây, và cũng không phải "trời quang".
+ *
+ * Ca thật, Fansipan 02/09/2026: thung lũng 1.900m khô (T−Td 3-6°C, mây thấp 0-15%) nên engine
+ * kết luận đúng "không có biển mây" — rồi dán nhãn `CLEAR` "Trời quang, không có biển mây".
+ * Thực tế đỉnh bị mây mù bao trùm cả buổi sáng. Cả 6 mô hình đều cho RH 73-93% ngay tại mực
+ * ~3.136m, tức ĐÚNG cao độ người đứng; engine chưa bao giờ hỏi "chỗ tôi đứng có mây không"
+ * vì nó chỉ đi tìm lớp mây bám gốc thung lũng.
+ *
+ * Cách nhận: khối khí ngang đỉnh cần được nâng thêm `LCL` mét nữa mới ngưng tụ; ngọn núi tự
+ * nó nâng khối khí lên khi gió thổi qua. Nếu lượng nâng ĐỦ thì đỉnh chìm trong mây.
+ *   · LCL trên đầu ≈ 125 × (T − Td), với T − Td ≈ (100 − RH)/5 khi RH > 50% ⇒ 25 × (100 − RH) m.
+ *   · Lượng nâng khả dụng ≈ MỘT NỬA chênh cao đỉnh−đáy (dòng khí ổn định bị chặn một phần,
+ *     không vượt trọn chiều cao vật cản), chặn trên ở 600m (cao hơn nữa thì gió vòng qua chứ
+ *     không trèo lên). Nhờ vậy ngưỡng TỰ CO GIÃN: đỉnh nhô 1.200m khắt khe khác đồi nhô 300m,
+ *     và RH lạnh khác RH ấm — không phải một con số RH cứng.
+ *
+ * Bộ dò này CHỈ được đổi CLEAR → FOG, không bao giờ làm app lạc quan hơn. Đo trên 287 ca
+ * (50 điểm × 3 mô hình × 3 ngày): bật ở 18% số ca, đổi kết luận ở 14% số ca đang là CLEAR.
+ */
+export const SUMMIT_LIFT_FRACTION = 0.5;
+export const SUMMIT_LIFT_CAP = 600;
+
+export function summitCloud(m: DayModelData, ctx: DayContext): {
+  inCloud: boolean; lclAbove: number | null; lift: number; rh: number | null;
+} {
+  const lift = Math.min(SUMMIT_LIFT_CAP,
+    SUMMIT_LIFT_FRACTION * Math.max(0, ctx.observerAlt - ctx.valleyElevation));
+  let best: { h: number; rh: number } | null = null;
+  for (const l of m.levels ?? []) {
+    if (!Number.isFinite(l.rh)) continue;
+    if (Math.abs(l.h - ctx.observerAlt) > 400) continue;   // quá xa thì không nói được gì
+    if (!best || Math.abs(l.h - ctx.observerAlt) < Math.abs(best.h - ctx.observerAlt)) {
+      best = { h: l.h, rh: l.rh };
+    }
+  }
+  if (!best) return { inCloud: false, lclAbove: null, lift, rh: null };
+  const lclAbove = 25 * (100 - best.rh);
+  return { inCloud: lclAbove <= lift, lclAbove: Math.round(lclAbove), lift, rh: best.rh };
 }
 
 export interface WindAssessment {
@@ -622,10 +664,20 @@ export function scoreOneModel(
   // người đứng 1.600m vào trong mây, nếu mặt biển mây nằm ở 1.582m dưới chân họ.
   // (Lỗi thật: Tà Xùa 24/8/2026 — GFS tính đỉnh mây 1.582m < chỗ đứng 1.600m, tức ĐỨNG TRÊN
   //  biển mây, nhưng bị deepOvercast đè thành "Mù trùm — bạn chìm trong mây".)
-  else if (top === null) status = deepOvercast ? 'FOG' : 'CLEAR';
+  else if (top === null) status = (deepOvercast || summitCloud(m, ctx).inCloud) ? 'FOG' : 'CLEAR';
   else if (deltaH !== null && deltaH > 250) status = wind.level === 'Low' ? 'STATIC' : 'FLOWING';
   else if (deltaH !== null && deltaH >= -250) status = wind.level === 'Low' ? 'FLUCTUATING' : 'ROLLING';
   else status = 'FOG';
+
+  // Giải thích cho người đọc VÌ SAO "không có biển mây" lại không phải "trời quang".
+  if (top === null && status === 'FOG' && !deepOvercast) {
+    const sc = summitCloud(m, ctx);
+    if (sc.inCloud) {
+      reasons.push(`±0 · Mây đội đỉnh: không khí ngang ${ctx.observerAlt}m chỉ cần nâng thêm `
+        + `~${sc.lclAbove}m là ngưng tụ (RH ${Math.round(sc.rh!)}%), mà chính ngọn núi nâng được `
+        + `~${Math.round(sc.lift)}m — thung lũng quang nhưng ĐỈNH nhiều khả năng chìm trong mây`);
+    }
+  }
 
   return { model, score, status, cloudTop: top, reasons };
 }

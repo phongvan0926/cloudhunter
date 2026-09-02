@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase,
+  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase, summitCloud,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -1184,5 +1184,66 @@ describe('engine-2.6 — "độ cao nghịch nhiệt" từng là trần cửa s�
     }), 600);
     expect(inv.ramp).toBe(false);       // anomaly tụt ở 1.940m → có đỉnh thật
     expect(inv.height).toBe(1462);
+  });
+});
+
+describe('engine-2.7 — "không có biển mây" KHÔNG đồng nghĩa với "trời quang"', () => {
+  /** Mặt cắt THẬT của ECMWF IFS tại Fansipan rạng sáng 02/09/2026 — hôm đỉnh bị mây mù bao
+   *  trùm còn app báo "Trời quang — không có biển mây". Đáy thung lũng 1.900m, đứng 3.143m. */
+  function fansipan0209(): DayModelData {
+    return {
+      t_valley_dawn: 15.0, td_valley_dawn: 11.8, t_obs_dawn: 6.9, td_obs_dawn: 5.0,
+      cloud_low_dawn: 0, cloud_mid_dawn: 20, cloud_high_dawn: 31,
+      precip_dawn: 0, wind850_dawn_max: 4.2, wind925_dawn_max: 3.0,
+      t925: 25.9, t850: 21.1, t700: 8.2,
+      rh925: 74, rh850: 63, rh700: 79,
+      cloud_high_night: 14, wind925_night: 2.9, precip_night: 0, rh2m_valley_night: 80,
+      levels: [
+        { p: 925, h: 766, hReal: true, t: 25.9, rh: 74, cc: 0 },
+        { p: 850, h: 1494, hReal: true, t: 21.1, rh: 63, cc: 0 },
+        { p: 700, h: 3136, hReal: true, t: 8.2, rh: 79, cc: 15 },
+      ],
+    };
+  }
+  const CTX_FAN = { valleyElevation: 1900, observerAlt: 3143, zone: 'B_WIND_TUNNEL' as const };
+
+  it('thung lũng khô + không lớp mây bám gốc ⇒ đúng là KHÔNG có biển mây', () => {
+    expect(estimateCloudTop(fansipan0209(), 1900)).toBeNull();
+    expect(rootedLowLayer(fansipan0209(), 1900).rooted).toBe(false);
+  });
+
+  it('…nhưng khối khí NGANG ĐỈNH chỉ cần nâng 525m là ngưng tụ, mà núi nâng được 600m', () => {
+    const sc = summitCloud(fansipan0209(), CTX_FAN);
+    expect(sc.rh).toBe(79);
+    expect(sc.lclAbove).toBe(525);          // 25 × (100 − 79)
+    expect(sc.lift).toBe(600);              // min(600, 0.5 × (3143 − 1900))
+    expect(sc.inCloud).toBe(true);
+  });
+
+  it('nhãn phải là FOG, không phải CLEAR — "trời quang" mời người ta leo lên chỗ mù', () => {
+    const r = scoreOneModel('ecmwf_ifs025', fansipan0209(), CTX_FAN, '2026-09-02');
+    expect(r.status).toBe('FOG');
+    expect(r.reasons.join(' ')).toMatch(/Mây đội đỉnh/);
+  });
+
+  it('ngưỡng TỰ CO GIÃN theo độ nhô của đỉnh: đồi thấp thì cùng RH đó không đủ', () => {
+    // Cùng RH 79% (cần nâng 525m) nhưng đỉnh chỉ nhô 400m trên đáy ⇒ nâng được 200m ⇒ không mù.
+    const doi = { ...CTX_FAN, valleyElevation: 2743, observerAlt: 3143 };
+    expect(summitCloud(fansipan0209(), doi).inCloud).toBe(false);
+  });
+
+  it('không khí khô ngang đỉnh ⇒ vẫn là CLEAR, bộ dò không bật bừa', () => {
+    const kho = fansipan0209();
+    kho.levels = kho.levels!.map(l => l.p === 700 ? { ...l, rh: 45, cc: 0 } : l);
+    kho.rh700 = 45;
+    expect(summitCloud(kho, CTX_FAN).inCloud).toBe(false);
+    expect(scoreOneModel('ecmwf_ifs025', kho, CTX_FAN, '2026-09-02').status).toBe('CLEAR');
+  });
+
+  it('CHỈ được đổi CLEAR→FOG: ngày CÓ biển mây thì bộ dò không đụng vào nhãn', () => {
+    // goldenNight có lớp mây bám gốc ⇒ top ≠ null ⇒ nhánh summitCloud không bao giờ chạy tới.
+    const r = scoreOneModel('gfs_seamless', goldenNight(), CTX_A, '2026-11-05');
+    expect(estimateCloudTop(goldenNight(), 600)).not.toBeNull();
+    expect(verdictOf(r.status)).toBe('SEA');
   });
 });

@@ -104,6 +104,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Mặt mây bị kẹp | không vươn qua **đáy nắp** được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây". Kẹp bằng đỉnh anomaly khi có đỉnh THẬT, bằng tầng ổn định cục bộ khi anomaly chỉ là một cái dốc |
 | Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
 | Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |
+| Mây đội đỉnh | mây do nâng địa hình sinh ra NGAY TẠI đỉnh, thung lũng bên dưới quang — không phải biển mây, cũng không phải trời quang. Nhận bằng cách so hai quãng đường: cần nâng `25 × (100 − RH)` m để ngưng tụ, núi nâng được `min(600m, ½ × chênh cao đỉnh−đáy)`. Tự co giãn theo độ nhô của đỉnh và theo nền nhiệt, không dùng ngưỡng RH cứng. Chỉ được đổi CLEAR → FOG |
 | Lớp mây bám gốc | bộ dò thứ ba: lớp ẩm/mây **liên tục bắt đầu sát đáy thung lũng** trên profile 7 mực. Cần vì mô hình có thể báo `cloud_cover_low = 0%` trong khi chính nó cho RH 80-85% suốt từ đáy lên 950m rồi rớt hẳn ở 1.450m — đúng một biển mây dày 700m |
 | Ẩm lớp biển mây | đo ở mực gần **đáy mây + 100m** (geopotential thật), không chọn cứng theo độ cao thung lũng — thung lũng 274m mà đo ở 760m là đo gần đỉnh lớp sương, có khi đo hẳn không khí bên trên nó |
 | Điểm ngày | **max(mây thấp, bão hoà)** + nghịch nhiệt + ẩm − gió − mây cao đêm − mưa(theo mm/h) ± mùa |
@@ -116,7 +117,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 97 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 104 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -128,6 +129,7 @@ npx vite-node scripts/audit-vars.ts                # đối chiếu 2 chiều: b
 npx vite-node scripts/gate-power.ts                # đo sức phân biệt của các ngưỡng trước khi nới
 npx vite-node scripts/ab-combine.ts                # so luật gộp cũ/mới trên cùng 1 lần lấy dữ liệu
 npx vite-node scripts/inversion-probe.ts           # "độ cao nghịch nhiệt" là phép đo hay là trần cửa sổ quét?
+npx vite-node scripts/summit-cloud-probe.ts        # đo tần suất bật của bộ dò mây đội đỉnh
 npx vite-node scripts/dump-rank.ts truoc.json …    # kết xuất bảng xếp hạng để so TRƯỚC/SAU một thay đổi engine
 npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác bao nhiêu điểm đổi nhãn/kết luận
 

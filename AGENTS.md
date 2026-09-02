@@ -336,6 +336,87 @@ chứng độc lập. Nhưng nó cho thấy rất rõ chỗ hỏng đã DỊCH C
 ngày app tự nhận là "biển mây tĩnh, thảm mây phẳng, bạn đứng trên mặt mây". App vừa nói
 "có biển mây dưới chân bạn" vừa khuyên "đừng đi". Đó là mâu thuẫn nội bộ, không phải thận trọng.
 
+### ⚠️ engine-2.7 (02/09/2026) — MẪU ÂM TÍNH ĐẦU TIÊN: "không có biển mây" ≠ "trời quang"
+
+Sáu báo cáo đầu đều là ngày CÓ biển mây. Ngày 02/09 là ca đầu tiên ngược lại: **đỉnh Fansipan
+bị mây mù bao trùm**, và người dùng cho biết hôm đó có vẻ **không nơi nào** có biển mây (hôm
+trước nắng to). Đây là thứ đã thiếu suốt để hiệu chuẩn.
+
+Engine-2.6 chấm `0/100 · CLEAR — "Trời quang, không có biển mây"`. Nửa đầu ĐÚNG: thung lũng
+1.900m khô cong (T−Td 3-6°C, mây thấp 0-15%, không có lớp mây bám gốc). Nửa sau SAI, và sai
+theo kiểu nguy hiểm — "trời quang" mời người ta leo lên chỗ mù.
+
+**Lỗi: engine chưa bao giờ hỏi "CHỖ TÔI ĐỨNG có mây không".** Nó chỉ đi tìm lớp mây bám gốc
+thung lũng, tức chỉ biết một loại mây duy nhất. Nhưng cả 6 mô hình đều cho RH 73-93% ngay tại
+mực ~3.136m — **đúng cao độ người đứng**:
+
+```
+ecmwf 3136m:rh79/cc15   gfs 3135m:rh79   icon 3132m:rh78/cc13
+jma   3138m:rh93/cc52   ukmo 3138m:rh73/cc5   aifs 3139m:rh79/cc15
+```
+
+Đó là **mây đội đỉnh**: gió thổi qua sườn núi nâng khối khí lên, nó ngưng tụ ngay tại đỉnh,
+trong khi thung lũng bên dưới quang. Không phải biển mây, và cũng không phải trời quang — một
+hiện tượng thứ ba mà engine không có tên gọi.
+
+Bộ dò mới `summitCloud()` không dùng ngưỡng RH cứng mà so **hai quãng đường**:
+
+| | |
+|---|---|
+| cần nâng bao nhiêu để ngưng tụ | `LCL_trên_đầu ≈ 25 × (100 − RH)` mét, đo tại mực ngang cao độ người đứng |
+| núi nâng được bao nhiêu | `min(600m, ½ × chênh cao đỉnh−đáy)` |
+
+Chìm trong mây khi vế trái ≤ vế phải. Fansipan: cần nâng 525m, núi nâng được 600m ⇒ mù.
+Ngưỡng **tự co giãn**: cùng RH 79% đó, một đỉnh chỉ nhô 400m trên đáy thì nâng được 200m nên
+KHÔNG mù — và RH lạnh khác RH ấm, một con số RH cứng không phân biệt được. Chặn trên 600m vì
+cao hơn nữa thì dòng khí ổn định vòng qua chứ không trèo lên.
+
+Bộ dò này **chỉ được đổi `CLEAR` → `FOG`**, về mặt cấu trúc không bao giờ làm app lạc quan hơn
+(nhánh chỉ chạy khi `top === null`, tức khi engine đã kết luận không có biển mây). Có test khoá.
+
+*Đã đo trước khi giữ* (`scripts/summit-cloud-probe.ts`, 287 ca = 50 điểm × 3 mô hình × 3 ngày):
+
+```
+                                bật          đổi CLEAR→FOG
+ngưỡng RH ≥75% (phẳng)      87 (30%)         23 (19% số ca CLEAR)
+ngưỡng RH ≥80% (phẳng)      62 (22%)         13 (11%)   ← bỏ sót Fansipan (chỉ JMA bật)
+LCL ≤ ½ độ nhô, chặn 600m   52 (18%)         17 (14%)   ← ĐƯỢC CHỌN: bắt được Fansipan 4/6 mô hình
+```
+
+Fansipan 02/09 nay ra `FOG — "Mù trùm — bạn chìm trong mây"`, kèm dòng giải thích lượng nâng.
+
+### 📐 Lần ĐẦU TIÊN đo được TỈ LỆ BÁO NHẦM (02/09/2026)
+
+Suốt sáu báo cáo trước, mọi hiệu chuẩn ngưỡng đều bị chặn vì bộ mẫu **toàn dương tính**. Ngày
+02/09 mở được nút đó. Chấm cả 50 điểm cho ngày người dùng tin là không nơi nào có biển mây:
+
+```
+CLEAR 24 · DISSIPATING 17 · FOG 7 · ROLLING 1 · FLUCTUATING 1
+
+kết luận "CÓ biển mây"                      2/50   (4%)
+vượt ngưỡng ĐIỂM 60                         0/50   (0%)
+phương án B (SEA + đồng thuận ≥50%)         2/50   (4%)
+   10/100 ROLLING      67%  Núi Lang Biang
+    6/100 FLUCTUATING  67%  Ngải Thầu Thượng (Y Tý)
+```
+
+⚠️ Đọc con số này cho đúng: người dùng **tự nói** chỉ kiểm được 2-3 điểm, gián tiếp qua tìm
+kiếm, và dùng chữ "hình như". Đây là mẫu âm tính **độ tin cậy thấp**, một ngày duy nhất. Ngoài
+ra Lang Biang ở Lâm Đồng, ngoài vùng người dùng kiểm chứng — chỉ Ngải Thầu Thượng (Y Tý) mới
+chắc chắn là báo nhầm.
+
+Dù vậy hướng đã rõ và lần đầu có SỐ ở cả hai phía:
+
+```
+                         ngày CÓ biển mây (6 ca)      ngày KHÔNG có (02/09, 50 điểm)
+ngưỡng ĐIỂM ≥ 60         khuyên đi 0/6   ✗✗✗          báo nhầm 0/50
+phương án B              khuyên đi 4/6                báo nhầm 2/50 (4%)
+```
+
+Ngưỡng điểm hiện tại đạt tỉ lệ báo nhầm hoàn hảo bằng cách **không bao giờ khuyên đi** — kể cả
+những hôm chính engine nói "biển mây tĩnh, thảm mây phẳng, bạn đứng trên mặt mây". Vẫn CHƯA đổi
+vì đây là quyết định về thứ app khuyên người dùng, không phải về vật lý — cần người dùng chốt.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

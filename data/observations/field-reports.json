@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-09-02-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-09-02",
+    "seaLevel": "IN_CLOUD",
+    "note": "Người dùng báo trực tiếp: sáng 02/09 đỉnh Fansipan bị mây mù bao trùm. BÁO CÁO ÂM TÍNH ĐẦU TIÊN — trước đó 5/5 báo cáo đều là ngày CÓ biển mây. Engine-2.6 chấm 0/100 CLEAR 'Trời quang, không có biển mây': nó ĐÚNG ở chỗ không có biển mây (thung lũng 1.900m khô, T−Td 3-6°C, mây thấp 0-15%) nhưng bỏ sót mây ĐỘI ĐỈNH — cả 6 mô hình đều cho RH 73-93% ngay tại mực ~3.136m, đúng cao độ người đứng. Engine chỉ đi tìm lớp mây bám gốc thung lũng nên chưa bao giờ hỏi 'chỗ tôi đứng có mây không'. Ca này sinh ra bộ dò summitCloud (engine-2.7).",
+    "reportedAt": "2026-09-03T09:00:00+07:00"
+  },
+  {
+    "id": "2026-09-02-toan-mien",
+    "spotKey": null,
+    "locationName": "Toàn thư viện (Tây Bắc)",
+    "date": "2026-09-02",
+    "seaLevel": "NONE",
+    "confidence": "THAP",
+    "note": "Người dùng cho biết 02/09 CÓ VẺ là ngày không nơi nào có biển mây, vì hôm trước nắng to. ĐỘ TIN CẬY THẤP: người dùng tự nói chỉ kiểm được 2-3 địa điểm, gián tiếp qua tìm kiếm Google, và dùng chữ 'hình như'. Không phải quan sát tại chỗ. Dù vậy đây là mẫu ÂM TÍNH DIỆN RỘNG đầu tiên, tức lần đầu đo được TỈ LỆ BÁO NHẦM: app kết luận 'có biển mây' ở 2/50 điểm (Núi Lang Biang 67%, Ngải Thầu Thượng 67%), 0/50 điểm vượt ngưỡng điểm 60. Lưu ý Lang Biang ở Lâm Đồng, ngoài vùng người dùng kiểm chứng, nên chỉ Ngải Thầu Thượng mới chắc là báo nhầm.",
+    "reportedAt": "2026-09-03T09:30:00+07:00"
+  },
+  {
     "id": "2026-08-27-taxua",
     "spotKey": "TA_XUA_SON_LA",
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",
