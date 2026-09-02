@@ -504,6 +504,26 @@ Kèm theo: báo cáo thực địa có thêm `duration: SHORT | LONG` (ô "mây 
 02/09 cho thấy câu hỏi thật của người đi là "có, nhưng được mấy tiếng?". Kho báo cáo trong repo
 đã chuẩn hoá về đúng từ vựng của app (`ABOVE` = chìm trong mây, không dùng `IN_CLOUD` nữa).
 
+### 🛰️ Vệ tinh và người đi CÃI NHAU ngay ngày đầu (02/09/2026) — người đi thắng, và đây là vì sao
+
+Lần chạy thật đầu tiên của job vệ tinh (Himawari, độ cao đỉnh mây 2km) cho 02/09:
+
+```
+vệ tinh:  Tà Xùa CLEAR · Fansipan CLEAR · Đồn Đèn BLOCKED_ABOVE (mây cao che)
+người đi: Khe Cải (Tà Xùa) CÓ biển mây 5-6h rồi tan · Fansipan CHÌM trong mây · Đồn Đèn CÓ, tan nhanh
+```
+
+Sai cả ba, theo ba cách khác nhau, và không cái nào là lỗi code:
+- **Sương mỏng ngắn hạn** (Tà Xùa, Đồn Đèn): lớp sương thung lũng 100-300m dày, tan trước 8h — hồng
+  ngoại 2km nhìn từ 36.000km chỉ thấy "mặt đất hơi mát", không thấy mây. Đồn Đèn còn bị mây cao che.
+- **Mây đội đỉnh** (Fansipan): mây bám sườn ở 3.100m nhìn từ trên xuống trùng màu với nền, ô 2km
+  không tách được cái mũ mây khỏi núi.
+
+Kết luận cho calibrate (đã là luật từ đầu, nay có bằng chứng): **báo cáo thực địa ĐÈ nhãn vệ tinh khi
+cùng điểm + ngày.** Vệ tinh chỉ đáng tin cho biển mây DÀY, RỘNG, còn tồn tại lúc nó chụp — tức đúng
+loại mà mô hình cũng thấy. Hai loại app đang trượt (sương ngắn hạn, mây đội đỉnh) thì vệ tinh cũng mù.
+Nghĩa là **nhãn vệ tinh không giúp đo được hai lỗi lớn nhất hiện nay; chỉ báo cáo người đi mới đo được.**
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm
