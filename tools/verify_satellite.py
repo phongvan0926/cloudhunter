@@ -15,7 +15,7 @@ dày che kín (vd 23/8/2026, ti tầng ở 13.800m, phát xạ 0.9) thì KHÔNG 
 biển mây hay không — lúc đó tool trả 'BLOCKED_HIGH', KHÔNG đoán bừa.
 
 Cài (một lần):
-    python3 -m venv ~/.venvs/ch-verify && ~/.venvs/ch-verify/bin/pip install h5py fsspec requests
+    python3 -m venv ~/.venvs/ch-verify && ~/.venvs/ch-verify/bin/pip install h5py fsspec requests aiohttp
 
 Chạy:
     npx vite-node scripts/export-spots.ts            # làm mới data/spots.json

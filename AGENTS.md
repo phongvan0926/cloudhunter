@@ -496,7 +496,9 @@ phải vòng kiểm chứng. `.github/workflows/verify-loop.yml`:
 Bot commit thẳng vào `main`; `deploy.yml` có `paths-ignore: data/observations/**` nên không build lại
 site 2 lần/ngày. Snapshot không bao giờ `--force` — đã có bản chụp thì script tự từ chối (bản chụp là
 bằng chứng). Vệ tinh trễ thì job chỉ cảnh báo, không bịa nhãn. Chạy tay: tab Actions → "Vòng kiểm
-chứng hằng ngày" → Run workflow → chọn `snapshot` hoặc `satellite`.
+chứng hằng ngày" → Run workflow → chọn `snapshot` hoặc `satellite` (+ `date` để lấy nhãn cho một ngày đã qua).
+Lần chạy thử đầu tiên lộ ngay một lỗi: `fsspec.filesystem('http')` cần `aiohttp` mà hướng dẫn cài
+trong `verify_satellite.py` không ghi — máy dev có sẵn nên chưa bao giờ thấy. Đã bổ sung.
 
 Kèm theo: báo cáo thực địa có thêm `duration: SHORT | LONG` (ô "mây tan nhanh khi nắng lên"), vì
 02/09 cho thấy câu hỏi thật của người đi là "có, nhưng được mấy tiếng?". Kho báo cáo trong repo
