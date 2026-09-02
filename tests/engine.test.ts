@@ -795,9 +795,32 @@ describe('engine-2.1 — sửa lỗi audit vòng 2', () => {
     delete (globalThis as any).localStorage;
   });
 
-  it('ngưỡng "đáng đi" là MỘT hằng số dùng chung (engine + UI)', async () => {
-    const { WORTH_GOING_SCORE } = await import('../services/cloudScoreEngine');
-    expect(WORTH_GOING_SCORE).toBe(60);
+  it('engine-2.8: "đáng đi" KHÔNG còn suy từ điểm — là kết luận SEA + đồng thuận + đứng trên mặt mây', async () => {
+    const { isWorthGoing, WORTH_GOING_AGREEMENT } = await import('../services/cloudScoreEngine');
+    expect(WORTH_GOING_AGREEMENT).toBe(50);
+    // Sáu ngày kiểm chứng thật đều có điểm 24-35 nhưng kết luận đúng — luật cũ (≥60) khuyên đi 0/6.
+    expect(isWorthGoing({ status: 'STATIC', agreement: 67, deltaH: 649 })).toBe(true);        // Tà Xùa 23/8
+    expect(isWorthGoing({ status: 'FLUCTUATING', agreement: 83, deltaH: 154 })).toBe(true);   // Tà Xùa 24/8
+    // …nhưng KHÔNG nới sang các ca không đủ điều kiện:
+    expect(isWorthGoing({ status: 'FLUCTUATING', agreement: 67, deltaH: -120 })).toBe(false); // ranh giới, ở DƯỚI
+    expect(isWorthGoing({ status: 'STATIC', agreement: 33, deltaH: 500 })).toBe(false);       // 1/3 mô hình
+    expect(isWorthGoing({ status: 'FOG', agreement: 100, deltaH: -300 })).toBe(false);        // chìm trong mây
+    expect(isWorthGoing({ status: 'RAIN', agreement: 100, deltaH: 500 })).toBe(false);        // bị chặn
+    expect(isWorthGoing({ status: 'STATIC', agreement: 100, deltaH: null })).toBe(false);     // không ước được mặt mây
+  });
+
+  it('computeDayForecast gắn worth_going vào forecast, và điểm thấp KHÔNG cản', () => {
+    const day: DayData = {
+      date: '2026-11-05', quality: 'FORECAST', daysAhead: 1,
+      models: { gfs_seamless: goldenNight(), icon_seamless: goldenNight(), ukmo_seamless: goldenNight() },
+      sun_times: computeSunTimes(21.3, 104.4, '2026-11-05'),
+    } as any;
+    const out = computeDayForecast(day, CTX_A);
+    expect(verdictOf(out.forecast.status_code)).toBe('SEA');
+    expect(out.forecast.worth_going).toBe(true);
+    // cùng ngày đó nhưng người đứng THẤP hơn mặt mây → không đáng đi dù điểm y hệt
+    const low = computeDayForecast(day, { ...CTX_A, observerAlt: 900 });
+    expect(low.forecast.worth_going).toBe(false);
   });
 });
 

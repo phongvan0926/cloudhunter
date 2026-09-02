@@ -48,6 +48,7 @@ rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
     spots: rows.map(r => ({
       key: r.key, name: r.name, score: r.score, status: r.status,
       agreement: r.agreement, observerAlt: r.elevation, valleyElevation: r.valleyElev,
+      cloudTop: r.cloudTop, deltaH: r.deltaH, worthGoing: r.worthGoing,
       perModel: r.perModel,
     })),
   }, null, 2) + '\n');

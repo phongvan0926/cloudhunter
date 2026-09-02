@@ -18,10 +18,37 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.7.0';
+export const ENGINE_VERSION = 'engine-2.8.0';
 
-/** Ngưỡng điểm "đáng đi" DUY NHẤT cho toàn app — engine/bộ lọc UI/xếp hạng phải cùng số này. */
+/**
+ * "ĐÁNG ĐI" — engine-2.8 (03/09/2026): KHÔNG còn là ngưỡng điểm.
+ *
+ * Trước đây: đáng đi ⇔ score ≥ 60. Đo trên 6 ngày kiểm chứng CÓ biển mây: app khuyên đi
+ * 0/6 — kể cả những hôm chính engine nói "biển mây tĩnh, thảm mây phẳng, bạn đứng trên mặt
+ * mây" (23/8: 35 STATIC, 24/8: 35 FLUCTUATING, 25/8: 32 FLUCTUATING). Điểm đo "nguyên liệu
+ * sương bức xạ có sách vở không" (T−Td ≈ 0, trời quang đêm, không mưa); còn biển mây mùa mưa
+ * hình thành nhờ nạp ẩm + nắp nghịch nhiệt, nên điểm thấp mãi dù kết luận đúng. Ngưỡng điểm
+ * đạt tỉ lệ báo nhầm hoàn hảo bằng cách KHÔNG BAO GIỜ khuyên đi.
+ *
+ * Nay: đáng đi ⇔ kết luận CÓ biển mây (verdict SEA) + đủ mô hình đồng thuận + người đứng
+ * TRÊN mặt mây (ΔH > 0). Không có hằng số nào phải bịa ngoài mức đồng thuận. Điểm chỉ còn
+ * dùng để XẾP THỨ TỰ giữa các ngày/điểm cùng đáng đi, và để tô màu.
+ *
+ * Cái giá đã nói rõ với người dùng: app sẽ khuyên đi nhiều hơn hẳn, và tỉ lệ báo nhầm CHƯA
+ * đo được (chưa có mẫu âm tính kiểm chứng tại chỗ). Người dùng chốt phương án này 03/09/2026.
+ */
+export const WORTH_GOING_AGREEMENT = 50;   // % mô hình cùng kết luận SEA, tối thiểu
+/** Ngưỡng điểm CŨ — nay chỉ để tô màu badge/ô ngày, KHÔNG quyết định "đáng đi". */
 export const WORTH_GOING_SCORE = 60;
+
+export interface WorthGoingInput { status: StatusCode; agreement: number; deltaH: number | null }
+export function isWorthGoing(x: WorthGoingInput): boolean {
+  if (verdictOf(x.status) !== 'SEA') return false;
+  if (x.agreement < WORTH_GOING_AGREEMENT) return false;
+  // FLUCTUATING/ROLLING chấp nhận ΔH tới −250m ("ranh giới mặt mây"); khuyên đi thì phải
+  // chắc là ở TRÊN. Không biết ΔH (không ước được mặt mây) thì không khuyên.
+  return x.deltaH !== null && x.deltaH > 0;
+}
 
 // Độ cao XẤP XỈ các mực — CHỈ là fallback khi model không trả geopotential_height thật.
 // engine-2.0: khi DayModelData.levels có mặt, mọi phép tính dùng độ cao THẬT từng ngày.
@@ -913,6 +940,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
       score: combined.score,
       status_code: combined.status,
       status_text: STATUS_TEXT[combined.status],
+      worth_going: isWorthGoing({ status: combined.status, agreement: combined.agreement, deltaH }),
       reliability_note,
       reasons: combined.representative.reasons,
       sunrise_color_potential: colorPotential,
@@ -989,7 +1017,7 @@ export function computeTripSummary(outputs: EngineDayOutput[]): {
 } {
   const withData = outputs.filter(o => o.forecast.data_quality !== 'NO_DATA');
   const bestDays = withData
-    .filter(o => o.forecast.score >= WORTH_GOING_SCORE)
+    .filter(o => o.forecast.worth_going)
     .sort((a, b) => b.forecast.score - a.forecast.score)
     .slice(0, 3)
     .map(o => o.forecast.date);

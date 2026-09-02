@@ -442,6 +442,45 @@ quang, bức xạ đêm mạnh ⇒ đúng công thức sương bức xạ kinh �
 lớp mỏng, tan ngay khi mặt trời lên. Engine hiện chỉ trả lời "có/không", trong khi câu hỏi thật
 của người đi là **"có, nhưng được mấy tiếng?"**. Chưa làm, và chưa nên làm bằng 2 mẫu.
 
+### ✅ engine-2.8 (03/09/2026) — "ĐÁNG ĐI" không còn là ngưỡng điểm
+
+Người dùng chốt phương án B sau ba lần được hỏi. Luật mới, một hàm duy nhất cho cả app
+(`isWorthGoing`, engine → `forecast.worth_going`, ranking → `SpotRank.worthGoing`):
+
+```
+đáng đi  ⇔  kết luận CÓ biển mây (verdict SEA)
+         ∧  đồng thuận ≥ 50% mô hình
+         ∧  ΔH > 0  (người đứng TRÊN mặt mây — FLUCTUATING/ROLLING cho phép tới −250m, khuyên đi thì không)
+```
+
+Điểm số **chỉ còn để xếp thứ tự** giữa các ngày/điểm cùng đáng đi, và để tô màu. `WORTH_GOING_SCORE = 60`
+vẫn tồn tại nhưng không còn quyết định gì; `calibrate.ts` in cả hai luật cạnh nhau để so.
+
+Vì sao đổi (bằng chứng đã ghi ở các mục trên): 6 ngày kiểm chứng CÓ biển mây, luật cũ khuyên đi **0/6**
+— kể cả 23/8 (`35 STATIC`), 24/8 (`35 FLUCTUATING`), 25/8 (`32 FLUCTUATING`) là những hôm chính engine
+nói "bạn đứng trên mặt mây". Điểm đo nguyên liệu sương bức xạ sách vở; biển mây mùa mưa không đi
+đường đó. Luật cũ đạt tỉ lệ báo nhầm hoàn hảo bằng cách không bao giờ khuyên đi.
+
+*Đo sau khi đổi* — nỗi lo "app sẽ khuyên đi tràn lan" hoá ra nhỏ hơn dự đoán:
+
+```
+Xếp hạng rạng sáng 04/09/2026 (55 điểm):  3 điểm ĐÁNG ĐI  (5%)
+   51/100 STATIC   Cực Tây A Pa Chải   ΔH +554m   67%
+   31/100 ROLLING  Núi Lang Biang      ΔH  +84m   67%
+   14/100 FLOWING  Pusilung            ΔH +1076m  67%
+Soi lại: Tà Xùa 25/8 (có biển mây thật) → CÓ khuyên đi · Fansipan 02/09 (chìm trong mây) → KHÔNG
+```
+
+Nhìn dòng thứ ba: **14/100 mà vẫn đáng đi** — đó chính là điểm cốt lõi của thay đổi này và cũng là
+chỗ cần nhìn kỹ nhất. Pusilung 3.083m, ba mô hình đều đặt mặt mây ở ~2.000m: kết luận nhất quán
+dù "nguyên liệu" kém. Đúng hay sai thì chỉ báo cáo thực địa mới trả lời được.
+
+⚠️ **Cái giá, chưa đo được:** tỉ lệ báo nhầm của luật mới. Chưa có mẫu âm tính kiểm chứng TẠI CHỖ
+(02/09 hoá ra không phải, xem trên). Bảng xếp hạng nay hiện ✅ và ΔH ở từng dòng để người dùng
+kiểm chứng được từng lời khuyên; `snapshot-forecast.ts` lưu thêm `cloudTop/deltaH/worthGoing` để
+calibrate chấm được luật mới trên bản chụp về sau (bản chụp cũ thiếu ΔH → tính là "không khuyên",
+là cận DƯỚI của độ nhạy, calibrate có ghi chú).
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm
@@ -476,7 +515,7 @@ lịch sử của chính nó rồi chấm điểm mình trên đó — bảng hi
 Muốn xem engine hiện tại chấm ngày cũ ra sao thì dùng `hindcast.ts` và ghi vào file `hindcast-*.json`
 có nhãn rõ ràng.
 
-### 🚧 Ngưỡng "đáng đi" 60/100 trong mùa mưa — CHƯA đụng vào, và vì sao
+### 🚧 Ngưỡng "đáng đi" 60/100 trong mùa mưa — (LỊCH SỬ: đã thay bằng engine-2.8, giữ lại để hiểu vì sao từng không đụng)
 
 Ngày 25/8, **0/50 điểm** đạt 60 dù người dùng nhìn thấy biển mây thật. **Năm** báo cáo thực địa đã có
 đều là ngày CÓ biển mây. Bảng chấm lại bằng engine-2.6 ở trên cho thêm một dữ kiện: **4/5 ca nay

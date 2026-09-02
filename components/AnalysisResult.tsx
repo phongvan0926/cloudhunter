@@ -5,7 +5,6 @@ import { SatellitePanel } from './SatellitePanel';
 import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
 import { moonInfoForDawn } from '../services/astroService';
-import { WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
 import { FieldReportPanel } from './FieldReportPanel';
 
 interface AnalysisResultProps {
@@ -479,12 +478,15 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
   );
 
   const ratedForecasts = sortedForecasts.filter(f => f.status_code !== 'UNKNOWN');
-  const heroBest = ratedForecasts.length
-    ? ratedForecasts.reduce((a, b) => (b.score > a.score ? b : a)) : null;
+  // engine-2.8: ngày "đẹp nhất" là ngày ĐÁNG ĐI có điểm cao nhất; không có ngày nào đáng đi
+  // thì mới lấy ngày điểm cao nhất để giải thích vì sao không nên đi.
+  const pickBest = (arr: typeof ratedForecasts) =>
+    arr.length ? arr.reduce((a, b) => (b.score > a.score ? b : a)) : null;
+  const heroBest = pickBest(ratedForecasts.filter(f => f.worth_going)) ?? pickBest(ratedForecasts);
   const heroBestDate = heroBest?.date;
 
   const filteredForecasts = filterGoldenOnly
-    ? sortedForecasts.filter(day => day.score >= WORTH_GOING_SCORE || bookmarkedDates.includes(day.date))
+    ? sortedForecasts.filter(day => day.worth_going || bookmarkedDates.includes(day.date))
     : sortedForecasts;
   
   return (
@@ -506,7 +508,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       {/* PHÁN QUYẾT — màn hình đầu tiên phải trả lời "đi hay không", không bắt cuộn */}
       {(() => {
         const best = heroBest;
-        const go = !!best && best.score >= WORTH_GOING_SCORE;
+        const go = !!best && !!best.worth_going;
         const near = !!best && !go && best.score >= 45;
         return (
           <div className={`rounded-3xl border p-5 md:p-6 shadow-2xl ${
@@ -692,7 +694,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
               : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'
           }`}
         >
-          <span>⭐ Chỉ xem Ngày Đáng Đi (Score ≥ {WORTH_GOING_SCORE})</span>
+          <span>⭐ Chỉ xem Ngày Đáng Đi (có biển mây · đứng trên mặt mây · mô hình đồng thuận)</span>
         </button>
       </div>
 
@@ -700,8 +702,8 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
       {filteredForecasts.length === 0 && (
         <div className="bg-slate-900/70 border border-slate-700 rounded-2xl p-8 text-center space-y-3">
           <p className="text-slate-300 text-sm leading-relaxed">
-            😕 Không có ngày nào đạt ≥{WORTH_GOING_SCORE} điểm trong khoảng đã tra — điều kiện biển mây kém
-            (thường gặp mùa mưa). Xem tất cả các ngày để biết vì sao điểm thấp.
+            😕 Không có ngày nào đáng đi trong khoảng đã tra — không ngày nào các mô hình cùng
+            kết luận có biển mây dưới chân bạn. Xem tất cả các ngày để biết vì sao.
           </p>
           <button
             onClick={() => setFilterGoldenOnly(false)}

@@ -14,7 +14,7 @@
  */
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
-import { WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
+import { WORTH_GOING_SCORE, isWorthGoing } from '../services/cloudScoreEngine';
 
 const DIR = 'data/observations';
 
@@ -23,6 +23,7 @@ interface Row {
   date: string; key: string; name: string;
   truth: Truth; truthSrc: string; truthDetail: string;
   score: number; status: string; agreement: number;
+  deltaH?: number | null; worthGoing?: boolean;   // có từ engine-2.8; bản chụp cũ không có
   perModel?: { model: string; score: number; status: string; cloudTop: number | null }[];
   engineVersion?: string;   // engine nào đã TẠO RA bản chụp — để cảnh báo số liệu cũ
 }
@@ -125,7 +126,13 @@ function main() {
     + `${rows.filter(r => r.truthSrc === 'vệ tinh').length} từ vệ tinh`);
 
   evalOne(`Theo TRẠNG THÁI (STATIC/FLOWING/FLUCTUATING/ROLLING = có biển mây)`, r => SEA_STATUS.has(r.status));
-  evalOne(`Theo NGƯỠNG ĐIỂM (>= ${WORTH_GOING_SCORE}/100 = khuyên đi)`, r => r.score >= WORTH_GOING_SCORE);
+  evalOne(`Theo NGƯỠNG ĐIỂM CŨ (>= ${WORTH_GOING_SCORE}/100 = khuyên đi) — chỉ để so sánh`, r => r.score >= WORTH_GOING_SCORE);
+  // Luật "đáng đi" hiện hành (engine-2.8). Bản chụp cũ không có deltaH → không ước được ΔH,
+  // luật này trả false ⇒ với dữ liệu cũ dòng dưới là cận DƯỚI của độ nhạy, không phải số thật.
+  const oldRows = rows.filter(r => r.worthGoing === undefined).length;
+  evalOne(`Theo LUẬT ĐÁNG ĐI hiện hành (SEA + đồng thuận ≥50% + ΔH>0)`
+    + (oldRows ? ` — ${oldRows}/${rows.length} dòng từ bản chụp cũ thiếu ΔH, tính là KHÔNG khuyên` : ''),
+    r => r.worthGoing ?? isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }));
 
   // Mô hình nào đúng? — bảng này là căn cứ để sau này quyết định có nên trọng số hoá mô hình.
   const perModel: Record<string, { hit: number; n: number }> = {};

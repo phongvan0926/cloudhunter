@@ -19,7 +19,7 @@ import {
   addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS,
   getCachedValley, setCachedValley,
 } from './weatherService';
-import { scoreOneModel, combineModels } from './cloudScoreEngine';
+import { scoreOneModel, combineModels, isWorthGoing } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
 const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_seamless'];
@@ -39,6 +39,9 @@ export interface SpotRank {
   score: number;
   status: StatusCode;
   agreement: number;    // % các mô hình xếp hạng đồng thuận trạng thái
+  cloudTop: number | null;   // trung vị mặt mây trong nhóm kết luận thắng (m ASL)
+  deltaH: number | null;     // elevation − cloudTop; >0 = đứng trên mặt mây
+  worthGoing: boolean;       // engine-2.8: xem isWorthGoing — KHÔNG suy từ score
   /**
    * Kết quả TỪNG mô hình, để về sau chấm được mô hình nào đúng trên các ngày đã kiểm chứng.
    * Cần vì ngày 23-24/8/2026 tại Tà Xùa cho thấy các mô hình bất đồng tận gốc: chỉ GFS
@@ -178,15 +181,19 @@ export async function rankSpotsForDawn(
     }
     if (per.length === 0) return;
     const c = combineModels(per);
+    const deltaH = c.cloudTop !== null ? mt.elevation - c.cloudTop : null;
     results.push({
       key, name: mt.name, lat: mt.lat, lon: mt.lon, elevation: mt.elevation,
       valleyElev: Math.round(valleys[key]), zone: mt.zone,
       score: c.score, status: c.status, agreement: c.agreement,
+      cloudTop: c.cloudTop, deltaH,
+      worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
       perModel: per.map(x => ({ model: x.model, score: x.score, status: x.status, cloudTop: x.cloudTop })),
     });
   });
 
-  results.sort((a, b) => b.score - a.score);
+  // Đáng đi lên đầu; trong mỗi nhóm điểm mới quyết định thứ tự (điểm chỉ để XẾP, không để CHỌN).
+  results.sort((a, b) => Number(b.worthGoing) - Number(a.worthGoing) || b.score - a.score);
   RANK_CACHE = { targetDate, ts: Date.now(), results };
   return results;
 }

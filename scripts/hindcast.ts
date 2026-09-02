@@ -85,7 +85,7 @@ async function main() {
   console.log(`   đồng thuận ${out.agreement}%, chênh điểm giữa mô hình ${out.scoreSpread}`);
   out.forecast.reasons?.forEach(r => console.log(`   • ${r}`));
   out.warnings.forEach(w => console.log(`   ⚠️  ${w}`));
-  console.log(`   ngưỡng "đáng đi" = 60 → app ${out.forecast.score >= 60 ? 'CÓ' : 'KHÔNG'} khuyên đi\n`);
+  console.log(`   ΔH = ${out.forecast.technical_indices?.delta_h ?? '—'}m · đáng đi (engine-2.8: SEA + đồng thuận ≥50% + ΔH>0) → app ${out.forecast.worth_going ? 'CÓ' : 'KHÔNG'} khuyên đi\n`);
 }
 
 main().catch(e => { console.error('❌', e?.message || e); process.exit(1); });

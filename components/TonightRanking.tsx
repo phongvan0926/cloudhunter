@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { rankSpotsForDawn, SpotRank } from '../services/rankingService';
-import { STATUS_TEXT, WORTH_GOING_SCORE } from '../services/cloudScoreEngine';
+import { STATUS_TEXT } from '../services/cloudScoreEngine';
 import { MOUNTAIN_DB } from '../constants/mountains';
 
 const TOTAL_SPOTS = Object.keys(MOUNTAIN_DB).length;
@@ -14,9 +14,11 @@ interface Props {
   onPickSpot: (name: string, elevation: number) => void;
 }
 
-const scoreBadge = (score: number) =>
-  score >= WORTH_GOING_SCORE ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/50'
-  : score >= 45 ? 'bg-amber-900/50 text-amber-300 border-amber-500/40'
+// Màu xanh = ĐÁNG ĐI (engine-2.8: kết luận có biển mây + đồng thuận + đứng trên mặt mây),
+// KHÔNG phải điểm cao. Vàng = điểm khá nhưng chưa đủ điều kiện. Điểm chỉ xếp thứ tự.
+const scoreBadge = (r: SpotRank) =>
+  r.worthGoing ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/50'
+  : r.score >= 45 ? 'bg-amber-900/50 text-amber-300 border-amber-500/40'
   : 'bg-slate-800 text-slate-400 border-slate-700';
 
 export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
@@ -79,10 +81,12 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-semibold text-slate-100 truncate">{r.name}</span>
                     <span className="block text-[11px] text-slate-400">
-                      {STATUS_TEXT[r.status]} · đứng {r.elevation}m · đồng thuận {r.agreement}%
+                      {STATUS_TEXT[r.status]} · đứng {r.elevation}m
+                      {r.deltaH !== null && ` · ${r.deltaH > 0 ? 'trên mặt mây' : 'dưới mặt mây'} ${Math.abs(Math.round(r.deltaH))}m`}
+                      {' '}· đồng thuận {r.agreement}%
                     </span>
                   </span>
-                  <span className={`shrink-0 px-2.5 py-1 rounded-lg border font-mono font-bold text-sm ${scoreBadge(r.score)}`}>
+                  <span className={`shrink-0 px-2.5 py-1 rounded-lg border font-mono font-bold text-sm ${scoreBadge(r)}`}>
                     {r.score}
                   </span>
                 </button>

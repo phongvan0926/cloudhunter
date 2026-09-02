@@ -90,6 +90,9 @@ export interface DailyForecast {
   score: number;
   status_code: StatusCode;
   status_text: string;
+  /** engine-2.8: "đáng đi" = kết luận CÓ biển mây + đồng thuận đủ + đứng TRÊN mặt mây.
+   *  Không còn suy từ điểm. Optional vì kết quả cache từ engine cũ không có trường này. */
+  worth_going?: boolean;
   data_quality: DataQuality;
   reliability_note?: string;    // vd "Dự báo xa 9 ngày — chỉ mang tính xu hướng"
   reasons?: string[];           // "Vì sao điểm này" — engine ghi từng yếu tố cộng/trừ
