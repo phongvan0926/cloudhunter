@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-09-02-khecai",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Khe Cải (Tà Xùa)",
+    "date": "2026-09-02",
+    "seaLevel": "BELOW",
+    "duration": "NGAN",
+    "note": "Người dùng đính chính: sáng 02/09 Khe Cải (Tà Xùa) VẪN có biển mây, nhưng chỉ tồn tại khoảng 5-6h sáng rồi tan nhanh khi nắng lên. App chấm 6/100 CLEAR — TRƯỢT. Đã kiểm dữ liệu thô: cả 3 mô hình cho cloud_cover_low = 0% ở MỌI giờ 3-11h, và T−Td đáy thung lũng 3,7-6,4°C (RH 67-80%) lúc 5-7h. Không có tín hiệu nào để bắt — không phải lỗi cửa sổ trung bình, mà là mô hình 25km không thấy lớp sương mỏng ngắn hạn trong thung lũng hẹp.",
+    "reportedAt": "2026-09-03T10:00:00+07:00"
+  },
+  {
+    "id": "2026-09-02-donden",
+    "spotKey": "DON_DEN",
+    "locationName": "Đồn Đèn (Ba Bể)",
+    "date": "2026-09-02",
+    "seaLevel": "BELOW",
+    "duration": "NGAN",
+    "note": "Người dùng đính chính: sáng 02/09 Đồn Đèn (Ba Bể) có biển mây, chỉ 5-6h rồi tan nhanh. App chấm 0/100 DISSIPATING — TRƯỢT. Dữ liệu thô: cloud_cover_low = 0% mọi giờ ở cả 3 mô hình; T−Td đáy thung lũng UKMO 1,6-1,8°C (RH 90-93%) là mô hình DUY NHẤT thấy gần bão hoà, GFS 3,4°C, ICON 5,6°C.",
+    "reportedAt": "2026-09-03T10:00:00+07:00"
+  },
+  {
+    "id": "2026-09-02-toan-mien",
+    "spotKey": null,
+    "locationName": "Toàn thư viện (Tây Bắc)",
+    "date": "2026-09-02",
+    "seaLevel": "MIXED",
+    "confidence": "THAP",
+    "note": "ĐÃ ĐÍNH CHÍNH. Ban đầu người dùng cho biết 02/09 có vẻ không nơi nào có biển mây (hôm trước nắng to), sau đó đính chính: vẫn có ở Khe Cải và Đồn Đèn, nhưng chỉ 5-6h sáng rồi tan nhanh. Vì vậy KHÔNG dùng ngày này làm mẫu âm tính toàn miền. Những gì đo được cho ngày 02/09: app kết luận 'có biển mây' ở 2/50 điểm (Núi Lang Biang 67%, Ngải Thầu Thượng 67%) — cả hai CHƯA kiểm chứng; và app TRƯỢT cả 2 điểm thật sự có biển mây. Tức chưa đo được tỉ lệ báo nhầm, chỉ đo được thêm 2 ca trượt.",
+    "reportedAt": "2026-09-03T10:00:00+07:00"
+  },
+  {
     "id": "2026-09-02-fansipan",
     "spotKey": "FANSIPAN",
     "locationName": "Fansipan (Nóc nhà Đông Dương)",
@@ -7,16 +37,6 @@
     "seaLevel": "IN_CLOUD",
     "note": "Người dùng báo trực tiếp: sáng 02/09 đỉnh Fansipan bị mây mù bao trùm. BÁO CÁO ÂM TÍNH ĐẦU TIÊN — trước đó 5/5 báo cáo đều là ngày CÓ biển mây. Engine-2.6 chấm 0/100 CLEAR 'Trời quang, không có biển mây': nó ĐÚNG ở chỗ không có biển mây (thung lũng 1.900m khô, T−Td 3-6°C, mây thấp 0-15%) nhưng bỏ sót mây ĐỘI ĐỈNH — cả 6 mô hình đều cho RH 73-93% ngay tại mực ~3.136m, đúng cao độ người đứng. Engine chỉ đi tìm lớp mây bám gốc thung lũng nên chưa bao giờ hỏi 'chỗ tôi đứng có mây không'. Ca này sinh ra bộ dò summitCloud (engine-2.7).",
     "reportedAt": "2026-09-03T09:00:00+07:00"
-  },
-  {
-    "id": "2026-09-02-toan-mien",
-    "spotKey": null,
-    "locationName": "Toàn thư viện (Tây Bắc)",
-    "date": "2026-09-02",
-    "seaLevel": "NONE",
-    "confidence": "THAP",
-    "note": "Người dùng cho biết 02/09 CÓ VẺ là ngày không nơi nào có biển mây, vì hôm trước nắng to. ĐỘ TIN CẬY THẤP: người dùng tự nói chỉ kiểm được 2-3 địa điểm, gián tiếp qua tìm kiếm Google, và dùng chữ 'hình như'. Không phải quan sát tại chỗ. Dù vậy đây là mẫu ÂM TÍNH DIỆN RỘNG đầu tiên, tức lần đầu đo được TỈ LỆ BÁO NHẦM: app kết luận 'có biển mây' ở 2/50 điểm (Núi Lang Biang 67%, Ngải Thầu Thượng 67%), 0/50 điểm vượt ngưỡng điểm 60. Lưu ý Lang Biang ở Lâm Đồng, ngoài vùng người dùng kiểm chứng, nên chỉ Ngải Thầu Thượng mới chắc là báo nhầm.",
-    "reportedAt": "2026-09-03T09:30:00+07:00"
   },
   {
     "id": "2026-08-27-taxua",

@@ -385,37 +385,62 @@ LCL ≤ ½ độ nhô, chặn 600m   52 (18%)         17 (14%)   ← ĐƯỢC CH
 
 Fansipan 02/09 nay ra `FOG — "Mù trùm — bạn chìm trong mây"`, kèm dòng giải thích lượng nâng.
 
-### 📐 Lần ĐẦU TIÊN đo được TỈ LỆ BÁO NHẦM (02/09/2026)
+### ❗ Ngày 02/09: mẫu âm tính hoá ra KHÔNG phải âm tính (đã đính chính)
 
-Suốt sáu báo cáo trước, mọi hiệu chuẩn ngưỡng đều bị chặn vì bộ mẫu **toàn dương tính**. Ngày
-02/09 mở được nút đó. Chấm cả 50 điểm cho ngày người dùng tin là không nơi nào có biển mây:
+Ban đầu người dùng cho biết 02/09 có vẻ **không nơi nào** có biển mây (hôm trước nắng to), và
+tôi đã ghi đó là mẫu âm tính diện rộng đầu tiên rồi tính luôn "tỉ lệ báo nhầm". **Sai.** Người
+dùng đính chính ngay sau đó: Khe Cải (Tà Xùa) và Đồn Đèn (Ba Bể) VẪN có biển mây sáng hôm đó,
+chỉ tồn tại khoảng **5-6h rồi tan nhanh khi nắng lên**.
 
-```
-CLEAR 24 · DISSIPATING 17 · FOG 7 · ROLLING 1 · FLUCTUATING 1
-
-kết luận "CÓ biển mây"                      2/50   (4%)
-vượt ngưỡng ĐIỂM 60                         0/50   (0%)
-phương án B (SEA + đồng thuận ≥50%)         2/50   (4%)
-   10/100 ROLLING      67%  Núi Lang Biang
-    6/100 FLUCTUATING  67%  Ngải Thầu Thượng (Y Tý)
-```
-
-⚠️ Đọc con số này cho đúng: người dùng **tự nói** chỉ kiểm được 2-3 điểm, gián tiếp qua tìm
-kiếm, và dùng chữ "hình như". Đây là mẫu âm tính **độ tin cậy thấp**, một ngày duy nhất. Ngoài
-ra Lang Biang ở Lâm Đồng, ngoài vùng người dùng kiểm chứng — chỉ Ngải Thầu Thượng (Y Tý) mới
-chắc chắn là báo nhầm.
-
-Dù vậy hướng đã rõ và lần đầu có SỐ ở cả hai phía:
+Bảng "tỉ lệ báo nhầm" viết trước đó đã bị gỡ. Thực tế ngày 02/09:
 
 ```
-                         ngày CÓ biển mây (6 ca)      ngày KHÔNG có (02/09, 50 điểm)
-ngưỡng ĐIỂM ≥ 60         khuyên đi 0/6   ✗✗✗          báo nhầm 0/50
-phương án B              khuyên đi 4/6                báo nhầm 2/50 (4%)
+app kết luận "có biển mây"    2/50   Núi Lang Biang 67% · Ngải Thầu Thượng 67%  ← CHƯA kiểm chứng
+sự thật đã biết               2 điểm Khe Cải (Tà Xùa) · Đồn Đèn (Ba Bể)          ← app TRƯỢT cả hai
+   Tà Xùa    6/100 CLEAR
+   Đồn Đèn   0/100 DISSIPATING
 ```
 
-Ngưỡng điểm hiện tại đạt tỉ lệ báo nhầm hoàn hảo bằng cách **không bao giờ khuyên đi** — kể cả
-những hôm chính engine nói "biển mây tĩnh, thảm mây phẳng, bạn đứng trên mặt mây". Vẫn CHƯA đổi
-vì đây là quyết định về thứ app khuyên người dùng, không phải về vật lý — cần người dùng chốt.
+⚠️ **Vẫn CHƯA đo được tỉ lệ báo nhầm.** Hai điểm app gọi tên không ai kiểm chứng, nên không
+biết là báo nhầm hay báo đúng. Bài học phương pháp, ghi lại vì tôi vừa vấp: *"người dùng nói
+hình như không có" KHÔNG PHẢI là "không có"* — nó là "chưa ai nhìn", và đem một mẫu như thế đi
+tính tỉ lệ báo nhầm thì con số ra rất đẹp mà vô nghĩa.
+
+#### Giả thuyết "cửa sổ trung bình làm loãng" — ĐÃ ĐO, ĐÃ BÁC BỎ
+
+Biển mây chỉ sống 5-6h rồi tan, trong khi `cloud_cover_low` lấy trung bình 04–09h ⇒ nghi ngờ
+tự nhiên là phép trung bình pha loãng mất hiện tượng. Đo thẳng chuỗi theo giờ ngày 02/09:
+
+```
+Tà Xùa  cloud_cover_low   3h   4h   5h   6h   7h   8h   9h        4-9h TB   5-7h TB
+        gfs                0    0    0    0    0    0    0            0%        0%
+        icon              32   29   25   10   15   20   24           21%       17%
+        ukmo               0    0    0    0    0    0    3            1%        0%
+Đồn Đèn gfs/icon/ukmo      0    0    0    0    0    0    0            0%        0%
+```
+
+**Không có gì để pha loãng** — mô hình cho ~0% mây thấp ở MỌI giờ. Thu cửa sổ về 5-7h không đổi
+kết quả. (Ghi thêm: T/Td và mặt cắt áp suất VỐN ĐÃ lấy ở cửa sổ lõi 5-7h, chỉ `cloud_cover_low`
+và mưa/gió dùng 04–09h — nên phần nhạy cảm nhất chưa bao giờ bị pha loãng.)
+
+Bộ dò thứ hai (bão hoà thung lũng) cũng không cứu được: T−Td đáy thung lũng Tà Xùa **3,7-6,4°C,
+RH 67-80%** lúc 5-7h. Ở Đồn Đèn chỉ UKMO thấy gần bão hoà (T−Td 1,6-1,8°C, RH 90-93%), GFS 3,4
+và ICON 5,6.
+
+#### Chế độ thời tiết thứ ba mà mô hình toàn cầu không thấy
+
+Ba ca trượt gần đây thuộc ba loại khác nhau, và loại này là mới:
+
+| ngày | hiện tượng | vì sao mô hình không thấy |
+|---|---|---|
+| 27/8 Tà Xùa | biển mây dày dưới sống lưng, giữa mùa mưa | cột khí ẩm đều 250→3.100m, không có nắp để tìm |
+| 02/09 Fansipan | mây đội đỉnh, thung lũng quang | engine chưa có bộ dò cho loại mây này (đã sửa, engine-2.7) |
+| 02/09 Khe Cải + Đồn Đèn | **sương bức xạ NGẮN HẠN sau ngày nắng to**, sống 1-2 tiếng | ô lưới 25km không phân giải lớp sương mỏng trong khe hẹp; grid-mean RH chỉ 67-80% |
+
+Loại thứ ba đáng ghi riêng vì nó **ngược với trực giác của engine**: hôm trước nắng to ⇒ trời
+quang, bức xạ đêm mạnh ⇒ đúng công thức sương bức xạ kinh điển — nhưng lượng ẩm chỉ đủ cho một
+lớp mỏng, tan ngay khi mặt trời lên. Engine hiện chỉ trả lời "có/không", trong khi câu hỏi thật
+của người đi là **"có, nhưng được mấy tiếng?"**. Chưa làm, và chưa nên làm bằng 2 mẫu.
 
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
@@ -474,6 +499,43 @@ ukmo_seamless   1/5
 ⚠️ **KHÔNG trọng số hoá mô hình cho tới khi có ≥30 ngày kiểm chứng**, và phải gồm cả ngày
 CÓ lẫn ngày KHÔNG có biển mây — hiện 3/5 dòng là ngày dễ (không có biển mây). Trọng số hoá
 sớm dựa trên vài ngày ở một điểm là cách chắc chắn nhất để tạo ra một lỗi hệ thống mới.
+
+### 📍 Gỡ SẠCH 5 điểm `needsReview` (03/09/2026) — thư viện lần đầu 0 điểm bị loại
+
+Năm điểm bị loại khỏi bảng xếp hạng vì toạ độ trỏ nhầm chỗ; trước đây chỗ này chờ người dùng
+gửi plus code (hỏi 4 lần không có). Nay xong cả 5 — **3 tự tra được, 2 do người dùng gửi mã.**
+
+| điểm | kết quả | nguồn |
+|---|---|---|
+| **Lũng Vân** | (20.5976, 105.1529) DEM **1202m** | xã Lũng Vân **đã sáp nhập thành xã Vân Sơn năm 2020** nên OSM không còn tên cũ; tra tên mới ra relation rồi quét DEM trong xã |
+| **Hang Kia - Pà Cò** | (20.7366, 104.8833) **1483m** | node OSM `Núi Hang Kia` ele=1483 (DEM 1406m) |
+| **Đồng Văn** | (23.2400, 105.3762) DEM **1511m** | quét DEM đoạn đèo Mã Pí Lèng; hẻm Nho Quế bên dưới 477m ⇒ chênh cao 1.034m |
+| **Bản Hang Đá** | (22.3234, 103.8821) DEM **1590m** | plus code `8VFJ+9V2` (Tả Van, Lào Cai) người dùng gửi |
+| ~~Pu Nhi Farm~~ → **Trạm phát sóng Tà Xùa** | (21.2764, 104.4239) DEM **1753m** | plus code `7CGF+HH` người dùng gửi. Pu Nhi bị **gỡ hẳn**: ~700m, chỉ cao hơn đáy thung lũng ~400m, không đáng là điểm săn mây |
+
+`npx vite-node scripts/audit-coords.ts` → **0/56 điểm lệch >300m so với DEM.**
+
+#### Ba bài học, ghi lại vì cả ba sẽ tái diễn
+
+1. **Địa danh Việt Nam đổi tên nhanh hơn OSM.** Lũng Vân tra mãi không ra không phải vì OSM
+   thiếu, mà vì cái tên đó đã bị xoá khỏi bản đồ hành chính từ 2020 (nay là xã Vân Sơn). Tra
+   không thấy thì hỏi "đơn vị hành chính này còn tồn tại không" TRƯỚC khi kết luận "OSM không có".
+2. **"Điểm cao nhất quanh đây" là quy tắc chọn SAI khi đã biết độ cao mục tiêu.** Cao nhất
+   quanh Bắc Yên là sống Tà Xùa 1.916m chứ không phải đồi Pu Nhi; cao nhất quanh Hầu Thào là
+   sườn Fansipan 2.638m chứ không phải bản Hang Đá. `find-spot.ts` nay nhận **mốc độ cao** và
+   chọn theo ĐỘ KHỚP.
+3. ⚠️ **Nguồn du lịch tiếng Việt chép chéo nhau — hai trang cùng sai vẫn trông như hai nguồn
+   độc lập.** Tôi tra ra "bản Hang Đá: thôn Hầu Chư Ngài, xã Mường Hoa, trên 1.800m", quét DEM
+   trong xã Mường Hoa thấy có đúng nền 1.799m nên tưởng đã được hai nguồn xác nhận, và suýt
+   chốt. Plus code thật của người dùng chỉ ra **xã Tả Van, 1.590m** — sai cả xã lẫn ~200m độ
+   cao. "DEM xác nhận có nền đúng độ cao đó trong xã" KHÔNG phải bằng chứng: gần như xã miền
+   núi nào cũng có nền ở mọi độ cao trong khoảng của nó.
+
+`scripts/pluscode.ts` (mới) giải plus code đầy đủ lẫn NGẮN. Mã ngắn ("8VFJ+9V2, Tả Van") bỏ
+4 ký tự đầu, phải khôi phục từ địa danh tham chiếu rồi **dịch ô nếu tâm ô rơi xa điểm tham
+chiếu hơn nửa ô** — bước này giải tay hay quên và lệch nguyên một ô 1° (~110km). Bộ giải được
+kiểm chứng bằng mã Suôi Thầu đã biết: `7PJ6MCJQ+7R` → 22.680687, 104.439562, DEM 1199m, khớp
+đúng số đã ghi trong thư viện từ 25/8.
 
 ### 🗺️ Toạ độ điểm — quy tắc bắt buộc khi thêm/sửa
 

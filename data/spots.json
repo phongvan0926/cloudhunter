@@ -22,12 +22,12 @@
   {
     "key": "HANG_KIA_PA_CO",
     "name": "Hang Kia - Pà Cò (Thung Mài)",
-    "lat": 20.741,
-    "lon": 104.931,
-    "elevation": 1200,
+    "lat": 20.7366,
+    "lon": 104.8833,
+    "elevation": 1483,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 800,
-    "needsReview": "Toạ độ hiện tại (DEM 983m) chỉ cao hơn đáy thung lũng đã xác thực 800m có 185m — điểm ngắm Thung Mài phải ở trên cao nguyên ~1.200m. Cần toạ độ thật."
+    "needsReview": null
   },
   {
     "key": "XIM_VANG",
@@ -40,14 +40,14 @@
     "needsReview": null
   },
   {
-    "key": "PU_NHI_FARM",
-    "name": "Pu Nhi Farm",
-    "lat": 21.173,
-    "lon": 104.316,
-    "elevation": 700,
+    "key": "TA_XUA_TRAM_PHAT",
+    "name": "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
+    "lat": 21.2764,
+    "lon": 104.4239,
+    "elevation": 1753,
     "zone": "A_CLOUD_TRAP",
-    "valleyElevation": 300,
-    "needsReview": "Toạ độ hiện tại (DEM 469m) chỉ cao hơn đáy thung lũng đã xác thực 300m có 170m. Nhiều khả năng bị lệch giống lỗi Tà Xùa (kinh độ ~104.3 thay vì ~104.4). Cần toạ độ thật."
+    "valleyElevation": null,
+    "needsReview": null
   },
   {
     "key": "FANSIPAN",
@@ -142,12 +142,12 @@
   {
     "key": "BAN_HANG_DA",
     "name": "Bản Hang Đá (Sapa)",
-    "lat": 22.311,
-    "lon": 103.878,
-    "elevation": 1800,
+    "lat": 22.3234,
+    "lon": 103.8821,
+    "elevation": 1600,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 1300,
-    "needsReview": "Toạ độ hiện tại nằm DƯỚI đáy thung lũng Mường Hoa (DEM 1.023m so với đáy 1.300m đã xác thực trong mặt cắt địa hình) — điểm ngắm phải ở TRÊN thung lũng. Cần toạ độ thật của bản Hang Đá."
+    "needsReview": null
   },
   {
     "key": "PHU_SA_PHIN",
@@ -272,12 +272,12 @@
   {
     "key": "LUNG_VAN",
     "name": "Lũng Vân (Nóc nhà xứ Mường)",
-    "lat": 20.612,
-    "lon": 105.183,
-    "elevation": 1200,
+    "lat": 20.5976,
+    "lon": 105.1529,
+    "elevation": 1202,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": null,
-    "needsReview": "Cả vùng quanh toạ độ hiện tại chỉ cao tối đa 610m (quét DEM 24/8/2026) — không thể chứa \"nóc nhà xứ Mường\" 1.200m. Toạ độ đang trỏ nhầm khu vực."
+    "needsReview": null
   },
   {
     "key": "DEO_THUNG_KHE",
@@ -321,13 +321,13 @@
   },
   {
     "key": "DONG_VAN",
-    "name": "Cao nguyên đá Đồng Văn",
-    "lat": 23.2783,
-    "lon": 105.3615,
-    "elevation": 1500,
+    "name": "Cao nguyên đá Đồng Văn (Mã Pí Lèng)",
+    "lat": 23.24,
+    "lon": 105.3762,
+    "elevation": 1511,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 1100,
-    "needsReview": "Toạ độ đang trỏ vào thị trấn Đồng Văn (DEM 1.059m) — chính là \"đáy thung lũng\" Phố Cổ 1.100m trong mặt cắt địa hình, không phải điểm ngắm ở trên cao nguyên đá."
+    "needsReview": null
   },
   {
     "key": "PU_LUONG",
@@ -545,6 +545,16 @@
     "lat": 21.43931,
     "lon": 104.19894,
     "elevation": 1350,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
+    "key": "SUOI_THAU",
+    "name": "Thảo nguyên Suôi Thầu (Xín Mần)",
+    "lat": 22.68069,
+    "lon": 104.43956,
+    "elevation": 1200,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": null,
     "needsReview": null

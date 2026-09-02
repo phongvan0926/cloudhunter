@@ -28,9 +28,13 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['pha luong', 'moc chau', 'đỉnh pha luông', 'nóc nhà mộc châu', 'mộc châu', 'cửa khẩu lóng sập']
   },
   HANG_KIA_PA_CO: {
-    needsReview: 'Toạ độ hiện tại (DEM 983m) chỉ cao hơn đáy thung lũng đã xác thực 800m có 185m — điểm ngắm Thung Mài phải ở trên cao nguyên ~1.200m. Cần toạ độ thật.',
+    // 03/09/2026: gỡ needsReview. Toạ độ cũ (20.7410, 104.9310) nằm ở DEM 983m, chỉ cao hơn
+    // đáy thung lũng 185m. Toạ độ mới = node OSM "Núi Hang Kia" ele=1483 — cao điểm của cao
+    // nguyên Hang Kia - Pà Cò, DEM quét được 1.406m ngay cạnh (DEM 90m luôn đọc hụt đỉnh nhọn).
+    // Lưu ý trung thực: điểm ngắm "Thung Mài" KHÔNG có trong OSM lẫn nguồn tra được, nên đây là
+    // cao điểm của đúng vùng đó chứ không phải chính chỗ người ta hay đứng.
     name: "Hang Kia - Pà Cò (Thung Mài)",
-    lat: 20.7410, lon: 104.9310, elevation: 1200,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
+    lat: 20.7366, lon: 104.8833, elevation: 1483,   // nguồn: OSM node "Núi Hang Kia" ele=1483 (DEM 1406m); đáy thung lũng Mai Châu dưới 190m
     zone: "A_CLOUD_TRAP",
     aliases: ['hang kia', 'pa co', 'pa cò', 'mai chau', 'mai châu', 'hòa bình', 'thung mài', 'thung mai', 'săn mây thung mài']
   },
@@ -40,12 +44,15 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     zone: "A_CLOUD_TRAP",
     aliases: ['xim vang', 'ruong bac thang', 'xím vàng', 'bắc yên']
   },
-  PU_NHI_FARM: {
-    needsReview: 'Toạ độ hiện tại (DEM 469m) chỉ cao hơn đáy thung lũng đã xác thực 300m có 170m. Nhiều khả năng bị lệch giống lỗi Tà Xùa (kinh độ ~104.3 thay vì ~104.4). Cần toạ độ thật.',
-    name: "Pu Nhi Farm",
-    lat: 21.1730, lon: 104.3160, elevation: 700,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
+  // PU_NHI_FARM đã GỠ ngày 03/09/2026 theo yêu cầu người dùng: đồi Pu Nhi thấp quá (~700m,
+  // chỉ cao hơn đáy thung lũng ~400m) nên không phải điểm săn mây đáng đưa vào xếp hạng.
+  // Thay bằng điểm dưới đây — cùng huyện Bắc Yên nhưng cao hơn hẳn.
+  // (Các bản chụp dự báo/vệ tinh cũ vẫn còn key PU_NHI_FARM: đó là BẰNG CHỨNG lịch sử, không sửa.)
+  TA_XUA_TRAM_PHAT: {
+    name: "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
+    lat: 21.2764, lon: 104.4239, elevation: 1753,   // nguồn: plus code 7CGF+HH người dùng cung cấp (DEM 1753m); đáy thung lũng Bắc Yên 116-181m
     zone: "A_CLOUD_TRAP",
-    aliases: ['pu nhi', 'pu nhi farm', 'bắc yên', 'đồi pu nhi']
+    aliases: ['trạm phát sóng tà xùa', 'tram phat song ta xua', 'trung tâm tà xùa', 'cột phát sóng tà xùa', 'bắc yên', 'tà xùa']
   },
   // (DINH_U_BO đã GỘP vào SA_MU_U_BO ngày 23/8/2026 — trùng một khối núi trong KBT Tà Xùa,
   //  toạ độ cũ 21.2380,104.3410 rơi xuống lòng thung lũng 253m nên mọi dự báo đều sai chỗ.)
@@ -106,13 +113,16 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['nam kang ho tao', 'nam kang', 'nậm cang']
   },
   BAN_HANG_DA: {
-    needsReview: 'Toạ độ hiện tại nằm DƯỚI đáy thung lũng Mường Hoa (DEM 1.023m so với đáy '
-      + '1.300m đã xác thực trong mặt cắt địa hình) — điểm ngắm phải ở TRÊN thung lũng. '
-      + 'Cần toạ độ thật của bản Hang Đá.',
+    // 03/09/2026: người dùng gửi plus code 8VFJ+9V2 (Thôn Hang Đá, Tả Van, Lào Cai) — giải bằng
+    // scripts/pluscode.ts ra 22.323388, 103.882141, DEM 1590m, khớp mô tả "cao trên 1.600m".
+    // Ghi lại cái tôi đoán SAI trước đó: tôi tra nguồn du lịch ra "thôn Hầu Chư Ngài, xã Mường
+    // Hoa, trên 1.800m" rồi quét DEM trong xã Mường Hoa chọn nền 1.799m. Sai cả XÃ (thực tế là
+    // Tả Van) lẫn ĐỘ CAO (lệch ~200m). Bài học: nguồn du lịch tiếng Việt hay chép chéo nhau,
+    // hai trang cùng sai thì trông vẫn như hai nguồn độc lập.
     name: "Bản Hang Đá (Sapa)",
-    lat: 22.3110, lon: 103.8780, elevation: 1800,   // giữ số GỐC — sai là ở TOẠ ĐỘ (xem needsReview)
+    lat: 22.3234, lon: 103.8821, elevation: 1600,   // nguồn: plus code 8VFJ+9V2 người dùng cung cấp (DEM 1590m); đáy thung lũng Mường Hoa 439-1078m
     zone: "A_CLOUD_TRAP",
-    aliases: ['hang đá', 'bản hang đá', 'sapa', 'hầu thào']
+    aliases: ['hang đá', 'hang da', 'bản hang đá', 'ban hang da', 'sapa', 'sa pa', 'tả van', 'ta van', 'lào cai', 'lao cai']
   },
 
   // --- YÊN BÁI ---
@@ -198,9 +208,12 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
 
   // --- HÒA BÌNH ---
   LUNG_VAN: {
-    needsReview: 'Cả vùng quanh toạ độ hiện tại chỉ cao tối đa 610m (quét DEM 24/8/2026) — không thể chứa "nóc nhà xứ Mường" 1.200m. Toạ độ đang trỏ nhầm khu vực.',
+    // 03/09/2026: gỡ needsReview. Vì sao trước đây tra không ra: xã Lũng Vân đã SÁP NHẬP thành
+    // xã Vân Sơn (Tân Lạc, Hoà Bình) năm 2020 nên OSM không còn tên "Lũng Vân". Tra theo tên
+    // mới ra relation "Xã Vân Sơn" (20.5420, 105.2122), quét DEM trong xã tìm được sống núi
+    // 1.202m — khớp đúng con số 1.200m vẫn khai báo bấy lâu.
     name: "Lũng Vân (Nóc nhà xứ Mường)",
-    lat: 20.6120, lon: 105.1830, elevation: 1200,   // giữ số GỐC — mặt cắt địa hình đã xác thực chứng minh chỗ đứng cao hơn thế; sai là ở TOẠ ĐỘ
+    lat: 20.5976, lon: 105.1529, elevation: 1202,   // nguồn: quét DEM trong ranh giới OSM "Xã Vân Sơn" (DEM 1202m); đáy thung lũng quanh vùng 83-630m
     zone: "A_CLOUD_TRAP",
     aliases: ['lũng vân', 'tân lạc', 'lung van', 'nóc nhà xứ mường']
   },
@@ -231,12 +244,14 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['tây côn lĩnh', 'tay con linh', 'nóc nhà hà giang']
   },
   DONG_VAN: {
-    needsReview: 'Toạ độ đang trỏ vào thị trấn Đồng Văn (DEM 1.059m) — chính là "đáy thung lũng" '
-      + 'Phố Cổ 1.100m trong mặt cắt địa hình, không phải điểm ngắm ở trên cao nguyên đá.',
-    name: "Cao nguyên đá Đồng Văn",
-    lat: 23.2783, lon: 105.3615, elevation: 1500,   // giữ số GỐC — sai là ở TOẠ ĐỘ (xem needsReview)
+    // 03/09/2026: gỡ needsReview. Toạ độ cũ trỏ vào thị trấn Đồng Văn (DEM 1.059m) — chính là
+    // ĐÁY thung lũng Phố Cổ trong mặt cắt địa hình. Toạ độ mới nằm trên đoạn đèo Mã Pí Lèng,
+    // điểm ngắm mây kinh điển của cao nguyên đá: DEM 1.511m, nhìn thẳng xuống hẻm Nho Quế
+    // đo được 477m — chênh cao 1.034m, đúng dạng bẫy mây.
+    name: "Cao nguyên đá Đồng Văn (Mã Pí Lèng)",
+    lat: 23.2400, lon: 105.3762, elevation: 1511,   // nguồn: quét DEM đoạn đèo Mã Pí Lèng (DEM 1511m); đáy hẻm Nho Quế 477m
     zone: "A_CLOUD_TRAP",
-    aliases: ['đồng văn', 'dong van', 'mèo vạc', 'cao nguyên đá']
+    aliases: ['đồng văn', 'dong van', 'mèo vạc', 'cao nguyên đá', 'mã pí lèng', 'ma pi leng', 'mã pì lèng', 'nho quế', 'hà giang']
   },
 
   // --- THANH HÓA ---

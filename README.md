@@ -45,7 +45,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   mùa đốt nương làm mặt trời mọc xỉn màu dù mây đẹp).
 - 🔗 **Link chia sẻ kết quả**: URL tự mang `?spot=&from=&to=&alt=` — gửi cho bạn đồng hành
   là họ mở đúng dự báo đó, không cần mô tả thao tác.
-- 📍 **Phân giải địa danh nhiều tầng có nhãn nguồn**: thư viện **58 điểm đã xác thực phủ
+- 📍 **Phân giải địa danh nhiều tầng có nhãn nguồn**: thư viện **56 điểm đã xác thực phủ
   toàn quốc** (Tây Bắc + Hà Giang/Cao Bằng/Quảng Ninh + Bạch Mã, Bà Đen, Măng Đen, cụm
   Đà Lạt, và các điểm "ẩn" như Phình Hồ, Kéo Lồm, Chiềng Công, Đồn Đèn...) →
   Nominatim/Open-Meteo geocoding (tọa độ thật) → AI ước tính (cảnh báo rõ).
@@ -122,6 +122,8 @@ npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
 npx vite-node scripts/audit-coords.ts              # đối chiếu toạ độ thư viện với DEM
+npx vite-node scripts/find-spot.ts "Vân Sơn" 20.61 105.18 8   # tìm toạ độ điểm ngắm: OSM + quét DEM 2 vòng
+npx vite-node scripts/pluscode.ts "8VFJ+9V2" 22.30 103.89     # giải plus code (kể cả mã NGẮN) → toạ độ + DEM
 npx vite-node scripts/snapshot-dem.ts              # chụp lại DEM cho test offline
 npx vite-node scripts/hindcast.ts TA_XUA_SON_LA    # soi lại 1 ngày: engine chấm gì, vì sao
 npx vite-node scripts/rank-now.ts                  # chạy bảng xếp hạng ngoài trình duyệt
