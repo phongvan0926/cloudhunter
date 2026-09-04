@@ -1,0 +1,2074 @@
+[
+  {
+    "key": "TA_XUA_SON_LA",
+    "name": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1600,
+    "valleyElevation": 700,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHA_LUONG",
+    "name": "Đỉnh Pha Luông",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1880,
+    "valleyElevation": 1400,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "HANG_KIA_PA_CO",
+    "name": "Hang Kia - Pà Cò (Thung Mài)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1483,
+    "valleyElevation": 800,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "XIM_VANG",
+    "name": "Xím Vàng",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1250,
+    "valleyElevation": 1000,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_XUA_TRAM_PHAT",
+    "name": "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1753,
+    "valleyElevation": 853,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "FANSIPAN",
+    "name": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 3143,
+    "valleyElevation": 1900,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LAO_THAN",
+    "name": "Lảo Thẩn (Y Tý)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2860,
+    "valleyElevation": 1800,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "KY_QUAN_SAN",
+    "name": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 3046,
+    "valleyElevation": 900,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "NHIU_CO_SAN",
+    "name": "Nhìu Cồ San (Sừng Trâu)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2965,
+    "valleyElevation": 1000,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "NGU_CHI_SON",
+    "name": "Ngũ Chỉ Sơn",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2858,
+    "valleyElevation": 1200,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "SAPA_HAM_RONG",
+    "name": "Thị trấn Sapa (Hàm Rồng)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1600,
+    "valleyElevation": 1200,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "NGAI_THAU_THUONG",
+    "name": "Ngải Thầu Thượng (Y Tý)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2190,
+    "valleyElevation": 1500,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 2831,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "CU_NHU_SAN",
+    "name": "Đỉnh Cú Nhù San",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2662,
+    "valleyElevation": 1200,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "NAM_KANG_HO_TAO",
+    "name": "Nam Kang Ho Tao",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2881,
+    "valleyElevation": 1981,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BAN_HANG_DA",
+    "name": "Bản Hang Đá (Sapa)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1600,
+    "valleyElevation": 1300,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHU_SA_PHIN",
+    "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2865,
+    "valleyElevation": 1965,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_CHI_NHU",
+    "name": "Tà Chì Nhù (Đồi hoa tím)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2979,
+    "valleyElevation": 1200,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LUNG_CUNG",
+    "name": "Lùng Cúng",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2913,
+    "valleyElevation": 1100,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DEO_KHAU_PHA",
+    "name": "Đèo Khau Phạ",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 940,
+    "valleyElevation": 600,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DOI_MAM_XOI",
+    "name": "Đồi Mâm Xôi (Mù Cang Chải)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1225,
+    "valleyElevation": 700,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PUTALENG",
+    "name": "Putaleng",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 3049,
+    "valleyElevation": 800,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_LIEN_SON",
+    "name": "Tả Liên Sơn (Cổ Trâu)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2996,
+    "valleyElevation": 1000,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": 2750,
+        "emiss": 0.65
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DEO_O_QUY_HO",
+    "name": "Đèo Ô Quy Hồ",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2035,
+    "valleyElevation": 1700,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "SI_THAU_CHAI",
+    "name": "Sì Thâu Chải",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1460,
+    "valleyElevation": 560,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LUNG_VAN",
+    "name": "Lũng Vân (Nóc nhà xứ Mường)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1202,
+    "valleyElevation": 302,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DEO_THUNG_KHE",
+    "name": "Đèo Thung Khe (Đèo Đá Trắng)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 830,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PU_LUONG",
+    "name": "Pù Luông",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1700,
+    "valleyElevation": 400,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BA_VI",
+    "name": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1296,
+    "valleyElevation": 100,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "SA_MU_U_BO",
+    "name": "Sa Mu - U Bò (2756m)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 2756,
+    "valleyElevation": 1400,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BACH_MA",
+    "name": "Bạch Mã (Vọng Hải Đài)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1448,
+    "valleyElevation": 548,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHINH_HO",
+    "name": "Phình Hồ (Trạm Tấu)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1080,
+    "valleyElevation": 180,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LANG_NHI",
+    "name": "Làng Nhì (Trạm Tấu)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 950,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_LENG_SAN_MAY",
+    "name": "Đồi săn mây Tả Lèng (Lai Châu)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1360,
+    "valleyElevation": 460,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "NGOC_SON_LAC_SON",
+    "name": "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 390,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BAN_NA",
+    "name": "Điểm săn mây Bản Nà (Tân Yên)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 740,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "CHIENG_CONG",
+    "name": "Điểm săn mây Chiềng Công (Mường La)",
+    "date": "2026-09-04",
+    "verdict": "CLEAR",
+    "observerAlt": 1350,
+    "valleyElevation": 450,
+    "cloudTopMedian_m": -999,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": -999,
+        "emiss": -999.0
+      },
+      {
+        "vn": "06:00",
+        "top_m": 4766,
+        "emiss": 0.35
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": -999.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PUSILUNG",
+    "name": "Pusilung (Biên giới)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 3083,
+    "valleyElevation": 2183,
+    "cloudTopMedian_m": 4544,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 4718,
+        "emiss": 0.64
+      },
+      {
+        "vn": "05:00",
+        "top_m": 4544,
+        "emiss": 0.64
+      },
+      {
+        "vn": "05:30",
+        "top_m": 4328,
+        "emiss": 0.64
+      },
+      {
+        "vn": "06:00",
+        "top_m": 4697,
+        "emiss": 0.64
+      },
+      {
+        "vn": "06:30",
+        "top_m": 4448,
+        "emiss": 0.64
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DEO_PHA_DIN",
+    "name": "Đèo Pha Đin",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1300,
+    "valleyElevation": 400,
+    "cloudTopMedian_m": 7968,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 7968,
+        "emiss": 0.97
+      },
+      {
+        "vn": "05:00",
+        "top_m": 8106,
+        "emiss": 0.96
+      },
+      {
+        "vn": "05:30",
+        "top_m": 9419,
+        "emiss": 0.81
+      },
+      {
+        "vn": "06:00",
+        "top_m": 7895,
+        "emiss": 0.6
+      },
+      {
+        "vn": "06:30",
+        "top_m": 6240,
+        "emiss": 0.27
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "CUC_TAY_A_PA_CHAI",
+    "name": "Cực Tây A Pa Chải",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1864,
+    "valleyElevation": 964,
+    "cloudTopMedian_m": 5311,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5311,
+        "emiss": 0.64
+      },
+      {
+        "vn": "05:00",
+        "top_m": 3218,
+        "emiss": 0.64
+      },
+      {
+        "vn": "05:30",
+        "top_m": 5108,
+        "emiss": 0.64
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6225,
+        "emiss": 0.77
+      },
+      {
+        "vn": "06:30",
+        "top_m": 8586,
+        "emiss": 0.6
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DEO_MA_PI_LENG",
+    "name": "Đèo Mã Pí Lèng (Mèo Vạc)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1400,
+    "valleyElevation": 350,
+    "cloudTopMedian_m": 3554,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 4245,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": 3300,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:30",
+        "top_m": 3554,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": 2183,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:30",
+        "top_m": 4843,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "CHIEU_LAU_THI",
+    "name": "Đỉnh Chiêu Lầu Thi",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 2402,
+    "valleyElevation": 1000,
+    "cloudTopMedian_m": 6193,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 2798,
+        "emiss": 0.37
+      },
+      {
+        "vn": "05:00",
+        "top_m": 8215,
+        "emiss": 0.5
+      },
+      {
+        "vn": "05:30",
+        "top_m": 6405,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6193,
+        "emiss": 0.78
+      },
+      {
+        "vn": "06:30",
+        "top_m": 5166,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TAY_CON_LINH",
+    "name": "Tây Côn Lĩnh",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 2428,
+    "valleyElevation": 800,
+    "cloudTopMedian_m": 6906,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 6906,
+        "emiss": 0.78
+      },
+      {
+        "vn": "05:00",
+        "top_m": 7103,
+        "emiss": 0.92
+      },
+      {
+        "vn": "05:30",
+        "top_m": 7893,
+        "emiss": 0.49
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": 2525,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DONG_VAN",
+    "name": "Cao nguyên đá Đồng Văn (Mã Pí Lèng)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1511,
+    "valleyElevation": 1100,
+    "cloudTopMedian_m": 2523,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 4023,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:30",
+        "top_m": 2523,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "06:30",
+        "top_m": 4920,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TAM_DAO",
+    "name": "Tam Đảo",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 970,
+    "valleyElevation": 200,
+    "cloudTopMedian_m": 2044,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": 1754,
+        "emiss": 0.67
+      },
+      {
+        "vn": "05:30",
+        "top_m": 3064,
+        "emiss": 0.67
+      },
+      {
+        "vn": "06:00",
+        "top_m": 3312,
+        "emiss": 0.67
+      },
+      {
+        "vn": "06:30",
+        "top_m": 2044,
+        "emiss": 0.67
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "MAU_SON",
+    "name": "Mẫu Sơn (Lạng Sơn)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1155,
+    "valleyElevation": 300,
+    "cloudTopMedian_m": 4260,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5120,
+        "emiss": 0.8
+      },
+      {
+        "vn": "05:00",
+        "top_m": 4939,
+        "emiss": 0.8
+      },
+      {
+        "vn": "05:30",
+        "top_m": 3448,
+        "emiss": 0.67
+      },
+      {
+        "vn": "06:00",
+        "top_m": 4260,
+        "emiss": 0.67
+      },
+      {
+        "vn": "06:30",
+        "top_m": 4242,
+        "emiss": 0.67
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BINH_LIEU",
+    "name": "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1429,
+    "valleyElevation": 529,
+    "cloudTopMedian_m": 6158,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 6673,
+        "emiss": 0.64
+      },
+      {
+        "vn": "05:00",
+        "top_m": 4806,
+        "emiss": 0.69
+      },
+      {
+        "vn": "05:30",
+        "top_m": 5673,
+        "emiss": 0.75
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6158,
+        "emiss": 0.63
+      },
+      {
+        "vn": "06:30",
+        "top_m": 6177,
+        "emiss": 0.55
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "PHIA_OAC",
+    "name": "Phia Oắc (Cao Bằng)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1931,
+    "valleyElevation": 1031,
+    "cloudTopMedian_m": 4974,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 4955,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": 3571,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:30",
+        "top_m": 4974,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": 5104,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:30",
+        "top_m": 5685,
+        "emiss": 0.66
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "BA_DEN",
+    "name": "Núi Bà Đen (Tây Ninh)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 986,
+    "valleyElevation": 86,
+    "cloudTopMedian_m": 7718,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 12034,
+        "emiss": 0.5
+      },
+      {
+        "vn": "05:00",
+        "top_m": 9887,
+        "emiss": 0.51
+      },
+      {
+        "vn": "05:30",
+        "top_m": 7718,
+        "emiss": 0.82
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6630,
+        "emiss": 0.82
+      },
+      {
+        "vn": "06:30",
+        "top_m": 6672,
+        "emiss": 0.59
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "MANG_DEN",
+    "name": "Măng Đen",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1200,
+    "valleyElevation": 300,
+    "cloudTopMedian_m": 9792,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5717,
+        "emiss": 0.77
+      },
+      {
+        "vn": "05:00",
+        "top_m": 9355,
+        "emiss": 0.75
+      },
+      {
+        "vn": "05:30",
+        "top_m": 10340,
+        "emiss": 0.88
+      },
+      {
+        "vn": "06:00",
+        "top_m": 10599,
+        "emiss": 0.91
+      },
+      {
+        "vn": "06:30",
+        "top_m": 9792,
+        "emiss": 0.82
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "CAU_DAT",
+    "name": "Đồi chè Cầu Đất (Đà Lạt)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1500,
+    "valleyElevation": 600,
+    "cloudTopMedian_m": 7128,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 6693,
+        "emiss": 0.83
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6209,
+        "emiss": 0.71
+      },
+      {
+        "vn": "05:30",
+        "top_m": 7198,
+        "emiss": 0.71
+      },
+      {
+        "vn": "06:00",
+        "top_m": 7128,
+        "emiss": 0.76
+      },
+      {
+        "vn": "06:30",
+        "top_m": 7242,
+        "emiss": 0.79
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LANG_BIANG",
+    "name": "Núi Lang Biang",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 2167,
+    "valleyElevation": 1267,
+    "cloudTopMedian_m": 6896,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 5284,
+        "emiss": 0.71
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6064,
+        "emiss": 0.71
+      },
+      {
+        "vn": "05:30",
+        "top_m": 6896,
+        "emiss": 0.74
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6902,
+        "emiss": 0.83
+      },
+      {
+        "vn": "06:30",
+        "top_m": 7200,
+        "emiss": 0.6
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "LINH_QUY_PHAP_AN",
+    "name": "Linh Quy Pháp Ấn (Bảo Lộc)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 850,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": 7343,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 6882,
+        "emiss": 0.93
+      },
+      {
+        "vn": "05:00",
+        "top_m": 7343,
+        "emiss": 0.82
+      },
+      {
+        "vn": "05:30",
+        "top_m": 7481,
+        "emiss": 0.83
+      },
+      {
+        "vn": "06:00",
+        "top_m": 7020,
+        "emiss": 0.81
+      },
+      {
+        "vn": "06:30",
+        "top_m": 7619,
+        "emiss": 0.82
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "TA_NANG",
+    "name": "Tà Năng - Phan Dũng",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1100,
+    "valleyElevation": 200,
+    "cloudTopMedian_m": 6960,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 4947,
+        "emiss": 0.71
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6906,
+        "emiss": 0.76
+      },
+      {
+        "vn": "05:30",
+        "top_m": 6960,
+        "emiss": 0.79
+      },
+      {
+        "vn": "06:00",
+        "top_m": 7321,
+        "emiss": 0.78
+      },
+      {
+        "vn": "06:30",
+        "top_m": 7009,
+        "emiss": 0.78
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "KEO_LOM",
+    "name": "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 860,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": 8362,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 2530,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6014,
+        "emiss": 0.55
+      },
+      {
+        "vn": "05:30",
+        "top_m": 8888,
+        "emiss": 0.75
+      },
+      {
+        "vn": "06:00",
+        "top_m": 8362,
+        "emiss": 0.71
+      },
+      {
+        "vn": "06:30",
+        "top_m": 8908,
+        "emiss": 0.43
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "DON_DEN",
+    "name": "Đồn Đèn (Ba Bể)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 660,
+    "valleyElevation": 80,
+    "cloudTopMedian_m": 2313,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": 2313,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:00",
+        "top_m": 1841,
+        "emiss": 0.66
+      },
+      {
+        "vn": "05:30",
+        "top_m": 2966,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:00",
+        "top_m": 2841,
+        "emiss": 0.66
+      },
+      {
+        "vn": "06:30",
+        "top_m": -999,
+        "emiss": 0.0
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  },
+  {
+    "key": "SUOI_THAU",
+    "name": "Thảo nguyên Suôi Thầu (Xín Mần)",
+    "date": "2026-09-04",
+    "verdict": "BLOCKED_ABOVE",
+    "observerAlt": 1200,
+    "valleyElevation": 300,
+    "cloudTopMedian_m": 6103,
+    "frames": [
+      {
+        "vn": "04:30",
+        "top_m": -999,
+        "emiss": 0.0
+      },
+      {
+        "vn": "05:00",
+        "top_m": 6103,
+        "emiss": 0.29
+      },
+      {
+        "vn": "05:30",
+        "top_m": 9607,
+        "emiss": 0.21
+      },
+      {
+        "vn": "06:00",
+        "top_m": 6319,
+        "emiss": 0.78
+      },
+      {
+        "vn": "06:30",
+        "top_m": 5516,
+        "emiss": 0.65
+      }
+    ],
+    "source": "NOAA AHI-L2-FLDK-Clouds (Himawari-9) CldTopHght, 2km"
+  }
+]
