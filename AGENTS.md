@@ -524,6 +524,47 @@ cùng điểm + ngày.** Vệ tinh chỉ đáng tin cho biển mây DÀY, RỘNG
 loại mà mô hình cũng thấy. Hai loại app đang trượt (sương ngắn hạn, mây đội đỉnh) thì vệ tinh cũng mù.
 Nghĩa là **nhãn vệ tinh không giúp đo được hai lỗi lớn nhất hiện nay; chỉ báo cáo người đi mới đo được.**
 
+### 🐛 "Bấm lần 1 ra kết quả rồi biến mất" — thủ phạm là PWA, không phải bảng xếp hạng (07/09/2026)
+
+Người dùng báo: bấm 🌄 *Đêm nay đi đâu săn mây?* thì bảng hiện ra rồi **biến mất**, phải bấm lần
+hai mới có "kết quả thật". Không có lỗi nào trong `TonightRanking` cả — `VitePWA({ registerType:
+'autoUpdate' })` sinh ra service worker `skipWaiting` cộng đoạn client:
+
+```js
+wb.addEventListener('activated', e => { if (e.isUpdate) window.location.reload() })
+```
+
+nên **mỗi lần repo có bản deploy mới, trang tự gọi `location.reload()` giữa chừng**. Ngày 03/09
+repo deploy 6 lần nên người dùng gặp liên tục. Đã tái hiện bằng Playwright (giả lập deploy bằng
+cách đổi nội dung `sw.js`): biến đánh dấu phiên biến mất, trang điều hướng lại 1 lần.
+
+Chi tiết đáng sợ hơn "mất kết quả": bảng hiện ra ở **lần bấm đầu là do bản app CŨ tính** — người
+dùng nhìn thấy số của phiên bản trước trong khoảnh khắc trước khi reload. Chữ *"lần 2 mới ra kết
+quả thật"* đúng theo nghĩa đen.
+
+Sửa: `registerType: 'prompt'` + thanh hỏi (`components/UpdateBanner.tsx`). Bản mới tải về rồi ĐỢI,
+người dùng chọn lúc tải lại. Trên núi mất sóng, tự reload còn có thể làm mất luôn dự báo đang xem.
+
+Hai cái bẫy gặp khi sửa, ghi lại vì cả hai đều im lặng:
+
+1. **`prompt` mặc định tắt `clientsClaim`** ⇒ lần truy cập ĐẦU không được SW nhận quyền, tức mất
+   offline cho tới lần tải thứ hai. Phải bật lại tay: `clientsClaim: true, skipWaiting: false` —
+   hai cờ này độc lập, chỉ `skipWaiting` mới là thứ quyết định "có giành quyền giữa chừng không".
+2. **`updateSW(true)` của thư viện có thể KHÔNG làm gì cả.** Nó chỉ reload khi workbox-window cho
+   rằng đây là "bản cập nhật", mà cờ `isUpdate` được chốt lúc đăng ký: trang được claim ngay ở lần
+   đầu thì cờ là false suốt phiên. Đo được: SKIP_WAITING gửi đi, `waiting` mất, `controllerchange`
+   bắn, trang vẫn đứng yên — nút bấm vô tác dụng mà không báo lỗi gì. `applyUpdate()` nay tự nghe
+   `controllerchange` và tự reload, kèm hẹn giờ 3s phòng khi không có gì xảy ra.
+
+Kèm theo: cache bảng xếp hạng nay ghi xuống `localStorage` (khoá gồm `ENGINE_VERSION` nên engine
+mới tự vô hiệu cache cũ, không bao giờ hiện điểm của phiên bản trước). Trước đây cache chỉ nằm
+trong biến module nên mọi lần tải lại trang đều nã lại API cho cả thư viện. Đo sau khi sửa: mở
+lại bảng sau khi tải lại trang có kết quả trong **1,03s**.
+
+Kiểm chứng đầy đủ bằng Playwright (`pw-python`, xem CLAUDE.md): bấm nút → 12 điểm hiện ra → giả
+lập deploy mới → **bảng còn nguyên 12 điểm** → bấm "Tải lại" → trang tải lại → mở lại bảng ra
+ngay từ cache. Và ngắt mạng sau lần truy cập đầu, app vẫn mở được.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

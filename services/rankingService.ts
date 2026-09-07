@@ -19,7 +19,7 @@ import {
   addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS,
   getCachedValley, setCachedValley,
 } from './weatherService';
-import { scoreOneModel, combineModels, isWorthGoing } from './cloudScoreEngine';
+import { scoreOneModel, combineModels, isWorthGoing, ENGINE_VERSION } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
 const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_seamless'];
@@ -127,12 +127,44 @@ export async function valleyElevationsForAll(
 let RANK_CACHE: { targetDate: string; ts: number; results: SpotRank[] } | null = null;
 const RANK_CACHE_TTL_MS = 30 * 60 * 1000;
 
+/**
+ * Cache xếp hạng cũng ghi xuống localStorage — trước đây chỉ nằm trong biến module nên MỌI
+ * lần tải lại trang (đổi bản app, mở lại tab, tuột mạng rồi vào lại) đều nã lại API cho cả
+ * thư viện. Khoá gồm ENGINE_VERSION: engine mới thì cache cũ tự hết hiệu lực, không bao giờ
+ * hiện điểm của phiên bản trước.
+ */
+const RANK_LS_KEY = 'ch-rank-cache-v1';
+
+function loadRankCache(targetDate: string): SpotRank[] | null {
+  try {
+    const raw = localStorage.getItem(RANK_LS_KEY);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    if (c.targetDate !== targetDate || c.engine !== ENGINE_VERSION) return null;
+    if (Date.now() - c.ts >= RANK_CACHE_TTL_MS) return null;
+    return Array.isArray(c.results) && c.results.length ? c.results : null;
+  } catch { return null; }
+}
+
+function saveRankCache(targetDate: string, results: SpotRank[]): void {
+  try {
+    localStorage.setItem(RANK_LS_KEY, JSON.stringify({
+      targetDate, engine: ENGINE_VERSION, ts: Date.now(), results,
+    }));
+  } catch { /* hết quota / chế độ riêng tư → bỏ qua, chỉ mất tiện lợi */ }
+}
+
 export async function rankSpotsForDawn(
   targetDate: string,
   onProgress?: (msg: string) => void
 ): Promise<SpotRank[]> {
   if (RANK_CACHE && RANK_CACHE.targetDate === targetDate && Date.now() - RANK_CACHE.ts < RANK_CACHE_TTL_MS) {
     return RANK_CACHE.results;
+  }
+  const persisted = loadRankCache(targetDate);
+  if (persisted) {
+    RANK_CACHE = { targetDate, ts: Date.now(), results: persisted };
+    return persisted;
   }
   // Điểm chưa xác minh được toạ độ thì KHÔNG đưa vào bảng xếp hạng: một toạ độ lệch 15km
   // vẫn trả về đủ số liệu "hợp lý" nhưng của nơi khác — sai âm thầm, người dùng không thể biết.
@@ -195,5 +227,6 @@ export async function rankSpotsForDawn(
   // Đáng đi lên đầu; trong mỗi nhóm điểm mới quyết định thứ tự (điểm chỉ để XẾP, không để CHỌN).
   results.sort((a, b) => Number(b.worthGoing) - Number(a.worthGoing) || b.score - a.score);
   RANK_CACHE = { targetDate, ts: Date.now(), results };
+  saveRankCache(targetDate, results);
   return results;
 }

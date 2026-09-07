@@ -37,7 +37,11 @@ export default defineConfig(({ mode }) => {
         // trekker mất sóng trên đèo vẫn mở lại được app và dự báo đã tải.
         // Scope/start_url tự lấy theo `base` nên build GH Pages và Vercel đều đúng.
         VitePWA({
-          registerType: 'autoUpdate',
+          // 'prompt', KHÔNG phải 'autoUpdate': autoUpdate sinh SW skipWaiting + tự gọi
+          // window.location.reload() ngay khi có bản deploy mới, cắt ngang việc người dùng
+          // đang làm (lỗi thật 07/09/2026 — xem services/pwaUpdate.ts). Nay bản mới đợi
+          // người dùng bấm.
+          registerType: 'prompt',
           includeAssets: ['pwa-192.png', 'pwa-512.png', 'pwa-maskable-512.png'],
           manifest: {
             name: 'CloudHunter AI — Dự báo Biển Mây',
@@ -54,6 +58,12 @@ export default defineConfig(({ mode }) => {
             ],
           },
           workbox: {
+            // clientsClaim: SW nhận quyền ngay ở LẦN TRUY CẬP ĐẦU → offline dùng được luôn,
+            //   không phải đợi tải lại lần hai (mặc định của chế độ 'prompt' là false).
+            // skipWaiting FALSE: bản mới cài xong thì ĐỢI người dùng bấm, không giành quyền
+            //   giữa chừng. Hai cờ này độc lập — đây mới là chỗ quyết định "có tự reload không".
+            clientsClaim: true,
+            skipWaiting: false,
             runtimeCaching: [
               {
                 // dự báo/DEM/geocoding Open-Meteo: mạng trước, offline dùng bản đã tải (tối đa 12h)

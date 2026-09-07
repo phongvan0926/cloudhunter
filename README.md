@@ -37,6 +37,10 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   chi tiết; nút "Đêm nay đi đâu" nằm trên cùng, không cần nhập gì.
 - 🔍 **"Vì sao điểm này?"**: mỗi ngày liệt kê từng yếu tố cộng/trừ điểm (mây thấp bình minh,
   nghịch nhiệt, ẩm, gió theo vùng địa hình, mây cao che đêm, mưa, mùa) — minh bạch 100%.
+- 🔄 **Bản mới KHÔNG tự tải lại**: service worker cập nhật nền rồi hiện thanh hỏi — bấm "Tải lại"
+  mới đổi bản. Trước đây dùng `autoUpdate` nên mỗi lần deploy là trang tự `location.reload()` ngay
+  giữa lúc đang xem kết quả (lỗi thật 07/09/2026). Bảng xếp hạng cũng được cache trong localStorage
+  theo phiên bản engine nên mở lại tức thì, không nã lại API.
 - ⛔ **Trung thực dữ liệu**: ngày ngoài phạm vi dự báo hiện UNKNOWN + "ngoài phạm vi dữ
   liệu" thay vì số bịa; ngày xa (4–15 ngày) dán nhãn "chỉ là xu hướng"; **dữ liệu tải từ
   cache offline cũ hơn 1.5h hiện banner "tải cách đây ~X giờ"** thay vì đeo badge tin cậy.

@@ -4,13 +4,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { importKeyFromUrlHash } from './services/modelDiscoveryService';
-import { registerSW } from 'virtual:pwa-register';
+import { initPwaUpdate } from './services/pwaUpdate';
 
 // Nhận API key chuyển từ thiết bị khác qua link/QR (#gkey=...) TRƯỚC khi render
 importKeyFromUrlHash();
 
-// PWA: cache app shell + dữ liệu đã tải để dùng offline trên núi (tự cập nhật bản mới)
-registerSW({ immediate: true });
+// PWA: cache app shell + dữ liệu đã tải để dùng offline trên núi. Bản mới KHÔNG tự reload —
+// app hiện thanh hỏi, người dùng chọn lúc (xem services/pwaUpdate.ts).
+initPwaUpdate();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

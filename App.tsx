@@ -6,6 +6,7 @@ import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
 import { VerificationPanel } from './components/VerificationPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { UpdateBanner } from './components/UpdateBanner';
 import { CloudAnalysis, WeatherInput, LocationAnalysis } from './types';
 import { listRuns, loadRun, saveRun } from './services/historyService';
 import { vnTodayStr, addDaysStr } from './services/weatherService';
@@ -291,6 +292,9 @@ const App: React.FC = () => {
         // key được đọc lại ở MỖI lần gọi AI; chỉ cần báo ModelSelector nạp lại danh sách model
         onKeyUpdated={() => window.dispatchEvent(new Event('ch-api-key-updated'))}
       />
+
+      {/* Bản mới của app: hỏi, không tự reload cắt ngang (xem services/pwaUpdate.ts) */}
+      <UpdateBanner />
     </div>
   );
 };
