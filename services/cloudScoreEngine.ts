@@ -47,6 +47,12 @@ export function isWorthGoing(x: WorthGoingInput): boolean {
   if (x.agreement < WORTH_GOING_AGREEMENT) return false;
   // FLUCTUATING/ROLLING chấp nhận ΔH tới −250m ("ranh giới mặt mây"); khuyên đi thì phải
   // chắc là ở TRÊN. Không biết ΔH (không ước được mặt mây) thì không khuyên.
+  // ΔH > 0, KHÔNG phải > 250. Đã thử biên 250m (bằng ngưỡng "ranh giới mặt mây" của chính
+  // engine): trên lịch sử nó giảm báo nhầm 17 → 14 nhưng LOẠI luôn Tà Xùa 24/8 — một trong
+  // vài ngày người dùng đã xác nhận tận mắt là có biển mây (ΔH chỉ 154m). Đó là đánh đổi
+  // độ nhạy lấy độ chính xác, tức quyết định về thứ app khuyên người dùng → để người dùng chọn.
+  // Ca +5m nguy hiểm (Fansipan 07/09) nay đã bị chặn bằng BẰNG CHỨNG TRỰC TIẾP thay vì bằng
+  // một biên áp đặt: observerInCloud() hỏi thẳng "mực ngang chỗ đứng có mây không".
   return x.deltaH !== null && x.deltaH > 0;
 }
 
@@ -359,6 +365,37 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
  */
 export const SUMMIT_LIFT_FRACTION = 0.5;
 export const SUMMIT_LIFT_CAP = 600;
+
+/** Mực áp suất gần cao độ người đứng nhất (trong ±dist mét). */
+function levelAtObserver(m: DayModelData, ctx: DayContext, dist = 400): { h: number; rh: number; cc: number } | null {
+  let best: { h: number; rh: number; cc: number } | null = null;
+  for (const l of m.levels ?? []) {
+    if (!Number.isFinite(l.rh)) continue;
+    if (Math.abs(l.h - ctx.observerAlt) > dist) continue;
+    if (!best || Math.abs(l.h - ctx.observerAlt) < Math.abs(best.h - ctx.observerAlt)) {
+      best = { h: l.h, rh: l.rh, cc: l.cc };
+    }
+  }
+  return best;
+}
+
+/**
+ * ĐO THẲNG "chỗ tôi đứng có mây không", thay vì chỉ suy từ đỉnh mây ước tính.
+ *
+ * Vì sao cần (đo trên 96 cặp dự báo × sự thật, 07/09/2026): 11/17 ca báo nhầm là kiểu vệ tinh
+ * trả FOGGED_IN — đỉnh mây nằm TRÊN đầu người đứng — trong khi app nói "bạn đứng trên biển
+ * mây". Engine so chỗ đứng với MẶT BIỂN MÂY THẤP nhưng không bao giờ hỏi người đó có đang nằm
+ * trong một TẦNG MÂY KHÁC ngay tại cao độ của mình hay không. Fansipan 07/09: mực 3.138m có
+ * RH 88-100%, mây 35-100%; người đứng 3.143m ở giữa đám đó.
+ *
+ * Số đọc TRỰC TIẾP phải thắng số SUY RA: đỉnh mây là ước lượng (±200m), còn "mực này có mây"
+ * là mô hình nói thẳng. Cổng này chỉ làm app bi quan hơn, không có đường nào ngược lại.
+ */
+export function observerInCloud(m: DayModelData, ctx: DayContext): boolean {
+  const lv = levelAtObserver(m, ctx, 250);
+  if (!lv) return false;
+  return (Number.isFinite(lv.cc) && lv.cc >= 45) || (Number.isFinite(lv.rh) && lv.rh >= 90);
+}
 
 export function summitCloud(m: DayModelData, ctx: DayContext): {
   inCloud: boolean; lclAbove: number | null; lift: number; rh: number | null;
@@ -692,6 +729,8 @@ export function scoreOneModel(
   // (Lỗi thật: Tà Xùa 24/8/2026 — GFS tính đỉnh mây 1.582m < chỗ đứng 1.600m, tức ĐỨNG TRÊN
   //  biển mây, nhưng bị deepOvercast đè thành "Mù trùm — bạn chìm trong mây".)
   else if (top === null) status = (deepOvercast || summitCloud(m, ctx).inCloud) ? 'FOG' : 'CLEAR';
+  // Trước khi kết luận "đứng trên biển mây": mô hình có báo mây NGAY tại cao độ này không?
+  else if (deltaH !== null && deltaH > -250 && observerInCloud(m, ctx)) status = 'FOG';
   else if (deltaH !== null && deltaH > 250) status = wind.level === 'Low' ? 'STATIC' : 'FLOWING';
   else if (deltaH !== null && deltaH >= -250) status = wind.level === 'Low' ? 'FLUCTUATING' : 'ROLLING';
   else status = 'FOG';

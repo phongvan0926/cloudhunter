@@ -101,6 +101,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | Đáy nắp chặn | mực thấp nhất từ đáy mây trở lên có Γ ≤ 3,5°C/km (đoạn nhiệt ẩm ~5 ⇒ ≤3,5 là ổn định hẳn). Không tìm thấy thì trả `null`, **không bịa số**. Cần vì anomaly cộng dồn theo độ cao nên "tầng cực đại" rơi vào mực cao nhất cửa sổ ở **113/120 ca đo được (94%)** — một trần cửa sổ quét, không phải phép đo |
 | Mặt mây (top) | đỉnh LỚP MÂY LIÊN TỤC từ dưới lên (cc tầng ≥45% / RH≥80%) +150m, không nhảy cóc lên lớp mây tách rời |
 | ΔH | vị_trí_đứng − top → STATIC / FLUCTUATING(±250m) / FOG |
+| Đứng trong mây | mực áp suất gần cao độ người đứng nhất (±250m) mà có mây ≥45% hoặc RH ≥90% ⇒ nhãn FOG, **bất kể ΔH**. Số đọc trực tiếp thắng số suy ra: đỉnh mây là ước lượng ±200m. Ca thật Fansipan 07/09: ΔH = +5m nên app khuyên đi, trong khi chính mực đó có mây 72% và vệ tinh báo đỉnh mây 3.915m |
 | **Đáng đi** (engine-2.8) | **không phải ngưỡng điểm**: kết luận CÓ biển mây + đồng thuận ≥50% mô hình + ΔH > 0 (đứng TRÊN mặt mây). Điểm chỉ xếp thứ tự. Lý do: 6 ngày kiểm chứng có biển mây, ngưỡng điểm ≥60 khuyên đi 0/6 — nó đo nguyên liệu sương bức xạ sách vở, còn biển mây mùa mưa không đi đường đó |
 | Gộp nhiều mô hình | bỏ phiếu **hai bước**: chọn KẾT LUẬN (có biển mây / chìm trong mây / trời quang / bị chặn) trước, rồi mới chọn nhãn chi tiết trong nhóm thắng. Bốn nhãn STATIC/FLOWING/FLUCTUATING/ROLLING là MỘT kết luận, không phải bốn ý kiến — trước đây đa số 4-2 bị chia phiếu nội bộ 2-2 nên thua FOG có 2 phiếu |
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
@@ -122,7 +123,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 105 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 110 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

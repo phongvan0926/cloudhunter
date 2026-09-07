@@ -565,6 +565,67 @@ Kiểm chứng đầy đủ bằng Playwright (`pw-python`, xem CLAUDE.md): bấ
 lập deploy mới → **bảng còn nguyên 12 điểm** → bấm "Tải lại" → trang tải lại → mở lại bảng ra
 ngay từ cache. Và ngắt mạng sau lần truy cập đầu, app vẫn mở được.
 
+### 📏 Số đầu tiên cho luật "đáng đi" — và cổng đo trực tiếp sinh ra từ đó (07/09/2026)
+
+Vòng kiểm chứng tự chạy từ 03/09 đã gom đủ 5 ngày bản chụp. `calibrate.ts` lần đầu chấm được
+**96 cặp** (93 nhãn vệ tinh, 3 báo cáo người đi):
+
+```
+                              đúng   bắt được   khi app báo CÓ thì đúng
+theo TRẠNG THÁI                72%      13%              5%     (1 đúng · 7 sót · 20 nhầm)
+theo NGƯỠNG ĐIỂM CŨ ≥60        90%       0%              0%     (0 đúng · 8 sót ·  2 nhầm)
+theo LUẬT ĐÁNG ĐI (engine-2.8) 75%      13%              6%     (1 đúng · 7 sót · 17 nhầm)
+```
+
+Ngưỡng điểm cũ vẫn "đúng 90%" theo đúng cái cách đã nói từ đầu: **không bao giờ khuyên đi**.
+
+⚠️ Trước khi đọc bảng này: một lỗi của chính commit engine-2.8 làm nó vô nghĩa suốt mấy ngày —
+`Row` có trường `deltaH/worthGoing` nhưng **không chỗ nào điền vào**, nên luật mới luôn trả
+false và calibrate báo "96/96 dòng thiếu ΔH, bắt được 0%". Bản chụp thì CÓ đủ hai trường.
+Cùng loại lỗi câm với `relative_humidity_2m` ngày 25/8: thêm trường mới mà quên nối dây, số
+liệu vẫn ra, chỉ là ra số của một câu hỏi khác. Và calibrate nay **tính lại** luật từ nguyên
+liệu chứ không đọc cờ đã đóng băng trong bản chụp — nếu đọc cờ cũ thì mọi thay đổi luật đều
+trông như "không có tác dụng gì" (đã mắc bẫy này một lần khi thử siết ngưỡng).
+
+**11/17 ca báo nhầm là kiểu `FOGGED_IN`** — vệ tinh báo đỉnh mây nằm TRÊN đầu người đứng, còn
+app nói "bạn đứng trên biển mây". Soi Fansipan 07/09:
+
+```
+sáu mô hình đặt đỉnh mây 3.138 · 3.138 · 3.138 · 3.148 · 3.140 · 3.141 m
+người đứng 3.143m  ⇒  ΔH = +5m  ⇒  app KHUYÊN ĐI
+mà chính mực 3.138m đó có RH 88-100%, mây 35-100%   ⇒ người ta đứng GIỮA đám mây
+vệ tinh: FOGGED_IN, đỉnh mây 3.915m
+```
+
+Engine so chỗ đứng với MẶT BIỂN MÂY THẤP nhưng chưa bao giờ hỏi liệu người đó có đang nằm
+trong một TẦNG MÂY KHÁC ngay tại cao độ của mình. Thêm `observerInCloud()`: mực áp suất gần
+chỗ đứng nhất (trong ±250m) mà có mây ≥45% hoặc RH ≥90% thì nhãn là `FOG`, bất kể ΔH.
+**Số đọc trực tiếp thắng số suy ra** — đỉnh mây là ước lượng ±200m, còn "mực này có mây" là
+mô hình nói thẳng. Cổng chỉ làm app bi quan hơn, không có đường nào ngược lại.
+
+*Đã đo trước khi giữ:*
+
+```
+Fansipan 07/09          FLUCTUATING "đáng đi"  →  FOG "không khuyên"  ✅ khớp vệ tinh
+4 ngày đã kiểm chứng    23/8 STATIC ΔH 617m · 24/8 FLOWING ΔH 704m · 25/8 ΔH 332m → VẪN khuyên đi
+                        (Suôi Thầu 25/8 nay ra RAIN, nhưng engine CŨ trên cùng dữ liệu cũng ra
+                         RAIN — do Open-Meteo đổi dữ liệu ngày quá khứ, không phải do cổng này)
+toàn thư viện 08/09     10/55 điểm (18%) đổi SEA → FOG
+```
+
+18% là nhiều hơn hẳn các cổng trước (5%), nhưng 08/09 là ngày ẩm diện rộng và nhóm đổi nhãn
+toàn đỉnh cao (Fansipan, Pusilung, Putaleng, A Pa Chải, Ô Quy Hồ) — đúng nhóm nhô vào tầng mây.
+Cần theo dõi tiếp: nếu những ngày quang mà vẫn bật 18% thì ngưỡng RH 90% là quá rộng.
+
+#### Đã THỬ và KHÔNG giữ: siết ΔH > 250m
+
+Biên 250m là con số sẵn có của engine ("ranh giới mặt mây") và lớn hơn sai số ±200m mà app tự
+in ra, nên rất hấp dẫn. Đo trên lịch sử: báo nhầm **17 → 14**, ca đúng giữ nguyên. Nhưng nó
+**loại luôn Tà Xùa 24/8** — một trong số ít ngày người dùng xác nhận tận mắt (ΔH chỉ 154m).
+Đó là đánh đổi độ nhạy lấy độ chính xác, tức quyết định về *thứ app khuyên người dùng*, không
+phải về vật lý ⇒ để người dùng chọn, không tự đổi. Ca +5m nguy hiểm đã được chặn bằng bằng
+chứng trực tiếp thay vì bằng một biên áp đặt.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

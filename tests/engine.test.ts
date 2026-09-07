@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase, summitCloud,
+  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase, summitCloud, observerInCloud,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -1268,5 +1268,93 @@ describe('engine-2.7 — "không có biển mây" KHÔNG đồng nghĩa với "t
     const r = scoreOneModel('gfs_seamless', goldenNight(), CTX_A, '2026-11-05');
     expect(estimateCloudTop(goldenNight(), 600)).not.toBeNull();
     expect(verdictOf(r.status)).toBe('SEA');
+  });
+});
+
+describe('engine-2.8b — hỏi thẳng "chỗ tôi ĐỨNG có mây không"', () => {
+  /** Mặt cắt THẬT của ICON tại Fansipan rạng sáng 07/09/2026 — hôm app khuyên đi vì ΔH = +5m,
+   *  còn vệ tinh báo đỉnh mây 3.915m (chìm hẳn trong mây). Đáy thung lũng 1.900m, đứng 3.143m. */
+  function fansipan0709(): DayModelData {
+    return {
+      ...goldenNight(),
+      t_valley_dawn: 21.0, td_valley_dawn: 20.8, t_obs_dawn: 9.3, td_obs_dawn: 9.0,
+      cloud_low_dawn: 100, cloud_mid_dawn: 100, cloud_high_dawn: 90,
+      t925: 21.0, t850: 17.7, t700: 9.3, rh925: 100, rh850: 100, rh700: 98,
+      levels: [
+        { p: 975, h: 324, hReal: true, t: 25.4, rh: 100, cc: 100 },
+        { p: 950, h: 546, hReal: true, t: 24.0, rh: 100, cc: 100 },
+        { p: 925, h: 774, hReal: true, t: 22.4, rh: 100, cc: 100 },
+        { p: 900, h: 1008, hReal: true, t: 21.0, rh: 100, cc: 100 },
+        { p: 850, h: 1497, hReal: true, t: 17.7, rh: 100, cc: 100 },
+        { p: 800, h: 2014, hReal: true, t: 15.0, rh: 100, cc: 100 },
+        { p: 700, h: 3138, hReal: true, t: 9.3, rh: 98, cc: 72 },
+      ],
+    };
+  }
+  const CTX_FAN = { valleyElevation: 1900, observerAlt: 3143, zone: 'B_WIND_TUNNEL' as const };
+
+  it('mực 3.138m có mây 72% mà người đứng 3.143m ⇒ đang Ở TRONG mây', () => {
+    expect(observerInCloud(fansipan0709(), CTX_FAN)).toBe(true);
+  });
+
+  /** Đúng cơ chế đã gây lỗi ở Fansipan 07/09, dựng gọn lại: lớp mây kết thúc ở 2.014m nên
+   *  đỉnh mây ước tính là 2.164m, người đứng 2.200m ⇒ ΔH = +36m ("đứng trên mặt mây"), trong
+   *  khi chính mực 2.014m ngay dưới chân lại có mây 100%. */
+  function satMatMay(): DayModelData {
+    return {
+      ...fansipan0709(),
+      levels: [
+        { p: 900, h: 1008, hReal: true, t: 21.0, rh: 100, cc: 100 },
+        { p: 850, h: 1497, hReal: true, t: 17.7, rh: 100, cc: 100 },
+        { p: 800, h: 2014, hReal: true, t: 15.0, rh: 100, cc: 100 },
+        { p: 700, h: 3138, hReal: true, t: 9.3, rh: 40, cc: 0 },
+      ],
+    };
+  }
+  const CTX_SAT = { valleyElevation: 900, observerAlt: 2200, zone: 'A_CLOUD_TRAP' as const };
+
+  it('ΔH dương vài chục mét KHÔNG thắng được số đo trực tiếp: nhãn phải là FOG', () => {
+    const top = estimateCloudTop(satMatMay(), 900);
+    expect(top).not.toBeNull();
+    expect(CTX_SAT.observerAlt - top!).toBeGreaterThan(0);   // ước lượng nói "đứng TRÊN mặt mây"
+    expect(observerInCloud(satMatMay(), CTX_SAT)).toBe(true);
+    const r = scoreOneModel('icon_seamless', satMatMay(), CTX_SAT, '2026-09-07');
+    expect(r.status).toBe('FOG');                            // …nhưng mô hình báo mây ngay tại đó
+    expect(verdictOf(r.status)).toBe('IN_CLOUD');
+  });
+
+  it('cùng mặt cắt đó nhưng mực ngang chỗ đứng KHÔ ⇒ trở lại kết luận có biển mây', () => {
+    const kho = { ...satMatMay(), levels: satMatMay().levels!.map(l =>
+      l.h === 2014 ? { ...l, rh: 55, cc: 0 } : l) };
+    expect(observerInCloud(kho, CTX_SAT)).toBe(false);
+    expect(verdictOf(scoreOneModel('icon_seamless', kho, CTX_SAT, '2026-09-07').status)).toBe('SEA');
+  });
+
+  it('KHÔNG bật oan ở ngày biển mây thật: Tà Xùa 27/8, mực 1.449m RH 85% + mây 0%', () => {
+    const ctx = { valleyElevation: 700, observerAlt: 1600, zone: 'A_CLOUD_TRAP' as const };
+    // gfs27() dùng lại từ bộ engine-2.6 phía trên — cùng một mặt cắt thật.
+    const gfs = {
+      ...goldenNight(),
+      t_valley_dawn: 23.1, td_valley_dawn: 22.3, t_obs_dawn: 18.2,
+      cloud_low_dawn: 16, cloud_mid_dawn: 80, cloud_high_dawn: 100,
+      precip_dawn: 4.6, precip_night: 12.2, cloud_high_night: 100,
+      wind850_dawn_max: 5.8, wind925_dawn_max: 4.0, wind925_night: 2.6,
+      t925: 23.2, t850: 20.9, t700: 12.0, rh925: 92, rh850: 85, rh700: 93,
+      rh2m_valley_night: 95,
+      levels: [
+        { p: 925, h: 712, hReal: true, t: 23.2, rh: 92, cc: 0 },
+        { p: 900, h: 951, hReal: true, t: 22.1, rh: 90, cc: 1 },
+        { p: 850, h: 1449, hReal: true, t: 20.9, rh: 85, cc: 0 },
+        { p: 800, h: 1973, hReal: true, t: 18.1, rh: 86, cc: 0 },
+        { p: 700, h: 3108, hReal: true, t: 12.0, rh: 93, cc: 0 },
+      ],
+    } as DayModelData;
+    expect(observerInCloud(gfs, ctx)).toBe(false);
+    expect(verdictOf(scoreOneModel('gfs_seamless', gfs, ctx, '2026-08-27').status)).toBe('SEA');
+  });
+
+  it('không có mực nào gần cao độ người đứng ⇒ im lặng, không đoán', () => {
+    const xa = { ...fansipan0709(), levels: [{ p: 850, h: 1497, hReal: true, t: 17.7, rh: 100, cc: 100 }] };
+    expect(observerInCloud(xa as DayModelData, CTX_FAN)).toBe(false);
   });
 });

@@ -131,10 +131,22 @@ function main() {
   evalOne(`Theo NGƯỠNG ĐIỂM CŨ (>= ${WORTH_GOING_SCORE}/100 = khuyên đi) — chỉ để so sánh`, r => r.score >= WORTH_GOING_SCORE);
   // Luật "đáng đi" hiện hành (engine-2.8). Bản chụp cũ không có deltaH → không ước được ΔH,
   // luật này trả false ⇒ với dữ liệu cũ dòng dưới là cận DƯỚI của độ nhạy, không phải số thật.
-  const oldRows = rows.filter(r => r.worthGoing === undefined && r.deltaH === undefined).length;
-  evalOne(`Theo LUẬT ĐÁNG ĐI hiện hành (SEA + đồng thuận ≥50% + ΔH>0)`
+  const oldRows = rows.filter(r => r.deltaH === undefined).length;
+  // TÍNH LẠI từ nguyên liệu (status/agreement/ΔH) chứ KHÔNG đọc cờ worthGoing đã đóng băng
+  // trong bản chụp: nếu đọc cờ cũ thì mọi thay đổi luật đều "không thấy tác dụng gì" trên
+  // lịch sử — đúng cái bẫy đã mắc một lần khi thử siết ngưỡng ΔH.
+  evalOne(`Theo LUẬT ĐÁNG ĐI hiện hành, tính lại trên lịch sử`
     + (oldRows ? ` — ${oldRows}/${rows.length} dòng từ bản chụp cũ thiếu ΔH, tính là KHÔNG khuyên` : ''),
-    r => r.worthGoing ?? isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }));
+    r => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }));
+  // …và app THỰC SỰ đã khuyên gì lúc đó (cờ lưu trong bản chụp) — hai dòng lệch nhau nghĩa là
+  // luật đã đổi kể từ lần chụp.
+  const withFlag = rows.filter(r => r.worthGoing !== undefined);
+  if (withFlag.length) {
+    const tp = withFlag.filter(r => r.worthGoing && r.truth === 'SEA').length;
+    const fp = withFlag.filter(r => r.worthGoing && r.truth !== 'SEA').length;
+    console.log(`\n  App ĐÃ khuyên đi lúc chụp (cờ lưu trong bản chụp, ${withFlag.length} dòng): `
+      + `báo đúng ${tp} · báo nhầm ${fp}`);
+  }
 
   // Mô hình nào đúng? — bảng này là căn cứ để sau này quyết định có nên trọng số hoá mô hình.
   const perModel: Record<string, { hit: number; n: number }> = {};
