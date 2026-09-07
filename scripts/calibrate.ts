@@ -68,6 +68,7 @@ function main() {
       rows.push({ date: o.date, key: o.key, name: o.name, truth, truthSrc: 'vệ tinh',
         truthDetail: `${o.verdict}, đỉnh mây ${o.cloudTopMedian_m ?? '—'}m`,
         score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel,
+        deltaH: (p as any).deltaH, worthGoing: (p as any).worthGoing,
         engineVersion: (p as any).engineVersion });
     }
   }
@@ -91,6 +92,7 @@ function main() {
       const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName, truth,
         truthSrc: 'người đi', truthDetail: r.seaLevel + (r.duration === 'SHORT' ? ' (tan nhanh)' : '') + (r.note ? ` — "${r.note}"` : ''),
         score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel,
+        deltaH: (p as any)?.deltaH, worthGoing: (p as any)?.worthGoing,
         engineVersion: (p as any)?.engineVersion };
       if (i >= 0) rows[i] = row; else rows.push(row);
     }
@@ -129,7 +131,7 @@ function main() {
   evalOne(`Theo NGƯỠNG ĐIỂM CŨ (>= ${WORTH_GOING_SCORE}/100 = khuyên đi) — chỉ để so sánh`, r => r.score >= WORTH_GOING_SCORE);
   // Luật "đáng đi" hiện hành (engine-2.8). Bản chụp cũ không có deltaH → không ước được ΔH,
   // luật này trả false ⇒ với dữ liệu cũ dòng dưới là cận DƯỚI của độ nhạy, không phải số thật.
-  const oldRows = rows.filter(r => r.worthGoing === undefined).length;
+  const oldRows = rows.filter(r => r.worthGoing === undefined && r.deltaH === undefined).length;
   evalOne(`Theo LUẬT ĐÁNG ĐI hiện hành (SEA + đồng thuận ≥50% + ΔH>0)`
     + (oldRows ? ` — ${oldRows}/${rows.length} dòng từ bản chụp cũ thiếu ΔH, tính là KHÔNG khuyên` : ''),
     r => r.worthGoing ?? isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }));
