@@ -18,7 +18,10 @@ import {
 } from '../types';
 import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherService';
 
-export const ENGINE_VERSION = 'engine-2.8.0';
+// Đổi số này MỖI KHI hành vi chấm điểm đổi: nó là khoá cache xếp hạng (bản cũ tự hết
+// hiệu lực) và là nhãn đóng vào bản chụp dự báo — quên đổi thì vòng kiểm chứng không
+// phân biệt được số của luật nào. Đã quên một lần ở engine-2.8b.
+export const ENGINE_VERSION = 'engine-2.8.2';
 
 /**
  * "ĐÁNG ĐI" — engine-2.8 (03/09/2026): KHÔNG còn là ngưỡng điểm.
@@ -41,19 +44,39 @@ export const WORTH_GOING_AGREEMENT = 50;   // % mô hình cùng kết luận SEA
 /** Ngưỡng điểm CŨ — nay chỉ để tô màu badge/ô ngày, KHÔNG quyết định "đáng đi". */
 export const WORTH_GOING_SCORE = 60;
 
+/**
+ * Người đứng phải cao hơn mặt mây ÍT NHẤT ngần này mới khuyên đi (engine-2.8.2, 09/09/2026,
+ * người dùng chốt 100m).
+ *
+ * Đo trên 96 cặp (dự báo × sự thật) bằng scripts/sweep-deltah.ts, quét 0→500m: KHÔNG có
+ * ngưỡng nào trong khoảng đó làm mất một ngày thật nào. Mọi ngày đã xác nhận có biển mây đều
+ * có ΔH ≥ 503m; những ngày thật còn lại nằm SÂU DƯỚI mây (−488…−1107m) và đã bị nhãn FOG loại.
+ * Báo nhầm giảm dần 15 → 11 khi siết từ 0 lên 500m.
+ *
+ * Vậy sao không lấy luôn 500m? Vì ΔH ≤ (chỗ đứng − đáy thung lũng): mặt mây không bao giờ
+ * nằm dưới đáy. Đo cả thư viện: 6/56 điểm có chênh cao < 250m và 18/56 < 500m (Linh Quy Pháp
+ * Ấn 121m, Đồi chè Cầu Đất 150m, Măng Đen 169m…). Ngưỡng lớn không "chính xác hơn", nó XOÁ
+ * SỔ vĩnh viễn cả một nhóm điểm địa hình thoải, bất kể thời tiết. 100m chỉ chạm 1 điểm duy
+ * nhất (Làng Nhì, chênh 5m — vốn đã bị rào MIN_GAP_M loại).
+ *
+ * Đừng tưởng đây là dụng cụ chính xác: so bản chụp dự báo tối hôm trước với chính engine tính
+ * lại ngày đó sau, ΔH lệch TRUNG VỊ 207m (30/55 ca lệch > 100m). Ngưỡng này để chặn kiểu "app
+ * bảo bạn đứng trên mặt mây 5m", không phải để tinh chỉnh theo bước 10-50m.
+ *
+ * Bằng chứng dương hiện chỉ có 4 ngày, 3 trong đó cùng một điểm (Tà Xùa) — chưa đủ để nói
+ * ngưỡng nào trong 50-250m tốt hơn. Có thêm báo cáo thực địa thì quét lại trước khi động vào.
+ */
+export const WORTH_GOING_DELTA_H = 100;
+
 export interface WorthGoingInput { status: StatusCode; agreement: number; deltaH: number | null }
 export function isWorthGoing(x: WorthGoingInput): boolean {
   if (verdictOf(x.status) !== 'SEA') return false;
   if (x.agreement < WORTH_GOING_AGREEMENT) return false;
-  // FLUCTUATING/ROLLING chấp nhận ΔH tới −250m ("ranh giới mặt mây"); khuyên đi thì phải
-  // chắc là ở TRÊN. Không biết ΔH (không ước được mặt mây) thì không khuyên.
-  // ΔH > 0, KHÔNG phải > 250. Đã thử biên 250m (bằng ngưỡng "ranh giới mặt mây" của chính
-  // engine): trên lịch sử nó giảm báo nhầm 17 → 14 nhưng LOẠI luôn Tà Xùa 24/8 — một trong
-  // vài ngày người dùng đã xác nhận tận mắt là có biển mây (ΔH chỉ 154m). Đó là đánh đổi
-  // độ nhạy lấy độ chính xác, tức quyết định về thứ app khuyên người dùng → để người dùng chọn.
-  // Ca +5m nguy hiểm (Fansipan 07/09) nay đã bị chặn bằng BẰNG CHỨNG TRỰC TIẾP thay vì bằng
-  // một biên áp đặt: observerInCloud() hỏi thẳng "mực ngang chỗ đứng có mây không".
-  return x.deltaH !== null && x.deltaH > 0;
+  // Không biết ΔH (không ước được mặt mây) thì KHÔNG khuyên — im lặng còn hơn đoán.
+  // Ca +5m nguy hiểm (Fansipan 07/09) đã bị chặn từ engine-2.8b bằng BẰNG CHỨNG TRỰC TIẾP
+  // (observerInCloud: "mực ngang chỗ đứng có mây không"); biên 100m là lớp chặn thứ hai cho
+  // những ca mà mực áp suất gần chỗ đứng không nói lên điều gì.
+  return x.deltaH !== null && x.deltaH > WORTH_GOING_DELTA_H;
 }
 
 // Độ cao XẤP XỈ các mực — CHỈ là fallback khi model không trả geopotential_height thật.

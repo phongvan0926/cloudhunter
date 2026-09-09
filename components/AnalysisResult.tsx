@@ -703,7 +703,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
         <div className="bg-slate-900/70 border border-slate-700 rounded-2xl p-8 text-center space-y-3">
           <p className="text-slate-300 text-sm leading-relaxed">
             😕 Không có ngày nào đáng đi trong khoảng đã tra — không ngày nào các mô hình cùng
-            kết luận có biển mây dưới chân bạn. Xem tất cả các ngày để biết vì sao.
+            kết luận có biển mây, mà bạn lại đứng cao hơn hẳn mặt mây. Xem tất cả các ngày để biết vì sao.
           </p>
           <button
             onClick={() => setFilterGoldenOnly(false)}

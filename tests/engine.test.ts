@@ -796,12 +796,18 @@ describe('engine-2.1 — sửa lỗi audit vòng 2', () => {
   });
 
   it('engine-2.8: "đáng đi" KHÔNG còn suy từ điểm — là kết luận SEA + đồng thuận + đứng trên mặt mây', async () => {
-    const { isWorthGoing, WORTH_GOING_AGREEMENT } = await import('../services/cloudScoreEngine');
+    const { isWorthGoing, WORTH_GOING_AGREEMENT, WORTH_GOING_DELTA_H } = await import('../services/cloudScoreEngine');
     expect(WORTH_GOING_AGREEMENT).toBe(50);
+    expect(WORTH_GOING_DELTA_H).toBe(100);
     // Sáu ngày kiểm chứng thật đều có điểm 24-35 nhưng kết luận đúng — luật cũ (≥60) khuyên đi 0/6.
     expect(isWorthGoing({ status: 'STATIC', agreement: 67, deltaH: 649 })).toBe(true);        // Tà Xùa 23/8
-    expect(isWorthGoing({ status: 'FLUCTUATING', agreement: 83, deltaH: 154 })).toBe(true);   // Tà Xùa 24/8
+    expect(isWorthGoing({ status: 'STATIC', agreement: 100, deltaH: 665 })).toBe(true);       // Tà Xùa 24/8 (tính lại 09/9)
     // …nhưng KHÔNG nới sang các ca không đủ điều kiện:
+    // engine-2.8.2: sát mặt mây thì KHÔNG khuyên. ΔH của chính engine lệch trung vị 207m giữa
+    // lúc dự báo và lúc tính lại, nên "trên mặt mây 5m" không phải là biết mình đứng trên mây.
+    expect(isWorthGoing({ status: 'STATIC', agreement: 100, deltaH: 5 })).toBe(false);        // Fansipan 07/9
+    expect(isWorthGoing({ status: 'STATIC', agreement: 100, deltaH: 100 })).toBe(false);      // đúng ngưỡng: chưa đủ
+    expect(isWorthGoing({ status: 'STATIC', agreement: 100, deltaH: 101 })).toBe(true);
     expect(isWorthGoing({ status: 'FLUCTUATING', agreement: 67, deltaH: -120 })).toBe(false); // ranh giới, ở DƯỚI
     expect(isWorthGoing({ status: 'STATIC', agreement: 33, deltaH: 500 })).toBe(false);       // 1/3 mô hình
     expect(isWorthGoing({ status: 'FOG', agreement: 100, deltaH: -300 })).toBe(false);        // chìm trong mây

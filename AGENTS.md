@@ -617,14 +617,81 @@ toàn thư viện 08/09     10/55 điểm (18%) đổi SEA → FOG
 toàn đỉnh cao (Fansipan, Pusilung, Putaleng, A Pa Chải, Ô Quy Hồ) — đúng nhóm nhô vào tầng mây.
 Cần theo dõi tiếp: nếu những ngày quang mà vẫn bật 18% thì ngưỡng RH 90% là quá rộng.
 
-#### Đã THỬ và KHÔNG giữ: siết ΔH > 250m
+#### ✅ engine-2.8.2 (09/09/2026) — siết biên "đáng đi" lên ΔH > 100m
 
-Biên 250m là con số sẵn có của engine ("ranh giới mặt mây") và lớn hơn sai số ±200m mà app tự
-in ra, nên rất hấp dẫn. Đo trên lịch sử: báo nhầm **17 → 14**, ca đúng giữ nguyên. Nhưng nó
-**loại luôn Tà Xùa 24/8** — một trong số ít ngày người dùng xác nhận tận mắt (ΔH chỉ 154m).
-Đó là đánh đổi độ nhạy lấy độ chính xác, tức quyết định về *thứ app khuyên người dùng*, không
-phải về vật lý ⇒ để người dùng chọn, không tự đổi. Ca +5m nguy hiểm đã được chặn bằng bằng
-chứng trực tiếp thay vì bằng một biên áp đặt.
+Ngày 07/09 tôi đã trình bày biên 250m như một đánh đổi *độ nhạy lấy độ chính xác*, viện cớ nó
+loại Tà Xùa 24/8 (ΔH 154m). **Con số đó không đứng vững.** Tính lại chính ngày đó bằng engine
+hôm nay: ΔH = **665m** (đáy 700m PROFILE, đỉnh mây GFS 935m, người đứng 1.600m) — cả đường
+6 mô hình (`hindcast.ts`) lẫn đường xếp hạng 3 mô hình (`replay-engine.ts`) đều ra 665m. Ngày
+đó chưa bao giờ nằm gần biên.
+
+Người dùng chọn 100m. Đo lại tử tế trước khi làm (`scripts/sweep-deltah.ts`, 96 cặp, 73/96
+dòng đã tính lại bằng engine hiện tại):
+
+```
+ΔH >    khuyên đi   đúng   nhầm   bỏ sót   chính xác   bắt được
+   0m         19      4     15       4        21%        50%
+  50m         18      4     14       4        22%        50%
+ 100m         18      4     14       4        22%        50%   ← chọn
+ 250m         16      4     12       4        25%        50%
+ 500m         15      4     11       4        27%        50%
+```
+
+**Không ngưỡng nào trong 0-500m làm mất một ngày thật nào.** In hết các ngày sự thật CÓ biển mây
+thì rõ vì sao:
+
+```
+ΔH  -1107m FOG      07/09 Tây Côn Lĩnh        ΔH   503m STATIC  23/8 Tà Xùa
+ΔH   -778m FOG      06/09 Sa Mu - U Bò        ΔH   513m STATIC  25/8 Tà Xùa
+ΔH   -556m FOG      06/09 Tà Chì Nhù          ΔH   665m STATIC  24/8 Tà Xùa
+ΔH   -488m FOG      06/09 Putaleng            ΔH   777m STATIC  06/09 Phu Sa Phìn
+```
+
+Ngày thật hoặc nằm SÂU DƯỚI mây (đã bị `FOG` loại), hoặc ở trên rất cao. Trống hoác khoảng
+0-500m.
+
+**Vậy sao không lấy luôn 500m cho chính xác hơn?** Vì `ΔH ≤ (chỗ đứng − đáy thung lũng)` —
+mặt mây không bao giờ nằm dưới đáy. Đo cả thư viện:
+
+```
+chênh cao chỗ đứng − đáy < 100m:  1/56 điểm      < 250m:  6/56 điểm      < 500m: 18/56 điểm
+   Linh Quy Pháp Ấn 121m · Đồi chè Cầu Đất 150m · Măng Đen 169m · Tà Năng 176m · Xím Vàng 250m
+```
+
+Ngưỡng lớn **không "chính xác hơn"** — nó xoá sổ vĩnh viễn cả nhóm điểm địa hình thoải, bất kể
+thời tiết, và phần "báo nhầm giảm" chính là tiếng của nhóm đó bị bịt miệng. 500m sẽ khiến
+18/56 điểm không bao giờ được khuyên đi nữa. 100m chỉ chạm đúng 1 điểm (Làng Nhì, chênh 5m —
+vốn đã bị rào `MIN_GAP_M` loại). Đây mới là lý do dừng ở 100m, không phải bảng số ở trên.
+
+**Đừng tưởng ΔH là dụng cụ chính xác.** So bản chụp dự báo tối hôm trước với chính engine tính
+lại ngày đó sau khi đã xảy ra (55 cặp):
+
+```
+trung vị |lệch| 207m · trung bình 537m · lớn nhất 2.571m · 30/55 ca lệch > 100m
+06/09 Đèo Khau Phạ: dự báo ΔH -24m FLUCTUATING → tính lại -2.595m FOG
+06/09 Bình Liêu:    dự báo ΔH -1.411m FOG      → tính lại  +665m DISSIPATING
+```
+
+Biên 100m vì thế là **cái chặn "app bảo bạn đứng trên mặt mây 5m"**, không phải một hệ số
+chỉnh cho vừa dữ liệu. Ai định chỉnh nó theo bước 10-50m: sai số đầu vào là 200m.
+
+Giới hạn phải nói thẳng: bằng chứng dương hiện có **4 ngày, 3 trong đó cùng một điểm (Tà Xùa)**.
+Bảng trên không đủ để nói 100m tốt hơn 50m hay 250m — nó chỉ đủ để nói cả ba đều không mất gì.
+Có thêm báo cáo thực địa thì chạy lại `sweep-deltah.ts` trước khi động vào hằng số.
+
+#### Hai công cụ sinh ra từ lần này
+
+- `scripts/replay-engine.ts` — tính lại bằng ENGINE HIỆN TẠI đúng những (điểm × ngày) đã có sự
+  thật, ghi ra file cache. **Bắt buộc** khi thử luật mới trên lịch sử: bản chụp 22-25/8 do
+  engine-2.2/2.3 tạo, KHÔNG hề có ΔH — quét ngưỡng trên chúng chỉ ra "không khuyên" ở mọi
+  ngưỡng, tức là một cận dưới giả. Chia lô 20 điểm/lần và nghỉ 2s: gọi 56 toạ độ một URL bị
+  tính là 56 lượt và ăn HTTP 429 ngay.
+- `scripts/sweep-deltah.ts` — quét ngưỡng, in luôn *mỗi bước siết thì MẤT ngày nào* (đúng hay
+  nhầm). Bảng tổng không cho thấy điều đó; danh sách mất mát mới là thứ ra quyết định.
+
+⚠️ **`ENGINE_VERSION` đã quên đổi ở engine-2.8b.** Nó là khoá cache xếp hạng và là nhãn đóng vào
+bản chụp; quên đổi thì người dùng cũ giữ điểm của luật cũ (tới 30 phút) và calibrate không phân
+biệt nổi số của luật nào. Đã sửa thành 2.8.1 rồi 2.8.2. Đổi hành vi chấm ⇒ đổi số này, luôn.
 
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 

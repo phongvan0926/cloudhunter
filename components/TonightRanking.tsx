@@ -14,7 +14,7 @@ interface Props {
   onPickSpot: (name: string, elevation: number) => void;
 }
 
-// Màu xanh = ĐÁNG ĐI (engine-2.8: kết luận có biển mây + đồng thuận + đứng trên mặt mây),
+// Màu xanh = ĐÁNG ĐI (engine-2.8.2: kết luận có biển mây + đồng thuận + đứng CAO HƠN mặt mây ≥100m),
 // KHÔNG phải điểm cao. Vàng = điểm khá nhưng chưa đủ điều kiện. Điểm chỉ xếp thứ tự.
 const scoreBadge = (r: SpotRank) =>
   r.worthGoing ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/50'

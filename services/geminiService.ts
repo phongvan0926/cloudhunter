@@ -412,7 +412,7 @@ function buildFallbackStrategy(forecasts: DailyForecast[], bestDays: string[], s
   }
   const best = bestDays.length
     ? `Ngày đáng đi nhất: ${bestDays.join(', ')}.`
-    : 'Chưa có ngày nào đáng đi trong khoảng này — không ngày nào các mô hình cùng kết luận có biển mây dưới chân bạn.';
+    : 'Chưa có ngày nào đáng đi trong khoảng này — không ngày nào các mô hình cùng kết luận có biển mây mà bạn đứng cao hơn hẳn mặt mây.';
   const avg = Math.round(withData.reduce((s, f) => s + f.score, 0) / withData.length);
   return `${seasonLabel}. Điểm trung bình khoảng ngày: ${avg}/100. ${best} Điểm số do engine tính từ dữ liệu 6 mô hình toàn cầu; xem chi tiết "vì sao" ở từng ngày.`;
 }
