@@ -60,6 +60,7 @@ export interface DayModelData {
   precip_dawn: number;        // mm tổng 04–09h
   wind850_dawn_max: number;   // km/h
   wind925_dawn_max: number;
+  wind700_dawn_max?: number;  // km/h — gió tầng 700hPa, để nội suy gió tại cao độ đỉnh
   t925: number; t850: number; t700: number;    // lúc 06h (nhiệt tầng)
   rh925: number; rh850: number; rh700: number; // lúc 06h (ẩm tầng)
   // Cửa sổ đêm trước 19:00 (D-1) → 06:00 (D) — pha bức xạ hình thành nghịch nhiệt
@@ -106,7 +107,9 @@ export const HOURLY_VARS = [
   // không đi qua tầng fetch. (Phát hiện 25/8/2026, ca Suôi Thầu.)
   'temperature_2m', 'dew_point_2m', 'relative_humidity_2m',
   'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'precipitation',
-  'wind_speed_925hPa', 'wind_speed_850hPa',
+  // wind_speed_700hPa: đỉnh 2.400-3.100m nằm giữa mực 850 và 700; có cả hai mới nội suy
+  // được gió tại ĐÚNG cao độ người đứng.
+  'wind_speed_925hPa', 'wind_speed_850hPa', 'wind_speed_700hPa',
   // profile tầng: T + RH + cloud cover + geopotential thật cho mọi mực trong PRESSURE_LEVELS
   ...PRESSURE_LEVELS.flatMap(({ p }) => [
     `temperature_${p}hPa`, `relative_humidity_${p}hPa`,
@@ -120,7 +123,7 @@ export const HOURLY_VARS = [
 // bộ 41 biến ×6 model cho cùng lat/lon (chỉ khác elevation), phí ~38% chi phí phân tích.
 export const OBSERVER_VARS = [
   'temperature_2m', 'dew_point_2m', 'cloud_cover_high',
-  'wind_speed_850hPa', 'freezing_level_height',
+  'wind_speed_850hPa', 'wind_speed_700hPa', 'freezing_level_height',
 ];
 
 function formatDateStr(d: Date): string {
@@ -377,6 +380,7 @@ export function aggregateDayModel(
   const precipDawn = pick(valley, 'precipitation', model, dawnIdxV);
   const precipNight = pick(valley, 'precipitation', model, nightIdxV);
   const wind850 = pick(observer, 'wind_speed_850hPa', model, dawnIdxO);
+  const wind700 = pick(observer, 'wind_speed_700hPa', model, dawnIdxO);
   const wind925Dawn = pick(valley, 'wind_speed_925hPa', model, dawnIdxV);
   const wind925Night = pick(valley, 'wind_speed_925hPa', model, nightIdxV);
   const rh2mNight = pick(valley, 'relative_humidity_2m', model, nightIdxV);
@@ -417,6 +421,7 @@ export function aggregateDayModel(
     precip_dawn: precipDawn.length ? +sum(precipDawn).toFixed(1) : 0,
     wind850_dawn_max: wind850.length ? +Math.max(...wind850).toFixed(1) : 0,
     wind925_dawn_max: wind925Dawn.length ? +Math.max(...wind925Dawn).toFixed(1) : 0,
+    wind700_dawn_max: wind700.length ? +Math.max(...wind700).toFixed(1) : undefined,
     t925: t925.length ? +avg(t925).toFixed(1) : NaN,
     t850: +avg(t850).toFixed(1),
     t700: t700.length ? +avg(t700).toFixed(1) : NaN,

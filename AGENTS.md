@@ -758,6 +758,53 @@ này. Ba: thay đổi này chỉ đi MỘT CHIỀU, chưa lần nào thêm một
 ⚠️ Việc cần làm để bảng trên có nghĩa: kiếm cho được ngày mà một đỉnh ≥2.400m THẬT SỰ có biển
 mây và app phải nói đúng. Chưa có mẫu đó thì không biết cái giá của nhóm sửa này.
 
+#### Gió tại cao độ người đứng — và vì sao KHÔNG lấy thẳng gió 700hPa
+
+Mọi đỉnh trước đây đều chấm bằng gió 850hPa (~1.500m). Với Fansipan 3.143m hay Tà Chì Nhù
+2.979m đó là gió ở lưng chừng dưới chân núi. Bản Antigravity thay hẳn bằng gió 700hPa cho đỉnh
+≥2.200m. **Không giữ cách đó**: thang `assessWind` được hiệu chỉnh CHO GIÓ 850hPa — ngưỡng
+Destructive >26km/h đến từ đúng một ngày kiểm chứng (Tà Xùa 23/8, 22-23km/h mà biển mây nằm
+nguyên) — đổ số của tầng 3.100m vào thang đó là đổi thước mà giữ nguyên vạch.
+
+Nay nội suy tuyến tính 850↔700 về ĐÚNG cao độ người đứng (`HIGH_PEAK_WIND_ALT = 2200`): đỉnh
+2.400m nhận gió của 2.400m. Đo cả hai cách, cùng một mẻ dữ liệu:
+
+```
+                          toàn thư viện 11/09        ngày có sự thật 06+07/09
+gió 700hPa thẳng (agy)    10/55 đổi nhãn, mất 2 ✅    báo nhầm 8 → 5, bỏ sót 5 → 5
+nội suy về chỗ đứng       10/55 đổi nhãn, mất 2 ✅    báo nhầm 8 → 5, bỏ sót 5 → 5
+```
+
+Giống hệt nhau — hôm đó gió mạnh thật, nội suy hay không cũng vượt vạch. Giữ bản nội suy vì nó
+không mượn số của chỗ khác, chứ không phải vì nó đo tốt hơn.
+
+⚠️ Hệ quả phải theo dõi: 10/55 điểm cao chuyển sang DISSIPATING/FOG trong MỘT ngày bình thường.
+Nếu Fansipan hay Tà Chì Nhù thật sự có biển mây, nay ta sẽ trượt — và bộ kiểm chứng hiện không
+có lấy một ví dụ nào để cảnh báo, vì app vốn đã trượt sạch nhóm đỉnh cao (5/5 ngày CÓ biển mây
+trong mẫu đều bị trượt ở MỌI phiên bản). Bảng số ở trên mới chỉ đo được mặt báo nhầm.
+
+#### 🚨 Open-Meteo SỬA LẠI quá khứ nhiều hơn ta tưởng — hindcast ngày cũ không dùng để chấm được
+
+Hôm qua đo được ΔH lệch trung vị 207m giữa bản chụp dự báo và bản tính lại. Hôm nay, cùng một
+script, cùng một điểm, cách nhau vài giờ:
+
+```
+Tà Xùa 23/8   sáng 10/09: STATIC      ΔH  +617m  ⇒ đáng đi
+              tối 11/09:  FOG         ΔH −1.919m ⇒ không
+Tà Xùa 25/8   sáng 10/09: FLUCTUATING ΔH  +332m  ⇒ đáng đi
+              tối 11/09:  FOG         ΔH −1.909m ⇒ không
+```
+
+Đã kiểm: chạy lại bằng CHÍNH engine-2.8.2 ở worktree cũng ra y hệt số mới ⇒ **không phải do
+thay đổi code, mà do dữ liệu quá khứ bị viết lại**. Ba ngày Tà Xùa này là bằng chứng thực địa
+mạnh nhất đang có, và giờ API kể một câu chuyện khác hẳn về chúng.
+
+Rút ra: **chỉ bản chụp `data/observations/*-forecast.json` mới là bằng chứng**. Mọi phép "tính
+lại ngày cũ" (`replay-engine.ts`, `hindcast.ts`) chỉ dùng để SO CÁC LUẬT với nhau trên cùng
+một mẻ dữ liệu, tuyệt đối không dùng làm sự thật, và không được kết luận "engine đã tệ đi" từ
+chúng. Vòng chụp hằng ngày vì thế không phải chuyện tiện tay — nó là thứ duy nhất giữ được
+bằng chứng trước khi API viết đè.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

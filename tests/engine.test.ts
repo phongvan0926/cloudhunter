@@ -1366,6 +1366,25 @@ describe('engine-2.8b — hỏi thẳng "chỗ tôi ĐỨNG có mây không"', (
 });
 
 describe('engine-2.8.3 — trung thực số liệu', () => {
+  it('đỉnh ≥2200m chấm gió NỘI SUY về cao độ đứng, không phải gió 850hPa dưới chân', () => {
+    // Khoá một LỰA CHỌN mới có ít số liệu, không phải một định luật: ngưỡng Destructive >26km/h
+    // của assessWind vốn hiệu chỉnh cho gió 850hPa trên đúng MỘT ngày (Tà Xùa 23/8). Đây là
+    // chốt hành vi để đổi thì biết, chứ chưa có bằng chứng nào nói 27km/h ở 2.800m thì tan mây.
+    const data: DayModelData = {
+      ...goldenNight(),
+      wind850_dawn_max: 8.0,      // 1.500m: lặng
+      wind700_dawn_max: 32.0,     // 3.100m: gió bão
+    };
+    const ctxHigh = { valleyElevation: 1000, observerAlt: 2800, zone: 'A_CLOUD_TRAP' as const };
+    const r = scoreOneModel('gfs_seamless', data, ctxHigh, '2026-11-05');
+    // nội suy: 8 + (2800-1500)/(3100-1500) × 24 = 27,5km/h ⇒ Destructive
+    expect(r.status).toBe('DISSIPATING');
+    expect(r.reasons.join(' ')).toMatch(/nội suy 850↔700hPa về 2800m/);
+    // …còn đứng THẤP thì vẫn chấm bằng gió 850hPa như cũ
+    const low = scoreOneModel('gfs_seamless', data, { ...ctxHigh, observerAlt: 1800 }, '2026-11-05');
+    expect(low.reasons.join(' ')).not.toMatch(/nội suy/);
+  });
+
   it('nội suy bắt được người đứng trong mây ở khoảng mù 2200-2850m (giữa 800hPa và 700hPa)', () => {
     const data: DayModelData = {
       ...goldenNight(),

@@ -406,6 +406,10 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
  *  ECMWF/JMA/AIFS — ba mô hình đó không có mực 800 nên nội suy sẽ là bịa qua 1,6km. */
 export const LEVEL_GAP_INTERP_MAX = 1300;
 
+/** Từ cao độ này trở lên thì chấm gió tại chỗ đứng (nội suy 850↔700) thay vì gió 850hPa.
+ *  2.200m là chỗ mà mực 850 (~1.500m) đã cách chân người đứng quá xa để nói thay. */
+export const HIGH_PEAK_WIND_ALT = 2200;
+
 export const SUMMIT_LIFT_FRACTION = 0.5;
 export const SUMMIT_LIFT_CAP = 600;
 
@@ -659,8 +663,29 @@ export function scoreOneModel(
     && top !== null && top <= inv.height + 150
     && h925 > ctx.valleyElevation
     && Number.isFinite(m.wind925_dawn_max);
-  const windLevel = seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
-  const wind = assessWind(seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max, ctx.zone);
+  // GIÓ TẠI CAO ĐỘ NGƯỜI ĐỨNG. Trước đây mọi đỉnh đều chấm bằng gió 850hPa (~1.500m): với
+  // Fansipan 3.143m hay Tà Chì Nhù 2.979m đó là gió ở lưng chừng dưới chân núi.
+  //
+  // KHÔNG thay thẳng bằng gió 700hPa (~3.100m) như bản Antigravity làm: thang assessWind được
+  // hiệu chỉnh CHO GIÓ 850hPa (ngày Tà Xùa 23/8, 22-23km/h = "vừa"), đổ số của tầng 3.100m vào
+  // thang đó là đổi thước mà giữ nguyên vạch. Thay vào đó nội suy tuyến tính 850↔700 về đúng
+  // cao độ người đứng — đỉnh 2.400m nhận gió của 2.400m, không phải của 3.100m.
+  // Đo: hai cách cho kết quả GIỐNG NHAU trên ngày kiểm chứng lẫn toàn thư viện (xem AGENTS.md);
+  // giữ bản nội suy vì nó không mượn số của chỗ khác.
+  const h850w = m.levels?.find(l => l.p === 850)?.h ?? LEVEL_HEIGHTS.p850;
+  const h700w = m.levels?.find(l => l.p === 700)?.h ?? LEVEL_HEIGHTS.p700;
+  const canInterpWind = m.wind700_dawn_max !== undefined && Number.isFinite(m.wind700_dawn_max)
+    && Number.isFinite(m.wind850_dawn_max) && h700w > h850w && ctx.observerAlt > h850w;
+  const useObsWind = canInterpWind && ctx.observerAlt >= HIGH_PEAK_WIND_ALT;
+  const windAtObs = canInterpWind
+    ? m.wind850_dawn_max + Math.min(1, (ctx.observerAlt - h850w) / (h700w - h850w))
+      * (m.wind700_dawn_max! - m.wind850_dawn_max)
+    : m.wind850_dawn_max;
+  const windLevel = useObsWind ? `nội suy 850↔700hPa về ${ctx.observerAlt}m`
+    : seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
+  const wind = assessWind(
+    useObsWind ? +windAtObs.toFixed(1) : (seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max),
+    ctx.zone);
   const spread = m.t_valley_dawn - m.td_valley_dawn;
   // Ẩm "lớp biển mây" phải đo Ở CHÍNH LỚP MÂY — xem seaLayerRH.
   const seaRH = seaLayerRH(m, ctx.valleyElevation);
@@ -992,6 +1017,19 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
 
   const warnings: string[] = [...season.warnings];
   if (wind.level === 'Destructive') warnings.push(`Gió tầng 1.500m tới ${rep.wind850_dawn_max}km/h — nguy hiểm khi đứng sống núi/mỏm đá.`);
+  // Đỉnh cao: cảnh báo theo gió ở CHÍNH cao độ đó, không theo gió 1.500m dưới chân.
+  if (ctx.observerAlt >= HIGH_PEAK_WIND_ALT && rep.wind700_dawn_max !== undefined
+      && Number.isFinite(rep.wind700_dawn_max)) {
+    const h850w = rep.levels?.find(l => l.p === 850)?.h ?? LEVEL_HEIGHTS.p850;
+    const h700w = rep.levels?.find(l => l.p === 700)?.h ?? LEVEL_HEIGHTS.p700;
+    if (h700w > h850w && ctx.observerAlt > h850w) {
+      const w = rep.wind850_dawn_max + Math.min(1, (ctx.observerAlt - h850w) / (h700w - h850w))
+        * (rep.wind700_dawn_max - rep.wind850_dawn_max);
+      if (assessWind(+w.toFixed(1), ctx.zone).level === 'Destructive') {
+        warnings.push(`Gió tại cao độ ${ctx.observerAlt}m tới ${Math.round(w)}km/h — cực kỳ nguy hiểm trên sống núi/mỏm đá.`);
+      }
+    }
+  }
   // Cảnh báo mưa bám vào LƯỢNG MƯA THẬT, không bám vào trạng thái: từ engine-2.2 một ngày
   // vẫn có thể là STATIC/FLOWING (biển mây thật) trong khi trời mưa phùn — người đi vẫn phải
   // biết là đường trơn. Bám theo status như trước sẽ nuốt mất cảnh báo đúng lúc cần nhất.
