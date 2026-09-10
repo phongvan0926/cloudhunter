@@ -729,6 +729,35 @@ thể mất tới ~20 điểm.
 Không đổi lời khuyên nào; chỉ thôi cộng điểm khống. Điểm vẫn quan trọng vì nó xếp thứ tự và
 tô màu, và vì mọi bản chụp kiểm chứng từ nay ghi con số mới.
 
+#### Bịt lỗ mù 2.200-2.850m của `observerInCloud` — bằng NỘI SUY, và biết rõ giá của nó
+
+Giữa 800hPa (~1.950m) và 700hPa (~3.100m) không có mực nào, nên mọi đỉnh 2.200-2.850m luôn
+trả `null` ⇒ `observerInCloud` luôn `false`. Cả nhóm đỉnh trekking cao nhất Tây Bắc — Tà Chì
+Nhù, Sa Mu, Lảo Thẩn, Cú Nhù San, Ngũ Chỉ Sơn — chưa từng được hỏi "chỗ tôi đứng có mây không".
+Nay nội suy tuyến tính RH/mây giữa hai mực kẹp, **chỉ khi chúng cách nhau ≤1.300m**
+(`LEVEL_GAP_INTERP_MAX`): con số đó vừa ôm khe 800↔700 của GFS/ICON/UKMO (~1.120m) và vừa CHẶN
+khe 850↔700 của ECMWF/JMA/AIFS (~1.640m) — ba mô hình không có mực 800, nội suy qua 1,6km là bịa.
+
+Đo, cùng một mẻ dữ liệu chấm bằng hai engine:
+
+```
+Toàn thư viện 11/09 (55 điểm)   đổi nhãn 6/55, TẤT CẢ sang FOG · mất "đáng đi" 1 · thêm 0
+Ngày có sự thật 06+07/09        báo nhầm 8 → 6   ·  bỏ sót 5 → 5
+```
+
+Bỏ được hai lượt khuyên sai (Lảo Thẩn và Cú Nhù San 07/09, vệ tinh nói không có biển mây) mà
+không thêm ca bỏ sót nào.
+
+**Ba điều phải nhớ trước khi tin bảng này.** Một: nội suy RH qua 1.100m là phép ĐOÁN, không
+phải số đọc — đã bắt gặp nó nói "trong mây" cho Sa Mu 06/09, ngày vệ tinh xác nhận biển mây
+với đỉnh mây 2.346m trong khi người đứng 2.756m, tức TRÊN mặt mây 410m. Hai: trong 47 dòng có
+sự thật chỉ có **5 dòng thật sự CÓ biển mây, và app trượt cả 5 ở mọi phiên bản** — nghĩa là ta
+mới chỉ đo được mặt báo nhầm; mọi thay đổi khiến app nói "không" nhiều hơn đều đẹp trên bảng
+này. Ba: thay đổi này chỉ đi MỘT CHIỀU, chưa lần nào thêm một nhãn biển mây.
+
+⚠️ Việc cần làm để bảng trên có nghĩa: kiếm cho được ngày mà một đỉnh ≥2.400m THẬT SỰ có biển
+mây và app phải nói đúng. Chưa có mẫu đó thì không biết cái giá của nhóm sửa này.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

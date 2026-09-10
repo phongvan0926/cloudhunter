@@ -1366,6 +1366,43 @@ describe('engine-2.8b — hỏi thẳng "chỗ tôi ĐỨNG có mây không"', (
 });
 
 describe('engine-2.8.3 — trung thực số liệu', () => {
+  it('nội suy bắt được người đứng trong mây ở khoảng mù 2200-2850m (giữa 800hPa và 700hPa)', () => {
+    const data: DayModelData = {
+      ...goldenNight(),
+      levels: [
+        { p: 800, h: 2000, hReal: true, t: 15.0, rh: 92, cc: 60 },
+        { p: 700, h: 3100, hReal: true, t: 9.0, rh: 90, cc: 50 },
+      ],
+    };
+    // Đứng ở 2500m (khoảng giữa 2000m và 3100m, cách mực gần nhất 500m > 250m)
+    const ctx = { valleyElevation: 1000, observerAlt: 2500, zone: 'A_CLOUD_TRAP' as const };
+    expect(observerInCloud(data, ctx)).toBe(true);
+  });
+
+  it('nội suy không báo mây khi cả 800hPa và 700hPa đều khô', () => {
+    const data: DayModelData = {
+      ...goldenNight(),
+      levels: [
+        { p: 800, h: 2000, hReal: true, t: 15.0, rh: 40, cc: 0 },
+        { p: 700, h: 3100, hReal: true, t: 9.0, rh: 35, cc: 0 },
+      ],
+    };
+    const ctx = { valleyElevation: 1000, observerAlt: 2500, zone: 'A_CLOUD_TRAP' as const };
+    expect(observerInCloud(data, ctx)).toBe(false);
+  });
+
+  it('KHÔNG nội suy qua khe 850↔700hPa (~1.640m) của ECMWF/JMA — quá xa để đoán', () => {
+    const data: DayModelData = {
+      ...goldenNight(),
+      levels: [
+        { p: 850, h: 1500, hReal: true, t: 15.0, rh: 99, cc: 100 },
+        { p: 700, h: 3140, hReal: true, t: 9.0, rh: 99, cc: 100 },
+      ],
+    };
+    const ctx = { valleyElevation: 1000, observerAlt: 2500, zone: 'A_CLOUD_TRAP' as const };
+    expect(observerInCloud(data, ctx)).toBe(false);
+  });
+
   it('cột khí suy giảm đều 5°C/km không có nắp thật thì strength hạ xuống Weak/None (chống nghịch nhiệt ma)', () => {
     // 4 mực suy giảm đúng 5°C/km: không có tầng nào Γ ≤ 3.5°C/km
     const data: DayModelData = {

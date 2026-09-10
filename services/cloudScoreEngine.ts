@@ -401,20 +401,51 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
  * Bộ dò này CHỈ được đổi CLEAR → FOG, không bao giờ làm app lạc quan hơn. Đo trên 287 ca
  * (50 điểm × 3 mô hình × 3 ngày): bật ở 18% số ca, đổi kết luận ở 14% số ca đang là CLEAR.
  */
+/** Khoảng cách tối đa giữa hai mực áp suất mà còn cho phép nội suy. 1.300m vừa đủ ôm khe
+ *  800↔700hPa (~1.120m) của GFS/ICON/UKMO và vừa đủ CHẶN khe 850↔700hPa (~1.640m) của
+ *  ECMWF/JMA/AIFS — ba mô hình đó không có mực 800 nên nội suy sẽ là bịa qua 1,6km. */
+export const LEVEL_GAP_INTERP_MAX = 1300;
+
 export const SUMMIT_LIFT_FRACTION = 0.5;
 export const SUMMIT_LIFT_CAP = 600;
 
-/** Mực áp suất gần cao độ người đứng nhất (trong ±dist mét). */
+/**
+ * Mực áp suất gần cao độ người đứng nhất (trong ±dist mét); không có thì NỘI SUY giữa hai mực
+ * kẹp trên-dưới nếu chúng cách nhau ≤1.300m.
+ *
+ * Vì sao cần nội suy: giữa 800hPa (~1.950m) và 700hPa (~3.100m) không có mực nào, nên mọi đỉnh
+ * 2.200-2.850m — Tà Chì Nhù, Sa Mu, Lảo Thẩn, Cú Nhù San… — luôn trả về null và observerInCloud
+ * luôn trả false. Cả một nhóm đỉnh trekking cao nhất Tây Bắc chưa từng được hỏi câu "chỗ tôi
+ * đứng có mây không".
+ *
+ * ĐỌC KỸ TRƯỚC KHI TIN: nội suy tuyến tính RH/mây qua 1.100m là một PHÉP ĐOÁN, không phải số
+ * đọc. Nó có thể nói "đang trong mây" cho người thật ra đứng trên mặt mây — đã bắt gặp: Sa Mu
+ * 06/09, vệ tinh xác nhận biển mây với đỉnh mây 2.346m (người đứng 2.756m, tức TRÊN mặt mây
+ * 410m) mà nội suy làm 3/6 mô hình kết luận "trong mây". Giữ lại vì số đo ủng hộ (xem AGENTS.md),
+ * không phải vì cơ chế đáng tin.
+ */
 function levelAtObserver(m: DayModelData, ctx: DayContext, dist = 400): { h: number; rh: number; cc: number } | null {
   let best: { h: number; rh: number; cc: number } | null = null;
-  for (const l of m.levels ?? []) {
-    if (!Number.isFinite(l.rh)) continue;
+  const valid = (m.levels ?? []).filter(l => Number.isFinite(l.rh));
+  for (const l of valid) {
     if (Math.abs(l.h - ctx.observerAlt) > dist) continue;
     if (!best || Math.abs(l.h - ctx.observerAlt) < Math.abs(best.h - ctx.observerAlt)) {
       best = { h: l.h, rh: l.rh, cc: l.cc };
     }
   }
-  return best;
+  if (best) return best;
+
+  const below = valid.filter(l => l.h <= ctx.observerAlt).sort((a, b) => b.h - a.h)[0];
+  const above = valid.filter(l => l.h >= ctx.observerAlt).sort((a, b) => a.h - b.h)[0];
+  if (below && above && above.h > below.h && (above.h - below.h) <= LEVEL_GAP_INTERP_MAX) {
+    const frac = (ctx.observerAlt - below.h) / (above.h - below.h);
+    const rh = Math.round(below.rh + frac * (above.rh - below.rh));
+    const cc = (Number.isFinite(below.cc) && Number.isFinite(above.cc))
+      ? Math.round(below.cc + frac * (above.cc - below.cc))
+      : NaN;
+    return { h: ctx.observerAlt, rh, cc };
+  }
+  return null;
 }
 
 /**
