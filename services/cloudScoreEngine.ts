@@ -151,7 +151,8 @@ export function computeInversion(m: DayModelData, valleyElev: number): {
   }
   const best = samples.reduce((a, b) => (b.a > a.a ? b : a));
   const anomaly = best.a;
-  const strength = anomaly >= 3 ? 'Strong' : anomaly >= 1 ? 'Moderate' : anomaly >= -1 ? 'Weak' : 'None';
+  let strength: 'Strong' | 'Moderate' | 'Weak' | 'None' =
+    anomaly >= 3 ? 'Strong' : anomaly >= 1 ? 'Moderate' : anomaly >= -1 ? 'Weak' : 'None';
 
   // "DỐC" thay vì "ĐỈNH" — xem chú thích capLayerBase. Khi anomaly chỉ tăng đều lên tới mực
   // cao nhất của cửa sổ thì không hề có đỉnh nghịch nhiệt; con số best.h chỉ là mép cửa sổ.
@@ -162,6 +163,20 @@ export function computeInversion(m: DayModelData, valleyElev: number): {
   const height = ramp
     ? capLayerBase(m, valleyElev)                       // không có đỉnh → tìm tầng ổn định cục bộ
     : (strength === 'Strong' || strength === 'Moderate') ? Math.round(best.h) : null;
+
+  // "NGHỊCH NHIỆT MA": cột khí ẩm giảm đều ~5°C/km vẫn ấm dần lên so với chuẩn 6.5°C/km, nên
+  // anomaly dương và tăng đều — engine cũ gọi đó là "nghịch nhiệt vừa" (+10 điểm) dù KHÔNG có
+  // nắp nào nhốt mây. Dốc đơn điệu (ramp) mà capLayerBase cũng không tìm ra tầng nào Γ ≤ 3.5°C/km
+  // thì đúng nghĩa là không có nắp: hạ strength xuống cho khớp.
+  //
+  // Lưu ý mức tác động THẬT, lớn hơn "+10 điểm oan": strength còn quyết định `inversionObserved`,
+  // và biến đó đổi hình phạt "mây cao ban đêm" từ −5 thành −15. Một ngày có thể mất tới ~20 điểm.
+  // Đo trên toàn thư viện rạng sáng 11/09 (55 điểm, cùng một mẻ dữ liệu): riêng thay đổi này
+  // làm lệch điểm trung bình 0,9 và KHÔNG đổi nhãn điểm nào — nó chỉ thôi cộng điểm khống.
+  if (ramp && height === null && (strength === 'Strong' || strength === 'Moderate')) {
+    strength = anomaly >= 0 ? 'Weak' : 'None';
+  }
+
   return { strength, anomaly: +anomaly.toFixed(1), height, anomalyHeight: Math.round(best.h), ramp };
 }
 

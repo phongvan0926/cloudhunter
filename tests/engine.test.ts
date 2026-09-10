@@ -1366,6 +1366,26 @@ describe('engine-2.8b — hỏi thẳng "chỗ tôi ĐỨNG có mây không"', (
 });
 
 describe('engine-2.8.3 — trung thực số liệu', () => {
+  it('cột khí suy giảm đều 5°C/km không có nắp thật thì strength hạ xuống Weak/None (chống nghịch nhiệt ma)', () => {
+    // 4 mực suy giảm đúng 5°C/km: không có tầng nào Γ ≤ 3.5°C/km
+    const data: DayModelData = {
+      ...goldenNight(),
+      t_valley_dawn: 20.0,
+      td_valley_dawn: 19.5,
+      levels: [
+        { p: 925, h: 750, hReal: true, t: 19.25, rh: 95, cc: 100 },
+        { p: 850, h: 1500, hReal: true, t: 15.5, rh: 95, cc: 100 },
+        { p: 800, h: 2000, hReal: true, t: 13.0, rh: 95, cc: 100 },
+        { p: 700, h: 3100, hReal: true, t: 7.5, rh: 95, cc: 100 },
+      ],
+    };
+    const inv = computeInversion(data, 600);
+    expect(inv.ramp).toBe(true);
+    expect(inv.height).toBeNull();
+    // Trước đây code cũ gán Moderate (+10 điểm) do anomaly dương giả tạo; nay phải là Weak/None
+    expect(['Weak', 'None']).toContain(inv.strength);
+  });
+
   it('không bịa số: thiếu tdObs thì td_obs_dawn là NaN và Td_surf là N/A', () => {
     const valley = {
       time: ['2026-11-05T06:00'],

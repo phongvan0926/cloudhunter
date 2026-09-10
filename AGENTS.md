@@ -710,6 +710,25 @@ Kèm một sửa giao diện: khối phán quyết đặt **kết luận vật l
 đúng tên là "điểm nguyên liệu". Từ engine-2.8 app có thể khuyên đi một ngày 14/100; để con
 số trần trụi ở đầu dòng thì người đọc tưởng app tự mâu thuẫn.
 
+#### Chống "nghịch nhiệt ma" — thôi cộng điểm khống
+
+Cột khí ẩm giảm đều ~5°C/km vẫn ấm dần so với chuẩn 6.5°C/km, nên anomaly dương và tăng đều.
+Engine cũ gọi đó là "nghịch nhiệt vừa" và cộng +10, dù không có nắp nào nhốt mây. Nay: `ramp`
+bật mà `capLayerBase` cũng không tìm ra tầng nào Γ ≤ 3,5°C/km thì hạ `strength` xuống Weak/None.
+
+Tác động thật lớn hơn "+10 điểm oan" như bản khai của agy nói: `strength` còn quyết định
+`inversionObserved`, biến này đổi hình phạt "mây cao ban đêm" từ −5 thành −15 — một ngày có
+thể mất tới ~20 điểm.
+
+Đo trên toàn thư viện rạng sáng 11/09, **cùng một mẻ dữ liệu chấm bằng hai engine**:
+
+```
+đổi nhãn 0/55  ·  đổi kết luận "đáng đi" 0/55  ·  lệch điểm trung bình 0,9
+```
+
+Không đổi lời khuyên nào; chỉ thôi cộng điểm khống. Điểm vẫn quan trọng vì nó xếp thứ tự và
+tô màu, và vì mọi bản chụp kiểm chứng từ nay ghi con số mới.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm
