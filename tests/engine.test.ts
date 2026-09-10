@@ -1364,3 +1364,36 @@ describe('engine-2.8b — hỏi thẳng "chỗ tôi ĐỨNG có mây không"', (
     expect(observerInCloud(xa as DayModelData, CTX_FAN)).toBe(false);
   });
 });
+
+describe('engine-2.8.3 — trung thực số liệu', () => {
+  it('không bịa số: thiếu tdObs thì td_obs_dawn là NaN và Td_surf là N/A', () => {
+    const valley = {
+      time: ['2026-11-05T06:00'],
+      get: (v: string) => v.includes('temperature') ? [15.0] : v.includes('dew_point') ? [14.0] : [0],
+    };
+    const observer = {
+      time: ['2026-11-05T06:00'],
+      get: (v: string) => v.includes('temperature') ? [10.0] : null, // KHÔNG có dew_point
+    };
+    const agg = aggregateDayModel(valley as any, observer as any, 'gfs_seamless', '2026-11-05', '2026-11-04');
+    expect(agg).not.toBeNull();
+    expect(Number.isNaN(agg!.td_obs_dawn)).toBe(true);
+  });
+
+  it('seaCapped tôn trọng geopotential 925hPa thật khi thung lũng cao hơn 760m', () => {
+    const data: DayModelData = {
+      ...goldenNight(),
+      levels: [
+        { p: 925, h: 810, hReal: true, t: 15.0, rh: 95, cc: 100 },
+        { p: 850, h: 1500, hReal: true, t: 14.0, rh: 90, cc: 90 },
+      ],
+      wind925_dawn_max: 5.0,
+      wind850_dawn_max: 20.0,
+    };
+    // Thung lũng 780m > 760m hằng số chuẩn, nhưng < 810m geopotential thật
+    const ctx = { valleyElevation: 780, observerAlt: 2000, zone: 'A_CLOUD_TRAP' as const };
+    const r = scoreOneModel('gfs_seamless', data, ctx, '2026-11-05');
+    // Gió được chọn là 925hPa (trong lớp mây) thay vì 850hPa
+    expect(r.reasons.join(' ')).toMatch(/925hPa/);
+  });
+});

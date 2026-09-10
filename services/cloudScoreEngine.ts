@@ -21,7 +21,7 @@ import { DayData, DayModelData, WeatherModelId, MODEL_LABELS } from './weatherSe
 // Đổi số này MỖI KHI hành vi chấm điểm đổi: nó là khoá cache xếp hạng (bản cũ tự hết
 // hiệu lực) và là nhãn đóng vào bản chụp dự báo — quên đổi thì vòng kiểm chứng không
 // phân biệt được số của luật nào. Đã quên một lần ở engine-2.8b.
-export const ENGINE_VERSION = 'engine-2.8.2';
+export const ENGINE_VERSION = 'engine-2.8.3';
 
 /**
  * "ĐÁNG ĐI" — engine-2.8 (03/09/2026): KHÔNG còn là ngưỡng điểm.
@@ -604,10 +604,14 @@ export function scoreOneModel(
   // không với xuống lớp mây được — lúc đó gió quyết định là gió TRONG lớp mây (925hPa ~760m).
   // (Tà Xùa 23/8/2026: gió 850 22km/h bị engine cũ chấm "phá vỡ biển mây" trong khi gió 925
   // chỉ 3-9km/h và biển mây thực tế nằm nguyên cả ngày dưới nắp nghịch nhiệt +5°C tại 1450m.)
+  // Độ cao mực 925hPa lấy từ geopotential THẬT của ngày đó; hằng số 760m chỉ là dự phòng.
+  // Thung lũng 780m nằm dưới mực 925 nếu hôm ấy geopotential là 810m — dùng số cứng thì
+  // engine kết luận ngược.
+  const h925 = m.levels?.find(l => l.p === 925)?.h ?? LEVEL_HEIGHTS.p925;
   const seaCapped = (inv.strength === 'Strong' || inv.strength === 'Moderate')
     && inv.height !== null && inv.height <= LEVEL_HEIGHTS.p850 + 100
     && top !== null && top <= inv.height + 150
-    && LEVEL_HEIGHTS.p925 > ctx.valleyElevation
+    && h925 > ctx.valleyElevation
     && Number.isFinite(m.wind925_dawn_max);
   const windLevel = seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
   const wind = assessWind(seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max, ctx.zone);
@@ -969,7 +973,9 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
 
   const indices: TechnicalIndices = {
     T_surf: `${rep.t_obs_dawn}°C`,
-    Td_surf: `${rep.td_obs_dawn}°C`,
+    // Thiếu dew_point tại điểm quan sát thì để N/A. Trước đây chỗ này in ra điểm sương
+    // của THUNG LŨNG gán cho đỉnh núi — một con số sai mà nhìn không thể biết là sai.
+    Td_surf: Number.isFinite(rep.td_obs_dawn) ? `${rep.td_obs_dawn}°C` : 'N/A',
     T_valley: `${rep.t_valley_dawn}°C`,
     Td_valley: `${rep.td_valley_dawn}°C`,
     T_850: `${rep.t850}°C`,

@@ -693,6 +693,23 @@ Có thêm báo cáo thực địa thì chạy lại `sweep-deltah.ts` trước k
 bản chụp; quên đổi thì người dùng cũ giữ điểm của luật cũ (tới 30 phút) và calibrate không phân
 biệt nổi số của luật nào. Đã sửa thành 2.8.1 rồi 2.8.2. Đổi hành vi chấm ⇒ đổi số này, luôn.
 
+### ✅ engine-2.8.3 (10-11/09/2026) — ba sửa trung thực số liệu
+
+Bản này do Antigravity làm trong lúc phiên Claude nghỉ, Claude đo lại rồi tách thành từng
+commit. Ba việc dưới đây không đụng tới thứ app khuyên người dùng, chỉ sửa chỗ đang nói sai:
+
+1. **Không chép điểm sương thung lũng lên cho đỉnh núi.** `td_obs_dawn` trước đây thiếu số
+   thì lấy `td_valley` — chênh nhau cả nghìn mét độ cao. Nay trả `NaN`, UI hiện `N/A`. (Đã
+   lần dấu: biến này chỉ dùng để hiển thị, `NaN` không chui vào phép tính nào.)
+2. **`seaCapped` dùng geopotential 925hPa THẬT** thay hằng số 760m. Thung lũng 780m vẫn nằm
+   dưới mực 925 nếu hôm đó geopotential là 810m — dùng số cứng thì kết luận ngược.
+3. **Lỗi ngoại vi không còn im lặng.** `.catch(() => ({}))` ở `fetchEnsembleDays` /
+   `fetchAirQualityDays` nay `console.warn` trước khi bỏ qua.
+
+Kèm một sửa giao diện: khối phán quyết đặt **kết luận vật lý trước, điểm số sau** và gọi
+đúng tên là "điểm nguyên liệu". Từ engine-2.8 app có thể khuyên đi một ngày 14/100; để con
+số trần trụi ở đầu dòng thì người đọc tưởng app tự mâu thuẫn.
+
 ### 📉 Vì sao ĐIỂM vẫn thấp — và vì sao KHÔNG phải do hiệu chỉnh mùa
 
 Giả thuyết đầu tiên của tôi (trần điểm mùa hè khoá ngưỡng 60) **đã bị số liệu bác bỏ**. Chấm

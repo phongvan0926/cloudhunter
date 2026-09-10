@@ -524,9 +524,25 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                              : 'Chưa nên đi trong khoảng ngày này'}
                 </h2>
                 <p className="text-sm text-slate-300 mt-1 leading-relaxed">
+                  {/* Phán quyết vật lý ĐỨNG TRƯỚC, điểm số đứng sau và được gọi đúng tên là
+                      "điểm nguyên liệu": từ engine-2.8 app có thể khuyên đi một ngày 14/100,
+                      để nguyên con số trần trụi ở đầu dòng thì người đọc tưởng app tự mâu thuẫn. */}
                   {best
-                    ? <><b className={go ? 'text-emerald-300' : near ? 'text-amber-300' : 'text-slate-200'}>{best.score}/100</b>
+                    ? <>
+                        {go ? (
+                          <span className="text-emerald-300 font-bold">✅ Đủ điều kiện săn mây</span>
+                        ) : near ? (
+                          <span className="text-amber-300 font-bold">⚠️ Cân nhắc</span>
+                        ) : (
+                          <span className="text-slate-400 font-semibold">Chưa đạt điều kiện</span>
+                        )}
                         {' · '}{best.status_text}
+                        {best.technical_indices.delta_h !== null && best.technical_indices.delta_h !== undefined && (
+                          <> · {best.technical_indices.delta_h > 0
+                            ? `trên mặt mây ${best.technical_indices.delta_h}m`
+                            : `chìm dưới mây ${Math.abs(best.technical_indices.delta_h)}m`}</>
+                        )}
+                        {' · '}Điểm nguyên liệu: <b className={go ? 'text-emerald-300' : near ? 'text-amber-300' : 'text-slate-200'}>{best.score}/100</b>
                         {(go || near) && best.sun_times && <> · có mặt trước <b>{best.sun_times.sunrise}</b></>}
                       </>
                     : 'Không có ngày nào trong khoảng này có dữ liệu mô hình.'}

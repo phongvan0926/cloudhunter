@@ -408,7 +408,9 @@ export function aggregateDayModel(
     t_valley_dawn: +avg(tValley).toFixed(1),
     td_valley_dawn: +avg(tdValley).toFixed(1),
     t_obs_dawn: +avg(tObs).toFixed(1),
-    td_obs_dawn: tdObs.length ? +avg(tdObs).toFixed(1) : +avg(tdValley).toFixed(1),
+    // KHÔNG chép điểm sương thung lũng lên cho điểm quan sát: hai chỗ chênh nhau cả
+    // nghìn mét. Thiếu thì trả NaN để tầng trên hiện N/A (Luật 1: không bịa số).
+    td_obs_dawn: tdObs.length ? +avg(tdObs).toFixed(1) : NaN,
     cloud_low_dawn: cloudLow.length ? Math.round(avg(cloudLow)) : 0,
     cloud_mid_dawn: cloudMid.length ? Math.round(avg(cloudMid)) : 0,
     cloud_high_dawn: cloudHighDawn.length ? Math.round(avg(cloudHighDawn)) : 0,
@@ -627,9 +629,15 @@ export async function fetchMountainWeather(
       fetchPoint(mt.lat, mt.lon, obsElev, qStart, qEnd, OBSERVER_VARS),
       // ensemble/không khí là best-effort: lỗi thì bỏ qua (app vẫn đầy đủ), không bịa
       fetchEnsembleDays(mt.lat, mt.lon, valleyElevation, formatDateStr(apiStart), qEnd)
-        .catch(() => ({} as Record<string, EnsembleDay>)),
+        .catch(err => {
+          console.warn('[WeatherService] fetchEnsembleDays hỏng (bỏ qua, app vẫn chạy):', err?.message || err);
+          return {} as Record<string, EnsembleDay>;
+        }),
       fetchAirQualityDays(mt.lat, mt.lon, formatDateStr(apiStart), qEnd)
-        .catch(() => ({} as Record<string, AirQualityDay>)),
+        .catch(err => {
+          console.warn('[WeatherService] fetchAirQualityDays hỏng (bỏ qua, app vẫn chạy):', err?.message || err);
+          return {} as Record<string, AirQualityDay>;
+        }),
     ]);
     airDays = air;
     valleyBlock = makeHourlyBlock(valleyData.hourly);
