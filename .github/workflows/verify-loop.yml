@@ -5,14 +5,16 @@
 # vòng kiểm chứng phụ thuộc vào việc "nhớ chạy lệnh mỗi tối" thì không phải vòng kiểm chứng.
 #
 # Hai việc, hai giờ (cron của GitHub tính theo UTC; giờ VN = UTC+7):
-#   20:00 VN  snapshot-forecast.ts  → chụp app đã nói gì cho rạng sáng NGÀY MAI (trước khi biết sự thật)
+#   ~20:00 VN snapshot-forecast.ts  → chụp app đã nói gì cho rạng sáng NGÀY MAI (trước khi biết sự thật)
+#             (lịch ĐẶT 15:37 VN; GitHub trả cron trễ 2,8-7 giờ nên thực tế nổ quanh 18:20-22:35 VN)
 #   08:30 VN  verify_satellite.py   → nhãn thật từ Himawari cho rạng sáng HÔM NAY, rồi calibrate
 # Kết quả commit thẳng vào data/observations/ (deploy.yml bỏ qua thư mục này nên không build lại site).
 name: Vòng kiểm chứng hằng ngày
 
 on:
   schedule:
-    - cron: '0 13 * * *'    # 20:00 VN — chụp dự báo
+    # Đặt 08:37 UTC (15:37 VN) để giờ NỔ THẬT rơi vào buổi tối VN — xem chú thích ở job snapshot.
+    - cron: '37 8 * * *'    # ~20:00 VN thực tế — chụp dự báo
     - cron: '30 1 * * *'    # 08:30 VN — nhãn vệ tinh + calibrate
   workflow_dispatch:
     inputs:
@@ -34,7 +36,7 @@ concurrency:
 
 jobs:
   snapshot:
-    if: github.event.schedule == '0 13 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'snapshot')
+    if: github.event.schedule == '37 8 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'snapshot')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,15 +55,34 @@ jobs:
       # (08, 15, 22, 26, 28/09 và 05/10) — Open-Meteo chỉ phục vụ lại quá khứ gần nên không
       # ngày nào lấy lại được. Đo lại cùng lịch sử bằng luật neo-cron: 0 đụng, 0 nhảy vượt.
       #
-      # Cron 13:00 UTC ngày D = 20:00 VN ngày D ⇒ "rạng sáng mai" = D+1 = (ngày UTC) + 1.
-      # Còn đúng miễn độ trễ < 11 giờ (chưa lần nào vượt 7).
+      # Cron ngày UTC D ⇒ "rạng sáng mai" = D+1 = (ngày UTC) + 1. Với lịch 08:37 UTC thì
+      # luật này còn đúng tới độ trễ 15 giờ (chưa lần nào vượt 7).
+      #
+      # VÌ SAO LỊCH LÀ 08:37 UTC (đổi 05/10/2026, trước đó 13:00 UTC). Đo độ trễ của 32 lần chạy
+      # theo lịch cũ: min 2,8h · trung vị 4,4h · max 7,0h. Áp CHÍNH phân bố đó lên các lịch thử:
+      #   lịch UTC    giờ VN nổ thật (sớm · trung vị · muộn)   lead tối thiểu   qua nửa đêm VN
+      #   0 13        00:02 · 01:34 · 03:58                     2,0h            18/32
+      #   0 9         18:45 · 20:21 · 22:58                     6,0h             0/32
+      #   37 8        18:22 · 19:58 · 22:35                     6,4h             0/32   ← chọn
+      #   0 7         16:45 · 18:21 · 20:58                     8,0h             0/32
+      # Lịch cũ đặt 20:00 VN nhưng trung vị nổ thật là 01:34 sáng — chỉ ~3 giờ trước bình minh, tức
+      # bản chụp đo một dự báo NGẮN HẠN mà người dùng chưa bao giờ thấy: người săn mây quyết định đi
+      # hay không vào buổi tối. 08:37 UTC đưa trung vị về đúng 19:58 VN — khớp ý định ban đầu
+      # "chụp tối hôm trước", không đổi nó. Phút lẻ :37 để tránh mốc tròn giờ, nơi hàng đợi cron
+      # của GitHub đông nhất. Nếu GitHub hết trễ, bản chụp rơi vào 15:37 VN — vẫn là chiều hôm
+      # trước, lead 14h: chấp nhận được, còn hơn hẳn nổ lúc 3h sáng.
       - name: Chốt ngày cần chụp
         id: target
         run: |
           D="${{ github.event.inputs.date }}"
           [ -z "$D" ] && D="$(date -u -d tomorrow +%F)"
           echo "date=$D" >> "$GITHUB_OUTPUT"
-          echo "chụp dự báo rạng sáng $D (chạy lúc $(date -u +%FT%TZ), trễ so với 13:00 UTC)"
+          echo "chụp dự báo rạng sáng $D (chạy lúc $(date -u +%FT%TZ), lịch đặt 08:37 UTC)"
+          # Rạng sáng mục tiêu ~05:00 VN = 22:00 UTC ngày trước D. Chụp quá sát thì đó không còn
+          # là dự báo người dùng dùng để quyết định — vẫn chụp (bằng chứng) nhưng phải KÊU lên.
+          LEAD=$(( ( $(date -u -d "$D -1 day 22:00" +%s) - $(date -u +%s) ) / 3600 ))
+          echo "lead tới rạng sáng mục tiêu: ~${LEAD} giờ"
+          [ "$LEAD" -lt 4 ] && echo "::warning::Bản chụp $D chỉ cách rạng sáng ~${LEAD}h — cron trễ bất thường, bản này đo dự báo ngắn hạn chứ không phải dự báo buổi tối" || true
       - name: Chụp dự báo rạng sáng ngày mai
         # Không --force: đã có bản chụp thì script tự từ chối đè (bản chụp là bằng chứng).
         run: npx vite-node scripts/snapshot-forecast.ts "${{ steps.target.outputs.date }}"

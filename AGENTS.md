@@ -488,13 +488,14 @@ cho 26/8→03/09 — tức 4 báo cáo thực địa gần nhất đều không 
 chỉ có hindcast (in-sample). Một vòng kiểm chứng phụ thuộc vào việc nhớ chạy lệnh mỗi tối thì không
 phải vòng kiểm chứng. `.github/workflows/verify-loop.yml`:
 
-| giờ VN *đặt lịch* | việc | ghi vào |
-|---|---|---|
-| 20:00 | `snapshot-forecast.ts <mai>` — chụp dự báo rạng sáng **ngày mai** | `data/observations/<mai>-forecast.json` |
-| 08:30 | `verify_satellite.py <hôm nay>` rồi `calibrate.ts` (đọc trong log) | `data/observations/<nay>-satellite.json` |
+| lịch đặt (VN) | nổ thật (VN, đo) | việc | ghi vào |
+|---|---|---|---|
+| 15:37 | 18:22-22:35, trung vị ~20:00 | `snapshot-forecast.ts <mai>` — chụp dự báo rạng sáng **ngày mai** | `data/observations/<mai>-forecast.json` |
+| 08:30 | 13:10-14:35 | `verify_satellite.py <hôm nay>` rồi `calibrate.ts` (đọc trong log) | `data/observations/<nay>-satellite.json` |
 
-⚠️ Đó là giờ **đặt lịch**, không phải giờ nổ: GitHub trả cron trễ 3-7 giờ. Ngày mục tiêu vì thế
-phải neo vào lịch, không tính từ `now` — xem mục "Vòng tự chạy đã ÂM THẦM mất 6 ngày bằng chứng".
+⚠️ GitHub trả cron trễ **2,8-7 giờ** (đo 32 lần chạy, trung vị 4,4h). Vì thế (1) ngày mục tiêu neo
+vào lịch, không tính từ `now` — xem "Vòng tự chạy đã ÂM THẦM mất 6 ngày bằng chứng"; và (2) lịch
+chụp đặt SỚM để giờ nổ thật rơi đúng buổi tối — xem mục ngay dưới đó.
 
 Bot commit thẳng vào `main`; `deploy.yml` có `paths-ignore: data/observations/**` nên không build lại
 site 2 lần/ngày. Snapshot không bao giờ `--force` — đã có bản chụp thì script tự từ chối (bản chụp là
@@ -545,6 +546,34 @@ nhưng để nguyên thì một hôm trễ nặng sẽ đi xin nhãn cho ngày M
 commit đàng hoàng — chỉ đếm file trong kho mới phát hiện được. Phép đo đúng là *đếm ngày trong kho*,
 không phải *đếm lần chạy thành công*. Và **đừng bao giờ tính ngày mục tiêu từ `now`** khi bộ hẹn giờ
 có thể về trễ qua mốc nửa đêm của múi giờ đang dùng — hãy neo vào lịch đã đặt.
+
+#### ⏰ Lịch chụp dời từ 13:00 sang 08:37 UTC — để GIỜ NỔ THẬT khớp ý định "tối hôm trước" (05/10/2026)
+
+Sau khi neo ngày, vòng chụp không còn mất ngày — nhưng vẫn chụp SAI GIỜ. Lịch cũ đặt 20:00 VN mà
+áp phân bố trễ đo được thì **trung vị nổ thật là 01:34 sáng**, 18/32 lần qua nửa đêm VN, có lần chỉ
+2 giờ trước bình minh. Bản chụp như vậy đo một dự báo NGẮN HẠN mà người dùng chưa bao giờ thấy —
+người săn mây quyết định đi hay không vào buổi tối, trước khi đặt báo thức 3h sáng. Calibrate chấm
+app trên những bản đó là chấm một app tốt hơn cái người dùng thật sự dùng.
+
+```
+lịch UTC    giờ VN nổ thật (sớm · trung vị · muộn)   lead tối thiểu   qua nửa đêm VN
+0 13        00:02 · 01:34 · 03:58                     2,0h            18/32   ← cũ
+0 9         18:45 · 20:21 · 22:58                     6,0h             0/32
+37 8        18:22 · 19:58 · 22:35                     6,4h             0/32   ← chọn
+0 7         16:45 · 18:21 · 20:58                     8,0h             0/32
+```
+
+`37 8` đưa trung vị về **19:58 VN** — không đổi quyết định "chụp tối hôm trước", mà là lần đầu tiên
+thực hiện đúng nó. Phút lẻ :37 để tránh mốc tròn giờ, nơi hàng đợi cron của GitHub đông nhất. Nếu
+một ngày GitHub hết trễ thì bản chụp rơi vào 15:37 VN, lead 14h — vẫn là chiều hôm trước.
+
+Workflow nay in lead tới rạng sáng mục tiêu và `::warning::` khi dưới 4 giờ: bản chụp vẫn giữ (là
+bằng chứng), nhưng phải biết nó đo dự báo ngắn hạn.
+
+⚠️ Hệ quả cho bảng hiệu chuẩn: **bản chụp 04/09→06/10 phần lớn là dự báo trước bình minh 2-6 giờ**,
+từ 06/10 trở đi là dự báo trước 7-11 giờ. Dự báo xa hơn thường kém hơn, nên nếu tỉ lệ đúng tụt nhẹ
+sau 06/10 thì đó có thể là ĐO ĐÚNG HƠN, không phải engine tệ đi. `snapshotAt` trong mỗi file đủ để
+tách hai nhóm khi so.
 
 ### 🎯 Năm ngày kiểm chứng NGOÀI MẪU đầu tiên — và lần khuyên đi ĐÚNG đầu tiên (01-04/10/2026)
 
