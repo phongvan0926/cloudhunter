@@ -5,8 +5,9 @@
     "locationName": "Hang Kia - Pà Cò (Thung Mài)",
     "date": "2026-10-03",
     "seaLevel": "BELOW",
-    "note": "Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 01/10 18:40Z): 48/100 DISSIPATING, ΔH +309m, đồng thuận 33%, KHÔNG khuyên đi — TRƯỢT. Ba mô hình chia ba kết luận 1-1-1 (gfs 80 STATIC / icon 38 FOG / ukmo 48 DISSIPATING) nên luật hoà-phiếu-chọn-nặng-hơn (engine-2.5) trao cho BLOCKED. gfs chấm 80/100 STATIC — lời gọi đúng, điểm cao nhất trong cả kho — bị luật an toàn loại. ΔH +309m đã vượt biên 100m, chỉ thiếu đồng thuận.",
-    "reportedAt": "2026-10-05T18:30:00+07:00"
+    "note": "NGUỒN: video mạng xã hội do người dùng xem lại, KHÔNG phải người đo tại chỗ (anh Phong nói rõ 05/10: \"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo lại\"). Kênh này là bằng chứng mạnh cho \"CÓ biển mây\", nhưng KHÔNG cho biết giờ/thời lượng (duration để trống, không đoán), vị trí trong điểm chỉ ở mức tên điểm, và KHÔNG BAO GIỜ sinh được mẫu âm tính. Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 01/10 18:40Z): 48/100 DISSIPATING, ΔH +309m, đồng thuận 33%, KHÔNG khuyên đi — TRƯỢT. Ba mô hình chia ba kết luận 1-1-1 (gfs 80 STATIC / icon 38 FOG / ukmo 48 DISSIPATING) nên luật hoà-phiếu-chọn-nặng-hơn (engine-2.5) trao cho BLOCKED. gfs chấm 80/100 STATIC — lời gọi đúng, điểm cao nhất trong cả kho — bị luật an toàn loại. ΔH +309m đã vượt biên 100m, chỉ thiếu đồng thuận.",
+    "reportedAt": "2026-10-05T18:30:00+07:00",
+    "source": "SOCIAL_VIDEO"
   },
   {
     "id": "2026-10-02-hangkia",
@@ -14,8 +15,9 @@
     "locationName": "Hang Kia - Pà Cò (Thung Mài)",
     "date": "2026-10-02",
     "seaLevel": "BELOW",
-    "note": "Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 30/09 18:15Z): 70/100 FLOWING, ΔH +374m, đồng thuận 67%, ĐÁNG ĐI = TRUE — ĐÚNG. Đây là lần khuyên đi ĐẦU TIÊN của luật engine-2.8 được thực địa xác nhận. gfs 77 STATIC top=1033m, ukmo 70 FLOWING top=1185m cùng nhóm SEA; icon 36 FOG top=2208m thiểu số.",
-    "reportedAt": "2026-10-05T18:30:00+07:00"
+    "note": "NGUỒN: video mạng xã hội do người dùng xem lại, KHÔNG phải người đo tại chỗ (anh Phong nói rõ 05/10: \"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo lại\"). Kênh này là bằng chứng mạnh cho \"CÓ biển mây\", nhưng KHÔNG cho biết giờ/thời lượng (duration để trống, không đoán), vị trí trong điểm chỉ ở mức tên điểm, và KHÔNG BAO GIỜ sinh được mẫu âm tính. Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 30/09 18:15Z): 70/100 FLOWING, ΔH +374m, đồng thuận 67%, ĐÁNG ĐI = TRUE — ĐÚNG. Đây là lần khuyên đi ĐẦU TIÊN của luật engine-2.8 được thực địa xác nhận. gfs 77 STATIC top=1033m, ukmo 70 FLOWING top=1185m cùng nhóm SEA; icon 36 FOG top=2208m thiểu số.",
+    "reportedAt": "2026-10-05T18:30:00+07:00",
+    "source": "SOCIAL_VIDEO"
   },
   {
     "id": "2026-10-01-hangkia",
@@ -23,8 +25,9 @@
     "locationName": "Hang Kia - Pà Cò (Thung Mài)",
     "date": "2026-10-01",
     "seaLevel": "BELOW",
-    "note": "Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 29/09 18:26Z): 40/100 FOG, ΔH -708m, đồng thuận 33%, KHÔNG khuyên đi — TRƯỢT. Ba mô hình bất đồng tận gốc: gfs FOG top=2191m, icon STATIC top=1178m, ukmo CLEAR. ICON đúng, bị gộp bỏ phiếu loại.",
-    "reportedAt": "2026-10-05T18:30:00+07:00"
+    "note": "NGUỒN: video mạng xã hội do người dùng xem lại, KHÔNG phải người đo tại chỗ (anh Phong nói rõ 05/10: \"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo lại\"). Kênh này là bằng chứng mạnh cho \"CÓ biển mây\", nhưng KHÔNG cho biết giờ/thời lượng (duration để trống, không đoán), vị trí trong điểm chỉ ở mức tên điểm, và KHÔNG BAO GIỜ sinh được mẫu âm tính. Người dùng báo trực tiếp (05/10/2026): Hang Kia (Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10. Thời lượng CHƯA hỏi. Bản chụp (chụp 29/09 18:26Z): 40/100 FOG, ΔH -708m, đồng thuận 33%, KHÔNG khuyên đi — TRƯỢT. Ba mô hình bất đồng tận gốc: gfs FOG top=2191m, icon STATIC top=1178m, ukmo CLEAR. ICON đúng, bị gộp bỏ phiếu loại.",
+    "reportedAt": "2026-10-05T18:30:00+07:00",
+    "source": "SOCIAL_VIDEO"
   },
   {
     "id": "2026-10-04-taxua",
@@ -32,8 +35,9 @@
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",
     "date": "2026-10-04",
     "seaLevel": "BELOW",
-    "note": "Người dùng báo trực tiếp (05/10/2026): ngày 04/10 có biển mây trên Tà Xùa. Thời lượng CHƯA hỏi. Bản chụp dự báo 2026-10-04-forecast.json (engine-2.8.3, chụp 02/10 18:11Z, TRƯỚC khi biết sự thật) nói: Tà Xùa 50/100 FOG ΔH +332m, Trạm phát sóng 50/100 FOG ΔH +485m, worthGoing=false cả hai — TRƯỢT. Đây là ca ngoài mẫu đầu tiên có bản chụp thật.",
-    "reportedAt": "2026-10-05T18:00:00+07:00"
+    "note": "NGUỒN: video mạng xã hội do người dùng xem lại, KHÔNG phải người đo tại chỗ (anh Phong nói rõ 05/10: \"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo lại\"). Kênh này là bằng chứng mạnh cho \"CÓ biển mây\", nhưng KHÔNG cho biết giờ/thời lượng (duration để trống, không đoán), vị trí trong điểm chỉ ở mức tên điểm, và KHÔNG BAO GIỜ sinh được mẫu âm tính. Người dùng báo trực tiếp (05/10/2026): ngày 04/10 có biển mây trên Tà Xùa. Thời lượng CHƯA hỏi. Bản chụp dự báo 2026-10-04-forecast.json (engine-2.8.3, chụp 02/10 18:11Z, TRƯỚC khi biết sự thật) nói: Tà Xùa 50/100 FOG ΔH +332m, Trạm phát sóng 50/100 FOG ΔH +485m, worthGoing=false cả hai — TRƯỢT. Đây là ca ngoài mẫu đầu tiên có bản chụp thật.",
+    "reportedAt": "2026-10-05T18:00:00+07:00",
+    "source": "SOCIAL_VIDEO"
   },
   {
     "id": "2026-10-03-taxua",
@@ -41,8 +45,9 @@
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",
     "date": "2026-10-03",
     "seaLevel": "BELOW",
-    "note": "Người dùng báo trực tiếp (05/10/2026): ngày 03/10 có biển mây trên Tà Xùa. Thời lượng CHƯA hỏi. Bản chụp dự báo 2026-10-03-forecast.json (engine-2.8.3, chụp 01/10 18:40Z) nói: Tà Xùa 50/100 FOG ΔH -10m, Trạm phát sóng 46/100 FOG ΔH +143m, worthGoing=false cả hai — TRƯỢT.",
-    "reportedAt": "2026-10-05T18:00:00+07:00"
+    "note": "NGUỒN: video mạng xã hội do người dùng xem lại, KHÔNG phải người đo tại chỗ (anh Phong nói rõ 05/10: \"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo lại\"). Kênh này là bằng chứng mạnh cho \"CÓ biển mây\", nhưng KHÔNG cho biết giờ/thời lượng (duration để trống, không đoán), vị trí trong điểm chỉ ở mức tên điểm, và KHÔNG BAO GIỜ sinh được mẫu âm tính. Người dùng báo trực tiếp (05/10/2026): ngày 03/10 có biển mây trên Tà Xùa. Thời lượng CHƯA hỏi. Bản chụp dự báo 2026-10-03-forecast.json (engine-2.8.3, chụp 01/10 18:40Z) nói: Tà Xùa 50/100 FOG ΔH -10m, Trạm phát sóng 46/100 FOG ΔH +143m, worthGoing=false cả hai — TRƯỢT.",
+    "reportedAt": "2026-10-05T18:00:00+07:00",
+    "source": "SOCIAL_VIDEO"
   },
   {
     "id": "2026-09-02-khecai",
