@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+
+# Python bytecode của tools/
+__pycache__/
+*.pyc

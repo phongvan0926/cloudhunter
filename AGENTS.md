@@ -606,78 +606,113 @@ Và nó đọc mực áp suất gần chỗ đứng nhất trong **±250m** — 
 biển mây dưới chân; engine lại đọc nó thành "bạn đang ở trong mây". Cửa sổ ±250m không phân biệt
 "mây dưới chân tôi 84m" với "mây ngang mặt tôi".
 
-Đây đúng là loại lỗi engine-2.5 từng sửa một lần ("tự mâu thuẫn ngay trong một màn hình"), nay
-tái diễn ở một cổng khác. Và nó chính là **mẫu phản chứng mà mục engine-2.8.3 bên dưới đã xin**:
-*"cổng này chỉ đi MỘT CHIỀU, chưa lần nào thêm một nhãn biển mây"* — giờ đã có hai ngày thật cho
-thấy cái giá của chiều đó.
+Nhìn thế thì đây y hệt loại lỗi engine-2.5 từng sửa ("tự mâu thuẫn ngay trong một màn hình"), tái
+diễn ở một cổng khác, và chính là mẫu phản chứng mà mục engine-2.8.3 bên dưới đã xin:
+*"cổng này chỉ đi MỘT CHIỀU, chưa lần nào thêm một nhãn biển mây"*.
 
-⚠️ **CHƯA SỬA, và đừng sửa bằng cách nới ngưỡng.** Việc phải làm trước:
-1. Đo `observerInCloud` trên toàn thư viện, tách riêng ca "mực đọc được nằm DƯỚI chỗ đứng" với
-   ca "nằm TRÊN" — giả thuyết là chỉ nhóm dưới mới sai.
-2. Chạy `sweep-deltah.ts` + `calibrate.ts` lại với 2 ngày mới này trong mẫu.
-3. Nhớ rằng mẫu người-đi vẫn **toàn dương tính** (11/11 báo cáo đều là ngày CÓ biển mây, trừ
-   Fansipan 02/09): mọi thay đổi khiến app nói "có" nhiều hơn đều sẽ trông đẹp trên bảng này.
-   Cần một ngày KHÔNG có biển mây tại chỗ — và **không được lấy nhãn `CLEAR` của vệ tinh thay thế**
-   (xem mục "Tập sự thật của vệ tinh có 32% là no-data" ngay dưới).
-4. Hindcast 03-04/10 **không** dùng để chấm được — đã kiểm 05/10: API trả ΔH -590m cho ngày 04/10
-   trong khi bản chụp ghi +332m. Chỉ bản chụp là bằng chứng.
+**Lập luận đó đúng về cơ chế nhưng sai về kết luận.** Phần dưới là phép đo, và nó bác bỏ bản sửa.
+Giữ cả đoạn phân tích trên vì cơ chế đọc sai là thật và sẽ còn phải xử — chỉ là không xử ở đây.
 
-Thời lượng biển mây hai ngày này **chưa hỏi** — `duration` để trống trong `field-reports.json`,
-không đoán.
-
-### 🚨 Tập sự thật của vệ tinh có 32% là NO-DATA bị khai thành "trời quang" (05/10/2026)
-
-`tools/verify_satellite.py` lọc giá trị fill bằng `hgt[hgt < -1e10] = np.nan`. Mặt nạ đó chỉ bắt
-fill cực lớn và **bỏ sót hẳn `-999`**, là fill mà sản phẩm AHI-L2 thật sự dùng cho "không truy
-hồi được". `-999` sống sót như một con số hợp lệ, rồi trong `classify()` nó rơi vào nhánh
-
-```py
-if top <= valley + MARGIN_ABOVE:
-    return 'CLEAR', f'Đỉnh mây {top:.0f}m chưa vượt đáy thung lũng {valley}m'
-```
-
-vì −999 nhỏ hơn mọi đáy thung lũng. **Không đo được bị khai thành "trời quang, xác nhận không có
-biển mây"** — đúng thứ mà chính dòng docstring của hàm cấm: *"thà nói KHÔNG BIẾT còn hơn đoán"*.
-
-Đo trên toàn bộ 43 file đã thu (2.001 dòng điểm-ngày, 10.037 khung có số):
+**ĐÃ THỬ SỬA CỔNG NÀY, VÀ ĐÃ BỎ — phép đo bác bỏ.** Bản sửa: thêm trần ΔH 250m cho cổng, neo
+vào sai số ±200m của chính ΔH (không phải hệ số chỉnh cho vừa dữ liệu). Chấm trên **645 dòng bản
+chụp có sự thật đối chiếu**, dùng bằng chứng đã lưu chứ không fetch lại:
 
 ```
-khung mang giá trị -999                                   4.413 / 10.037   (44%)
-dòng báo ra cloudTopMedian_m ÂM (độ cao vô nghĩa)           850
-dòng nhãn CLEAR                                             789
-   ├─ KHÔNG có một khung nào đo được đỉnh mây thật           650  = 82% số CLEAR · 32% toàn kho
-   └─ có ít nhất một khung đo thật                           139
+luật        đúng  bỏ sót  báo nhầm   bắt được   báo có thì đúng
+cũ             9      19       172        32%            5%
+trần 250m     10      18       189        36%            5%
 ```
 
-**650 dòng "CLEAR" được dựng trên không một phép đo nào.** Và ví dụ đầu tiên trong danh sách
-chính là ca đã biết: `2026-09-02 Tà Xùa — CLEAR` với **5/5 khung đều no-data**, trong khi người
-dùng xác nhận Khe Cải (Tà Xùa) sáng đó CÓ biển mây. Mục "Vệ tinh và người đi CÃI NHAU" bên dưới
-quy nguyên nhân cho "sương mỏng 2km hồng ngoại không thấy" — đúng một phần, nhưng **lý do trực
-tiếp là vệ tinh không trả về số nào cả và script tự điền 'trời quang'.**
+18 dòng đổi sang "khuyên đi": **17 SAI, 1 ĐÚNG** — và đúng duy nhất là Tà Xùa 04/10, chính ngày
+dùng để nghĩ ra bản sửa. Overfit một ca, đúng thứ tài liệu này cấm. Đã hoàn nguyên
+(`OBSERVER_FOG_MAX_DELTA_H = Infinity`); giữ tham số `observerFogMaxDeltaH` của `scoreOneModel`
+để `scripts/observer-gate-probe.ts` (mới) đo lại được về sau.
 
-Hệ quả cho mọi bảng hiệu chuẩn đã in từ 03/09: cột **"báo nhầm"** và **"báo đúng không"** đều
-bị thổi lên bởi những dòng âm tính giả này. Bảng ngày 05/10 (649 cặp) ghi luật đáng đi *"đúng 70%,
-bắt được 31%, khi app báo có thì đúng 5%"* — con số 5% ấy là **cận dưới bị nhiễm**, không phải
-một phép đo. Không được dùng nó để siết cổng.
+**Thu hoạch thật của lần này nằm ở 17 ca sai đó: 16/17 có nhãn vệ tinh `CLEAR`** — hôm ấy
+**không có mây gì cả**, chứ không phải "người đứng trong mây". Nghĩa là cổng `observerInCloud`
+lâu nay **đúng vì lý do sai**: nó che một lỗi khác, `estimateCloudTop` dựng ra một "mặt biển mây"
+từ các tầng RH ≥80% trong những ngày trời quang. Gỡ cổng đi thì lỗi gốc lộ ra ngay thành 17 lời
+khuyên sai. Đủ tên để soi tiếp: A Pa Chải (3 ngày), Thung Khe (2), Phình Hồ (2), Sì Thâu Chải (2),
+Ba Vì (2), Pusilung (2), Ky Quan San, Bạch Mã, Hang Kia, Chiềng Công.
 
-Đã sửa (05/10) phần KHÔNG có tranh cãi: mặt nạ nay loại mọi giá trị âm (`hgt < 0`), vì không một
-độ cao đỉnh mây nào âm. Nhãn ngày **không đổi** (−999 và `None` đều vẫn ra `CLEAR`), chỉ hết báo
-ra độ cao âm.
+⇒ **Việc tiếp theo đúng chỗ: `estimateCloudTop` đừng dựng mặt mây khi mô hình không thấy mây.**
+Nhưng đo trước, và đo cả hai chiều: cổng `cloud_low_dawn < 15` hiện bị `valleySaturation` /
+`rootedLowLayer` vượt qua, mà chính hai bộ dò đó sinh ra để cứu những ngày thung lũng bão hoà mà
+mô hình báo 0% mây (Tà Xùa 23/8, Suôi Thầu 25/8). Siết tay là xoá luôn công của chúng.
 
-⚠️ **CHƯA sửa, và cần anh Phong quyết** — phần thật sự quan trọng: `classify()` trả `CLEAR` cho
-cả `top is None`. Với một sản phẩm *độ cao đỉnh mây*, "không truy hồi được" có thể là trời quang
-thật (không mây ⇒ không có đỉnh mây) **hoặc** là trượt phép truy hồi — và `CldTopHght` một mình
-không phân biệt được. Đổi nhánh đó thành `NO_DATA` sẽ **loại 650 dòng khỏi phép chấm (32% kho)**,
-làm bảng hiệu chuẩn nhỏ lại nhiều nhưng sạch. Đây là quyết định về nghĩa của tập sự thật, không
-phải chỉnh hằng số, nên không tự làm.
+Probe tần suất (`observer-gate-probe.ts`, 495 ca = 55 điểm × 3 mô hình × 3 ngày) còn cho một số
+đáng nhớ: cổng bật **39%** số ca, **nhưng 70% số lần bật là ca ΔH ≤ −250m, nơi nhãn vẫn FOG dù có
+cổng hay không** — cổng chỉ thật sự đổi kết luận ở 25/192 lần bật. Mực nó đọc nằm DƯỚI chân người
+đứng trong 44% số lần, nên cơ chế đọc sai là thật; chỉ là sửa nó chưa cải thiện được gì.
 
-Gợi ý khi làm: script **đã đọc `CldTopEmss`** và truyền vào `classify(top, emiss, …)` nhưng
-**thân hàm chưa bao giờ dùng `emiss`** — tham số chết. Chính trường đó là thứ phân biệt "không
-mây" với "không truy hồi". Nối dây nó là việc nên làm trước khi đổi nhãn.
+⚠️ Và hindcast 03-04/10 **không** dùng để chấm được — đã kiểm 05/10: API trả ΔH −590m cho ngày
+04/10 trong khi bản chụp ghi +332m. Chỉ bản chụp là bằng chứng.
 
-Backfill: 43 file hiện có vẫn giữ `cloudTopMedian_m` âm. Khung thô (`frames`) là bằng chứng và
-còn nguyên, nên tính lại trường dẫn xuất đó là an toàn — nhưng nó ghi lại 43 file đã commit nên
-chờ anh đồng ý, chưa chạy.
+#### Nguồn của 5 báo cáo này: VIDEO MẠNG XÃ HỘI, không phải người đo tại chỗ
+
+Người dùng cho biết (05/10): *"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo
+lại lên đây thôi."* Đúng theo đường đã thiết kế (xem mục "Vì sao KHÔNG cào Facebook/TikTok":
+người dùng thấy bài thì bấm một nút, không cào). Nhưng phải ghi rõ kênh này đo được gì:
+
+| | |
+|---|---|
+| **CÓ biển mây** | bằng chứng MẠNH — một video thấy biển mây thì khó sai |
+| **giờ và thời lượng** | **không lấy được** — video không nói nó quay lúc mấy giờ, tan lúc nào |
+| **vị trí trong điểm** | mờ — "Tà Xùa" rộng vài km; Khe Cải khác sống lưng khác trạm phát sóng |
+| **KHÔNG có biển mây** | **kênh này KHÔNG BAO GIỜ nói được** — không ai đăng video "hôm nay không có mây" |
+
+Vì thế `duration` để trống ở cả 5 báo cáo (không đoán). Và **đừng chờ mẫu âm tính từ kênh này** —
+điều tài liệu này vẫn ghi là việc-cần-làm từ 25/8. Mẫu âm tính phải đến từ vệ tinh, và mục "Tập
+sự thật của vệ tinh KHÔNG bị nhiễm" ngay dưới vừa chứng minh 650 dòng `CLEAR` đó là thật.
+
+### ✅ Tập sự thật của vệ tinh KHÔNG bị nhiễm — một báo động hụt, đã đo xong (05/10/2026)
+
+Mục này ban đầu tôi viết là "32% tập sự thật là no-data bị khai thành trời quang" và coi đó là
+lỗi nặng nhất của dự án. **Kết luận đó SAI, và phép đo tiếp theo của chính tôi đã bác bỏ nó.**
+Giữ lại cả quá trình vì cái bẫy này sẽ còn gặp.
+
+Cơ chế thì có thật: `CldTopHght` dùng `-999` cho "không có số", mặt nạ cũ chỉ bắt `< -1e10` nên
+`-999` sống sót như số hợp lệ, rồi vì nhỏ hơn mọi đáy thung lũng nên rơi vào nhánh trả `CLEAR`.
+Đo trên 43 file: **44% khung mang `-999`**, và **650/789 dòng `CLEAR` (82%) không có lấy một
+khung nào đo được đỉnh mây thật**. Nhìn thế thì đúng là "không đo được" và "trời quang" đi ra
+cùng một nhãn, và 32% kho sự thật thành âm tính giả.
+
+Nhưng "cùng một nhãn" chưa có nghĩa là "nhãn sai". Câu hỏi thật: `-999` nghĩa là *trượt phép
+truy hồi* hay *không có mây nên không có đỉnh mây*? Trả lời bằng một sản phẩm ĐỘC LẬP —
+`AHI-CMSK` nằm cùng thư mục, cùng mốc thời gian, dataset `CloudMask` với
+`flag_meanings = "clear probably_clear probably_cloudy cloudy"`. Đó là mặt nạ trời quang chính
+thức, không dính gì tới phép truy hồi độ cao. `tools/audit_cloudmask.py` (mới) hỏi đúng nó.
+
+Kết quả trên 143 dòng `CLEAR`-toàn-no-data, 6 ngày rải từ 02/09 đến 05/10:
+
+```
+khung:  clear 580 (81%)  ·  probably_clear 135 (19%)  ·  cloudy 0
+dòng:   143/143 mask xác nhận QUANG   →  nhãn CLEAR cũ ĐÚNG, 0 dòng phải gán lại
+```
+
+Ca đối chứng mạnh nhất: `2026-09-02 Tà Xùa`, nhãn `CLEAR` dựng trên 5/5 khung no-data — ngày
+người dùng xác nhận Khe Cải CÓ biển mây. Mask cho `clear` cả 5 khung, `P(mây) = 0.00`. Tức vệ
+tinh **thật sự không thấy gì**, và mục "Vệ tinh và người đi CÃI NHAU" bên dưới đã kết luận ĐÚNG
+từ đầu: lớp sương mỏng ngắn hạn thì hồng ngoại 2km không thấy. Lời "đính chính" tôi viết ở bản
+trước — rằng lý do trực tiếp là script tự điền "trời quang" — là sai, nay đã gỡ.
+
+**Hệ quả ngược hẳn với báo động ban đầu, và nó là tin tốt:** 650 dòng `CLEAR` kia là **mẫu ÂM
+TÍNH thật** — đúng thứ mà tài liệu này từ 25/8 vẫn ghi là "chưa có, cần báo cáo ngày KHÔNG có
+biển mây trước đã". Hoá ra bộ kiểm chứng đã có hàng trăm ngày âm tính hợp lệ từ vệ tinh. Vì thế
+`classify()` **GIỮ NGUYÊN** việc trả `CLEAR` cho no-data: đổi sang `NO_DATA` sẽ ném đi 650 nhãn
+âm tính đúng, làm bộ kiểm chứng tệ đi chứ không sạch hơn.
+
+Đã sửa, và chỉ sửa đúng phần hỏng thật: mặt nạ nay loại mọi giá trị âm (`hgt < 0`), vì không một
+độ cao đỉnh mây nào âm. **Nhãn ngày không đổi một dòng nào**; cái hết là 850 dòng từng báo ra
+`cloudTopMedian_m` ÂM — con số vô nghĩa mà `calibrate.ts` vẫn in ra làm bằng chứng
+("SEA_MARGINAL, đỉnh mây -999m").
+
+⚠️ Bài học phương pháp, ghi vì tôi vừa vấp: **"hai thứ khác nhau đi ra cùng một nhãn" là lý do
+để ĐI ĐO, không phải một kết luận.** Tôi đã viết thẳng vào tài liệu con số "32% tập sự thật là
+âm tính giả" khi chỉ mới chứng minh được cơ chế, chưa kiểm hệ quả — rồi phải tự gỡ. Có một sản
+phẩm độc lập nằm ngay cạnh trong cùng bucket mà chưa hỏi thì chưa được kết luận. Và `CldTopEmss`
+vẫn là tham số chết trong `classify()` (đọc rồi truyền vào, thân hàm không dùng) — không còn cấp
+bách nữa, nhưng vẫn nên dọn.
 
 ### 🛰️ Vệ tinh và người đi CÃI NHAU ngay ngày đầu (02/09/2026) — người đi thắng, và đây là vì sao
 

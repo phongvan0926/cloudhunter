@@ -138,6 +138,8 @@ npx vite-node scripts/gate-power.ts                # đo sức phân biệt củ
 npx vite-node scripts/ab-combine.ts                # so luật gộp cũ/mới trên cùng 1 lần lấy dữ liệu
 npx vite-node scripts/inversion-probe.ts           # "độ cao nghịch nhiệt" là phép đo hay là trần cửa sổ quét?
 npx vite-node scripts/summit-cloud-probe.ts        # đo tần suất bật của bộ dò mây đội đỉnh
+npx vite-node scripts/observer-gate-probe.ts       # cổng "chỗ tôi đứng có mây không": tần suất bật + quét trần ΔH
+~/.venvs/ch-verify/bin/python tools/audit_cloudmask.py --all   # nhãn CLEAR của vệ tinh có thật là trời quang? (AHI-CMSK)
 npx vite-node scripts/dump-rank.ts truoc.json …    # kết xuất bảng xếp hạng để so TRƯỚC/SAU một thay đổi engine
 npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác bao nhiêu điểm đổi nhãn/kết luận
 

@@ -45,6 +45,35 @@ export const WORTH_GOING_AGREEMENT = 50;   // % mô hình cùng kết luận SEA
 export const WORTH_GOING_SCORE = 60;
 
 /**
+ * TRẦN ΔH CHO CỔNG `observerInCloud` — ĐÃ THỬ 250m RỒI BỎ (đo 05/10/2026).
+ *
+ * Giả thuyết: cổng `observerInCloud` (07/09) bật BẤT KỂ ΔH dương bao nhiêu, nên ngày 04/10 app
+ * vừa in "ΔH +332m" vừa dán nhãn "Mù trùm — bạn chìm trong mây" (Tà Xùa, ngày người dùng xác
+ * nhận CÓ biển mây). Cửa sổ ±250m của cổng lấy mực áp suất gần nhất KỂ CẢ mực dưới chân người
+ * đứng — Tà Xùa 1.600m thì đó là 850hPa ~1.516m, mà "mực ngay dưới chân có mây" chính là định
+ * nghĩa của biển mây dưới chân. Nghe rất thuyết phục. Phép đo nói KHÔNG.
+ *
+ * Chấm trần 250m trên 645 dòng bản chụp CÓ sự thật đối chiếu (bằng chứng đã lưu, không fetch lại):
+ *
+ *   luật      đúng  bỏ sót  báo nhầm   bắt được   báo có thì đúng
+ *   cũ           9      19       172        32%            5%
+ *   trần 250m   10      18       189        36%            5%
+ *
+ * 18 dòng đổi sang "khuyên đi": 17 SAI, 1 ĐÚNG — và đúng duy nhất là Tà Xùa 04/10, chính ngày
+ * dùng để nghĩ ra bản sửa. Đó là overfit một ca, đúng thứ tài liệu này cấm.
+ *
+ * VÀ ĐÂY MỚI LÀ ĐIỀU ĐÁNG GHI: 16/17 ca báo nhầm có nhãn vệ tinh `CLEAR` — hôm đó KHÔNG CÓ MÂY
+ * GÌ CẢ, chứ không phải "người đứng trong mây". Nghĩa là cổng này lâu nay ĐÚNG VÌ LÝ DO SAI: nó
+ * che một lỗi khác, `estimateCloudTop` dựng ra "mặt biển mây" từ các tầng RH ≥80% trong những
+ * ngày trời quang. Bỏ cổng đi thì lỗi gốc lộ ra thành 17 lời khuyên sai.
+ *
+ * ⇒ Chỗ cần sửa là `estimateCloudTop` (đừng dựng mặt mây khi không có mây), KHÔNG phải cổng này.
+ * Giữ Infinity = hành vi engine-2.8.3. Tham số `observerFogMaxDeltaH` giữ lại để
+ * scripts/observer-gate-probe.ts còn đo lại được sau khi lỗi gốc đã sửa.
+ */
+export const OBSERVER_FOG_MAX_DELTA_H = Infinity;
+
+/**
  * Người đứng phải cao hơn mặt mây ÍT NHẤT ngần này mới khuyên đi (engine-2.8.2, 09/09/2026,
  * người dùng chốt 100m).
  *
@@ -428,7 +457,7 @@ export const SUMMIT_LIFT_CAP = 600;
  * 410m) mà nội suy làm 3/6 mô hình kết luận "trong mây". Giữ lại vì số đo ủng hộ (xem AGENTS.md),
  * không phải vì cơ chế đáng tin.
  */
-function levelAtObserver(m: DayModelData, ctx: DayContext, dist = 400): { h: number; rh: number; cc: number } | null {
+export function levelAtObserver(m: DayModelData, ctx: DayContext, dist = 400): { h: number; rh: number; cc: number } | null {
   let best: { h: number; rh: number; cc: number } | null = null;
   const valid = (m.levels ?? []).filter(l => Number.isFinite(l.rh));
   for (const l of valid) {
@@ -644,7 +673,10 @@ export interface ModelDayScore {
 }
 
 export function scoreOneModel(
-  model: WeatherModelId, m: DayModelData, ctx: DayContext, dateStr: string
+  model: WeatherModelId, m: DayModelData, ctx: DayContext, dateStr: string,
+  // Chỉ dùng cho script đo: truyền Infinity để chấm lại bằng luật TRƯỚC engine-2.8.4 trên
+  // cùng một mẻ dữ liệu (hai lần fetch không so được — Open-Meteo viết đè quá khứ).
+  opts?: { observerFogMaxDeltaH?: number }
 ): ModelDayScore {
   const reasons: string[] = [];
   const inv = computeInversion(m, ctx.valleyElevation);
@@ -828,7 +860,9 @@ export function scoreOneModel(
   //  biển mây, nhưng bị deepOvercast đè thành "Mù trùm — bạn chìm trong mây".)
   else if (top === null) status = (deepOvercast || summitCloud(m, ctx).inCloud) ? 'FOG' : 'CLEAR';
   // Trước khi kết luận "đứng trên biển mây": mô hình có báo mây NGAY tại cao độ này không?
-  else if (deltaH !== null && deltaH > -250 && observerInCloud(m, ctx)) status = 'FOG';
+  else if (deltaH !== null && deltaH > -250
+           && deltaH <= (opts?.observerFogMaxDeltaH ?? OBSERVER_FOG_MAX_DELTA_H)
+           && observerInCloud(m, ctx)) status = 'FOG';
   else if (deltaH !== null && deltaH > 250) status = wind.level === 'Low' ? 'STATIC' : 'FLOWING';
   else if (deltaH !== null && deltaH >= -250) status = wind.level === 'Low' ? 'FLUCTUATING' : 'ROLLING';
   else status = 'FOG';
