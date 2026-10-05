@@ -139,7 +139,13 @@ def main() -> None:
         with h5py.File(f, 'r') as h:
             hgt = h['CldTopHght'][r0:r1, c0:c1].astype('float64')
             ems = h['CldTopEmss'][r0:r1, c0:c1].astype('float64')
-        hgt[hgt < -1e10] = np.nan
+        # LỌC GIÁ TRỊ KHÔNG-ĐO-ĐƯỢC. Mặt nạ cũ chỉ bắt fill cực lớn (< -1e10) nên BỎ SÓT
+        # hẳn -999, là fill thật mà sản phẩm AHI-L2 dùng cho "không truy hồi được".
+        # Đo 05/10/2026 trên 43 file đã thu: 4.413/10.037 khung (44%) có giá trị -999 lọt lưới,
+        # và vì -999 < đáy thung lũng nên classify() trả CLEAR kèm câu "Đỉnh mây -999m chưa vượt
+        # đáy thung lũng" — tức no-data bị khai thành "trời quang". 850 dòng còn báo ra
+        # cloudTopMedian_m ÂM. Mọi giá trị âm đều vô nghĩa với độ cao đỉnh mây ⇒ loại hết.
+        hgt[(hgt < 0) | (hgt < -1e10)] = np.nan
         ems[ems < -1e10] = np.nan
         vn = (int(hhmm[:2]) + 7) % 24
         for s in spots:

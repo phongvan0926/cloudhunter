@@ -488,10 +488,13 @@ cho 26/8→03/09 — tức 4 báo cáo thực địa gần nhất đều không 
 chỉ có hindcast (in-sample). Một vòng kiểm chứng phụ thuộc vào việc nhớ chạy lệnh mỗi tối thì không
 phải vòng kiểm chứng. `.github/workflows/verify-loop.yml`:
 
-| giờ VN | việc | ghi vào |
+| giờ VN *đặt lịch* | việc | ghi vào |
 |---|---|---|
-| 20:00 | `snapshot-forecast.ts` — chụp dự báo rạng sáng **ngày mai** | `data/observations/<mai>-forecast.json` |
+| 20:00 | `snapshot-forecast.ts <mai>` — chụp dự báo rạng sáng **ngày mai** | `data/observations/<mai>-forecast.json` |
 | 08:30 | `verify_satellite.py <hôm nay>` rồi `calibrate.ts` (đọc trong log) | `data/observations/<nay>-satellite.json` |
+
+⚠️ Đó là giờ **đặt lịch**, không phải giờ nổ: GitHub trả cron trễ 3-7 giờ. Ngày mục tiêu vì thế
+phải neo vào lịch, không tính từ `now` — xem mục "Vòng tự chạy đã ÂM THẦM mất 6 ngày bằng chứng".
 
 Bot commit thẳng vào `main`; `deploy.yml` có `paths-ignore: data/observations/**` nên không build lại
 site 2 lần/ngày. Snapshot không bao giờ `--force` — đã có bản chụp thì script tự từ chối (bản chụp là
@@ -503,6 +506,178 @@ trong `verify_satellite.py` không ghi — máy dev có sẵn nên chưa bao gi�
 Kèm theo: báo cáo thực địa có thêm `duration: SHORT | LONG` (ô "mây tan nhanh khi nắng lên"), vì
 02/09 cho thấy câu hỏi thật của người đi là "có, nhưng được mấy tiếng?". Kho báo cáo trong repo
 đã chuẩn hoá về đúng từ vựng của app (`ABOVE` = chìm trong mây, không dùng `IN_CLOUD` nữa).
+
+#### 🕳️ Vòng tự chạy đã ÂM THẦM mất 6 ngày bằng chứng (sửa 05/10/2026)
+
+Vòng chạy từ 03/09 trông như hoạt động tốt: 32/32 lần chạy buổi tối đều nổ, 28 lần báo success.
+Nhưng kho bản chụp **trống 6 ngày** trong 04/09→06/10: `08, 15, 22, 26, 28/09` và `05/10`.
+
+**Nguyên nhân: ngày cần chụp được tính từ GIỜ CHẠY THẬT, mà cron của GitHub về trễ 3-7 giờ.**
+Cron đặt 13:00 UTC (20:00 VN) nhưng thực tế nổ rải rác **15:45-19:58 UTC** — tức hai bên mốc
+17:00 UTC = **00:00 giờ VN**. Script lấy mặc định `addDaysStr(vnTodayStr(), 1)`, nên:
+
+```
+10-02 18:11 UTC = 10-03 01:11 VN  →  "mai" = 10-04  → ghi 10-04 ✓
+10-03 16:56 UTC = 10-03 23:56 VN  →  "mai" = 10-04  → ĐỤNG, script từ chối đè, exit 1
+10-04 17:15 UTC = 10-05 00:15 VN  →  "mai" = 10-06  → ghi 10-06 ✓   ⇒ 10-05 không bao giờ có
+```
+
+Một lần trễ qua nửa đêm VN làm **nhảy vượt** một ngày; lần nổ sớm kế tiếp **đụng** bản chụp đã có
+rồi `exit 1`. Chấm lại cả 32 lần chạy bằng hai luật:
+
+```
+luật cũ (giờ VN lúc chạy)       4 lần đụng · 3 lần nhảy vượt  →  6 ngày mất
+luật mới (neo vào ngày UTC cron)  0 lần đụng · 0 lần nhảy vượt  →  phủ kín 04/09→05/10
+```
+
+Sửa: workflow tự chốt ngày bằng `date -u -d tomorrow +%F` rồi truyền vào script
+(`snapshot-forecast.ts` vốn đã nhận tham số ngày ở `argv[2]`, chỉ chưa ai truyền). Cron 13:00 UTC
+ngày D = 20:00 VN ngày D ⇒ rạng sáng mai = D+1 = (ngày UTC) + 1, đúng miễn độ trễ < 11 giờ.
+Job vệ tinh neo theo `date -u +%F` cùng lý do — nó chưa mất ngày nào vì cron 01:30 UTC còn xa mốc,
+nhưng để nguyên thì một hôm trễ nặng sẽ đi xin nhãn cho ngày MAI.
+
+**6 ngày đó mất vĩnh viễn** — Open-Meteo chỉ phục vụ lại quá khứ gần và còn viết đè nó (xem mục
+"Open-Meteo SỬA LẠI quá khứ"). Tuyệt đối không chụp bù bằng dữ liệu hôm nay rồi dán nhãn ngày cũ:
+đó là engine tự viết lại lịch sử của chính nó.
+
+⚠️ Bài học dùng được cho mọi vòng tự chạy: **"job success" không có nghĩa "dữ liệu đủ"**. Ba lần
+`failure` thì thấy ngay trong tab Actions, nhưng ba lần *nhảy vượt* thì job báo **success** và vẫn
+commit đàng hoàng — chỉ đếm file trong kho mới phát hiện được. Phép đo đúng là *đếm ngày trong kho*,
+không phải *đếm lần chạy thành công*. Và **đừng bao giờ tính ngày mục tiêu từ `now`** khi bộ hẹn giờ
+có thể về trễ qua mốc nửa đêm của múi giờ đang dùng — hãy neo vào lịch đã đặt.
+
+### 🎯 Năm ngày kiểm chứng NGOÀI MẪU đầu tiên — và lần khuyên đi ĐÚNG đầu tiên (01-04/10/2026)
+
+Người dùng báo (05/10) hai đợt: **03/10 và 04/10 có biển mây trên Tà Xùa**, và **Hang Kia
+(Pà Cò) có biển mây 3 ngày liên tiếp 01-02-03/10.** Đây là lần đầu tiên có báo cáo thực địa cho
+những ngày **đã có bản chụp dự báo thật** trong kho — tức bằng chứng "app đã nói gì TRƯỚC khi
+biết sự thật", không phải hindcast in-sample như 6 ca trước. Và Hang Kia là **điểm thứ hai** có
+nhiều ngày liên tiếp, gỡ bớt thế lệch "gần như chỉ Tà Xùa" của bộ mẫu cũ.
+
+```
+                                 bản chụp (chụp TRƯỚC 1-2 ngày, engine-2.8.3)
+01/10  Hang Kia - Pà Cò          40/100  FOG          ΔH -708m  đồng thuận  33%   KHÔNG  ✗
+02/10  Hang Kia - Pà Cò          70/100  FLOWING      ΔH +374m  đồng thuận  67%   CÓ     ✅
+03/10  Hang Kia - Pà Cò          48/100  DISSIPATING  ΔH +309m  đồng thuận  33%   KHÔNG  ✗
+```
+
+**Ngày 02/10 là lần khuyên đi ĐẦU TIÊN của luật engine-2.8 được thực địa xác nhận.** Từ 03/09
+tới nay tài liệu này vẫn ghi "⚠️ cái giá chưa đo được: tỉ lệ báo nhầm của luật mới" và "luật cũ
+đạt tỉ lệ báo nhầm hoàn hảo bằng cách không bao giờ khuyên đi" — nay đã có một ca dương tính thật,
+và nó là ca điểm cao nhất trong cả kho (70/100, ΔH +374m, hai mô hình cùng nhóm SEA).
+
+Hai ngày kia trượt, mỗi ngày vì một lý do khác nhau và **không ngày nào là lỗi vật lý**:
+
+- **01/10**: ba mô hình bất đồng tận gốc (gfs `FOG` top 2.191m · icon `STATIC` top 1.178m ·
+  ukmo `CLEAR`), đồng thuận 33%. ICON đúng và bị bỏ phiếu loại. Đây là giới hạn dữ liệu đã ghi
+  từ engine-2.3: không luật gộp nào cứu được khi đa số sai.
+- **03/10**: chia ba kết luận **1-1-1** (gfs 80 `STATIC` · icon 38 `FOG` · ukmo 48 `DISSIPATING`)
+  nên luật hoà-phiếu-chọn-nặng-hơn của engine-2.5 trao cho `BLOCKED` → `DISSIPATING`.
+  GFS chấm **80/100 STATIC** — lời gọi đúng, điểm cao nhất từng thấy — bị luật an toàn loại.
+  ΔH +309m đã vượt biên 100m; chỉ thiếu đồng thuận. Đây **không phải bug**: engine-2.5 đã chốt
+  "thà khuyên ở nhà nhầm còn hơn bắt người ta dậy 3h sáng". Nhưng giờ đã đo được cái giá của nó:
+  1 trong 3 ngày thật ở điểm này mất vì luật hoà phiếu, không vì vật lý.
+
+Còn Tà Xùa thì trượt sạch:
+
+```
+                                 bản chụp (engine-2.8.3, chụp TRƯỚC 1-2 ngày)
+03/10  Tà Xùa                    50/100  FOG   ΔH  -10m   đồng thuận 67%   KHÔNG khuyên đi
+       Trạm phát sóng Tà Xùa     46/100  FOG   ΔH +143m   đồng thuận 100%  KHÔNG khuyên đi
+04/10  Tà Xùa                    50/100  FOG   ΔH +332m   đồng thuận 67%   KHÔNG khuyên đi
+       Trạm phát sóng Tà Xùa     50/100  FOG   ΔH +485m   đồng thuận 67%   KHÔNG khuyên đi
+```
+
+Chỗ đáng chú ý không phải con số điểm — mà là
+**app tự mâu thuẫn ngay trong một dòng**: ngày 04/10 nó nói người đứng **cao hơn mặt mây 332m**
+(Trạm phát sóng: 485m) rồi dán nhãn *"Mù trùm — bạn chìm trong mây"*.
+
+Thủ phạm, xác định bằng loại trừ trên cây quyết định của `scoreOneModel`: với `top ≠ null` và
+`ΔH > 250` thì nhánh duy nhất còn trả `FOG` là **`observerInCloud`** (dòng 831). Bản chụp 04/10
+cho thấy GFS tự tính đỉnh mây 1.019m dưới chỗ đứng 1.600m — ΔH **+581m** của riêng nó — mà vẫn ra
+`FOG`. ICON tương tự (đỉnh mây 1.517m, ΔH +83m → `FOG`). Cổng này **bật bất kể ΔH dương bao nhiêu**:
+
+```js
+else if (deltaH !== null && deltaH > -250 && observerInCloud(m, ctx)) status = 'FOG';
+```
+
+Và nó đọc mực áp suất gần chỗ đứng nhất trong **±250m** — với Tà Xùa 1.600m thì đó là mực 850hPa
+ở ~1.516m, tức **mực nằm NGAY DƯỚI chân người đứng**. Mực ấy có mây chính là *định nghĩa* của
+biển mây dưới chân; engine lại đọc nó thành "bạn đang ở trong mây". Cửa sổ ±250m không phân biệt
+"mây dưới chân tôi 84m" với "mây ngang mặt tôi".
+
+Đây đúng là loại lỗi engine-2.5 từng sửa một lần ("tự mâu thuẫn ngay trong một màn hình"), nay
+tái diễn ở một cổng khác. Và nó chính là **mẫu phản chứng mà mục engine-2.8.3 bên dưới đã xin**:
+*"cổng này chỉ đi MỘT CHIỀU, chưa lần nào thêm một nhãn biển mây"* — giờ đã có hai ngày thật cho
+thấy cái giá của chiều đó.
+
+⚠️ **CHƯA SỬA, và đừng sửa bằng cách nới ngưỡng.** Việc phải làm trước:
+1. Đo `observerInCloud` trên toàn thư viện, tách riêng ca "mực đọc được nằm DƯỚI chỗ đứng" với
+   ca "nằm TRÊN" — giả thuyết là chỉ nhóm dưới mới sai.
+2. Chạy `sweep-deltah.ts` + `calibrate.ts` lại với 2 ngày mới này trong mẫu.
+3. Nhớ rằng mẫu người-đi vẫn **toàn dương tính** (11/11 báo cáo đều là ngày CÓ biển mây, trừ
+   Fansipan 02/09): mọi thay đổi khiến app nói "có" nhiều hơn đều sẽ trông đẹp trên bảng này.
+   Cần một ngày KHÔNG có biển mây tại chỗ — và **không được lấy nhãn `CLEAR` của vệ tinh thay thế**
+   (xem mục "Tập sự thật của vệ tinh có 32% là no-data" ngay dưới).
+4. Hindcast 03-04/10 **không** dùng để chấm được — đã kiểm 05/10: API trả ΔH -590m cho ngày 04/10
+   trong khi bản chụp ghi +332m. Chỉ bản chụp là bằng chứng.
+
+Thời lượng biển mây hai ngày này **chưa hỏi** — `duration` để trống trong `field-reports.json`,
+không đoán.
+
+### 🚨 Tập sự thật của vệ tinh có 32% là NO-DATA bị khai thành "trời quang" (05/10/2026)
+
+`tools/verify_satellite.py` lọc giá trị fill bằng `hgt[hgt < -1e10] = np.nan`. Mặt nạ đó chỉ bắt
+fill cực lớn và **bỏ sót hẳn `-999`**, là fill mà sản phẩm AHI-L2 thật sự dùng cho "không truy
+hồi được". `-999` sống sót như một con số hợp lệ, rồi trong `classify()` nó rơi vào nhánh
+
+```py
+if top <= valley + MARGIN_ABOVE:
+    return 'CLEAR', f'Đỉnh mây {top:.0f}m chưa vượt đáy thung lũng {valley}m'
+```
+
+vì −999 nhỏ hơn mọi đáy thung lũng. **Không đo được bị khai thành "trời quang, xác nhận không có
+biển mây"** — đúng thứ mà chính dòng docstring của hàm cấm: *"thà nói KHÔNG BIẾT còn hơn đoán"*.
+
+Đo trên toàn bộ 43 file đã thu (2.001 dòng điểm-ngày, 10.037 khung có số):
+
+```
+khung mang giá trị -999                                   4.413 / 10.037   (44%)
+dòng báo ra cloudTopMedian_m ÂM (độ cao vô nghĩa)           850
+dòng nhãn CLEAR                                             789
+   ├─ KHÔNG có một khung nào đo được đỉnh mây thật           650  = 82% số CLEAR · 32% toàn kho
+   └─ có ít nhất một khung đo thật                           139
+```
+
+**650 dòng "CLEAR" được dựng trên không một phép đo nào.** Và ví dụ đầu tiên trong danh sách
+chính là ca đã biết: `2026-09-02 Tà Xùa — CLEAR` với **5/5 khung đều no-data**, trong khi người
+dùng xác nhận Khe Cải (Tà Xùa) sáng đó CÓ biển mây. Mục "Vệ tinh và người đi CÃI NHAU" bên dưới
+quy nguyên nhân cho "sương mỏng 2km hồng ngoại không thấy" — đúng một phần, nhưng **lý do trực
+tiếp là vệ tinh không trả về số nào cả và script tự điền 'trời quang'.**
+
+Hệ quả cho mọi bảng hiệu chuẩn đã in từ 03/09: cột **"báo nhầm"** và **"báo đúng không"** đều
+bị thổi lên bởi những dòng âm tính giả này. Bảng ngày 05/10 (649 cặp) ghi luật đáng đi *"đúng 70%,
+bắt được 31%, khi app báo có thì đúng 5%"* — con số 5% ấy là **cận dưới bị nhiễm**, không phải
+một phép đo. Không được dùng nó để siết cổng.
+
+Đã sửa (05/10) phần KHÔNG có tranh cãi: mặt nạ nay loại mọi giá trị âm (`hgt < 0`), vì không một
+độ cao đỉnh mây nào âm. Nhãn ngày **không đổi** (−999 và `None` đều vẫn ra `CLEAR`), chỉ hết báo
+ra độ cao âm.
+
+⚠️ **CHƯA sửa, và cần anh Phong quyết** — phần thật sự quan trọng: `classify()` trả `CLEAR` cho
+cả `top is None`. Với một sản phẩm *độ cao đỉnh mây*, "không truy hồi được" có thể là trời quang
+thật (không mây ⇒ không có đỉnh mây) **hoặc** là trượt phép truy hồi — và `CldTopHght` một mình
+không phân biệt được. Đổi nhánh đó thành `NO_DATA` sẽ **loại 650 dòng khỏi phép chấm (32% kho)**,
+làm bảng hiệu chuẩn nhỏ lại nhiều nhưng sạch. Đây là quyết định về nghĩa của tập sự thật, không
+phải chỉnh hằng số, nên không tự làm.
+
+Gợi ý khi làm: script **đã đọc `CldTopEmss`** và truyền vào `classify(top, emiss, …)` nhưng
+**thân hàm chưa bao giờ dùng `emiss`** — tham số chết. Chính trường đó là thứ phân biệt "không
+mây" với "không truy hồi". Nối dây nó là việc nên làm trước khi đổi nhãn.
+
+Backfill: 43 file hiện có vẫn giữ `cloudTopMedian_m` âm. Khung thô (`frames`) là bằng chứng và
+còn nguyên, nên tính lại trường dẫn xuất đó là an toàn — nhưng nó ghi lại 43 file đã commit nên
+chờ anh đồng ý, chưa chạy.
 
 ### 🛰️ Vệ tinh và người đi CÃI NHAU ngay ngày đầu (02/09/2026) — người đi thắng, và đây là vì sao
 

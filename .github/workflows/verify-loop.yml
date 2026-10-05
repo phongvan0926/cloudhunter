@@ -21,7 +21,7 @@ on:
         required: false
         default: 'snapshot'
       date:
-        description: 'Ngày rạng sáng cần lấy nhãn vệ tinh (YYYY-MM-DD); để trống = hôm nay giờ VN. Dùng khi chạy tay cho ngày đã qua.'
+        description: 'Ngày rạng sáng (YYYY-MM-DD). Để trống: job satellite lấy hôm nay, job snapshot lấy ngày mai. Chạy tay cho ngày đã qua: chỉ có nghĩa với satellite — snapshot ngày cũ KHÔNG còn là bằng chứng (Open-Meteo viết đè quá khứ).'
         required: false
         default: ''
 
@@ -43,16 +43,35 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # NGÀY CẦN CHỤP PHẢI NEO VÀO LỊCH CRON, KHÔNG THEO GIỜ CHẠY THẬT.
+      #
+      # Lỗi thật (đo 05/10/2026 trên 32 lần chạy theo lịch): GitHub trả cron chậm 3-7 giờ,
+      # nên cron 13:00 UTC thực tế nổ rải rác 15:45-19:58 UTC — tức hai bên mốc 17:00 UTC
+      # (= 00:00 giờ VN). Script mặc định lấy "mai theo giờ VN LÚC CHẠY", nên lần nổ sớm và
+      # lần nổ muộn rơi vào hai ngày VN khác nhau: lần muộn nhảy VƯỢT một ngày, lần sớm kế
+      # tiếp ĐỤNG bản chụp đã có rồi exit 1. Hậu quả: 6 ngày mất vĩnh viễn trong 04/09→06/10
+      # (08, 15, 22, 26, 28/09 và 05/10) — Open-Meteo chỉ phục vụ lại quá khứ gần nên không
+      # ngày nào lấy lại được. Đo lại cùng lịch sử bằng luật neo-cron: 0 đụng, 0 nhảy vượt.
+      #
+      # Cron 13:00 UTC ngày D = 20:00 VN ngày D ⇒ "rạng sáng mai" = D+1 = (ngày UTC) + 1.
+      # Còn đúng miễn độ trễ < 11 giờ (chưa lần nào vượt 7).
+      - name: Chốt ngày cần chụp
+        id: target
+        run: |
+          D="${{ github.event.inputs.date }}"
+          [ -z "$D" ] && D="$(date -u -d tomorrow +%F)"
+          echo "date=$D" >> "$GITHUB_OUTPUT"
+          echo "chụp dự báo rạng sáng $D (chạy lúc $(date -u +%FT%TZ), trễ so với 13:00 UTC)"
       - name: Chụp dự báo rạng sáng ngày mai
         # Không --force: đã có bản chụp thì script tự từ chối đè (bản chụp là bằng chứng).
-        run: npx vite-node scripts/snapshot-forecast.ts
+        run: npx vite-node scripts/snapshot-forecast.ts "${{ steps.target.outputs.date }}"
       - name: Commit bản chụp
         run: |
           git config user.name  "cloudhunter-verify[bot]"
           git config user.email "cloudhunter-verify[bot]@users.noreply.github.com"
           git add data/observations/
           git diff --cached --quiet && echo "không có gì mới" && exit 0
-          git commit -m "chụp dự báo $(TZ=Asia/Ho_Chi_Minh date -d tomorrow +%F) [bot]"
+          git commit -m "chụp dự báo ${{ steps.target.outputs.date }} [bot]"
           git pull --rebase origin main
           git push
 
@@ -65,12 +84,21 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install h5py fsspec requests aiohttp   # aiohttp: fsspec.filesystem("http") cần, thiếu là ImportError
+      # Cùng lý do neo lịch như job snapshot: cron 01:30 UTC ngày D = 08:30 VN ngày D, nên
+      # "rạng sáng hôm nay" = ngày UTC của lần chạy. Job này chưa mất ngày nào (độ trễ buổi
+      # sáng còn xa mốc 17:00 UTC), nhưng để nguyên "giờ VN lúc chạy" thì một hôm trễ nặng
+      # sẽ đi xin nhãn cho ngày MAI — ngày vệ tinh chưa thể có dữ liệu.
+      - name: Chốt ngày cần lấy nhãn
+        id: target
+        run: |
+          D="${{ github.event.inputs.date }}"
+          [ -z "$D" ] && D="$(date -u +%F)"
+          echo "date=$D" >> "$GITHUB_OUTPUT"
       - name: Nhãn thật từ vệ tinh Himawari cho rạng sáng hôm nay
         # Dữ liệu NOAA trên S3 đôi khi trễ vài giờ; lỗi ở đây không được làm hỏng job —
         # ngày thiếu sẽ hiện trong calibrate là "không có nhãn", không bịa.
         run: |
-          D="${{ github.event.inputs.date }}"
-          [ -z "$D" ] && D="$(TZ=Asia/Ho_Chi_Minh date +%F)"
+          D="${{ steps.target.outputs.date }}"
           echo "lấy nhãn vệ tinh cho rạng sáng $D"
           python tools/verify_satellite.py "$D" || echo "::warning::vệ tinh chưa có dữ liệu cho $D, thử lại tay sau (Actions → Run workflow → job=satellite, date=$D)"
       - uses: actions/setup-node@v4
@@ -86,6 +114,6 @@ jobs:
           git config user.email "cloudhunter-verify[bot]@users.noreply.github.com"
           git add data/observations/
           git diff --cached --quiet && echo "không có gì mới" && exit 0
-          git commit -m "nhãn vệ tinh ${{ github.event.inputs.date || '$(TZ=Asia/Ho_Chi_Minh date +%F)' }} [bot]"
+          git commit -m "nhãn vệ tinh ${{ steps.target.outputs.date }} [bot]"
           git pull --rebase origin main
           git push
