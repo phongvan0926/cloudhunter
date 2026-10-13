@@ -1,0 +1,1767 @@
+{
+  "date": "2026-10-14",
+  "engineVersion": "engine-2.8.3",
+  "snapshotAt": "2026-10-13T16:20:24.625Z",
+  "spots": [
+    {
+      "key": "LUNG_VAN",
+      "name": "Lũng Vân (Nóc nhà xứ Mường)",
+      "score": 62,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1202,
+      "valleyElevation": 715,
+      "cloudTop": 1062,
+      "deltaH": 140,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 62,
+          "status": "FLUCTUATING",
+          "cloudTop": 1061
+        },
+        {
+          "model": "icon_seamless",
+          "score": 64,
+          "status": "FLUCTUATING",
+          "cloudTop": 1062
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 56,
+          "status": "FOG",
+          "cloudTop": 1711
+        }
+      ]
+    },
+    {
+      "key": "PHA_LUONG",
+      "name": "Đỉnh Pha Luông",
+      "score": 61,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 1880,
+      "valleyElevation": 1400,
+      "cloudTop": 1755,
+      "deltaH": 125,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 60,
+          "status": "ROLLING",
+          "cloudTop": 1800
+        },
+        {
+          "model": "icon_seamless",
+          "score": 61,
+          "status": "FOG",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 66,
+          "status": "ROLLING",
+          "cloudTop": 1710
+        }
+      ]
+    },
+    {
+      "key": "KY_QUAN_SAN",
+      "name": "Ky Quan San (Bạch Mộc Lương Tử)",
+      "score": 60,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 3046,
+      "valleyElevation": 900,
+      "cloudTop": 1704,
+      "deltaH": 1342,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 64,
+          "status": "STATIC",
+          "cloudTop": 1211
+        },
+        {
+          "model": "icon_seamless",
+          "score": 25,
+          "status": "STATIC",
+          "cloudTop": 1704
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 60,
+          "status": "STATIC",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "DEO_MA_PI_LENG",
+      "name": "Đèo Mã Pí Lèng (Mèo Vạc)",
+      "score": 52,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1400,
+      "valleyElevation": 350,
+      "cloudTop": 1158,
+      "deltaH": 242,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 28,
+          "status": "FLUCTUATING",
+          "cloudTop": 1552
+        },
+        {
+          "model": "icon_seamless",
+          "score": 52,
+          "status": "STATIC",
+          "cloudTop": 763
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 59,
+          "status": "FOG",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "PHU_SA_PHIN",
+      "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+      "score": 48,
+      "status": "STATIC",
+      "agreement": 67,
+      "observerAlt": 2865,
+      "valleyElevation": 1735,
+      "cloudTop": 2225,
+      "deltaH": 640,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 38,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 48,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 76,
+          "status": "STATIC",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "SA_MU_U_BO",
+      "name": "Sa Mu - U Bò (2756m)",
+      "score": 48,
+      "status": "STATIC",
+      "agreement": 67,
+      "observerAlt": 2756,
+      "valleyElevation": 1400,
+      "cloudTop": 2225,
+      "deltaH": 531,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 38,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 48,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 70,
+          "status": "STATIC",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "PUSILUNG",
+      "name": "Pusilung (Biên giới)",
+      "score": 46,
+      "status": "FLOWING",
+      "agreement": 100,
+      "observerAlt": 3083,
+      "valleyElevation": 1561,
+      "cloudTop": 2220,
+      "deltaH": 863,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 52,
+          "status": "FLOWING",
+          "cloudTop": 2213
+        },
+        {
+          "model": "icon_seamless",
+          "score": 46,
+          "status": "FLOWING",
+          "cloudTop": 2220
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 44,
+          "status": "FLOWING",
+          "cloudTop": 2225
+        }
+      ]
+    },
+    {
+      "key": "LAO_THAN",
+      "name": "Lảo Thẩn (Y Tý)",
+      "score": 45,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2860,
+      "valleyElevation": 1800,
+      "cloudTop": 2226,
+      "deltaH": 634,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 60,
+          "status": "STATIC",
+          "cloudTop": 2250
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 40,
+          "status": "STATIC",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "NHIU_CO_SAN",
+      "name": "Nhìu Cồ San (Sừng Trâu)",
+      "score": 45,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2965,
+      "valleyElevation": 1000,
+      "cloudTop": 2221,
+      "deltaH": 744,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 64,
+          "status": "STATIC",
+          "cloudTop": 1211
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 40,
+          "status": "STATIC",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "CU_NHU_SAN",
+      "name": "Đỉnh Cú Nhù San",
+      "score": 45,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2662,
+      "valleyElevation": 1200,
+      "cloudTop": 2221,
+      "deltaH": 441,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 60,
+          "status": "STATIC",
+          "cloudTop": 1650
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 40,
+          "status": "STATIC",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "NAM_KANG_HO_TAO",
+      "name": "Nam Kang Ho Tao",
+      "score": 43,
+      "status": "FLOWING",
+      "agreement": 100,
+      "observerAlt": 2881,
+      "valleyElevation": 1702,
+      "cloudTop": 2221,
+      "deltaH": 660,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 43,
+          "status": "FLOWING",
+          "cloudTop": 2164
+        },
+        {
+          "model": "icon_seamless",
+          "score": 40,
+          "status": "FLOWING",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 70,
+          "status": "FLOWING",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "TA_CHI_NHU",
+      "name": "Tà Chì Nhù (Đồi hoa tím)",
+      "score": 42,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2979,
+      "valleyElevation": 1200,
+      "cloudTop": 2221,
+      "deltaH": 758,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 42,
+          "status": "STATIC",
+          "cloudTop": 1703
+        },
+        {
+          "model": "icon_seamless",
+          "score": 52,
+          "status": "STATIC",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 29,
+          "status": "STATIC",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "CHIEU_LAU_THI",
+      "name": "Đỉnh Chiêu Lầu Thi",
+      "score": 40,
+      "status": "FLUCTUATING",
+      "agreement": 100,
+      "observerAlt": 2402,
+      "valleyElevation": 1000,
+      "cloudTop": 1562,
+      "deltaH": 840,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "FLUCTUATING",
+          "cloudTop": 2217
+        },
+        {
+          "model": "icon_seamless",
+          "score": 68,
+          "status": "STATIC",
+          "cloudTop": 1557
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 40,
+          "status": "FLOWING",
+          "cloudTop": 1562
+        }
+      ]
+    },
+    {
+      "key": "CUC_TAY_A_PA_CHAI",
+      "name": "Cực Tây A Pa Chải",
+      "score": 39,
+      "status": "STATIC",
+      "agreement": 67,
+      "observerAlt": 1864,
+      "valleyElevation": 941,
+      "cloudTop": 1390,
+      "deltaH": 474,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 42,
+          "status": "STATIC",
+          "cloudTop": 1229
+        },
+        {
+          "model": "icon_seamless",
+          "score": 39,
+          "status": "STATIC",
+          "cloudTop": 1551
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 38,
+          "status": "FOG",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "MAU_SON",
+      "name": "Mẫu Sơn (Lạng Sơn)",
+      "score": 39,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 1155,
+      "valleyElevation": 300,
+      "cloudTop": 775,
+      "deltaH": 380,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "STATIC",
+          "cloudTop": 775
+        },
+        {
+          "model": "icon_seamless",
+          "score": 39,
+          "status": "STATIC",
+          "cloudTop": 825
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 43,
+          "status": "FLOWING",
+          "cloudTop": 519
+        }
+      ]
+    },
+    {
+      "key": "BA_DEN",
+      "name": "Núi Bà Đen (Tây Ninh)",
+      "score": 38,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 986,
+      "valleyElevation": 80,
+      "cloudTop": 520,
+      "deltaH": 466,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 0,
+          "status": "FOG",
+          "cloudTop": 1677
+        },
+        {
+          "model": "icon_seamless",
+          "score": 38,
+          "status": "FLOWING",
+          "cloudTop": 557
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 47,
+          "status": "FLOWING",
+          "cloudTop": 483
+        }
+      ]
+    },
+    {
+      "key": "DEO_PHA_DIN",
+      "name": "Đèo Pha Đin",
+      "score": 37,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 1300,
+      "valleyElevation": 760,
+      "cloudTop": 1190,
+      "deltaH": 110,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 61,
+          "status": "FLUCTUATING",
+          "cloudTop": 1207
+        },
+        {
+          "model": "icon_seamless",
+          "score": 26,
+          "status": "ROLLING",
+          "cloudTop": 1173
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 37,
+          "status": "FOG",
+          "cloudTop": 1709
+        }
+      ]
+    },
+    {
+      "key": "TA_XUA_TRAM_PHAT",
+      "name": "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
+      "score": 36,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 1753,
+      "valleyElevation": 530,
+      "cloudTop": 1109,
+      "deltaH": 644,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "STATIC",
+          "cloudTop": 1212
+        },
+        {
+          "model": "icon_seamless",
+          "score": 41,
+          "status": "FLOWING",
+          "cloudTop": 1005
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 21,
+          "status": "FOG",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "LUNG_CUNG",
+      "name": "Lùng Cúng",
+      "score": 36,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2913,
+      "valleyElevation": 1100,
+      "cloudTop": 2222,
+      "deltaH": 691,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "STATIC",
+          "cloudTop": 2220
+        },
+        {
+          "model": "icon_seamless",
+          "score": 49,
+          "status": "STATIC",
+          "cloudTop": 2222
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 30,
+          "status": "STATIC",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "FANSIPAN",
+      "name": "Fansipan (Nóc nhà Đông Dương)",
+      "score": 34,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 3143,
+      "valleyElevation": 1900,
+      "cloudTop": 2269,
+      "deltaH": 874,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 24,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 34,
+          "status": "FLOWING",
+          "cloudTop": 2263
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FLOWING",
+          "cloudTop": 2275
+        }
+      ]
+    },
+    {
+      "key": "BA_VI",
+      "name": "Đỉnh Ba Vì (Đỉnh Vua)",
+      "score": 32,
+      "status": "STATIC",
+      "agreement": 67,
+      "observerAlt": 1296,
+      "valleyElevation": 100,
+      "cloudTop": 519,
+      "deltaH": 777,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "STATIC",
+          "cloudTop": 525
+        },
+        {
+          "model": "icon_seamless",
+          "score": 62,
+          "status": "STATIC",
+          "cloudTop": 512
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 29,
+          "status": "FOG",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "CHIENG_CONG",
+      "name": "Điểm săn mây Chiềng Công (Mường La)",
+      "score": 30,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1350,
+      "valleyElevation": 656,
+      "cloudTop": 1214,
+      "deltaH": 136,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "FLUCTUATING",
+          "cloudTop": 1210
+        },
+        {
+          "model": "icon_seamless",
+          "score": 23,
+          "status": "FOG",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 30,
+          "status": "FLUCTUATING",
+          "cloudTop": 1218
+        }
+      ]
+    },
+    {
+      "key": "NGU_CHI_SON",
+      "name": "Ngũ Chỉ Sơn",
+      "score": 22,
+      "status": "FLOWING",
+      "agreement": 100,
+      "observerAlt": 2858,
+      "valleyElevation": 1200,
+      "cloudTop": 2221,
+      "deltaH": 637,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 22,
+          "status": "FLOWING",
+          "cloudTop": 1702
+        },
+        {
+          "model": "icon_seamless",
+          "score": 26,
+          "status": "FLOWING",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 17,
+          "status": "FLOWING",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "TAY_CON_LINH",
+      "name": "Tây Côn Lĩnh",
+      "score": 22,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 2428,
+      "valleyElevation": 800,
+      "cloudTop": 1889,
+      "deltaH": 539,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 22,
+          "status": "ROLLING",
+          "cloudTop": 2219
+        },
+        {
+          "model": "icon_seamless",
+          "score": 42,
+          "status": "FLOWING",
+          "cloudTop": 1558
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 15,
+          "status": "FOG",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "TA_LIEN_SON",
+      "name": "Tả Liên Sơn (Cổ Trâu)",
+      "score": 18,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 2996,
+      "valleyElevation": 1000,
+      "cloudTop": 1838,
+      "deltaH": 1158,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 18,
+          "status": "FLOWING",
+          "cloudTop": 1450
+        },
+        {
+          "model": "icon_seamless",
+          "score": 4,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 26,
+          "status": "FLOWING",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "PUTALENG",
+      "name": "Putaleng",
+      "score": 17,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 3049,
+      "valleyElevation": 800,
+      "cloudTop": 1719,
+      "deltaH": 1330,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 22,
+          "status": "FLOWING",
+          "cloudTop": 1211
+        },
+        {
+          "model": "icon_seamless",
+          "score": 0,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 17,
+          "status": "FLOWING",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "TA_LENG_SAN_MAY",
+      "name": "Đồi săn mây Tả Lèng (Lai Châu)",
+      "score": 17,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 1360,
+      "valleyElevation": 786,
+      "cloudTop": 1226,
+      "deltaH": 134,
+      "worthGoing": true,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 30,
+          "status": "ROLLING",
+          "cloudTop": 1236
+        },
+        {
+          "model": "icon_seamless",
+          "score": 12,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 17,
+          "status": "ROLLING",
+          "cloudTop": 1216
+        }
+      ]
+    },
+    {
+      "key": "PU_LUONG",
+      "name": "Pù Luông",
+      "score": 66,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1700,
+      "valleyElevation": 400,
+      "cloudTop": 1386,
+      "deltaH": 314,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 78,
+          "status": "STATIC",
+          "cloudTop": 973
+        },
+        {
+          "model": "icon_seamless",
+          "score": 66,
+          "status": "FOG",
+          "cloudTop": 1061
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 66,
+          "status": "FOG",
+          "cloudTop": 1710
+        }
+      ]
+    },
+    {
+      "key": "DEO_THUNG_KHE",
+      "name": "Đèo Thung Khe (Đèo Đá Trắng)",
+      "score": 65,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 830,
+      "valleyElevation": 343,
+      "cloudTop": 902,
+      "deltaH": -72,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 65,
+          "status": "FLUCTUATING",
+          "cloudTop": 741
+        },
+        {
+          "model": "icon_seamless",
+          "score": 68,
+          "status": "FLUCTUATING",
+          "cloudTop": 1062
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 47,
+          "status": "FOG",
+          "cloudTop": 1711
+        }
+      ]
+    },
+    {
+      "key": "NGAI_THAU_THUONG",
+      "name": "Ngải Thầu Thượng (Y Tý)",
+      "score": 61,
+      "status": "FLUCTUATING",
+      "agreement": 100,
+      "observerAlt": 2190,
+      "valleyElevation": 1500,
+      "cloudTop": 2221,
+      "deltaH": -31,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 61,
+          "status": "FLUCTUATING",
+          "cloudTop": 2216
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "FLUCTUATING",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FLUCTUATING",
+          "cloudTop": 2226
+        }
+      ]
+    },
+    {
+      "key": "DONG_VAN",
+      "name": "Cao nguyên đá Đồng Văn (Mã Pí Lèng)",
+      "score": 61,
+      "status": "FOG",
+      "agreement": 33,
+      "observerAlt": 1511,
+      "valleyElevation": 1100,
+      "cloudTop": 2228,
+      "deltaH": -717,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 24,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 61,
+          "status": "FLUCTUATING",
+          "cloudTop": 1557
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "BAN_NA",
+      "name": "Điểm săn mây Bản Nà (Tân Yên)",
+      "score": 59,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 740,
+      "valleyElevation": 469,
+      "cloudTop": 1719,
+      "deltaH": -979,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 59,
+          "status": "FOG",
+          "cloudTop": 1210
+        },
+        {
+          "model": "icon_seamless",
+          "score": 60,
+          "status": "FLUCTUATING",
+          "cloudTop": 742
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 51,
+          "status": "FOG",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "SUOI_THAU",
+      "name": "Thảo nguyên Suôi Thầu (Xín Mần)",
+      "score": 58,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1200,
+      "valleyElevation": 274,
+      "cloudTop": 2223,
+      "deltaH": -1023,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "FOG",
+          "cloudTop": 2217
+        },
+        {
+          "model": "icon_seamless",
+          "score": 66,
+          "status": "FLUCTUATING",
+          "cloudTop": 979
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FOG",
+          "cloudTop": 2228
+        }
+      ]
+    },
+    {
+      "key": "KEO_LOM",
+      "name": "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+      "score": 57,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 860,
+      "valleyElevation": 753,
+      "cloudTop": 2220,
+      "deltaH": -1360,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 68,
+          "status": "FOG",
+          "cloudTop": 1208
+        },
+        {
+          "model": "icon_seamless",
+          "score": 49,
+          "status": "FOG",
+          "cloudTop": 2220
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 57,
+          "status": "FOG",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "HANG_KIA_PA_CO",
+      "name": "Hang Kia - Pà Cò (Thung Mài)",
+      "score": 56,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1483,
+      "valleyElevation": 800,
+      "cloudTop": 1966,
+      "deltaH": -483,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 57,
+          "status": "STATIC",
+          "cloudTop": 1061
+        },
+        {
+          "model": "icon_seamless",
+          "score": 56,
+          "status": "FOG",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 34,
+          "status": "FOG",
+          "cloudTop": 1711
+        }
+      ]
+    },
+    {
+      "key": "SAPA_HAM_RONG",
+      "name": "Thị trấn Sapa (Hàm Rồng)",
+      "score": 53,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 1200,
+      "cloudTop": 1966,
+      "deltaH": -366,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 38,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 53,
+          "status": "FOG",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1710
+        }
+      ]
+    },
+    {
+      "key": "BINH_LIEU",
+      "name": "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+      "score": 52,
+      "status": "DISSIPATING",
+      "agreement": 33,
+      "observerAlt": 1429,
+      "valleyElevation": 367,
+      "cloudTop": 2229,
+      "deltaH": -800,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 12,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 58,
+          "status": "FOG",
+          "cloudTop": 825
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 2229
+        }
+      ]
+    },
+    {
+      "key": "LANG_BIANG",
+      "name": "Núi Lang Biang",
+      "score": 47,
+      "status": "ROLLING",
+      "agreement": 100,
+      "observerAlt": 2167,
+      "valleyElevation": 1467,
+      "cloudTop": 2195,
+      "deltaH": -28,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 47,
+          "status": "STATIC",
+          "cloudTop": 1680
+        },
+        {
+          "model": "icon_seamless",
+          "score": 33,
+          "status": "ROLLING",
+          "cloudTop": 2195
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FLUCTUATING",
+          "cloudTop": 2201
+        }
+      ]
+    },
+    {
+      "key": "DOI_MAM_XOI",
+      "name": "Đồi Mâm Xôi (Mù Cang Chải)",
+      "score": 46,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1225,
+      "valleyElevation": 700,
+      "cloudTop": 1702,
+      "deltaH": -477,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 46,
+          "status": "FOG",
+          "cloudTop": 1702
+        },
+        {
+          "model": "icon_seamless",
+          "score": 66,
+          "status": "FOG",
+          "cloudTop": 1068
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 43,
+          "status": "FOG",
+          "cloudTop": 2227
+        }
+      ]
+    },
+    {
+      "key": "LINH_QUY_PHAP_AN",
+      "name": "Linh Quy Pháp Ấn (Bảo Lộc)",
+      "score": 45,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 850,
+      "valleyElevation": 729,
+      "cloudTop": 1063,
+      "deltaH": -213,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 45,
+          "status": "FLUCTUATING",
+          "cloudTop": 946
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "FOG",
+          "cloudTop": 1179
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FOG",
+          "cloudTop": 947
+        }
+      ]
+    },
+    {
+      "key": "BAN_HANG_DA",
+      "name": "Bản Hang Đá (Sapa)",
+      "score": 44,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 1300,
+      "cloudTop": 1707,
+      "deltaH": -107,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 42,
+          "status": "FLUCTUATING",
+          "cloudTop": 1703
+        },
+        {
+          "model": "icon_seamless",
+          "score": 53,
+          "status": "FOG",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 44,
+          "status": "FLUCTUATING",
+          "cloudTop": 1710
+        }
+      ]
+    },
+    {
+      "key": "DEO_O_QUY_HO",
+      "name": "Đèo Ô Quy Hồ",
+      "score": 40,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 2035,
+      "valleyElevation": 1700,
+      "cloudTop": 2148,
+      "deltaH": -113,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 40,
+          "status": "FLUCTUATING",
+          "cloudTop": 2221
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 66,
+          "status": "ROLLING",
+          "cloudTop": 2075
+        }
+      ]
+    },
+    {
+      "key": "CAU_DAT",
+      "name": "Đồi chè Cầu Đất (Đà Lạt)",
+      "score": 38,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1500,
+      "valleyElevation": 1350,
+      "cloudTop": 2198,
+      "deltaH": -698,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 46,
+          "status": "FLUCTUATING",
+          "cloudTop": 1680
+        },
+        {
+          "model": "icon_seamless",
+          "score": 14,
+          "status": "FOG",
+          "cloudTop": 2195
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 38,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ]
+    },
+    {
+      "key": "TA_XUA_SON_LA",
+      "name": "Tà Xùa (Sống lưng Khủng Long)",
+      "score": 36,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 700,
+      "cloudTop": 2222,
+      "deltaH": -622,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "STATIC",
+          "cloudTop": 1212
+        },
+        {
+          "model": "icon_seamless",
+          "score": 41,
+          "status": "FOG",
+          "cloudTop": 2222
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 21,
+          "status": "FOG",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "PHINH_HO",
+      "name": "Phình Hồ (Trạm Tấu)",
+      "score": 36,
+      "status": "FOG",
+      "agreement": 33,
+      "observerAlt": 1080,
+      "valleyElevation": 377,
+      "cloudTop": 1556,
+      "deltaH": -476,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "STATIC",
+          "cloudTop": 826
+        },
+        {
+          "model": "icon_seamless",
+          "score": 52,
+          "status": "FOG",
+          "cloudTop": 1556
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 26,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "DON_DEN",
+      "name": "Đồn Đèn (Ba Bể)",
+      "score": 36,
+      "status": "FLUCTUATING",
+      "agreement": 100,
+      "observerAlt": 660,
+      "valleyElevation": 173,
+      "cloudTop": 740,
+      "deltaH": -80,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "FLUCTUATING",
+          "cloudTop": 740
+        },
+        {
+          "model": "icon_seamless",
+          "score": 58,
+          "status": "FLUCTUATING",
+          "cloudTop": 825
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 29,
+          "status": "ROLLING",
+          "cloudTop": 521
+        }
+      ]
+    },
+    {
+      "key": "PHIA_OAC",
+      "name": "Phia Oắc (Cao Bằng)",
+      "score": 35,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1931,
+      "valleyElevation": 918,
+      "cloudTop": 2227,
+      "deltaH": -296,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 35,
+          "status": "STATIC",
+          "cloudTop": 1553
+        },
+        {
+          "model": "icon_seamless",
+          "score": 45,
+          "status": "FOG",
+          "cloudTop": 2225
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 26,
+          "status": "FOG",
+          "cloudTop": 2229
+        }
+      ]
+    },
+    {
+      "key": "TAM_DAO",
+      "name": "Tam Đảo",
+      "score": 32,
+      "status": "CLEAR",
+      "agreement": 67,
+      "observerAlt": 970,
+      "valleyElevation": 200,
+      "cloudTop": null,
+      "deltaH": null,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 55,
+          "status": "STATIC",
+          "cloudTop": 587
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 22,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "NGOC_SON_LAC_SON",
+      "name": "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+      "score": 30,
+      "status": "CLEAR",
+      "agreement": 67,
+      "observerAlt": 390,
+      "valleyElevation": 80,
+      "cloudTop": null,
+      "deltaH": null,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 30,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 70,
+          "status": "FLUCTUATING",
+          "cloudTop": 514
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 18,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "XIM_VANG",
+      "name": "Xím Vàng",
+      "score": 27,
+      "status": "FOG",
+      "agreement": 33,
+      "observerAlt": 1250,
+      "valleyElevation": 1000,
+      "cloudTop": 2220,
+      "deltaH": -970,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 26,
+          "status": "ROLLING",
+          "cloudTop": 1350
+        },
+        {
+          "model": "icon_seamless",
+          "score": 32,
+          "status": "FOG",
+          "cloudTop": 2220
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 27,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "DEO_KHAU_PHA",
+      "name": "Đèo Khau Phạ",
+      "score": 27,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 940,
+      "valleyElevation": 600,
+      "cloudTop": 1963,
+      "deltaH": -1023,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 27,
+          "status": "FOG",
+          "cloudTop": 1702
+        },
+        {
+          "model": "icon_seamless",
+          "score": 36,
+          "status": "FOG",
+          "cloudTop": 2223
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 22,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ]
+    },
+    {
+      "key": "SI_THAU_CHAI",
+      "name": "Sì Thâu Chải",
+      "score": 26,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1460,
+      "valleyElevation": 718,
+      "cloudTop": 1458,
+      "deltaH": 2,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 26,
+          "status": "STATIC",
+          "cloudTop": 1205
+        },
+        {
+          "model": "icon_seamless",
+          "score": 19,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FLUCTUATING",
+          "cloudTop": 1710
+        }
+      ]
+    },
+    {
+      "key": "MANG_DEN",
+      "name": "Măng Đen",
+      "score": 21,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1200,
+      "valleyElevation": 1031,
+      "cloudTop": 2200,
+      "deltaH": -1000,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 19,
+          "status": "DISSIPATING",
+          "cloudTop": 1685
+        },
+        {
+          "model": "icon_seamless",
+          "score": 23,
+          "status": "DISSIPATING",
+          "cloudTop": 2200
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 21,
+          "status": "DISSIPATING",
+          "cloudTop": 2205
+        }
+      ]
+    },
+    {
+      "key": "BACH_MA",
+      "name": "Bạch Mã (Vọng Hải Đài)",
+      "score": 17,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1448,
+      "valleyElevation": 211,
+      "cloudTop": 1698,
+      "deltaH": -250,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 13,
+          "status": "DISSIPATING",
+          "cloudTop": 2210
+        },
+        {
+          "model": "icon_seamless",
+          "score": 24,
+          "status": "DISSIPATING",
+          "cloudTop": 1198
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 17,
+          "status": "DISSIPATING",
+          "cloudTop": 1698
+        }
+      ]
+    },
+    {
+      "key": "TA_NANG",
+      "name": "Tà Năng - Phan Dũng",
+      "score": 15,
+      "status": "DISSIPATING",
+      "agreement": 33,
+      "observerAlt": 1100,
+      "valleyElevation": 924,
+      "cloudTop": 1186,
+      "deltaH": -86,
+      "worthGoing": false,
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 14,
+          "status": "ROLLING",
+          "cloudTop": 1349
+        },
+        {
+          "model": "icon_seamless",
+          "score": 32,
+          "status": "FOG",
+          "cloudTop": 1675
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 15,
+          "status": "DISSIPATING",
+          "cloudTop": 1186
+        }
+      ]
+    }
+  ]
+}
