@@ -1,5 +1,15 @@
 [
   {
+    "id": "2026-10-11-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-10-11",
+    "seaLevel": "NONE",
+    "source": "SOCIAL_POST",
+    "note": "Người dùng chép từ bài đăng mạng xã hội: 'Tà Xùa 11/10/2026 ⛅️🏔️ không có biển mây - thời tiết tà xùa hôm nay: nắng đẹp + ít mây'. KHÔNG có giờ quan sát: tính là rạng sáng vì bài kiểu 'thời tiết hôm nay' thường viết buổi sáng, nhưng nếu biển mây tan sớm trước lúc người viết nhìn thì nhãn này sai. Bản chụp dự báo 2026-10-11 (chụp 10/10 14:38Z): Tà Xùa 4/100 CLEAR đồng thuận 67%, Trạm phát sóng 12/100 DISSIPATING 33%, cả hai đáng đi=False — ĐÚNG. Vệ tinh BLOCKED_ABOVE (mây cao che) nên ngày này trước đây KHÔNG được chấm; báo cáo này là cặp mới.",
+    "reportedAt": "2026-10-14T18:00:00+07:00"
+  },
+  {
     "spotKey": "FANSIPAN",
     "locationName": "Fansipan (Nóc nhà Đông Dương)",
     "seaLevel": "NONE",
