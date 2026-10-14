@@ -1,5 +1,41 @@
 [
   {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "seaLevel": "NONE",
+    "reportedAt": "2026-10-14T17:30:00+07:00",
+    "id": "2026-10-12-fansipan",
+    "date": "2026-10-12",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:08",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh người dùng gửi 14/10, dấu chữ '12 Oct 2026 at 06:08:47, Lao Cai, Ta Van' (thấy tháp chùa trên đỉnh). Mặt trời mọc, thung lũng phía Sa Pa chỉ có mù/khói mỏng, các dãy núi lộ rõ, KHÔNG có biển mây. Bản chụp dự báo 2026-10-12: 18/100 DISSIPATING đồng thuận 33%, đáng đi=False — ĐÚNG. Vệ tinh cùng ngày CLEAR."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "seaLevel": "NONE",
+    "reportedAt": "2026-10-14T17:30:00+07:00",
+    "id": "2026-10-10-fansipan",
+    "date": "2026-10-10",
+    "timeOfDay": "DAWN",
+    "observedAt": "05:57",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh người dùng gửi 14/10, dấu chữ 'Mường Khoa, Lai Châu, 10 Th10 2026 05:57:21' (cột mốc 3.143m). Mặt trời mọc, chỉ có dải mây mỏng xa ở chân trời bên phải, thung lũng quanh đỉnh quang — KHÔNG có biển mây dưới chân. Bản chụp dự báo 2026-10-10: 52/100 DISSIPATING ΔH 451m đồng thuận 67%, đáng đi=False — ĐÚNG (gfs riêng nói 60 FLOWING). Vệ tinh cùng ngày CLEAR."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "seaLevel": "NONE",
+    "reportedAt": "2026-10-14T17:30:00+07:00",
+    "id": "2026-10-08-fansipan",
+    "date": "2026-10-08",
+    "timeOfDay": "MORNING",
+    "observedAt": "08:28",
+    "source": "USER_PHOTO_TIMEMARK",
+    "note": "Ảnh người dùng gửi 14/10, Timemark Verified '08:28 08 Tháng 10, 2026, X. Bản Bo, Lai Châu'. Trời xanh, thung lũng Sa Pa lộ rõ dưới lớp mù khô, KHÔNG có biển mây. 08:28 là sau bình minh hơn 2 giờ nên không tự chấm như rạng sáng; ngày này vẫn được chấm qua vệ tinh (CLEAR). Bản chụp dự báo 2026-10-08: 30/100 CLEAR, đáng đi=False — ĐÚNG."
+  },
+  {
     "id": "2026-10-14-fansipan",
     "spotKey": "FANSIPAN",
     "locationName": "Fansipan (Nóc nhà Đông Dương)",

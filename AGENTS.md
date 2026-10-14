@@ -638,6 +638,23 @@ loạt ảnh hằng ngày bắt đầu từ 13/10 (7 ảnh, chú thích "biển 
 Lưu ý: cùng thư viện đó lộ cả PDF vé của khách - lọc `fansipan-` trong tên tệp, không mở thứ khác.
 Chưa dựng job tự lấy: ảnh còn trên máy chủ nên chưa có gì mất, và nhãn phải do người nhìn ảnh.
 
+Người dùng gửi thêm ảnh có dấu giờ của 08, 10 và 12/10, cả ba KHÔNG có biển mây. Chuỗi Fansipan 5 ngày,
+mỗi ngày đều có bản chụp dự báo làm TRƯỚC, ảnh người nhìn và nhãn vệ tinh:
+
+```
+ngày    ảnh (giờ)     người nhìn   vệ tinh   app (bản chụp)                       lời khuyên
+08/10   08:28         không có     CLEAR     30 CLEAR                             không đi  ✅
+10/10   05:57         không có     CLEAR     52 DISSIPATING ΔH +451m  67%         không đi  ✅
+12/10   06:08         không có     CLEAR     18 DISSIPATING           33%         không đi  ✅
+13/10   06:19, 13:35  CÓ, cả ngày  SEA       66 STATIC      ΔH +916m  100%        ĐI        ✅
+14/10   08:12         không có     CLEAR     34 FLOWING     ΔH +874m  67%         ĐI        ✗
+```
+
+App đúng 4/5 ở đỉnh này. Và vệ tinh khớp người nhìn **5/5** — lần đầu có bằng chứng độc lập rằng nhãn
+vệ tinh ở một đỉnh cao, mùa khô, là tin được (khác hẳn sương mỏng thung lũng thấp, xem 02/09). Ca sai
+duy nhất là 34 điểm; ca đúng là 66. Thêm một dữ kiện cùng chiều cho mức "điểm ≥ 65", nhưng vẫn là cùng
+hai ngày 13/10 và 14/10, chưa phải ngày độc lập mới.
+
 #### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
 
 Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với
