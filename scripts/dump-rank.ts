@@ -30,8 +30,13 @@ async function main() {
     if (i > 0) await new Promise(r => setTimeout(r, 45_000));
     const rows = await rankSpotsForDawn(date);
     for (const r of rows) {
+      // Ghi ĐỦ các trường quyết định lời khuyên. Đo 14/10/2026: bản cũ chỉ ghi điểm/nhãn/đồng
+      // thuận, nên mọi phép so dựa trên file này đọc ra "ΔH = None, đáng đi = 0" cho cả thư viện
+      // — không phải dự báo, mà là cột bị thiếu. Thiếu dữ liệu phải hiện ra là thiếu, không là 0.
       out.push({ date, key: r.key ?? r.name, name: r.name, score: r.score,
-                 status: r.status, agreement: r.agreement});
+                 status: r.status, agreement: r.agreement,
+                 cloudTop: r.cloudTop, deltaH: r.deltaH, worthGoing: r.worthGoing,
+                 perModel: r.perModel });
     }
     console.log(`${date}: ${rows.length} điểm`);
   }

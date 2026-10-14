@@ -81,6 +81,12 @@ function main() {
     for (const r of JSON.parse(readFileSync(arg, 'utf-8'))) {
       const key = r.spotKey || nameToKey(r.locationName);
       if (!key) { skipped.push(`${r.date} ${r.locationName}: không map được về điểm trong thư viện`); continue; }
+      // App chỉ dự báo RẠNG SÁNG. Báo cáo quan sát ban đêm/chiều (vd ảnh đăng 23:29 ngày 12/10)
+      // mà ghép vào dự báo rạng sáng cùng ngày là chấm app trên một thời điểm cách 18 tiếng.
+      // Giữ trong kho làm tư liệu, nhưng KHÔNG chấm — và nói ra, không lặng lẽ bỏ.
+      if (r.timeOfDay && r.timeOfDay !== 'DAWN') {
+        skipped.push(`${r.date} ${key}: quan sát lúc ${r.timeOfDay}${r.observedAt ? ' ' + r.observedAt : ''}, không phải rạng sáng — không chấm`); continue;
+      }
       const p = fc[r.date]?.[key];
       const score = r.predictedScore ?? p?.score;
       const status = r.predictedStatus ?? p?.status;
@@ -138,6 +144,20 @@ function main() {
   evalOne(`Theo LUẬT ĐÁNG ĐI hiện hành, tính lại trên lịch sử`
     + (oldRows ? ` — ${oldRows}/${rows.length} dòng từ bản chụp cũ thiếu ΔH, tính là KHÔNG khuyên` : ''),
     r => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }));
+  // MỨC "CHẮC ĂN" ĐANG THEO DÕI — CHƯA phải luật của app (14/10/2026).
+  // Ngày 13/10 app khuyên đi đúng Tà Chì Nhù + Fansipan (người đi xác nhận, Fansipan có ảnh
+  // Timemark 06:19) với điểm 66, và đo trên cả kho thì "đáng đi ∧ điểm ≥ 65" đúng ~53% so với
+  // ~7,5% của luật hiện hành. Nhưng 7/8 ca trúng đến từ CÙNG một buổi sáng 13/10 — chỉ 2 ngày
+  // độc lập. Đổi luật app trên 2 ngày là đúng kiểu overfit đã ghi trong AGENTS.md. Nên chỉ in ra
+  // đây để mỗi ngày tự cộng mẫu; số NGÀY độc lập trong các ca trúng là con số phải nhìn trước.
+  const STRONG_SCORE = 65;
+  const strongPred = (r: Row) => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null })
+    && r.score >= STRONG_SCORE;
+  evalOne(`Mức "CHẮC ĂN" đang theo dõi: đáng đi ∧ điểm ≥ ${STRONG_SCORE} (CHƯA dùng trong app)`, strongPred);
+  const strongDays = new Set(rows.filter(r => strongPred(r) && r.truth === 'SEA').map(r => r.date));
+  console.log(`    ca trúng đến từ ${strongDays.size} NGÀY độc lập: ${[...strongDays].sort().join(', ') || '—'}`
+    + (strongDays.size < 5 ? '  ⚠️  <5 ngày — chưa đủ để đổi luật' : ''));
+
   // …và app THỰC SỰ đã khuyên gì lúc đó (cờ lưu trong bản chụp) — hai dòng lệch nhau nghĩa là
   // luật đã đổi kể từ lần chụp.
   const withFlag = rows.filter(r => r.worthGoing !== undefined);

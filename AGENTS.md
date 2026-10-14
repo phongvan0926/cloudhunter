@@ -575,6 +575,83 @@ từ 06/10 trở đi là dự báo trước 7-11 giờ. Dự báo xa hơn thư�
 sau 06/10 thì đó có thể là ĐO ĐÚNG HƠN, không phải engine tệ đi. `snapshotAt` trong mỗi file đủ để
 tách hai nhóm khi so.
 
+### 🏔️ 13/10/2026 — lần đầu app nói ĐÚNG "có biển mây" cho đỉnh cao, và đúng TRƯỚC khi nó xảy ra
+
+Người dùng gửi ảnh (14/10): **Tà Chì Nhù** biển mây dày, phẳng, nắng đẹp bên trên; **Fansipan** cùng
+sáng, ảnh có dấu **Timemark xác thực 06:19** — báo cáo đầu tiên có mốc giờ thật. Bản chụp làm tối
+12/10 (trước khi biết) đã nói đúng cả hai:
+
+```
+Tà Chì Nhù 2.979m   66/100 STATIC  ΔH +1.272m  đồng thuận 100%  mặt mây 1.704 · 1.707 · 1.711m  ĐÁNG ĐI ✅
+Fansipan   3.143m   66/100 STATIC  ΔH   +916m  đồng thuận 100%  mặt mây 2.300 · 2.224 · 2.227m  ĐÁNG ĐI ✅
+```
+
+Đây đúng là mẫu mục engine-2.8.3 bên dưới đã xin từ 11/09 ("một đỉnh ≥2.400m THẬT SỰ có biển mây
+và app phải nói đúng"). Nỗi lo ở đó — các cổng 2.8.3 (nội suy mực, gió tại chỗ đứng) sẽ giết sạch
+ngày tốt của nhóm đỉnh cao — **không xảy ra trong ca này**. Ngày 13/10 là một sự kiện diện rộng:
+14/16 điểm Hoàng Liên Sơn được khuyên đi, 7 điểm đạt ≥65, và vệ tinh xác nhận SEA ở 12 điểm.
+
+**Nhưng phải đọc cùng con số này:** ở riêng Tà Chì Nhù, luật "đáng đi" đã bật 13 lần trong lịch sử;
+9 lần có sự thật đối chiếu thì đúng 1 (13/10), sai 8. Trên cả kho (933 cặp) luật hiện hành đúng
+**8%** khi nó nói "đi". Tức 13/10 trúng một phần vì app nói "đi" quá thường xuyên.
+
+Cái tách 13/10 khỏi các ngày báo nhầm là **điểm**: hôm đó 64-74, còn các lần nhầm ở Tà Chì Nhù đều
+5-44. Đo trên toàn kho, không riêng điểm này:
+
+```
+luật                         khuyên  đúng  nhầm   chính xác   bắt được
+đáng đi (hiện hành)             262    20   242       8%         48%
+đáng đi ∧ điểm ≥ 65              15     8     7      53%         19%
+```
+
+**CHƯA đưa vào app.** 7/8 ca trúng của mức ≥65 đến từ CÙNG buổi sáng 13/10 (ca còn lại: Hang Kia
+02/10) — 2 ngày độc lập. Bảy ca nhầm thì dồn vào núi thấp (Pù Luông ×4, Ba Vì, Pha Luông, Lũng Vân),
+nơi sương thung lũng mỏng mà vệ tinh hay bỏ sót, nên "nhầm" ở đó cũng chưa chắc là nhầm. Đổi luật
+trên chừng ấy là overfit (xem mục "ĐÃ THỬ SỬA CỔNG NÀY, VÀ ĐÃ BỎ"). `calibrate.ts` nay in mức này
+mỗi ngày kèm **số ngày độc lập** trong các ca trúng và tự cảnh báo khi dưới 5. Đủ 5 ngày rồi mới quyết.
+
+Hai lỗi đo lường lộ ra trong lúc soi ca này, đều đã sửa:
+- `dump-rank.ts` **không ghi** ΔH / mặt mây / "đáng đi" — mọi so sánh dựa trên file đó đọc ra
+  "đáng đi = 0, ΔH = None" cho cả thư viện. Suýt báo với người dùng "mấy ngày tới không điểm nào
+  đáng đi" trong khi đó chỉ là cột bị thiếu.
+- Báo cáo ban đêm (ảnh Tà Xùa đăng 23:29 ngày 12/10) mà ghép vào dự báo rạng sáng cùng ngày là chấm
+  app trên một thời điểm cách 18 tiếng. Báo cáo nay có `timeOfDay`; `calibrate.ts` bỏ qua mọi báo
+  cáo không phải `DAWN` và nói rõ lý do.
+
+#### Ngay hôm sau, 14/10: Fansipan KHÔNG có biển mây mà app vẫn khuyên đi
+
+Trang `vecaptreosapa.com/thoi-tiet-dinh-fansipan/` đăng ảnh thật từ đỉnh mỗi sáng (14/10 lúc 08:12:
+"trời xanh, nắng rõ, núi và mây phía xa"), người dùng xác nhận không có biển mây. Bản chụp 14/10 ghi
+`34/100 FLOWING ΔH +874m đồng thuận 67% · đáng đi` (gfs 24 CLEAR · icon 34 FLOWING · ukmo 58 FLOWING),
+vệ tinh CLEAR cả 5 khung 04:30-06:30. Đây là một ca báo nhầm có cả người nhìn lẫn vệ tinh, và nó rơi
+đúng vào kiểu mà mức "điểm ≥ 65" loại được (34 điểm). Báo cáo ghi `seaLevel: NONE`, `timeOfDay:
+MORNING` (08:12 là hơn 2 giờ sau bình minh nên không tự chấm như rạng sáng; ngày này vẫn được chấm
+qua nhãn vệ tinh).
+
+Trang đó là nguồn sự thật mới đáng giá nhất từ trước tới nay: **cùng một chỗ, mỗi ngày, có giờ, và nói
+được cả "không có"** - đúng thứ kênh video mạng xã hội không bao giờ cho. Trang chỉ giữ ảnh ngày hiện
+tại; người dùng có lưu ảnh từ 08/10. Nhưng trang chạy WordPress nên ảnh cũ VẪN nằm trong thư viện
+media, đọc được qua API công khai (robots.txt không cấm):
+`/wp-json/wp/v2/media?after=<ngày>&per_page=100&_fields=date,source_url,alt_text,caption`. Đo 14/10:
+loạt ảnh hằng ngày bắt đầu từ 13/10 (7 ảnh, chú thích "biển mây lúc 13:35" ⇒ báo cáo 13/10 có
+`duration: LONG`) và 14/10 (5 ảnh, 08:12). Ảnh 08-12/10 không có trên máy chủ, chỉ người dùng có.
+Lưu ý: cùng thư viện đó lộ cả PDF vé của khách - lọc `fansipan-` trong tên tệp, không mở thứ khác.
+Chưa dựng job tự lấy: ảnh còn trên máy chủ nên chưa có gì mất, và nhãn phải do người nhìn ảnh.
+
+#### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
+
+Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với
+`Unexpected token 'U'` và bản chụp 09/10 mất vĩnh viễn. Sửa: `fetchJson` đọc chữ trước rồi mới
+parse, lỗi nói thẳng "trả HTTP 200 nhưng KHÔNG phải JSON: …" (đã gọi thật vào một trang HTML để
+kiểm); workflow tự thử lại 4 lần, chờ 3 → 8 → 15 phút. Chạy lại an toàn vì script chỉ ghi ở bước
+cuối và từ chối đè.
+
+Và lịch 08:37 UTC **không** cho giờ nổ như đã tính: 7 lần chạy từ 06/10 nổ 14:38-18:08 UTC (trễ
+6-9,5 giờ, so với 2,8-7 giờ đo ở lịch cũ), tức 21:38-01:08 giờ VN, lead tới rạng sáng 3,9-7,4 giờ.
+Vẫn tốt hơn lịch cũ (trung vị 01:34 sáng) nhưng sai số dự đoán lớn. Đáng chú ý: cả hai lịch đều đổ
+về khoảng 15-18 UTC — có thể GitHub gom các lần chạy hạng thấp, không phụ thuộc giờ đặt. Mới 7 điểm
+đo, chưa đổi tiếp; kiểm lại sau 2 tuần.
+
 ### 🎯 Năm ngày kiểm chứng NGOÀI MẪU đầu tiên — và lần khuyên đi ĐÚNG đầu tiên (01-04/10/2026)
 
 Người dùng báo (05/10) hai đợt: **03/10 và 04/10 có biển mây trên Tà Xùa**, và **Hang Kia

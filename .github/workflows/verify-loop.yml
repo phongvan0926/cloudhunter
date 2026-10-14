@@ -85,7 +85,19 @@ jobs:
           [ "$LEAD" -lt 4 ] && echo "::warning::Bản chụp $D chỉ cách rạng sáng ~${LEAD}h — cron trễ bất thường, bản này đo dự báo ngắn hạn chứ không phải dự báo buổi tối" || true
       - name: Chụp dự báo rạng sáng ngày mai
         # Không --force: đã có bản chụp thì script tự từ chối đè (bản chụp là bằng chứng).
-        run: npx vite-node scripts/snapshot-forecast.ts "${{ steps.target.outputs.date }}"
+        # Thử lại khi Open-Meteo lỗi tạm (429, 5xx, trả chữ thay vì JSON). Đo 08/10/2026: một lần
+        # trả "Unexpected…" là mất VĨNH VIỄN bản chụp 09/10, vì quá khứ không chụp bù được.
+        # An toàn để chạy lại: script chỉ ghi file ở bước cuối và từ chối đè file đã có, nên lần
+        # thử sau không bao giờ ghi hai bản. Chờ dài (3 → 8 → 15 phút) vì 429 cần nguội hạn mức.
+        run: |
+          D="${{ steps.target.outputs.date }}"
+          for wait in 0 180 480 900; do
+            [ "$wait" -gt 0 ] && { echo "::warning::chụp $D lỗi, chờ ${wait}s rồi thử lại"; sleep "$wait"; }
+            if [ -f "data/observations/$D-forecast.json" ]; then echo "đã có bản chụp $D"; exit 0; fi
+            npx vite-node scripts/snapshot-forecast.ts "$D" && exit 0
+          done
+          echo "::error::chụp $D thất bại sau 4 lần — ngày này sẽ mất nếu không chạy tay trước rạng sáng"
+          exit 1
       - name: Commit bản chụp
         run: |
           git config user.name  "cloudhunter-verify[bot]"

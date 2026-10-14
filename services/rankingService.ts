@@ -54,7 +54,13 @@ export interface SpotRank {
 async function fetchJson(url: string): Promise<any> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status} từ ${new URL(url).hostname}`);
-  const data = await res.json();
+  // Đo 08/10/2026: Open-Meteo trả HTTP 200 mà thân là chữ "Unexpected…", res.json() chết với
+  // `Unexpected token 'U'` — không ai đọc ra đó là lỗi phía máy chủ, và vòng chụp mất ngày 09/10.
+  const text = await res.text();
+  let data: any;
+  try { data = JSON.parse(text); } catch {
+    throw new Error(`${new URL(url).hostname} trả HTTP ${res.status} nhưng KHÔNG phải JSON: "${text.slice(0, 80)}"`);
+  }
   if (data && !Array.isArray(data) && data.error) throw new Error(`Open-Meteo: ${data.reason || 'lỗi không rõ'}`);
   return data;
 }

@@ -1,5 +1,51 @@
 [
   {
+    "id": "2026-10-14-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-14",
+    "seaLevel": "NONE",
+    "timeOfDay": "MORNING",
+    "observedAt": "08:12",
+    "source": "WEBCAM_PAGE",
+    "note": "Ảnh thực tế từ đỉnh do trang vecaptreosapa.com/thoi-tiet-dinh-fansipan/ đăng hằng sáng, mốc '14/10/2026 08:12:16', chú thích 'trời xanh, nắng rõ, núi và mây phía xa'. Người dùng xác nhận: trong xanh, KHÔNG có biển mây. MẪU ÂM TÍNH người nhìn đầu tiên có giờ. Không chấm như rạng sáng vì 08:12 là hơn 2 giờ sau bình minh (biển mây có thể đã tan) — nhưng vệ tinh cùng ngày CLEAR cả 5 khung 04:30-06:30, nên ngày này VẪN được chấm qua nhãn vệ tinh. Bản chụp 2026-10-14 (chụp 13/10 16:20Z): 34/100 FLOWING ΔH 874m đồng thuận 67% đáng đi=True — BÁO NHẦM. Từng mô hình: gfs 24 CLEAR · icon 34 FLOWING top 2263 · ukmo 58 FLOWING top 2275.",
+    "reportedAt": "2026-10-14T16:00:00+07:00"
+  },
+  {
+    "id": "2026-10-12-taxua-dem",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-10-12",
+    "timeOfDay": "NIGHT",
+    "observedAt": "trước 23:29 (giờ đăng bài)",
+    "seaLevel": "BELOW",
+    "source": "SOCIAL_PHOTO",
+    "note": "Ảnh từ bài Facebook trang 'Lang Thang Hà Nội', đăng 23:29 ngày 12/10/2026, người dùng xác nhận là Tà Xùa (05/10 anh cho biết nguồn là mạng xã hội). Biển mây ĐÊM dưới trăng: lớp mây nằm thấp trong thung lũng, đèn khu dân cư trên sống núi phía trên, dãy núi xa nhô hẳn lên. KHÔNG chấm (timeOfDay=NIGHT): app dự báo rạng sáng. Rạng sáng 12/10 đã qua 18 tiếng trước ảnh; còn rạng sáng 13/10 thì không ai xác nhận lớp mây còn tới sáng, nên KHÔNG suy ra. Tư liệu liên quan: bản chụp rạng sáng 13/10 nói Trạm phát sóng Tà Xùa 31 FLOWING ΔH +836m ĐÁNG ĐI, sống lưng 31 FOG đồng thuận 33% không khuyên; vệ tinh 13/10 CLEAR cho cả hai — mà đây đúng loại sương thấp trong thung lũng hồng ngoại hay bỏ sót (xem ca 02/09). Nếu có ảnh rạng sáng 13/10 ở Tà Xùa thì ca này chấm được.",
+    "reportedAt": "2026-10-14T14:00:00+07:00"
+  },
+  {
+    "id": "2026-10-13-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-13",
+    "seaLevel": "BELOW",
+    "source": "USER_PHOTO_TIMEMARK",
+    "observedAt": "06:19",
+    "note": "Ảnh người dùng gửi 14/10/2026, có dấu Timemark Verified '06:19 13 Tháng 10, 2026, X. Bản Bo, Lai Châu' (đỉnh Fansipan, thấy dây cáp treo). Biển mây phẳng kín tới chân trời, một đỉnh nhô lên giữa biển mây, trời xanh không mây bên trên, nắng mặt trời mọc. ĐÂY LÀ BÁO CÁO ĐẦU TIÊN CÓ MỐC GIỜ ĐƯỢC XÁC THỰC: biển mây CÒN NGUYÊN lúc 06:19 — không phải thời lượng, nhưng là một điểm thời gian chắc chắn. Bản chụp dự báo 2026-10-13 (chụp 12/10 18:09Z, TRƯỚC khi biết): 66/100 STATIC, ΔH 916m, đồng thuận 100%, đáng đi=True — ĐÚNG. Từng mô hình: gfs 66 STATIC top 2300 · icon 51 FLOWING top 2224 · ukmo 76 STATIC top 2227. Vệ tinh cùng ngày: SEA. BỔ SUNG 14/10: trang vecaptreosapa.com (ảnh thật từ đỉnh, lấy qua WordPress media API) có 7 ảnh 13/10 chú thích 'trời xanh, nắng và biển mây lúc 13:35' ⇒ biển mây còn ít nhất tới 13:35, nên duration=LONG (đo được, không đoán).",
+    "reportedAt": "2026-10-14T13:00:00+07:00",
+    "duration": "LONG"
+  },
+  {
+    "id": "2026-10-13-tachinhu",
+    "spotKey": "TA_CHI_NHU",
+    "locationName": "Tà Chì Nhù (Đồi hoa tím)",
+    "date": "2026-10-13",
+    "seaLevel": "BELOW",
+    "source": "USER_PHOTO",
+    "note": "Người dùng gửi 2 ảnh (14/10/2026): biển mây DÀY và PHẲNG phủ kín thung lũng, vài sống núi nhô lên, nắng đẹp và trời xanh bên trên, người đứng cao hẳn trên mặt mây; ảnh 1 chụp lúc mặt trời mọc. Thời lượng không biết (không ai đo). Bản chụp dự báo 2026-10-13-forecast.json (engine-2.8.3, chụp 12/10 18:09Z, TRƯỚC khi biết sự thật): 66/100 STATIC, ΔH +1272m, mặt mây 1707m, đồng thuận 100% (gfs 70 STATIC top 1704 · icon 66 FLOWING top 1707 · ukmo 46 STATIC top 1711), ĐÁNG ĐI = TRUE — ĐÚNG. Đây là ca ĐẦU TIÊN app nói đúng 'có biển mây' cho một đỉnh ≥2.400m, đúng mẫu AGENTS.md mục engine-2.8.3 đã xin từ 11/09. Vệ tinh cùng ngày: SEA_MARGINAL, đỉnh mây 2798-3109m ở 3/5 khung (phát xạ 0,66) — cao hơn mặt mây trong ảnh; ô 2km quanh một đỉnh nhọn nhiều khả năng lẫn sườn núi/mép lớp mây.",
+    "reportedAt": "2026-10-14T12:00:00+07:00"
+  },
+  {
     "id": "2026-10-03-hangkia",
     "spotKey": "HANG_KIA_PA_CO",
     "locationName": "Hang Kia - Pà Cò (Thung Mài)",

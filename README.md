@@ -162,6 +162,8 @@ Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để ch
    `BLOCKED_ABOVE` và **bị loại khỏi phép chấm** thay vì đoán bừa.
 3. **`scripts/calibrate.ts`** ghép hai nguồn trên với dự báo đã chụp, in ra tỉ lệ đúng,
    danh sách ngày **BỎ SÓT** và ngày **BÁO NHẦM** — chỉnh hằng số nào là nhìn thẳng vào đó.
+   Từ 14/10/2026 nó in thêm mức theo dõi "đáng đi ∧ điểm ≥ 65" kèm số NGÀY độc lập (chưa dùng
+   trong app cho tới khi đủ ≥5 ngày), và bỏ qua báo cáo không phải rạng sáng (`timeOfDay`).
 
 > Không cào Facebook/TikTok: API tìm bài công khai của Facebook đã đóng từ 2018, CrowdTangle
 > ngừng hẳn 14/8/2024, bản thay thế chỉ mở cho nghiên cứu học thuật; TikTok tương tự.
