@@ -701,6 +701,16 @@ rạng sáng nên hai ca này không chấm (`timeOfDay: MIDDAY/AFTERNOON`), nh�
 cao mùa này có cả **biển mây ban ngày** (mây thung lũng nâng lên khi nắng đốt) — một câu hỏi app
 chưa trả lời. Gom thêm ca có giờ rồi mới tính có nên dự báo khung trưa hay không.
 
+**Kinh nghiệm người dùng (anh Phong, 14/10/2026 — kinh nghiệm thực địa, CHƯA đo bằng số):** mùa này
+biển mây chỉ yên lúc sáng sớm lạnh; trưa nắng nóng thì mây **bốc dần lên**. Riêng tháng 12-1 trời lạnh
+thì biển mây có thể nằm cả ngày. Khớp với vật lý (nắng đốt mặt đất phá nắp nghịch nhiệt, lớp mây nâng
+lên theo lớp xáo trộn; mùa đông có không khí lạnh tràn về giữ nắp suốt ngày) và khớp các ca có giờ đã
+ghi: Fansipan 13/10 biển mây còn dưới đỉnh lúc 13:35 (đỉnh 3.143m đủ cao để mây dâng chưa tới), Fansipan
+14/10 mây dâng sát đỉnh lúc 11:13, Ky Quan San (3.046m, thấp hơn) bị trùm lúc ~15h hai ngày liền.
+Hệ quả cho lời khuyên: tháng 10-11 và 2-4 thì **đi sớm**, đỉnh càng thấp càng sớm bị trùm sau trưa.
+Nếu sau này làm dự báo "biển mây giữ được tới mấy giờ", đây là giả thuyết cần kiểm bằng các báo cáo
+có giờ (trường `observedAt`, `duration`), nhất là đối chiếu tháng 12-1 với tháng 10.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
