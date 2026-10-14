@@ -655,6 +655,43 @@ vệ tinh ở một đỉnh cao, mùa khô, là tin được (khác hẳn sươn
 duy nhất là 34 điểm; ca đúng là 66. Thêm một dữ kiện cùng chiều cho mức "điểm ≥ 65", nhưng vẫn là cùng
 hai ngày 13/10 và 14/10, chưa phải ngày độc lập mới.
 
+#### Ky Quan San 13 và 14/10: app nói "chắc ăn" mà người đi chìm trong mây
+
+Người dùng báo (14/10): hai sáng 13 và 14/10 Ky Quan San (3.046m) bị **mây mù dày bao trùm cả đỉnh**.
+Bản chụp: 13/10 `68 STATIC ΔH +1.335m 100%`, 14/10 `60 STATIC ΔH +1.342m 100%` — cả hai khuyên đi,
+13/10 còn đạt mức "điểm ≥ 65". Mức theo dõi đó tụt từ 8/15 xuống **7/15 (47%)**.
+
+Soi kỹ thì cái sai không nằm ở luật mà ở **độ cao mặt mây**. So mặt mây app tính (bản chụp) với đỉnh
+mây vệ tinh đo được, cùng ngày 13/10, các điểm Hoàng Liên Sơn:
+
+```
+                 app     vệ tinh   đứng      (vệ tinh − app)
+Fansipan        2.227    3.040    3.143        +813     ảnh: biển mây ngay dưới đỉnh
+Tà Chì Nhù      1.707    3.000    2.979      +1.293     ảnh: biển mây dày phẳng
+Ky Quan San     1.711    2.830    3.046      +1.119     người đi: CHÌM trong mây
+Nhìu Cồ San     1.711    2.810    2.965      +1.099
+Lùng Cúng       1.711    3.061    2.913      +1.350
+trung vị 22 điểm miền Bắc có số đo: vệ tinh cao hơn app ~1.100m
+```
+
+Hôm đó mặt biển mây thật nằm ở **~2.800-3.050m**, sát ngang các đỉnh cao nhất, chứ không phải ~1.700m
+như app tính. App nói "bạn đứng trên mặt mây 1.300m" trong khi khoảng hở thật là **0-300m**: đỉnh nào
+nhô qua được thì có biển mây (Fansipan, Tà Chì Nhù), đỉnh nào thấp hơn mặt mây một chút thì chìm (Ky
+Quan San, có thể vì mây dâng sau 06:30 khi vệ tinh chụp khung cuối). Nghĩa là **Tà Chì Nhù và Fansipan
+13/10 trúng một phần nhờ may**: kết luận đúng, nhưng lề an toàn app khai (1.300m) gấp ~5-10 lần lề thật.
+
+Ngày 14/10 vệ tinh ghi CLEAR mà người đi chìm trong mây — cùng kiểu mây bám đỉnh hồng ngoại không thấy
+như Fansipan 02/09; báo cáo người đi đè nhãn vệ tinh.
+
+**CHƯA sửa engine.** Một ngày, một sự kiện; chỉnh `estimateCloudTop` cho khớp 13/10 là overfit. Nhưng
+đây là phép đo đáng làm thành công cụ: mỗi ngày vệ tinh đo được đỉnh mây thấp (không bị mây cao che),
+so với mặt mây app đã chụp, sẽ ra **sai số ΔH thật** trên hàng chục điểm/ngày — thay cho con số
+"±200m" vẫn ghi từ trước tới nay mà chưa ai đo bằng sự thật. Lưu ý khi làm: lọc `BLOCKED_ABOVE`
+(đỉnh mây 9-15km ở Lang Biang, Măng Đen… là mây tầng cao, không phải biển mây).
+
+Ngũ Chỉ Sơn 09/10 (người dùng báo nắng, quang) không chấm được: bản chụp 09/10 là ngày đã mất. Vệ tinh
+CLEAR, khớp người đi.
+
 #### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
 
 Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với

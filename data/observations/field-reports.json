@@ -1,5 +1,40 @@
 [
   {
+    "id": "2026-10-14-kyquansan",
+    "spotKey": "KY_QUAN_SAN",
+    "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "date": "2026-10-14",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "buổi sáng (không rõ giờ)",
+    "source": "USER_RELAY",
+    "note": "Người dùng báo 14/10: hai sáng 13 và 14/10 Ky Quan San nhiều mây nhưng là mây mù dày BAO TRÙM cả đỉnh — chìm trong mây, không phải biển mây dưới chân. Bản chụp dự báo 2026-10-14: 60/100 STATIC ΔH 1342m đồng thuận 100%, đáng đi=True — BÁO NHẦM (gfs 64 top 1211 · icon 25 top 1704 · ukmo 60 top 2226). Vệ tinh CLEAR cả 5 khung 04:30-06:30: cùng kiểu mây bám đỉnh mà hồng ngoại không thấy như Fansipan 02/09 — báo cáo người đi đè nhãn vệ tinh.",
+    "reportedAt": "2026-10-14T19:00:00+07:00"
+  },
+  {
+    "id": "2026-10-13-kyquansan",
+    "spotKey": "KY_QUAN_SAN",
+    "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "date": "2026-10-13",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "buổi sáng (không rõ giờ)",
+    "source": "USER_RELAY",
+    "note": "Người dùng báo 14/10: sáng 13/10 Ky Quan San mây mù dày bao trùm cả đỉnh. Bản chụp dự báo 2026-10-13: 68/100 STATIC ΔH 1335m đồng thuận 100%, đáng đi=True — BÁO NHẦM, dù đạt mức 'chắc ăn' ≥65. Vệ tinh ghi SEA_CONFIRMED nhưng đỉnh mây đo được 2813-2847m, chỉ 200-230m dưới đỉnh 3046m (trong sai số, và ô 2km gồm cả sườn) — tức vệ tinh thấy mây dâng sát đỉnh, KHÔNG mâu thuẫn với người đi. Cái sai thật là mặt mây của app: 1063-2222m, thấp hơn thực tế 600-1.700m.",
+    "reportedAt": "2026-10-14T19:00:00+07:00"
+  },
+  {
+    "id": "2026-10-09-nguchison",
+    "spotKey": "NGU_CHI_SON",
+    "locationName": "Ngũ Chỉ Sơn",
+    "date": "2026-10-09",
+    "seaLevel": "NONE",
+    "observedAt": "không rõ giờ",
+    "source": "USER_RELAY",
+    "note": "Người dùng báo 14/10: đỉnh Ngũ Chỉ Sơn 09/10 trời nắng, quang, không có mây. KHÔNG CHẤM ĐƯỢC app: bản chụp dự báo 09/10 bị mất (Open-Meteo trả chữ thay JSON lần chạy 08/10). Vệ tinh cùng ngày CLEAR — khớp người đi.",
+    "reportedAt": "2026-10-14T19:00:00+07:00"
+  },
+  {
     "id": "2026-10-11-taxua",
     "spotKey": "TA_XUA_SON_LA",
     "locationName": "Tà Xùa (Sống lưng Khủng Long)",
