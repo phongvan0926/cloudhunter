@@ -1473,3 +1473,52 @@ describe('engine-2.8.3 — trung thực số liệu', () => {
     expect(r.reasons.join(' ')).toMatch(/925hPa/);
   });
 });
+
+describe('Model mới tự lên đời — Gemini 4 Argon và alias -latest (14/10/2026)', () => {
+  const mkAll = async (ids: string[]) => {
+    const { classifyTier } = await import('../services/modelDiscoveryService');
+    return ids.map(id => ({ id, name: id, displayName: id, tier: classifyTier(id), tierLabel: '' }));
+  };
+
+  it('Argon là CAO CẤP: chọn tay được, nhưng không bao giờ là mặc định hay dự phòng tự động', async () => {
+    const { classifyTier, buildFallbackChain, pickDefaultModel } = await import('../services/modelDiscoveryService');
+    expect(classifyTier('gemini-4-argon')).toBe('pro');
+    const models = await mkAll(['gemini-4-argon', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']);
+    expect(pickDefaultModel(models)?.id).toBe('gemini-3.8-flash');
+    expect(buildFallbackChain('gemini-3.8-flash', models)).not.toContain('gemini-4-argon');
+    // người dùng tự chọn Argon: Argon đứng đầu, lỗi (key miễn phí) thì rơi xuống Flash
+    expect(buildFallbackChain('gemini-4-argon', models).slice(0, 2)).toEqual(['gemini-4-argon', 'gemini-3.8-flash']);
+  });
+
+  it('có alias gemini-flash-latest thì nó là mặc định (Google tự trỏ sang Flash mới nhất)', async () => {
+    const { pickDefaultModel } = await import('../services/modelDiscoveryService');
+    const models = await mkAll(['gemini-flash-lite-latest', 'gemini-3.8-flash', 'gemini-flash-latest', 'gemini-4-argon']);
+    expect(pickDefaultModel(models)?.id).toBe('gemini-flash-latest');
+  });
+
+  it('HỒI QUY: không có alias thì mặc định KHÔNG được là Lite/preview (sort chữ cái cũ chọn flash-lite-latest)', async () => {
+    const { pickDefaultModel } = await import('../services/modelDiscoveryService');
+    const models = await mkAll(['gemini-flash-lite-latest', 'gemini-3-flash-preview', 'gemini-3.6-flash', 'gemini-3.8-flash']);
+    expect(pickDefaultModel(models)?.id).toBe('gemini-3.8-flash');
+  });
+
+  it('họ model mới chưa biết tên (chưa biết giá) không vào chuỗi dự phòng tự động', async () => {
+    const { buildFallbackChain, classifyTier } = await import('../services/modelDiscoveryService');
+    expect(classifyTier('gemini-5-xenon')).toBe('custom');
+    const models = await mkAll(['gemini-5-xenon', 'gemini-3.8-flash', 'gemma-4-27b-it']);
+    const chain = buildFallbackChain('gemini-3.8-flash', models);
+    expect(chain).not.toContain('gemini-5-xenon');
+    expect(chain[chain.length - 1]).toBe('gemma-4-27b-it');
+  });
+
+  it('lọc các họ không phải văn bản trên trang models 14/10/2026', async () => {
+    const { isTextAnalysisModel } = await import('../services/modelDiscoveryService');
+    for (const id of ['gemini-nano-banana-2.1', 'gemini-3.5-transcribe', 'gemini-3.8-live', 'gemini-3.8-flash-tts',
+      'gemini-omni-1.1-flash', 'lyria-3.5', 'deep-research-preview-04-2026', 'gemini-3.5-live-translate-preview']) {
+      expect(isTextAnalysisModel(id, id), id).toBe(false);
+    }
+    for (const id of ['gemini-4-argon', 'gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.5-flash-lite']) {
+      expect(isTextAnalysisModel(id, id), id).toBe(true);
+    }
+  });
+});

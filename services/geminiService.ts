@@ -17,7 +17,7 @@ import { fetchMountainWeather, pointElevation } from './weatherService';
 import {
   computeDayForecast, computeTripSummary, seasonAdjust, ENGINE_VERSION, EngineDayOutput,
 } from './cloudScoreEngine';
-import { discoverModels, executeWithFallback, getStoredModel, getStoredApiKey } from './modelDiscoveryService';
+import { discoverModels, executeWithFallback, getStoredModel, getStoredApiKey, DEFAULT_MODEL_ID } from './modelDiscoveryService';
 
 function getAIInstance(): GoogleGenAI {
   const apiKey = getStoredApiKey();
@@ -224,7 +224,7 @@ export const analyzeLocation = async (locationName: string, model?: string): Pro
 
 async function aiDescribeLocation(locationName: string, admin: string, elevation: number, model?: string): Promise<string | null> {
   const discovered = await discoverModels();
-  const primaryModel = model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
+  const primaryModel = model || getStoredModel() || discovered[0]?.id || DEFAULT_MODEL_ID;
   const res = await executeWithFallback(primaryModel, discovered, async (modelId) => {
     const p = getAIInstance().models.generateContent({
       model: modelId,
@@ -241,7 +241,7 @@ async function aiDescribeLocation(locationName: string, admin: string, elevation
 async function aiResolveLocation(locationName: string, model?: string): Promise<Omit<LocationAnalysis, 'is_known_peak' | 'confidence' | 'source'> | null> {
   try {
     const discovered = await discoverModels();
-    const primaryModel = model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
+    const primaryModel = model || getStoredModel() || discovered[0]?.id || DEFAULT_MODEL_ID;
     const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
       const fetchPromise = getAIInstance().models.generateContent({
         model: modelId,
@@ -451,7 +451,7 @@ async function generateNarrative(base: CloudAnalysis, model?: string): Promise<C
   };
 
   const discovered = await discoverModels();
-  const primaryModel = model || getStoredModel() || discovered[0]?.id || "gemini-2.5-flash";
+  const primaryModel = model || getStoredModel() || discovered[0]?.id || DEFAULT_MODEL_ID;
   const fallbackRes = await executeWithFallback(primaryModel, discovered, async (modelId) => {
     const fetchPromise = getAIInstance().models.generateContent({
       model: modelId,

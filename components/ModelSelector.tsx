@@ -99,7 +99,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         >
           {models.map(m => (
             <option key={m.id} value={m.id} className="bg-slate-950 text-slate-100 font-sans text-sm py-1.5">
-              {m.displayName} ({m.tier === 'flash' ? '⚡ Flash' : m.tier === 'pro' ? '🚀 Pro' : m.tier === 'experimental' ? '🧪 Preview' : '🤖 Khác'}) {m.isDefaultCandidate ? '⭐ Mặc định' : ''}
+              {m.displayName} ({m.tier === 'flash' ? '⚡ Flash' : m.tier === 'pro' ? '🚀 Cao cấp, trả phí' : m.tier === 'experimental' ? '🧪 Preview' : '🤖 Khác'}) {m.isDefaultCandidate ? '⭐ Mặc định' : ''}
             </option>
           ))}
         </select>
@@ -119,6 +119,13 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
             {activeModelObj.tierLabel}
           </span>
         </div>
+      )}
+      {activeModelObj?.tier === 'pro' && (
+        <p className="mt-2 text-xs text-amber-300/90 bg-amber-950/30 border border-amber-800/40 rounded-xl p-2.5 font-sans">
+          Model cao cấp thường chỉ chạy với key có bật thanh toán (Gemini 4 Argon không có hạn mức miễn phí).
+          Key miễn phí sẽ bị từ chối và app tự chuyển sang Flash. Lời bình chỉ diễn giải số của engine,
+          nên Flash là đủ; mọi con số dự báo không phụ thuộc model AI.
+        </p>
       )}
     </div>
   );

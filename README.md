@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-117_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-122_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-6_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -59,6 +59,11 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   tạo ảnh/Live); model bạn chọn lỗi (429...) thì hạ bậc thang chất lượng (3.7 → flash-latest
   → 3.6 → 3.5..., Lite gần cuối, **Gemma tuyệt đối cuối cùng** — không chen vào bậc thang
   Flash) và app nói rõ model nào đã viết lời bình. Số liệu dự báo không phụ thuộc model AI.
+  **Tự lên đời model:** danh sách lấy từ API theo key của bạn mỗi lần mở app (hoặc bấm 🔄 Cập
+  nhật); mặc định là alias `gemini-flash-latest` mà Google tự trỏ sang bản Flash mới nhất, nên ra
+  model Flash mới thì app dùng ngay không cần sửa code. Model cao cấp (vd **Gemini 4 Argon**,
+  chỉ gói trả phí) chọn tay được, kèm cảnh báo, nhưng không bao giờ là mặc định hay dự phòng
+  tự động; họ model mới chưa rõ giá cũng vậy.
 - 🕐 **Ngày giờ neo theo Asia/Ho_Chi_Minh** — đúng ngày Việt Nam kể cả khi thiết bị đặt
   múi giờ khác.
 - 🕘 **Lịch sử dự báo** (localStorage): mở lại tức thì, và là nền tảng để đối chiếu
@@ -123,7 +128,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 117 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử
+npm test         # 122 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

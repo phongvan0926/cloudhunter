@@ -26,17 +26,11 @@ export function formatModelDisplayName(modelId: string, discoveredModels?: Disco
   }
 
   // Friendly name mapping for common / alias model IDs
+  // Alias "-latest" do Google tự trỏ sang bản mới nhất — KHÔNG ghi số phiên bản ở đây (sẽ lỗi thời).
   const friendlyMap: Record<string, { displayName: string; tierLabel: string }> = {
-    'gemini-flash-latest': { displayName: 'Gemini 2.5 Flash (Bản mới nhất)', tierLabel: '⚡ Flash' },
-    'gemini-flash-lite-latest': { displayName: 'Gemini 2.5 Flash-Lite (Siêu nhanh / Tiết kiệm)', tierLabel: '⚡ Flash-Lite' },
-    'gemini-pro-latest': { displayName: 'Gemini 2.5 Pro (Tư duy sâu / Mới nhất)', tierLabel: '🚀 Pro' },
-    'gemini-2.5-flash': { displayName: 'Gemini 2.5 Flash', tierLabel: '⚡ Flash' },
-    'gemini-2.5-flash-lite': { displayName: 'Gemini 2.5 Flash-Lite', tierLabel: '⚡ Flash-Lite' },
-    'gemini-2.5-pro': { displayName: 'Gemini 2.5 Pro', tierLabel: '🚀 Pro' },
-    'gemini-2.0-flash': { displayName: 'Gemini 2.0 Flash', tierLabel: '⚡ Flash' },
-    'gemini-2.0-flash-lite': { displayName: 'Gemini 2.0 Flash-Lite', tierLabel: '⚡ Flash-Lite' },
-    'gemini-1.5-flash': { displayName: 'Gemini 1.5 Flash', tierLabel: '⚡ Flash' },
-    'gemini-1.5-pro': { displayName: 'Gemini 1.5 Pro', tierLabel: '🚀 Pro' },
+    'gemini-flash-latest': { displayName: 'Gemini Flash (luôn bản mới nhất)', tierLabel: '⚡ Flash' },
+    'gemini-flash-lite-latest': { displayName: 'Gemini Flash-Lite (luôn bản mới nhất)', tierLabel: '⚡ Flash-Lite' },
+    'gemini-pro-latest': { displayName: 'Gemini Pro (luôn bản mới nhất)', tierLabel: '🚀 Cao cấp' },
   };
 
   if (friendlyMap[cleanId]) {
@@ -54,9 +48,10 @@ export function formatModelDisplayName(modelId: string, discoveredModels?: Disco
     .join(' ');
 
   let tierLabel = '🤖 AI Model';
-  if (cleanId.toLowerCase().includes('flash')) tierLabel = '⚡ Flash';
-  else if (cleanId.toLowerCase().includes('pro')) tierLabel = '🚀 Pro';
-  else if (cleanId.toLowerCase().includes('preview') || cleanId.toLowerCase().includes('exp')) tierLabel = '🧪 Preview';
+  const t = classifyTier(cleanId);
+  if (t === 'flash') tierLabel = '⚡ Flash';
+  else if (t === 'pro') tierLabel = '🚀 Cao cấp';
+  else if (t === 'experimental') tierLabel = '🧪 Preview';
 
   return {
     displayName: formatted,
@@ -69,36 +64,81 @@ export type ErrorClassification = 'AUTH' | 'RETRYABLE' | 'OTHER';
 
 const STORAGE_KEY = 'cloudhunter_selected_model';
 
-// Fallback safe default models if API discovery fails or key is missing
+const PREMIUM_TIER_LABEL = '🚀 Cao cấp (thường cần gói trả phí)';
+
+// Danh sách dự phòng khi không gọi được list-models (thiếu key / lỗi mạng).
+// Ưu tiên ALIAS "-latest": Google tự trỏ nó sang bản mới nhất nên danh sách này không lỗi thời
+// mỗi khi có model mới. Tên số cụ thể chỉ là phương án sau (đối chiếu trang models 14/10/2026).
 const FALLBACK_DEFAULT_MODELS: DiscoveredModel[] = [
   {
-    id: 'gemini-2.5-flash',
-    name: 'gemini-2.5-flash',
-    displayName: 'Gemini 2.5 Flash',
-    description: 'Mô hình chuẩn mặc định, hạn mức cao và phản hồi nhanh nhất',
+    id: 'gemini-flash-latest',
+    name: 'gemini-flash-latest',
+    displayName: 'Gemini Flash (luôn bản mới nhất)',
+    description: 'Alias do Google tự cập nhật sang bản Flash mới nhất — có hạn mức miễn phí',
     tier: 'flash',
     tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
     isDefaultCandidate: true,
   },
   {
-    id: 'gemini-1.5-flash',
-    name: 'gemini-1.5-flash',
-    displayName: 'Gemini 1.5 Flash',
-    description: 'Mô hình thế hệ 1.5 ổn định cao',
+    id: 'gemini-3.8-flash',
+    name: 'gemini-3.8-flash',
+    displayName: 'Gemini 3.8 Flash',
+    description: 'Flash ổn định (14/10/2026) — có hạn mức miễn phí',
     tier: 'flash',
     tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
   },
   {
-    id: 'gemini-2.5-pro',
-    name: 'gemini-2.5-pro',
-    displayName: 'Gemini 2.5 Pro',
-    description: 'Mô hình tư duy chuyên sâu (Pro)',
+    id: 'gemini-3.5-flash-lite',
+    name: 'gemini-3.5-flash-lite',
+    displayName: 'Gemini 3.5 Flash-Lite',
+    description: 'Nhẹ, rẻ — có hạn mức miễn phí',
+    tier: 'flash',
+    tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
+  },
+  {
+    id: 'gemini-4-argon',
+    name: 'gemini-4-argon',
+    displayName: 'Gemini 4 Argon',
+    description: 'Model lập luận hàng đầu — CHỈ gói trả phí, không có hạn mức miễn phí',
     tier: 'pro',
-    tierLabel: '🚀 Cao cấp (Pro)',
-  }
+    tierLabel: PREMIUM_TIER_LABEL,
+  },
 ];
 
+/** Id dùng khi chưa biết gì (không có danh sách) — alias tự cập nhật, không ghim phiên bản. */
+export const DEFAULT_MODEL_ID = 'gemini-flash-latest';
+
 const API_KEY_STORAGE_KEY = 'cloudhunter_custom_api_key';
+
+/**
+ * Phân hạng theo TÊN model. "Cao cấp" = model lập luận hàng đầu, thường chỉ có ở gói trả phí
+ * (Gemini 4 Argon: "not available on the Free tier", đo 14/10/2026). Model cao cấp chỉ chạy khi
+ * người dùng TỰ CHỌN — không bao giờ là mặc định, không bao giờ được dùng làm dự phòng tự động.
+ * Họ model mới có tên mã chưa biết (vd "gemini-5-xyz") rơi vào 'custom': hiện trong danh sách để
+ * chọn tay, nhưng cũng KHÔNG vào chuỗi dự phòng — chưa biết giá thì không tự tiêu tiền.
+ */
+const PREMIUM_WORDS = ['pro', 'ultra', 'argon', 'thinking', 'reasoning'];
+export function classifyTier(id: string): DiscoveredModel['tier'] {
+  const lower = id.toLowerCase();
+  if (lower.includes('flash')) return 'flash';
+  if (PREMIUM_WORDS.some(w => lower.includes(w))) return 'pro';
+  if (lower.includes('exp') || lower.includes('preview')) return 'experimental';
+  return 'custom';
+}
+
+/**
+ * Model mặc định: alias `gemini-flash-latest` nếu key thấy nó (Google tự trỏ sang Flash mới
+ * nhất ⇒ app tự lên đời mà không cần sửa code); không có thì Flash ổn định, không Lite,
+ * điểm cao nhất theo `fallbackPriority`.
+ */
+export function pickDefaultModel(models: DiscoveredModel[]): DiscoveredModel | undefined {
+  const alias = models.find(m => m.id === DEFAULT_MODEL_ID);
+  if (alias) return alias;
+  const flash = models.filter(m => m.tier === 'flash');
+  const stable = flash.filter(m => !/lite|preview|exp/.test(m.id.toLowerCase()));
+  const pool = stable.length ? stable : flash.length ? flash : models;
+  return [...pool].sort((a, b) => fallbackPriority(b.id) - fallbackPriority(a.id))[0];
+}
 
 /**
  * Chỉ giữ model PHÂN TÍCH VĂN BẢN. Loại: embedding, TTS, model TẠO ẢNH
@@ -113,6 +153,9 @@ export function isTextAnalysisModel(id: string, displayName: string): boolean {
     'image',        // gemini-*-image* = model tạo ảnh (Nano Banana)
     '-live',        // Live API (realtime audio/video), không dùng cho phân tích
     'native-audio', 'veo',
+    // họ mới trên trang models 14/10/2026 — không phải model phân tích văn bản:
+    'banana',       // gemini-nano-banana-2.1 (tạo ảnh, id không chứa 'image')
+    'transcribe', 'translate', 'lyria', 'omni', 'deep-research', 'antigravity',
   ];
   if (banned.some(b => lower.includes(b))) return false;
   if (dn.includes('nano banana') || dn.includes('image')) return false;
@@ -233,19 +276,11 @@ export async function discoverModels(apiKey?: string): Promise<DiscoveredModel[]
       const lower = cleanId.toLowerCase();
 
       // Classify Tiers (R2)
-      let tier: 'flash' | 'pro' | 'experimental' | 'custom' = 'custom';
-      let tierLabel = '🤖 Khác';
-
-      if (lower.includes('flash')) {
-        tier = 'flash';
-        tierLabel = '⚡ Nhanh / Tiết kiệm (Flash)';
-      } else if (lower.includes('pro') || lower.includes('thinking')) {
-        tier = 'pro';
-        tierLabel = '🚀 Cao cấp / Tư duy sâu (Pro)';
-      } else if (lower.includes('exp') || lower.includes('preview')) {
-        tier = 'experimental';
-        tierLabel = '🧪 Thử nghiệm (Preview)';
-      }
+      const tier = classifyTier(cleanId);
+      const tierLabel = tier === 'flash' ? '⚡ Nhanh / Tiết kiệm (Flash)'
+        : tier === 'pro' ? PREMIUM_TIER_LABEL
+        : tier === 'experimental' ? '🧪 Thử nghiệm (Preview)'
+        : '🤖 Khác';
 
       const displayName = item.displayName || cleanId;
       const description = item.description || `Model ${cleanId}`;
@@ -264,18 +299,23 @@ export async function discoverModels(apiKey?: string): Promise<DiscoveredModel[]
       return FALLBACK_DEFAULT_MODELS;
     }
 
-    // Sort order (R2): Flash models first (newest to oldest), then Pro, then Experimental/Other
+    // Sắp xếp: Flash trước, rồi Khác, Cao cấp, Preview; trong mỗi nhóm theo fallbackPriority
+    // (bản cũ sort chữ cái ngược: 'gemini-flash-lite-latest' > 'gemini-3.8-flash' vì 'f' > '3',
+    // nên Lite thành mặc định). Model mặc định đưa lên ĐẦU danh sách vì geminiService dùng
+    // discovered[0] khi người dùng chưa chọn gì.
     discovered.sort((a, b) => {
       const tierRank = { flash: 1, custom: 2, pro: 3, experimental: 4 };
       const rankA = tierRank[a.tier] || 5;
       const rankB = tierRank[b.tier] || 5;
       if (rankA !== rankB) return rankA - rankB;
-      return b.id.localeCompare(a.id); // Lexicographical sort descending (newer version numbers first)
+      return fallbackPriority(b.id) - fallbackPriority(a.id);
     });
 
-    // Mark safe default candidate (R4)
-    if (discovered.length > 0) {
-      discovered[0].isDefaultCandidate = true;
+    const def = pickDefaultModel(discovered);
+    if (def) {
+      def.isDefaultCandidate = true;
+      discovered.splice(discovered.indexOf(def), 1);
+      discovered.unshift(def);
     }
 
     return discovered;
@@ -359,7 +399,9 @@ export function fallbackPriority(id: string): number {
 export function buildFallbackChain(primaryModel: string, discoveredModels: DiscoveredModel[]): string[] {
   const chain: string[] = [primaryModel];
   const safeFallbacks = discoveredModels
-    .filter(m => m.tier === 'flash' || m.tier === 'custom')
+    // Chỉ Flash (có hạn mức miễn phí) + Gemma ở cuối. KHÔNG có Cao cấp/Preview/họ mới chưa biết giá:
+    // model trả phí chỉ chạy khi người dùng tự chọn nó làm model chính.
+    .filter(m => m.tier === 'flash' || m.id.toLowerCase().includes('gemma'))
     .map(m => m.id)
     .sort((a, b) => fallbackPriority(b) - fallbackPriority(a));
   for (const fb of safeFallbacks) {
