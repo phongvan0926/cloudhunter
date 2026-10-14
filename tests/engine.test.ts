@@ -991,6 +991,16 @@ describe('MOUNTAIN_DB — toạ độ phải khớp độ cao DEM thật', () =>
     expect(findBestMatchingMountain('Tà Xùa')?.key).toBe('TA_XUA_SON_LA');
     expect(findBestMatchingMountain('Phu Sa Phìn')?.key).toBe('PHU_SA_PHIN');
   });
+
+  it('HỒI QUY 14/10/2026: chọn nhanh "Tà Xùa" phải ra mốc 1.800m, không phải 2.865m của Phu Sa Phìn', async () => {
+    const { NORTHWEST_PEAKS } = await import('../constants');
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const preset = NORTHWEST_PEAKS.find(p => p.name.startsWith('Tà Xùa'))!;
+    expect(preset.altitude).toBe(1800);
+    expect(preset.elevation_profile?.some(w => w.altitude > 2000)).toBe(false);
+    expect(MOUNTAIN_DB.TA_XUA_SON_LA.elevation).toBe(1800);
+    expect(MOUNTAIN_DB.TA_XUA_TRAM_PHAT).toBeUndefined();   // đã gộp: cùng một chỗ đứng
+  });
 });
 
 describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO HƠN đáy thung lũng', () => {

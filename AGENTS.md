@@ -693,6 +693,26 @@ so với mặt mây app đã chụp, sẽ ra **sai số ΔH thật** trên hàng
 Ngũ Chỉ Sơn 09/10 (người dùng báo nắng, quang) không chấm được: bản chụp 09/10 là ngày đã mất. Vệ tinh
 CLEAR, khớp người đi.
 
+#### Fansipan 11:13 cùng ngày 14/10: biển mây DÂNG LÊN sau bình minh
+
+08:12 trời trong không có biển mây; ảnh có dấu giờ **11:13** cùng ngày thì biển mây trắng dày kín
+tới chân trời, trùm gần hết sườn đỉnh. Cùng kiểu với Ky Quan San mù trùm đỉnh ~15h. App chỉ dự báo
+rạng sáng nên hai ca này không chấm (`timeOfDay: MIDDAY/AFTERNOON`), nhưng chúng cho thấy với đỉnh
+cao mùa này có cả **biển mây ban ngày** (mây thung lũng nâng lên khi nắng đốt) — một câu hỏi app
+chưa trả lời. Gom thêm ca có giờ rồi mới tính có nên dự báo khung trưa hay không.
+
+#### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
+
+Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
+Phu Sa Phìn (Yên Bái) đã tách tên từ trước, nhưng `constants.ts` (danh sách chọn nhanh) bị bỏ sót
+khi tách. Hậu quả thật: chọn Tà Xùa từ danh sách thì độ cao đứng = 2.865 − 100 = **2.765m**, mọi
+phân tích theo đường đó tính cho một người đứng gần đỉnh Phu Sa Phìn. Người dùng chốt mốc chuẩn
+1.800m (cao nhất xe lên được). Đo: đường xe cao nhất trong OSM quanh Tà Xùa là nhánh lên trạm phát
+sóng, DEM 1.770m tại 21.2764,104.4243 — trùng plus code 7CGF+HH. Nên `TA_XUA_SON_LA` chuyển về đó
+(1.800m) và **gộp** `TA_XUA_TRAM_PHAT`; bản chụp/báo cáo cũ giữ nguyên khoá (bằng chứng của chỗ
+đứng 1.600m khi ấy). Có test khoá. Bài học: tách/đổi tên một điểm thì sửa CẢ HAI danh sách
+(`constants/mountains.ts` và `constants.ts`), chúng nối với nhau chỉ bằng tên.
+
 #### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
 
 Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với

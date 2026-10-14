@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-10-14-fansipan-trua",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-14",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MIDDAY",
+    "observedAt": "11:13",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh người dùng gửi 14/10, dấu '14/10/2026 11:13:31' (nhìn xuống quần thể chùa, ga cáp treo). Biển mây trắng dày kín tới chân trời, trời xanh không mây bên trên, mây dâng sát và trùm gần hết sườn đỉnh. Cùng ngày lúc 08:12 trời trong, KHÔNG có biển mây (báo cáo 2026-10-14-fansipan) ⇒ biển mây HÌNH THÀNH/DÂNG LÊN trong buổi sáng, sau bình minh — giống Ky Quan San mù trùm đỉnh lúc ~15h. Không chấm dự báo rạng sáng (app chỉ dự báo bình minh); ghi làm tư liệu cho câu hỏi 'biển mây ban ngày'.",
+    "reportedAt": "2026-10-14T20:00:00+07:00"
+  },
+  {
     "id": "2026-10-14-kyquansan",
     "spotKey": "KY_QUAN_SAN",
     "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",

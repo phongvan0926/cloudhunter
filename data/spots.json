@@ -2,9 +2,9 @@
   {
     "key": "TA_XUA_SON_LA",
     "name": "Tà Xùa (Sống lưng Khủng Long)",
-    "lat": 21.2796,
-    "lon": 104.4326,
-    "elevation": 1600,
+    "lat": 21.2764,
+    "lon": 104.4239,
+    "elevation": 1800,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 700,
     "needsReview": null
@@ -37,16 +37,6 @@
     "elevation": 1250,
     "zone": "A_CLOUD_TRAP",
     "valleyElevation": 1000,
-    "needsReview": null
-  },
-  {
-    "key": "TA_XUA_TRAM_PHAT",
-    "name": "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
-    "lat": 21.2764,
-    "lon": 104.4239,
-    "elevation": 1753,
-    "zone": "A_CLOUD_TRAP",
-    "valleyElevation": null,
     "needsReview": null
   },
   {

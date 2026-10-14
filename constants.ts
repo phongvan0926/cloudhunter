@@ -4,7 +4,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
   // --- SƠN LA ---
   { 
     name: 'Tà Xùa (Sống lưng Khủng Long)', 
-    altitude: 2865, 
+    altitude: 1800,   // 14/10/2026: mốc chuẩn người dùng chốt = chỗ cao nhất xe lên được. 2865m là Phu Sa Phìn (Yên Bái), KHÔNG phải Tà Xùa
     province: 'Sơn La',
     aliases: ['ta xua', 'khung long', 'song lung', 'bac yen', 'thiên đường mây', 'tà xùa', 'bắc yên', 'sống lưng khủng long', 'ta xua son la'],
     elevation_profile: [
@@ -12,7 +12,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
       { label: 'Đèo Chống Gậy', altitude: 1300, type: 'SLOPE', description: 'Cung đường đèo dốc quanh co sương mù' },
       { label: 'Thung lũng Mây', altitude: 1200, type: 'VALLEY', description: 'Khu vực lòng chảo, mây thường đọng lại' },
       { label: 'Sống lưng KL', altitude: 1600, type: 'RIDGE', description: 'Sống núi hẹp 2 bên là vực, điểm săn mây chính' },
-      { label: 'Đỉnh Tà Xùa', altitude: 2865, type: 'PEAK', description: 'Đỉnh cao nhất của dãy Tà Xùa, đường trekking rừng rêu' }
+      { label: 'Trạm phát sóng', altitude: 1800, type: 'PEAK', description: 'Chỗ cao nhất xe lên được, mốc chuẩn của Tà Xùa' }
     ]
   },
   { 

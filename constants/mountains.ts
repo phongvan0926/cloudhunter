@@ -15,11 +15,19 @@ export interface MountainInfo {
 
 export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // --- SƠN LA ---
+  // 14/10/2026: người dùng chốt "Tà Xùa chuẩn" = khu du lịch săn mây Tà Xùa (Bắc Yên), lấy 1.800m làm
+  // mốc vì đó là chỗ cao nhất XE LÊN ĐƯỢC. Đo bằng OSM + DEM: đường xe cao nhất quanh Tà Xùa là
+  // nhánh lên trạm phát sóng (DEM 1.770m tại 21.2764,104.4243), trùng plus code 7CGF+HH người dùng
+  // gửi 03/09. Vì thế GỘP luôn điểm TA_XUA_TRAM_PHAT (1.753m, cách ~50m) vào đây — để hai mục cùng
+  // một chỗ thì bảng xếp hạng đếm Tà Xùa hai lần. Trước đó điểm này ở 21.2796,104.4326 / 1.600m
+  // (cụm homestay - Sống lưng KL). Bản chụp và báo cáo cũ giữ nguyên khoá: chúng là bằng chứng
+  // của chỗ đứng 1.600m tại thời điểm đó, không sửa lại.
   TA_XUA_SON_LA: {
     name: "Tà Xùa (Sống lưng Khủng Long)",
-    lat: 21.2796, lon: 104.4326, elevation: 1600,   // nguồn: OSM viewpoint "ta xua" — cụm homestay/Sống lưng KL (DEM 1556m)
+    lat: 21.2764, lon: 104.4239, elevation: 1800,   // nguồn: plus code 7CGF+HH người dùng gửi + đường xe cao nhất OSM (DEM 1753-1770m); 1.800m = mốc người dùng chốt 14/10/2026
     zone: "A_CLOUD_TRAP",
-    aliases: ['ta xua', 'khung long', 'song lung', 'bac yen', 'thiên đường mây', 'tà xùa', 'bắc yên', 'sống lưng khủng long', 'ta xua son la']
+    aliases: ['ta xua', 'khung long', 'song lung', 'bac yen', 'thiên đường mây', 'tà xùa', 'bắc yên', 'sống lưng khủng long', 'ta xua son la',
+              'trạm phát sóng tà xùa', 'tram phat song ta xua', 'trung tâm tà xùa', 'cột phát sóng tà xùa']
   },
   PHA_LUONG: {
     name: "Đỉnh Pha Luông",
@@ -48,12 +56,7 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
   // chỉ cao hơn đáy thung lũng ~400m) nên không phải điểm săn mây đáng đưa vào xếp hạng.
   // Thay bằng điểm dưới đây — cùng huyện Bắc Yên nhưng cao hơn hẳn.
   // (Các bản chụp dự báo/vệ tinh cũ vẫn còn key PU_NHI_FARM: đó là BẰNG CHỨNG lịch sử, không sửa.)
-  TA_XUA_TRAM_PHAT: {
-    name: "Trạm phát sóng Tà Xùa (điểm cao nhất trung tâm)",
-    lat: 21.2764, lon: 104.4239, elevation: 1753,   // nguồn: plus code 7CGF+HH người dùng cung cấp (DEM 1753m); đáy thung lũng Bắc Yên 116-181m
-    zone: "A_CLOUD_TRAP",
-    aliases: ['trạm phát sóng tà xùa', 'tram phat song ta xua', 'trung tâm tà xùa', 'cột phát sóng tà xùa', 'bắc yên', 'tà xùa']
-  },
+  // TA_XUA_TRAM_PHAT đã GỘP vào TA_XUA_SON_LA ngày 14/10/2026 (cùng một chỗ, xem ghi chú ở trên).
   // (DINH_U_BO đã GỘP vào SA_MU_U_BO ngày 23/8/2026 — trùng một khối núi trong KBT Tà Xùa,
   //  toạ độ cũ 21.2380,104.3410 rơi xuống lòng thung lũng 253m nên mọi dự báo đều sai chỗ.)
 
