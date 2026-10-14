@@ -655,33 +655,34 @@ vệ tinh ở một đỉnh cao, mùa khô, là tin được (khác hẳn sươn
 duy nhất là 34 điểm; ca đúng là 66. Thêm một dữ kiện cùng chiều cho mức "điểm ≥ 65", nhưng vẫn là cùng
 hai ngày 13/10 và 14/10, chưa phải ngày độc lập mới.
 
-#### Ky Quan San 13 và 14/10: app nói "chắc ăn" mà người đi chìm trong mây
+#### Ky Quan San 13 và 14/10: mù trùm đỉnh lúc 15h — và mặt mây app tính thấp ~1.100m
 
-Người dùng báo (14/10): hai sáng 13 và 14/10 Ky Quan San (3.046m) bị **mây mù dày bao trùm cả đỉnh**.
-Bản chụp: 13/10 `68 STATIC ΔH +1.335m 100%`, 14/10 `60 STATIC ΔH +1.342m 100%` — cả hai khuyên đi,
-13/10 còn đạt mức "điểm ≥ 65". Mức theo dõi đó tụt từ 8/15 xuống **7/15 (47%)**.
+Người dùng báo (14/10): hai ngày 13 và 14/10 Ky Quan San (3.046m) bị **mây mù dày bao trùm cả đỉnh**.
+Ban đầu tôi ghi là buổi sáng và chấm thành hai ca báo nhầm (mức "điểm ≥ 65" tụt còn 7/15). **Sai giờ:**
+người dùng đính chính ngay, cả hai lần mù đều vào **giữa chiều, khoảng 15h**. Dự báo của app là cho
+rạng sáng; mây chiều dâng trùm đỉnh là hiện tượng khác (đối lưu ban ngày, biển mây dâng khi nắng
+nóng thung lũng). Hai báo cáo nay có `timeOfDay: AFTERNOON`, calibrate bỏ qua, hai ngày đó chấm bằng
+vệ tinh như cũ (13/10 SEA, 14/10 CLEAR ⇒ một đúng, một báo nhầm); mức ≥65 trở lại **8/15**.
+Bài học lặp lại lần thứ hai trong một ngày: **chưa biết giờ thì hỏi, đừng tự điền "buổi sáng".**
 
-Soi kỹ thì cái sai không nằm ở luật mà ở **độ cao mặt mây**. So mặt mây app tính (bản chụp) với đỉnh
-mây vệ tinh đo được, cùng ngày 13/10, các điểm Hoàng Liên Sơn:
+Nhưng soi ca này lộ ra một chuyện không phụ thuộc giờ quan sát: **độ cao mặt mây app tính sai xa.**
+So mặt mây app tính (bản chụp) với đỉnh mây vệ tinh đo được, cùng sáng 13/10, các điểm Hoàng Liên Sơn:
 
 ```
                  app     vệ tinh   đứng      (vệ tinh − app)
 Fansipan        2.227    3.040    3.143        +813     ảnh: biển mây ngay dưới đỉnh
 Tà Chì Nhù      1.707    3.000    2.979      +1.293     ảnh: biển mây dày phẳng
-Ky Quan San     1.711    2.830    3.046      +1.119     người đi: CHÌM trong mây
+Ky Quan San     1.711    2.830    3.046      +1.119     15h chiều: chìm trong mây
 Nhìu Cồ San     1.711    2.810    2.965      +1.099
 Lùng Cúng       1.711    3.061    2.913      +1.350
 trung vị 22 điểm miền Bắc có số đo: vệ tinh cao hơn app ~1.100m
 ```
 
-Hôm đó mặt biển mây thật nằm ở **~2.800-3.050m**, sát ngang các đỉnh cao nhất, chứ không phải ~1.700m
-như app tính. App nói "bạn đứng trên mặt mây 1.300m" trong khi khoảng hở thật là **0-300m**: đỉnh nào
-nhô qua được thì có biển mây (Fansipan, Tà Chì Nhù), đỉnh nào thấp hơn mặt mây một chút thì chìm (Ky
-Quan San, có thể vì mây dâng sau 06:30 khi vệ tinh chụp khung cuối). Nghĩa là **Tà Chì Nhù và Fansipan
-13/10 trúng một phần nhờ may**: kết luận đúng, nhưng lề an toàn app khai (1.300m) gấp ~5-10 lần lề thật.
-
-Ngày 14/10 vệ tinh ghi CLEAR mà người đi chìm trong mây — cùng kiểu mây bám đỉnh hồng ngoại không thấy
-như Fansipan 02/09; báo cáo người đi đè nhãn vệ tinh.
+Hôm đó mặt biển mây thật (vệ tinh, 04:30-06:30) nằm ở **~2.800-3.050m**, sát ngang các đỉnh cao
+nhất, chứ không phải ~1.700m như app tính. App nói "bạn đứng trên mặt mây 1.300m" trong khi khoảng hở
+thật chỉ **0-300m**. Ky Quan San thấp hơn Fansipan 100m và mặt mây chỉ cách đỉnh ~200m lúc sáng — chiều
+nó dâng lên trùm đỉnh là rất hợp lý. Nghĩa là **Tà Chì Nhù và Fansipan 13/10 trúng một phần nhờ may**:
+kết luận đúng, nhưng lề an toàn app khai (1.300m) gấp ~5-10 lần lề thật.
 
 **CHƯA sửa engine.** Một ngày, một sự kiện; chỉnh `estimateCloudTop` cho khớp 13/10 là overfit. Nhưng
 đây là phép đo đáng làm thành công cụ: mỗi ngày vệ tinh đo được đỉnh mây thấp (không bị mây cao che),
