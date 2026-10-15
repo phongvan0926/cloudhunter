@@ -52,6 +52,17 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     zone: "A_CLOUD_TRAP",
     aliases: ['xim vang', 'ruong bac thang', 'xím vàng', 'bắc yên']
   },
+  // 15/10/2026: người dùng giới thiệu "Đồi gió và cỏ Đỉnh Kim Bon", plus code 4JC7+C39 (bản Kim Bon,
+  // xã Kim Bon, Sơn La): ô tô lên tận đỉnh. Giải mã: 7PH64JC7+C39 = 21.121038,104.612734, DEM 1.055m;
+  // cực đại DEM quanh đó 1.146m cách ~450m (DEM 90m làm tù đỉnh). Đáy là lòng hồ Hòa Bình trên sông
+  // Đà, DEM 116-145m trong bán kính 4-8km ⇒ chênh cao ~950m, nguồn ẩm là mặt hồ rộng ngay dưới chân.
+  KIM_BON: {
+    name: "Đỉnh Kim Bon (Đồi gió và cỏ)",
+    lat: 21.1210, lon: 104.6127, elevation: 1100,   // nguồn: plus code 4JC7+C39 người dùng gửi (DEM 1055m, cực đại lân cận 1146m); 1.100m = độ cao đỉnh xe lên theo người dùng
+    zone: "A_CLOUD_TRAP",
+    aliases: ['kim bon', 'đỉnh kim bon', 'dinh kim bon', 'đồi gió kim bon', 'doi gio kim bon', 'đồi cỏ kim bon',
+              'phù yên', 'phu yen', 'sông đà sơn la', 'hồ hòa bình sơn la']
+  },
   // PU_NHI_FARM đã GỠ ngày 03/09/2026 theo yêu cầu người dùng: đồi Pu Nhi thấp quá (~700m,
   // chỉ cao hơn đáy thung lũng ~400m) nên không phải điểm săn mây đáng đưa vào xếp hạng.
   // Thay bằng điểm dưới đây — cùng huyện Bắc Yên nhưng cao hơn hẳn.

@@ -1001,6 +1001,16 @@ describe('MOUNTAIN_DB — toạ độ phải khớp độ cao DEM thật', () =>
     expect(MOUNTAIN_DB.TA_XUA_SON_LA.elevation).toBe(1800);
     expect(MOUNTAIN_DB.TA_XUA_TRAM_PHAT).toBeUndefined();   // đã gộp: cùng một chỗ đứng
   });
+
+  it('Đỉnh Kim Bon (15/10/2026): tra được bằng tên, đúng plus code 4JC7+C39, đáy là lòng hồ sông Đà', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const { findBestMatchingMountain } = await import('../services/geminiService');
+    expect(findBestMatchingMountain('Kim Bon')?.key).toBe('KIM_BON');
+    expect(findBestMatchingMountain('đồi gió Kim Bon')?.key).toBe('KIM_BON');
+    const k = MOUNTAIN_DB.KIM_BON;
+    expect(Math.abs(k.lat - 21.121038)).toBeLessThan(0.001);
+    expect(Math.abs(k.lon - 104.612734)).toBeLessThan(0.001);
+  });
 });
 
 describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO HƠN đáy thung lũng', () => {

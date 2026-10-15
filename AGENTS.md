@@ -740,6 +740,16 @@ sóng, DEM 1.770m tại 21.2764,104.4243 — trùng plus code 7CGF+HH. Nên `TA_
 đứng 1.600m khi ấy). Có test khoá. Bài học: tách/đổi tên một điểm thì sửa CẢ HAI danh sách
 (`constants/mountains.ts` và `constants.ts`), chúng nối với nhau chỉ bằng tên.
 
+#### Điểm mới: Đỉnh Kim Bon (15/10/2026)
+
+Người dùng giới thiệu "Đồi gió và cỏ Đỉnh Kim Bon", plus code `4JC7+C39` (bản Kim Bon, Sơn La), ô tô
+lên tận đỉnh ~1.100m. Giải mã `7PH64JC7+C39` = 21.121038, 104.612734, DEM 1.055m; cực đại DEM lân
+cận 1.146m cách ~450m. Quét DEM vòng 2-8km: đáy 116-145m — chính là mặt hồ Hòa Bình trên sông Đà,
+chênh cao ~950m. Mặt cắt chỉ ghi hai mốc đã đo (lòng hồ 120m, đỉnh 1.100m); không thêm mốc giữa
+chưa đo. Dự báo thử 16-18/10 (6 mô hình, lúc thêm): 16/10 mặt mây trên đầu (ΔH −571m, không khuyên);
+17 và 18/10 khuyên đi nhưng ΔH chỉ +155m/+138m — sát biên, và 13/10 đã cho thấy ΔH có thể lệch cả
+nghìn mét. Từ đêm nay điểm này vào bản chụp hằng ngày nên sẽ tự có bằng chứng.
+
 #### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
 
 Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với
@@ -1404,7 +1414,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `components/RadarPanel.tsx` | Radar mưa RainViewer (weather-maps.json, CORS *; composite phủ VN thật) trên nền 3×3 tile OSM lọc màu tối; khung nowcast dán nhãn "dự báo". |
 | `services/verificationService.ts` | Vòng đối chiếu: dự báo đã lưu vs ERA5 archive (cloud_cover_low 4-9h, trễ ~5 ngày, ngưỡng biển mây 40%); ngày chưa có ERA5 → hit=null, không phán. |
 | `components/VerificationPanel.tsx` | UI trúng/trượt/chờ từng ngày + tổng kết; nói rõ ERA5 là proxy, không phải mắt thấy. |
-| `tests/engine.test.ts` | 122 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
+| `tests/engine.test.ts` | 124 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả **verdict-first**: khối phán quyết ĐI/KHÔNG ở đầu trang, thẻ ngày là `<details>` thu gọn (chỉ ngày tốt nhất mở sẵn — trang từng dài 11.1 màn hình mobile, nay ~5.8), quality badge, "Vì sao", consensus thật, ΔH theo waypoint, GPX/TXT/PNG export, banner dữ liệu cũ. |
 
@@ -1470,7 +1480,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 122 golden tests engine
+npm test       # vitest — 124 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

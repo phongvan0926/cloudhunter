@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-122_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-124_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-6_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -49,7 +49,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   mùa đốt nương làm mặt trời mọc xỉn màu dù mây đẹp).
 - 🔗 **Link chia sẻ kết quả**: URL tự mang `?spot=&from=&to=&alt=` — gửi cho bạn đồng hành
   là họ mở đúng dự báo đó, không cần mô tả thao tác.
-- 📍 **Phân giải địa danh nhiều tầng có nhãn nguồn**: thư viện **55 điểm đã xác thực phủ
+- 📍 **Phân giải địa danh nhiều tầng có nhãn nguồn**: thư viện **56 điểm đã xác thực phủ
   toàn quốc** (Tây Bắc + Hà Giang/Cao Bằng/Quảng Ninh + Bạch Mã, Bà Đen, Măng Đen, cụm
   Đà Lạt, và các điểm "ẩn" như Phình Hồ, Kéo Lồm, Chiềng Công, Đồn Đèn...) →
   Nominatim/Open-Meteo geocoding (tọa độ thật) → AI ước tính (cảnh báo rõ).
@@ -128,7 +128,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 122 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới
+npm test         # 124 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

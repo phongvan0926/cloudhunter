@@ -40,6 +40,16 @@
     "needsReview": null
   },
   {
+    "key": "KIM_BON",
+    "name": "Đỉnh Kim Bon (Đồi gió và cỏ)",
+    "lat": 21.121,
+    "lon": 104.6127,
+    "elevation": 1100,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": 120,
+    "needsReview": null
+  },
+  {
     "key": "FANSIPAN",
     "name": "Fansipan (Nóc nhà Đông Dương)",
     "lat": 22.3033,

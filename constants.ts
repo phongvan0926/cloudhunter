@@ -52,6 +52,16 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
     ]
   },
   { 
+    name: 'Đỉnh Kim Bon (Đồi gió và cỏ)', 
+    altitude: 1100,   // 15/10/2026: plus code 4JC7+C39, ô tô lên tận đỉnh (DEM 1055-1146m)
+    province: 'Sơn La',
+    aliases: ['kim bon', 'đỉnh kim bon', 'đồi gió kim bon', 'đồi cỏ kim bon', 'phù yên'],
+    elevation_profile: [
+      { label: 'Lòng hồ sông Đà', altitude: 120, type: 'VALLEY', description: 'Mặt hồ Hòa Bình trên sông Đà (DEM 116-145m), nguồn ẩm cho biển mây' },
+      { label: 'Đỉnh Kim Bon', altitude: 1100, type: 'PEAK', description: 'Đồi cỏ trống, xe lên tận nơi, nhìn xuống lòng hồ sông Đà' }
+    ]
+  },
+  { 
     name: 'Pu Nhi Farm', 
     altitude: 700, 
     province: 'Sơn La',
