@@ -84,6 +84,7 @@ function main() {
       // App chỉ dự báo RẠNG SÁNG. Báo cáo quan sát ban đêm/chiều (vd ảnh đăng 23:29 ngày 12/10)
       // mà ghép vào dự báo rạng sáng cùng ngày là chấm app trên một thời điểm cách 18 tiếng.
       // Giữ trong kho làm tư liệu, nhưng KHÔNG chấm — và nói ra, không lặng lẽ bỏ.
+      // 'DAWN' = trong khung quan sát 04:00-09:00 của engine (chuẩn hoá 15/10/2026); sau 09:00 là MORNING.
       if (r.timeOfDay && r.timeOfDay !== 'DAWN') {
         skipped.push(`${r.date} ${key}: quan sát lúc ${r.timeOfDay}${r.observedAt ? ' ' + r.observedAt : ''}, không phải rạng sáng — không chấm`); continue;
       }

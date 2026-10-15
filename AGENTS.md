@@ -711,6 +711,27 @@ Hệ quả cho lời khuyên: tháng 10-11 và 2-4 thì **đi sớm**, đỉnh c
 Nếu sau này làm dự báo "biển mây giữ được tới mấy giờ", đây là giả thuyết cần kiểm bằng các báo cáo
 có giờ (trường `observedAt`, `duration`), nhất là đối chiếu tháng 12-1 với tháng 10.
 
+#### Fansipan 15/10: trọn một chu kỳ trong ngày — và lần BỎ SÓT do gió đo ở đỉnh
+
+Ba ảnh có dấu giờ cùng ngày: **07:22** biển mây trải tới chân trời dưới đỉnh, trời xanh → **09:11**
+biển mây vỡ, mây bốc lên quấn sống núi ngang tầm mắt → **13:01** sương mù trùm kín cột cờ. Đúng chu kỳ
+người dùng kể ở trên. Vệ tinh 04:30-06:00 đo đỉnh mây 2.802-3.027m (dưới đỉnh 3.143m), khớp ảnh 07:22.
+
+Bản chụp tối 14/10 (lead ~9h): `34/100 DISSIPATING · đồng thuận 100% · không khuyên đi` ⇒ **BỎ SÓT**.
+Chạy lại để chẩn đoán (hindcast, chỉ để đọc lý do, không làm bằng chứng): cả 6 mô hình đều có nghịch
+nhiệt mạnh, thung lũng gần bão hoà, mặt mây ~2.300m dưới chỗ đứng — rồi **cùng bị −28 vì "gió nội suy
+850↔700hPa về 3.143m: 17-22km/h, xé nát mây"** (Zone B, vạch phá huỷ 15km/h) và chuyển `DISSIPATING`.
+
+Đây chính là rủi ro mục engine-2.8.3 đã ghi ("nếu Fansipan hay Tà Chì Nhù thật sự có biển mây, nay ta
+sẽ trượt") và đi ngược bài học engine-2.2 số 5: khi mặt mây nằm hẳn dưới nắp/dưới chỗ đứng, gió ở tầng
+TRÊN không với xuống được lớp mây. Gió tại chỗ đứng 3.143m thổi phía trên biển mây 2.300-2.900m.
+
+**CHƯA sửa** — mới là một ca. Phép đo cần làm trước khi đổi: với mọi dòng có sự thật của nhóm đỉnh
+≥2.200m, chấm lại cùng một mẻ dữ liệu bằng hai luật (gió tại chỗ đứng hiện tại vs gió tại mặt mây khi
+ΔH > 0), đếm cả ca cứu được lẫn ca báo nhầm mới (đúng cách đã làm với cổng `observerInCloud`). Gió
+tại chỗ đứng vẫn có ý nghĩa cho trải nghiệm (lạnh, khó đứng), nên nếu đổi thì tách thành cảnh báo
+thay vì xoá kết luận biển mây.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh

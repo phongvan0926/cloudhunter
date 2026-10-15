@@ -1,5 +1,41 @@
 [
   {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-15",
+    "reportedAt": "2026-10-15T16:30:00+07:00",
+    "id": "2026-10-15-fansipan",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "07:22",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh '15/10/2026 07:22:56' từ cột cờ: biển mây trắng trải tới chân trời dưới đỉnh, các sống núi nhô lên, trời xanh. CÓ biển mây. Bản chụp dự báo 2026-10-15 (chụp 14/10 13:58Z, lead ~9h): 34/100 DISSIPATING ΔH 518m đồng thuận 100%, đáng đi=False (gfs 34 top 3564 · icon 8 top 2625 · ukmo 48 top 2202). ⇒ BỎ SÓT. Vệ tinh 04:30-06:00 SEA_CONFIRMED, đỉnh mây 2.802-3.027m (trung vị 2.875m) dưới đỉnh 3.143m — khớp ảnh."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-15",
+    "reportedAt": "2026-10-15T16:30:00+07:00",
+    "id": "2026-10-15-fansipan-sang",
+    "seaLevel": "AT_EYE",
+    "timeOfDay": "MORNING",
+    "observedAt": "09:11",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh '15/10/2026 09:11:55' nhìn xuống quần thể chùa: biển mây đã vỡ, từng khối mây bốc lên quấn quanh sống núi ngang tầm mắt, thung lũng lộ ra. Mây đang DÂNG LÊN — không chấm (sau khung 04-09h)."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-15",
+    "reportedAt": "2026-10-15T16:30:00+07:00",
+    "id": "2026-10-15-fansipan-trua",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "AFTERNOON",
+    "observedAt": "13:01",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh '15 thg 10, 2026 13:01:15, Bản Bo, Lai Châu' tại cột cờ: sương mù dày trùm kín đỉnh, tầm nhìn vài chục mét. Không chấm. Cùng ngày 07:22 biển mây dưới chân → 09:11 bốc lên → 13:01 trùm đỉnh: đúng chu kỳ người dùng mô tả (mùa này biển mây chỉ yên sáng sớm, trưa nóng bốc lên)."
+  },
+  {
     "id": "2026-10-14-fansipan-trua",
     "spotKey": "FANSIPAN",
     "locationName": "Fansipan (Nóc nhà Đông Dương)",
@@ -87,10 +123,10 @@
     "reportedAt": "2026-10-14T17:30:00+07:00",
     "id": "2026-10-08-fansipan",
     "date": "2026-10-08",
-    "timeOfDay": "MORNING",
+    "timeOfDay": "DAWN",
     "observedAt": "08:28",
     "source": "USER_PHOTO_TIMEMARK",
-    "note": "Ảnh người dùng gửi 14/10, Timemark Verified '08:28 08 Tháng 10, 2026, X. Bản Bo, Lai Châu'. Trời xanh, thung lũng Sa Pa lộ rõ dưới lớp mù khô, KHÔNG có biển mây. 08:28 là sau bình minh hơn 2 giờ nên không tự chấm như rạng sáng; ngày này vẫn được chấm qua vệ tinh (CLEAR). Bản chụp dự báo 2026-10-08: 30/100 CLEAR, đáng đi=False — ĐÚNG."
+    "note": "CHUẨN HOÁ 15/10: 'rạng sáng' = khung quan sát 04:00-09:00 của engine (pha quan sát 4h→9h), nên ảnh 08:28 nay tính là DAWN và được chấm (cùng nhãn với vệ tinh, số liệu không đổi). Ảnh người dùng gửi 14/10, Timemark Verified '08:28 08 Tháng 10, 2026, X. Bản Bo, Lai Châu'. Trời xanh, thung lũng Sa Pa lộ rõ dưới lớp mù khô, KHÔNG có biển mây. 08:28 là sau bình minh hơn 2 giờ nên không tự chấm như rạng sáng; ngày này vẫn được chấm qua vệ tinh (CLEAR). Bản chụp dự báo 2026-10-08: 30/100 CLEAR, đáng đi=False — ĐÚNG."
   },
   {
     "id": "2026-10-14-fansipan",
@@ -98,10 +134,10 @@
     "locationName": "Fansipan (Nóc nhà Đông Dương)",
     "date": "2026-10-14",
     "seaLevel": "NONE",
-    "timeOfDay": "MORNING",
+    "timeOfDay": "DAWN",
     "observedAt": "08:12",
     "source": "WEBCAM_PAGE",
-    "note": "Ảnh thực tế từ đỉnh do trang vecaptreosapa.com/thoi-tiet-dinh-fansipan/ đăng hằng sáng, mốc '14/10/2026 08:12:16', chú thích 'trời xanh, nắng rõ, núi và mây phía xa'. Người dùng xác nhận: trong xanh, KHÔNG có biển mây. MẪU ÂM TÍNH người nhìn đầu tiên có giờ. Không chấm như rạng sáng vì 08:12 là hơn 2 giờ sau bình minh (biển mây có thể đã tan) — nhưng vệ tinh cùng ngày CLEAR cả 5 khung 04:30-06:30, nên ngày này VẪN được chấm qua nhãn vệ tinh. Bản chụp 2026-10-14 (chụp 13/10 16:20Z): 34/100 FLOWING ΔH 874m đồng thuận 67% đáng đi=True — BÁO NHẦM. Từng mô hình: gfs 24 CLEAR · icon 34 FLOWING top 2263 · ukmo 58 FLOWING top 2275.",
+    "note": "CHUẨN HOÁ 15/10: 'rạng sáng' = khung quan sát 04:00-09:00 của engine (pha quan sát 4h→9h), nên ảnh 08:12 nay tính là DAWN và được chấm (cùng nhãn với vệ tinh, số liệu không đổi). Ảnh thực tế từ đỉnh do trang vecaptreosapa.com/thoi-tiet-dinh-fansipan/ đăng hằng sáng, mốc '14/10/2026 08:12:16', chú thích 'trời xanh, nắng rõ, núi và mây phía xa'. Người dùng xác nhận: trong xanh, KHÔNG có biển mây. MẪU ÂM TÍNH người nhìn đầu tiên có giờ. Không chấm như rạng sáng vì 08:12 là hơn 2 giờ sau bình minh (biển mây có thể đã tan) — nhưng vệ tinh cùng ngày CLEAR cả 5 khung 04:30-06:30, nên ngày này VẪN được chấm qua nhãn vệ tinh. Bản chụp 2026-10-14 (chụp 13/10 16:20Z): 34/100 FLOWING ΔH 874m đồng thuận 67% đáng đi=True — BÁO NHẦM. Từng mô hình: gfs 24 CLEAR · icon 34 FLOWING top 2263 · ukmo 58 FLOWING top 2275.",
     "reportedAt": "2026-10-14T16:00:00+07:00"
   },
   {
