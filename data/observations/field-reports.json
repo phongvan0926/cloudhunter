@@ -5,11 +5,12 @@
     "date": "2026-10-15",
     "reportedAt": "2026-10-15T16:30:00+07:00",
     "id": "2026-10-15-fansipan",
-    "seaLevel": "BELOW",
+    "seaLevel": "ABOVE",
     "timeOfDay": "DAWN",
-    "observedAt": "07:22",
+    "observedAt": "~06:00 (người dùng kể) và 07:22 (ảnh)",
     "source": "USER_PHOTO_STAMP",
-    "note": "Ảnh '15/10/2026 07:22:56' từ cột cờ: biển mây trắng trải tới chân trời dưới đỉnh, các sống núi nhô lên, trời xanh. CÓ biển mây. Bản chụp dự báo 2026-10-15 (chụp 14/10 13:58Z, lead ~9h): 34/100 DISSIPATING ΔH 518m đồng thuận 100%, đáng đi=False (gfs 34 top 3564 · icon 8 top 2625 · ukmo 48 top 2202). ⇒ BỎ SÓT. Vệ tinh 04:30-06:00 SEA_CONFIRMED, đỉnh mây 2.802-3.027m (trung vị 2.875m) dưới đỉnh 3.143m — khớp ảnh."
+    "note": "ĐÍNH CHÍNH 15/10 theo người dùng: khoảng 06:00 đỉnh bị mây mù trùm một phần; mặt trời lên thì tan dần; ảnh 07:22 là MÂY MỎNG ĐANG TAN, không phải biển mây ổn định (ban đầu tôi đọc ảnh tĩnh thành 'biển mây' và kết luận app BỎ SÓT — sai). Trưa lại mù trùm (ảnh 13:01). Sự thật cho câu 'sáng nay có đáng đi không': KHÔNG có biển mây đẹp. Bản chụp dự báo 2026-10-15 (chụp 14/10 13:58Z, lead ~9h): 34/100 DISSIPATING ('mây đang tan') đồng thuận 100%, đáng đi=False — ĐÚNG, kể cả nhãn chi tiết. Vệ tinh 04:30-06:00 ghi SEA_CONFIRMED nhưng đỉnh mây 2.802-3.027m, sát đỉnh 3.143m — tức mây dâng tới ngang đỉnh, khớp 'trùm một ít' của người đi; báo cáo người đi đè nhãn vệ tinh.",
+    "duration": "SHORT"
   },
   {
     "spotKey": "FANSIPAN",
@@ -21,7 +22,7 @@
     "timeOfDay": "MORNING",
     "observedAt": "09:11",
     "source": "USER_PHOTO_STAMP",
-    "note": "Ảnh '15/10/2026 09:11:55' nhìn xuống quần thể chùa: biển mây đã vỡ, từng khối mây bốc lên quấn quanh sống núi ngang tầm mắt, thung lũng lộ ra. Mây đang DÂNG LÊN — không chấm (sau khung 04-09h)."
+    "note": "Ảnh '15/10/2026 09:11:55' nhìn xuống quần thể chùa: biển mây đã vỡ, từng khối mây bốc lên quấn quanh sống núi ngang tầm mắt, thung lũng lộ ra. Mây đang DÂNG LÊN — không chấm (sau khung 04-09h). (Người dùng: buổi sáng mây tan dần sau khi mặt trời lên, trưa lại mù trùm.)"
   },
   {
     "spotKey": "FANSIPAN",

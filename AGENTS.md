@@ -711,26 +711,22 @@ Hệ quả cho lời khuyên: tháng 10-11 và 2-4 thì **đi sớm**, đỉnh c
 Nếu sau này làm dự báo "biển mây giữ được tới mấy giờ", đây là giả thuyết cần kiểm bằng các báo cáo
 có giờ (trường `observedAt`, `duration`), nhất là đối chiếu tháng 12-1 với tháng 10.
 
-#### Fansipan 15/10: trọn một chu kỳ trong ngày — và lần BỎ SÓT do gió đo ở đỉnh
+#### Fansipan 15/10: app nói "mây đang tan" — và ĐÚNG (tôi đọc nhầm ảnh rồi phải đính chính)
 
-Ba ảnh có dấu giờ cùng ngày: **07:22** biển mây trải tới chân trời dưới đỉnh, trời xanh → **09:11**
-biển mây vỡ, mây bốc lên quấn sống núi ngang tầm mắt → **13:01** sương mù trùm kín cột cờ. Đúng chu kỳ
-người dùng kể ở trên. Vệ tinh 04:30-06:00 đo đỉnh mây 2.802-3.027m (dưới đỉnh 3.143m), khớp ảnh 07:22.
+Ba ảnh có dấu giờ: 07:22, 09:11, 13:01. Tôi đọc ảnh 07:22 thành "biển mây dưới đỉnh", kết luận app
+**bỏ sót**, rồi lần ra thủ phạm là cổng gió (cả 6 mô hình −28 vì gió nội suy về 3.143m 17-22km/h) và
+ghi đó là "lỗi thật". **Sai.** Người dùng đính chính: khoảng **06:00 đỉnh bị mây mù trùm một phần**,
+mặt trời lên thì tan dần; ảnh 07:22 là **mây mỏng đang tan**; trưa lại mù trùm (13:01).
 
-Bản chụp tối 14/10 (lead ~9h): `34/100 DISSIPATING · đồng thuận 100% · không khuyên đi` ⇒ **BỎ SÓT**.
-Chạy lại để chẩn đoán (hindcast, chỉ để đọc lý do, không làm bằng chứng): cả 6 mô hình đều có nghịch
-nhiệt mạnh, thung lũng gần bão hoà, mặt mây ~2.300m dưới chỗ đứng — rồi **cùng bị −28 vì "gió nội suy
-850↔700hPa về 3.143m: 17-22km/h, xé nát mây"** (Zone B, vạch phá huỷ 15km/h) và chuyển `DISSIPATING`.
+Vậy bản chụp `34/100 DISSIPATING ("mây đang tan") · đồng thuận 100% · không khuyên đi` là **đúng**,
+đúng cả nhãn chi tiết, và chính cổng gió tôi định gỡ là thứ đã cho ra nhãn đúng. Vệ tinh ghi
+SEA_CONFIRMED nhưng đỉnh mây 2.802-3.027m — sát ngang đỉnh 3.143m, khớp "trùm một ít"; báo cáo
+người đi đè nhãn vệ tinh. Ca này nay là bằng chứng ỦNG HỘ việc đo gió tại chỗ đứng cho đỉnh cao,
+không phải chống.
 
-Đây chính là rủi ro mục engine-2.8.3 đã ghi ("nếu Fansipan hay Tà Chì Nhù thật sự có biển mây, nay ta
-sẽ trượt") và đi ngược bài học engine-2.2 số 5: khi mặt mây nằm hẳn dưới nắp/dưới chỗ đứng, gió ở tầng
-TRÊN không với xuống được lớp mây. Gió tại chỗ đứng 3.143m thổi phía trên biển mây 2.300-2.900m.
-
-**CHƯA sửa** — mới là một ca. Phép đo cần làm trước khi đổi: với mọi dòng có sự thật của nhóm đỉnh
-≥2.200m, chấm lại cùng một mẻ dữ liệu bằng hai luật (gió tại chỗ đứng hiện tại vs gió tại mặt mây khi
-ΔH > 0), đếm cả ca cứu được lẫn ca báo nhầm mới (đúng cách đã làm với cổng `observerInCloud`). Gió
-tại chỗ đứng vẫn có ý nghĩa cho trải nghiệm (lạnh, khó đứng), nên nếu đổi thì tách thành cảnh báo
-thay vì xoá kết luận biển mây.
+Bài học, lần thứ ba trong hai ngày: **một ảnh tĩnh không cho biết mây đang dày lên hay đang tan.**
+Trước khi kết luận app đúng/sai từ ảnh, hỏi người gửi diễn biến quanh giờ đó. Và đừng vội tìm "thủ
+phạm" cho một ca trượt chưa được xác nhận — lần này suýt đề xuất gỡ một cổng đang làm đúng việc.
 
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
