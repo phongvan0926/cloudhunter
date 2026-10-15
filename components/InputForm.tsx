@@ -28,6 +28,15 @@ interface InputFormProps {
   isLoading: boolean;
 }
 
+/**
+ * Độ cao đứng mặc định khi chọn một điểm: thấp hơn mốc 100m (đỉnh nhọn thì người ta đứng dưới
+ * chóp), trừ điểm `standAtTop` — xe lên tận nơi nên đứng đúng mốc (vd Đỉnh Kim Bon 1.100m).
+ */
+export function defaultObserverAlt(name: string, altitude: number): number {
+  const peak = NORTHWEST_PEAKS.find(p => p.name === name);
+  return peak?.standAtTop ? altitude : Math.max(300, altitude - 100);
+}
+
 export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => {
   // Mặc định: hôm nay → +3 ngày, theo GIỜ VIỆT NAM (toISOString là UTC → từng lùi 1 ngày lúc rạng sáng)
   const today = vnTodayStr();
@@ -108,13 +117,13 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
     setFormData(prev => ({
       ...prev,
       locationName: name,
-      ...(peak ? { observerAlt: Math.max(300, peak.altitude - 100) } : {}),
+      ...(peak ? { observerAlt: defaultObserverAlt(peak.name, peak.altitude) } : {}),
     }));
     setSuggestions([]);
   };
 
   const handleSuggestionClick = (name: string, altitude: number) => {
-    setFormData(prev => ({ ...prev, locationName: name, observerAlt: altitude - 100 }));
+    setFormData(prev => ({ ...prev, locationName: name, observerAlt: defaultObserverAlt(name, altitude) }));
     setSuggestions([]);
   };
 

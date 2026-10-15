@@ -750,6 +750,12 @@ chưa đo. Dự báo thử 16-18/10 (6 mô hình, lúc thêm): 16/10 mặt mây 
 17 và 18/10 khuyên đi nhưng ΔH chỉ +155m/+138m — sát biên, và 13/10 đã cho thấy ΔH có thể lệch cả
 nghìn mét. Từ đêm nay điểm này vào bản chụp hằng ngày nên sẽ tự có bằng chứng.
 
+16/10: người dùng chốt độ cao đứng đúng 1.100m. Mục chọn nhanh có cờ mới `standAtTop` (xe lên tận
+nơi ⇒ đứng đúng mốc, không trừ 100m như các đỉnh khác); hàm `defaultObserverAlt` trong InputForm, có
+test. Tà Xùa vẫn theo quy tắc chung (1.700m) vì người dùng chỉ chốt cho Kim Bon. Người dùng cũng cho
+biết chỗ này hẻo lánh, gần như không có ảnh có giờ ⇒ sự thật ở Kim Bon sẽ CHỈ đến từ vệ tinh, mà
+vệ tinh hay bỏ sót sương mỏng thấp trên mặt hồ (xem 02/09). Đọc nhãn CLEAR ở đây thận trọng.
+
 #### Vòng chụp mất thêm ngày 09/10 — Open-Meteo trả chữ thay vì JSON
 
 Lần chạy 08/10 nhận HTTP **200** với thân là chữ "Unexpected…", `res.json()` chết với
@@ -1414,7 +1420,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `components/RadarPanel.tsx` | Radar mưa RainViewer (weather-maps.json, CORS *; composite phủ VN thật) trên nền 3×3 tile OSM lọc màu tối; khung nowcast dán nhãn "dự báo". |
 | `services/verificationService.ts` | Vòng đối chiếu: dự báo đã lưu vs ERA5 archive (cloud_cover_low 4-9h, trễ ~5 ngày, ngưỡng biển mây 40%); ngày chưa có ERA5 → hit=null, không phán. |
 | `components/VerificationPanel.tsx` | UI trúng/trượt/chờ từng ngày + tổng kết; nói rõ ERA5 là proxy, không phải mắt thấy. |
-| `tests/engine.test.ts` | 124 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
+| `tests/engine.test.ts` | 125 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả **verdict-first**: khối phán quyết ĐI/KHÔNG ở đầu trang, thẻ ngày là `<details>` thu gọn (chỉ ngày tốt nhất mở sẵn — trang từng dài 11.1 màn hình mobile, nay ~5.8), quality badge, "Vì sao", consensus thật, ΔH theo waypoint, GPX/TXT/PNG export, banner dữ liệu cũ. |
 
@@ -1480,7 +1486,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 124 golden tests engine
+npm test       # vitest — 125 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

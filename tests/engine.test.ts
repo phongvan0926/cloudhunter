@@ -1011,6 +1011,12 @@ describe('MOUNTAIN_DB — toạ độ phải khớp độ cao DEM thật', () =>
     expect(Math.abs(k.lat - 21.121038)).toBeLessThan(0.001);
     expect(Math.abs(k.lon - 104.612734)).toBeLessThan(0.001);
   });
+
+  it('16/10/2026: điểm xe lên tận đỉnh (standAtTop) đặt người đứng ĐÚNG mốc, điểm khác vẫn trừ 100m', async () => {
+    const { defaultObserverAlt } = await import('../components/InputForm');
+    expect(defaultObserverAlt('Đỉnh Kim Bon (Đồi gió và cỏ)', 1100)).toBe(1100);
+    expect(defaultObserverAlt('Tà Xùa (Sống lưng Khủng Long)', 1800)).toBe(1700);
+  });
 });
 
 describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO HƠN đáy thung lũng', () => {

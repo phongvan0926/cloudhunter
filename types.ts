@@ -197,4 +197,6 @@ export interface PeakPreset {
   province: string;
   elevation_profile?: TerrainPoint[];
   aliases?: string[];
+  /** Xe lên tận nơi, người đứng ĐÚNG ở `altitude` (mặc định app đặt chỗ đứng thấp hơn mốc 100m). */
+  standAtTop?: boolean;
 }

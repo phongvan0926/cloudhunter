@@ -54,6 +54,7 @@ export const NORTHWEST_PEAKS: PeakPreset[] = [
   { 
     name: 'Đỉnh Kim Bon (Đồi gió và cỏ)', 
     altitude: 1100,   // 15/10/2026: plus code 4JC7+C39, ô tô lên tận đỉnh (DEM 1055-1146m)
+    standAtTop: true,   // 16/10/2026: người dùng chốt đứng đúng 1.100m
     province: 'Sơn La',
     aliases: ['kim bon', 'đỉnh kim bon', 'đồi gió kim bon', 'đồi cỏ kim bon', 'phù yên'],
     elevation_profile: [
