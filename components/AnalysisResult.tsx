@@ -645,6 +645,11 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                      <span className="text-slate-400 font-semibold">· 🤖 Lời bình:</span>
                      <span className="font-bold text-cyan-300 font-sans bg-slate-900 px-2.5 py-1 rounded-lg border border-cyan-500/40 shadow-sm flex items-center gap-1">
                        <span>{modelInfo.displayName}</span>
+                       {result.modelVersionReported && result.modelVersionReported.replace(/^models\//, '') !== modelInfo.rawId && (
+                         <span className="text-slate-300 font-normal" title="Tên model Google trả về trong phản hồi (response.modelVersion)">
+                           → Google chạy: {result.modelVersionReported.replace(/^models\//, '')}
+                         </span>
+                       )}
                        <span className="text-[10px] text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-500/30 font-mono">
                          {modelInfo.tierLabel}
                        </span>

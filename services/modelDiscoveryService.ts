@@ -28,9 +28,9 @@ export function formatModelDisplayName(modelId: string, discoveredModels?: Disco
   // Friendly name mapping for common / alias model IDs
   // Alias "-latest" do Google tự trỏ sang bản mới nhất — KHÔNG ghi số phiên bản ở đây (sẽ lỗi thời).
   const friendlyMap: Record<string, { displayName: string; tierLabel: string }> = {
-    'gemini-flash-latest': { displayName: 'Gemini Flash (luôn bản mới nhất)', tierLabel: '⚡ Flash' },
-    'gemini-flash-lite-latest': { displayName: 'Gemini Flash-Lite (luôn bản mới nhất)', tierLabel: '⚡ Flash-Lite' },
-    'gemini-pro-latest': { displayName: 'Gemini Pro (luôn bản mới nhất)', tierLabel: '🚀 Cao cấp' },
+    'gemini-flash-latest': { displayName: 'Gemini Flash (alias, Google tự trỏ)', tierLabel: '⚡ Flash' },
+    'gemini-flash-lite-latest': { displayName: 'Gemini Flash-Lite (alias, Google tự trỏ)', tierLabel: '⚡ Flash-Lite' },
+    'gemini-pro-latest': { displayName: 'Gemini Pro (alias, Google tự trỏ)', tierLabel: '🚀 Cao cấp' },
   };
 
   if (friendlyMap[cleanId]) {
@@ -67,23 +67,25 @@ const STORAGE_KEY = 'cloudhunter_selected_model';
 const PREMIUM_TIER_LABEL = '🚀 Cao cấp (thường cần gói trả phí)';
 
 // Danh sách dự phòng khi không gọi được list-models (thiếu key / lỗi mạng).
-// Ưu tiên ALIAS "-latest": Google tự trỏ nó sang bản mới nhất nên danh sách này không lỗi thời
-// mỗi khi có model mới. Tên số cụ thể chỉ là phương án sau (đối chiếu trang models 14/10/2026).
+// Danh sách dự phòng khi không gọi được list-models (đối chiếu trang models 14/10/2026).
+// Mặc định là bản SỐ ổn định cao nhất, không phải alias: Google không công bố alias "-latest"
+// đang trỏ tới bản nào (trang models 13/10/2026 chỉ ghi "có thể là stable, preview hoặc
+// experimental"), và anh Phong gặp kết quả ra 2.5 Flash khi chọn alias (16/10/2026).
 const FALLBACK_DEFAULT_MODELS: DiscoveredModel[] = [
-  {
-    id: 'gemini-flash-latest',
-    name: 'gemini-flash-latest',
-    displayName: 'Gemini Flash (luôn bản mới nhất)',
-    description: 'Alias do Google tự cập nhật sang bản Flash mới nhất — có hạn mức miễn phí',
-    tier: 'flash',
-    tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
-    isDefaultCandidate: true,
-  },
   {
     id: 'gemini-3.8-flash',
     name: 'gemini-3.8-flash',
     displayName: 'Gemini 3.8 Flash',
     description: 'Flash ổn định (14/10/2026) — có hạn mức miễn phí',
+    tier: 'flash',
+    tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
+    isDefaultCandidate: true,
+  },
+  {
+    id: 'gemini-flash-latest',
+    name: 'gemini-flash-latest',
+    displayName: 'Gemini Flash (alias, Google tự trỏ)',
+    description: 'Alias do Google tự trỏ — không biết trước đang là bản nào',
     tier: 'flash',
     tierLabel: '⚡ Nhanh / Tiết kiệm (Flash)',
   },
@@ -105,8 +107,10 @@ const FALLBACK_DEFAULT_MODELS: DiscoveredModel[] = [
   },
 ];
 
-/** Id dùng khi chưa biết gì (không có danh sách) — alias tự cập nhật, không ghim phiên bản. */
-export const DEFAULT_MODEL_ID = 'gemini-flash-latest';
+/** Id dùng khi chưa biết gì (không có danh sách). Bình thường mặc định do `pickDefaultModel` dò. */
+export const DEFAULT_MODEL_ID = 'gemini-3.8-flash';
+/** Alias Google tự trỏ — chỉ là phương án khi key không thấy bản Flash có số nào. */
+export const FLASH_ALIAS_ID = 'gemini-flash-latest';
 
 const API_KEY_STORAGE_KEY = 'cloudhunter_custom_api_key';
 
@@ -127,14 +131,17 @@ export function classifyTier(id: string): DiscoveredModel['tier'] {
 }
 
 /**
- * Model mặc định: alias `gemini-flash-latest` nếu key thấy nó (Google tự trỏ sang Flash mới
- * nhất ⇒ app tự lên đời mà không cần sửa code); không có thì Flash ổn định, không Lite,
- * điểm cao nhất theo `fallbackPriority`.
+ * Model mặc định: Flash có SỐ phiên bản, ổn định (không Lite/preview/exp), số cao nhất mà key
+ * thấy ⇒ Google ra 3.9 Flash thì app tự lên 3.9 mà không cần sửa code. KHÔNG dùng alias
+ * `gemini-flash-latest` làm mặc định: Google không nói nó đang trỏ tới bản nào, và 16/10/2026
+ * anh Phong chọn alias mà kết quả ra 2.5 Flash. Alias chỉ là phương án khi không có bản số.
  */
 export function pickDefaultModel(models: DiscoveredModel[]): DiscoveredModel | undefined {
-  const alias = models.find(m => m.id === DEFAULT_MODEL_ID);
-  if (alias) return alias;
   const flash = models.filter(m => m.tier === 'flash');
+  const numbered = flash.filter(m => /\d/.test(m.id) && !/lite|preview|exp|latest/.test(m.id.toLowerCase()));
+  if (numbered.length) return [...numbered].sort((a, b) => fallbackPriority(b.id) - fallbackPriority(a.id))[0];
+  const alias = models.find(m => m.id === FLASH_ALIAS_ID);
+  if (alias) return alias;
   const stable = flash.filter(m => !/lite|preview|exp/.test(m.id.toLowerCase()));
   const pool = stable.length ? stable : flash.length ? flash : models;
   return [...pool].sort((a, b) => fallbackPriority(b.id) - fallbackPriority(a.id))[0];
@@ -213,8 +220,16 @@ export function setStoredApiKey(key: string): void {
   }
 }
 
+const ALIAS_MIGRATION_KEY = 'cloudhunter_model_alias_migrated_v1';
 export function getStoredModel(): string | null {
   try {
+    // Bản 14/10/2026 TỰ LƯU alias gemini-flash-latest làm mặc định cho mọi máy, nên giá trị đó
+    // không chắc là người dùng chọn. Xoá đúng một lần để máy nhận mặc định mới; chọn lại alias
+    // bằng tay sau đó thì được giữ.
+    if (!localStorage.getItem(ALIAS_MIGRATION_KEY)) {
+      localStorage.setItem(ALIAS_MIGRATION_KEY, '1');
+      if (localStorage.getItem(STORAGE_KEY) === FLASH_ALIAS_ID) localStorage.removeItem(STORAGE_KEY);
+    }
     return localStorage.getItem(STORAGE_KEY);
   } catch {
     return null;

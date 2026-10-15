@@ -30,10 +30,11 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
       if (stored && isValidStored) {
         onSelectModel(stored);
       } else if (list.length > 0) {
-        // Safe default: top Flash / Light model
+        // Mặc định do pickDefaultModel dò (Flash có số cao nhất). KHÔNG lưu xuống máy: lưu thì
+        // lần sau Google ra bản mới, người dùng vẫn bị ghim ở mặc định cũ (đã xảy ra với alias
+        // gemini-flash-latest, 16/10/2026). Chỉ lựa chọn tay mới được lưu.
         const defaultCandidate = list.find(m => m.isDefaultCandidate) || list[0];
         onSelectModel(defaultCandidate.id);
-        setStoredModel(defaultCandidate.id);
       }
     } catch (err: any) {
       if (err.message && err.message.startsWith('AUTH_ERROR')) {

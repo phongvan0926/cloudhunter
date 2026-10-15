@@ -528,6 +528,7 @@ async function generateNarrative(base: CloudAnalysis, model?: string): Promise<C
     aiNarrative: true,
     modelUsed: fallbackRes.modelUsed,
     modelRequested: primaryModel,
+    modelVersionReported: typeof fallbackRes.result?.modelVersion === 'string' ? fallbackRes.result.modelVersion : undefined,
     modelFallbackNote,
   };
 }

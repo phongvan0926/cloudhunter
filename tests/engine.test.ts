@@ -1516,9 +1516,17 @@ describe('Model mới tự lên đời — Gemini 4 Argon và alias -latest (14/
     expect(buildFallbackChain('gemini-4-argon', models).slice(0, 2)).toEqual(['gemini-4-argon', 'gemini-3.8-flash']);
   });
 
-  it('có alias gemini-flash-latest thì nó là mặc định (Google tự trỏ sang Flash mới nhất)', async () => {
+  it('HỒI QUY 16/10: có cả alias lẫn bản số thì mặc định là BẢN SỐ cao nhất (alias từng ra 2.5 Flash)', async () => {
     const { pickDefaultModel } = await import('../services/modelDiscoveryService');
-    const models = await mkAll(['gemini-flash-lite-latest', 'gemini-3.8-flash', 'gemini-flash-latest', 'gemini-4-argon']);
+    const models = await mkAll(['gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-3.8-flash', 'gemini-flash-latest', 'gemini-4-argon']);
+    expect(pickDefaultModel(models)?.id).toBe('gemini-3.8-flash');
+    // Google ra bản mới thì tự lên đời, không cần sửa code
+    expect(pickDefaultModel(await mkAll(['gemini-3.8-flash', 'gemini-3.9-flash', 'gemini-flash-latest']))?.id).toBe('gemini-3.9-flash');
+  });
+
+  it('key chỉ thấy alias (không có bản số) thì mới dùng alias', async () => {
+    const { pickDefaultModel } = await import('../services/modelDiscoveryService');
+    const models = await mkAll(['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-4-argon']);
     expect(pickDefaultModel(models)?.id).toBe('gemini-flash-latest');
   });
 

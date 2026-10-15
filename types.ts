@@ -185,6 +185,7 @@ export interface CloudAnalysis {
   weather_data_source?: WeatherDataSource;
   modelUsed?: string;
   modelRequested?: string;     // model người dùng chọn (có thể khác modelUsed nếu fallback)
+  modelVersionReported?: string; // model Google BÁO đã chạy (response.modelVersion) — alias -latest phân giải ra bản nào
   modelFallbackNote?: string;  // giải thích trung thực vì sao phải đổi model
   aiNarrative?: boolean;   // false = AI không phản hồi, phần lời bình là văn bản do engine sinh
   engineVersion?: string;

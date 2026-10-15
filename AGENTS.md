@@ -1454,8 +1454,14 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
    model ảnh/Live qua `isTextAnalysisModel`, và luôn hiển thị `modelFallbackNote` khi model
    người dùng chọn bị thay.
    **Không ghim tên model (14/10/2026, khi ra Gemini 4 Argon):** mặc định = `pickDefaultModel`
-   (alias `gemini-flash-latest` nếu key thấy, không thì Flash ổn định điểm cao nhất — KHÔNG sort
-   chữ cái: bản cũ chọn nhầm `gemini-flash-lite-latest` vì 'f' > '3'). `classifyTier` xếp
+   = Flash có SỐ phiên bản, ổn định, số cao nhất key thấy (ra 3.9 Flash thì tự lên 3.9) — KHÔNG
+   sort chữ cái: bản cũ chọn nhầm `gemini-flash-lite-latest` vì 'f' > '3'. **Alias
+   `gemini-flash-latest` KHÔNG làm mặc định nữa (16/10/2026):** anh Phong chọn alias mà kết quả
+   ra 2.5 Flash; Google không công bố alias đang trỏ tới bản nào (trang models 13/10 chỉ ghi
+   "stable, preview hoặc experimental"). Alias chỉ dùng khi key không thấy bản số nào. Mặc định
+   tự dò thì KHÔNG lưu xuống máy (lưu là ghim người dùng ở mặc định cũ); `getStoredModel` xoá
+   một lần alias mà bản 14/10 đã tự lưu. Kết quả hiện thêm `→ Google chạy: <modelVersion>` khi
+   tên Google báo trong phản hồi khác tên đã gọi, để luôn biết alias phân giải ra bản nào. `classifyTier` xếp
    pro/ultra/argon/thinking vào **Cao cấp**: chỉ chạy khi người dùng tự chọn, không mặc định,
    không vào `buildFallbackChain` (Argon: "not available on the Free tier", đo trang pricing
    14/10). Chuỗi dự phòng chỉ gồm Flash + Gemma cuối; họ model tên mã lạ ('custom') cũng bị
