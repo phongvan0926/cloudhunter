@@ -319,7 +319,7 @@
     "timeOfDay": "DAWN",
     "observedAt": "07:25",
     "source": "USER_PHOTO_STAMP",
-    "note": "Ảnh Timemark xác thực '07:25 16 Tháng 10, 2026' tại cột mốc 3.143m: sương mù trắng đặc trùm kín, không thấy gì ngoài lan can, sàn gỗ ướt. Người dùng: 'đỉnh Fansipan sáng nay mù trùm'. Chưa biết diễn biến sau 07:25 (tan hay không) - không đoán. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z, lead ~9h): 37/100 DISSIPATING đồng thuận 100%, mặt mây 3.161m ngay ngang đỉnh (ΔH -18m), đáng đi=False - lời khuyên KHÔNG ĐI là đúng; nhãn chi tiết là 'mây đang tan' chứ không phải 'mù trùm'."
+    "note": "Ảnh Timemark xác thực '07:25 16 Tháng 10, 2026' tại cột mốc 3.143m: sương mù trắng đặc trùm kín, không thấy gì ngoài lan can, sàn gỗ ướt. Người dùng: 'đỉnh Fansipan sáng nay mù trùm'. Chưa biết diễn biến sau 07:25 (tan hay không) - không đoán. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z, lead ~9h): 37/100 DISSIPATING đồng thuận 100%, mặt mây 3.161m ngay ngang đỉnh (ΔH -18m), đáng đi=False - lời khuyên KHÔNG ĐI là đúng; nhãn chi tiết là 'mây đang tan' chứ không phải 'mù trùm'. BỔ SUNG (người dùng chuyển lời một thông báo nhận được, 16/10, không rõ giờ và không nêu tên điểm): chỉ ĐỈNH Fansipan bị mù, các điểm bên dưới trời khá quang. Tức đây giống MÂY ĐỘI ĐỈNH (xem engine-2.7) hơn là một lớp biển mây dày từ thung lũng lên. Bản chụp đặt mặt mây 3.161m theo kiểu lớp mây liên tục từ dưới lên - lời khuyên đúng, nhưng cơ chế app mô tả có thể sai. Nguồn gián tiếp nên KHÔNG tạo báo cáo 'quang' cho điểm nào khác."
   },
   {
     "spotKey": "TA_XUA_SON_LA",
@@ -356,6 +356,6 @@
     "timeOfDay": "MIDDAY",
     "observedAt": "12:05",
     "source": "USER_PHOTO_STAMP",
-    "note": "Ảnh Timemark xác thực '12:05 16 Tháng 10, 2026' tại cột cờ: sương mù trắng đặc trùm kín, đông khách, không thấy gì quá lan can. Người dùng: 'trưa nay ở Fansipan mù trùm như ảnh'. KHÔNG chấm (MIDDAY). Cùng ngày 07:25 cũng mù trùm (báo cáo 2026-10-16-fansipan) ⇒ cả 07:25 lẫn 12:05 đều chìm trong mây; giữa hai mốc ra sao thì không biết, nên chưa nói được nhãn 'mây đang tan' của bản chụp là sai, chỉ biết KHÔNG thấy dấu hiệu tan ở hai lần nhìn."
+    "note": "Ảnh Timemark xác thực '12:05 16 Tháng 10, 2026' tại cột cờ: sương mù trắng đặc trùm kín, đông khách, không thấy gì quá lan can. Người dùng: 'trưa nay ở Fansipan mù trùm như ảnh'. KHÔNG chấm (MIDDAY). Cùng ngày 07:25 cũng mù trùm (báo cáo 2026-10-16-fansipan) ⇒ cả 07:25 lẫn 12:05 đều chìm trong mây; giữa hai mốc ra sao thì không biết, nên chưa nói được nhãn 'mây đang tan' của bản chụp là sai, chỉ biết KHÔNG thấy dấu hiệu tan ở hai lần nhìn. BỔ SUNG (người dùng chuyển lời một thông báo nhận được, 16/10, không rõ giờ và không nêu tên điểm): chỉ ĐỈNH Fansipan bị mù, các điểm bên dưới trời khá quang. Tức đây giống MÂY ĐỘI ĐỈNH (xem engine-2.7) hơn là một lớp biển mây dày từ thung lũng lên. Bản chụp đặt mặt mây 3.161m theo kiểu lớp mây liên tục từ dưới lên - lời khuyên đúng, nhưng cơ chế app mô tả có thể sai. Nguồn gián tiếp nên KHÔNG tạo báo cáo 'quang' cho điểm nào khác."
   }
 ]
