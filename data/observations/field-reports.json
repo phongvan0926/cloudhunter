@@ -308,5 +308,17 @@
     "seaLevel": "BELOW",
     "note": "Người dùng báo trực tiếp: biển mây cả ngày ở Tà Xùa - Bắc Yên (báo cáo 23/8/2026). Đây là ca kiểm chứng đầu tiên, chính là ca làm lộ 5 lỗi của engine-2.1.",
     "reportedAt": "2026-08-23T12:00:00+07:00"
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-16",
+    "reportedAt": "2026-10-16T08:50:00+07:00",
+    "id": "2026-10-16-fansipan",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "07:25",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh Timemark xác thực '07:25 16 Tháng 10, 2026' tại cột mốc 3.143m: sương mù trắng đặc trùm kín, không thấy gì ngoài lan can, sàn gỗ ướt. Người dùng: 'đỉnh Fansipan sáng nay mù trùm'. Chưa biết diễn biến sau 07:25 (tan hay không) - không đoán. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z, lead ~9h): 37/100 DISSIPATING đồng thuận 100%, mặt mây 3.161m ngay ngang đỉnh (ΔH -18m), đáng đi=False - lời khuyên KHÔNG ĐI là đúng; nhãn chi tiết là 'mây đang tan' chứ không phải 'mù trùm'."
   }
 ]

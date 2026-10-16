@@ -728,6 +728,11 @@ Bài học, lần thứ ba trong hai ngày: **một ảnh tĩnh không cho biế
 Trước khi kết luận app đúng/sai từ ảnh, hỏi người gửi diễn biến quanh giờ đó. Và đừng vội tìm "thủ
 phạm" cho một ca trượt chưa được xác nhận — lần này suýt đề xuất gỡ một cổng đang làm đúng việc.
 
+Fansipan 16/10, ảnh Timemark **07:25**: sương mù đặc trùm kín cột mốc, sàn ướt. Bản chụp (lead ~9h)
+`37/100 DISSIPATING · đồng thuận 100% · mặt mây 3.161m, ΔH −18m · không khuyên đi` ⇒ lời khuyên ĐÚNG;
+chính app đặt mặt mây ngang đỉnh. Nhãn chi tiết "mây đang tan" thì chưa kiểm được vì chưa biết diễn biến
+sau 07:25. Chuỗi Fansipan có ảnh người nhìn: lời khuyên đúng 6/7 ngày (08, 10, 12, 13, 15, 16/10; sai 14/10).
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
