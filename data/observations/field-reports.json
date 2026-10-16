@@ -332,5 +332,17 @@
     "observedAt": "trước 08:57 (giờ người dùng báo, không có giờ nhìn cụ thể)",
     "source": "USER_DIRECT",
     "note": "Người dùng báo trực tiếp 08:57: 'Tà Xùa 1800m sáng nay trời trong không có mây'. Chỗ đứng 1.800m (mốc chuẩn mới). Tính DAWN vì báo trong khung 04-09h; nếu nhìn sau khi một lớp sương sớm đã tan thì nhãn này sai. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z): 25/100 FOG đồng thuận 67%, mặt mây 2.182m, ΔH -382m, đáng đi=False - lời khuyên KHÔNG ĐI đúng, nhưng NHÃN SAI: app nói 'chìm trong mây' trong khi trời trong. Từng mô hình: gfs 65 FOG mặt mây 2.182m · icon 5 FOG (không có mặt mây) · ukmo 25 FLOWING mặt mây 1.188m. Cùng kiểu lỗi đã ghi: dựng ra mây/mặt mây trong ngày quang."
+  },
+  {
+    "spotKey": "DEO_O_QUY_HO",
+    "locationName": "Đèo Ô Quy Hồ",
+    "date": "2026-10-16",
+    "reportedAt": "2026-10-16T08:58:00+07:00",
+    "id": "2026-10-16-oquyho",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MORNING",
+    "observedAt": "CHƯA RÕ GIỜ (ảnh gửi lúc ~08:58; nắng đã rọi, bóng ngả)",
+    "source": "USER_PHOTO",
+    "note": "Người dùng: 'ở Ô Quy Hồ mây đang tan thật'. Ảnh tại mốc 'Biển mây Ô Quy Hồ 2.16xm': chỗ đứng nắng, trời xanh có mây tích; trong thung lũng phía dưới còn khối mây trắng dày đang vỡ ra và bốc lên quanh sống núi, sườn đối diện đã lộ. KHÔNG chấm (timeOfDay=MORNING) vì chưa biết giờ chụp và chưa biết lúc rạng sáng ra sao - không suy ngược. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z): 58/100 FOG đồng thuận 67%, mặt mây 2.799m, ΔH -764m (người đứng 2.035m CHÌM trong mây), đáng đi=False. Từng mô hình: gfs 65 ROLLING mặt mây 2.029m · icon 32 FOG 3.559m · ukmo 58 FOG 2.039m. Lúc chụp ảnh thì người đứng ở TRÊN/ngang lớp mây chứ không chìm trong mây; GFS (ROLLING, mặt mây ngay ngang chỗ đứng) gần với ảnh nhất."
   }
 ]
