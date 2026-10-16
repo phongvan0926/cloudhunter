@@ -732,6 +732,8 @@ Fansipan 16/10, ảnh Timemark **07:25**: sương mù đặc trùm kín cột m�
 `37/100 DISSIPATING · đồng thuận 100% · mặt mây 3.161m, ΔH −18m · không khuyên đi` ⇒ lời khuyên ĐÚNG;
 chính app đặt mặt mây ngang đỉnh. Nhãn chi tiết "mây đang tan" thì chưa kiểm được vì chưa biết diễn biến
 sau 07:25. Chuỗi Fansipan có ảnh người nhìn: lời khuyên đúng 6/7 ngày (08, 10, 12, 13, 15, 16/10; sai 14/10).
+Ảnh Timemark 12:05 cùng ngày vẫn mù trùm kín (không chấm, MIDDAY): hai lần nhìn 07:25 và 12:05 đều chìm
+trong mây, chưa thấy dấu hiệu tan; giữa hai mốc thì không biết.
 
 Tà Xùa 16/10 (1.800m, anh báo 08:57, không có giờ nhìn cụ thể): **trời trong, không có mây**. Bản chụp
 `25/100 FOG · đồng thuận 67% · mặt mây 2.182m, ΔH −382m · không khuyên đi` ⇒ lời khuyên đúng nhưng NHÃN

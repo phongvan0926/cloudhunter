@@ -345,5 +345,17 @@
     "source": "USER_PHOTO",
     "note": "Người dùng: 'ở Ô Quy Hồ mây đang tan thật'. Ảnh tại mốc 'Biển mây Ô Quy Hồ 2.16xm': chỗ đứng nắng, trời xanh có mây tích; trong thung lũng phía dưới còn khối mây trắng dày đang vỡ ra và bốc lên quanh sống núi, sườn đối diện đã lộ. Người dùng cho biết ảnh chụp ~08:00 ⇒ nằm trong khung 04-09h engine dùng ⇒ chấm như rạng sáng (cùng chuẩn với Fansipan 08/10 08:28, 14/10 08:12). Diễn biến lúc 5-6h người dùng không biết. Lúc 08:00 có mây dưới chân nhưng là lớp mây ĐANG VỠ, không phải biển mây phẳng ổn định ⇒ duration SHORT. Bản chụp dự báo 2026-10-16 (chụp 15/10 13:38Z): 58/100 FOG đồng thuận 67%, mặt mây 2.799m, ΔH -764m (người đứng 2.035m CHÌM trong mây), đáng đi=False. Từng mô hình: gfs 65 ROLLING mặt mây 2.029m · icon 32 FOG 3.559m · ukmo 58 FOG 2.039m. Lúc chụp ảnh thì người đứng ở TRÊN/ngang lớp mây chứ không chìm trong mây; GFS (ROLLING, mặt mây ngay ngang chỗ đứng) gần với ảnh nhất.",
     "duration": "SHORT"
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-16",
+    "reportedAt": "2026-10-16T12:30:00+07:00",
+    "id": "2026-10-16-fansipan-trua",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "MIDDAY",
+    "observedAt": "12:05",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh Timemark xác thực '12:05 16 Tháng 10, 2026' tại cột cờ: sương mù trắng đặc trùm kín, đông khách, không thấy gì quá lan can. Người dùng: 'trưa nay ở Fansipan mù trùm như ảnh'. KHÔNG chấm (MIDDAY). Cùng ngày 07:25 cũng mù trùm (báo cáo 2026-10-16-fansipan) ⇒ cả 07:25 lẫn 12:05 đều chìm trong mây; giữa hai mốc ra sao thì không biết, nên chưa nói được nhãn 'mây đang tan' của bản chụp là sai, chỉ biết KHÔNG thấy dấu hiệu tan ở hai lần nhìn."
   }
 ]
