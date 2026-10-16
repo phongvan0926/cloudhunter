@@ -737,6 +737,10 @@ Tà Xùa 16/10 (1.800m, anh báo 08:57, không có giờ nhìn cụ thể): **tr
 `25/100 FOG · đồng thuận 67% · mặt mây 2.182m, ΔH −382m · không khuyên đi` ⇒ lời khuyên đúng nhưng NHÃN
 SAI: app bảo "chìm trong mây" giữa một ngày quang (gfs 65 FOG mặt mây 2.182m, icon 5 FOG, ukmo 25 FLOWING
 1.188m). Thêm một ca cho lỗi gốc đã ghi ở mục 01-04/10: engine dựng mây/mặt mây trong ngày quang. Chưa sửa.
+Cùng sáng, Đèo Ô Quy Hồ (ảnh ~08:00): người đứng trong nắng, mây trắng dày trong thung lũng bên dưới
+đang vỡ và bốc lên. Bản chụp `58/100 FOG · 67% · mặt mây 2.799m, ΔH −764m` nói chìm trong mây ⇒ chấm là
+BỎ SÓT (tính rạng sáng vì 08:00 nằm trong khung 04-09h); gfs `65 ROLLING` mặt mây 2.029m gần ảnh nhất. Chỉ
+là lớp mây đang tan (duration SHORT), lúc 5-6h ra sao không ai biết.
 
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
