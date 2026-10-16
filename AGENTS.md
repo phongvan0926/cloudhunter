@@ -733,6 +733,11 @@ Fansipan 16/10, ảnh Timemark **07:25**: sương mù đặc trùm kín cột m�
 chính app đặt mặt mây ngang đỉnh. Nhãn chi tiết "mây đang tan" thì chưa kiểm được vì chưa biết diễn biến
 sau 07:25. Chuỗi Fansipan có ảnh người nhìn: lời khuyên đúng 6/7 ngày (08, 10, 12, 13, 15, 16/10; sai 14/10).
 
+Tà Xùa 16/10 (1.800m, anh báo 08:57, không có giờ nhìn cụ thể): **trời trong, không có mây**. Bản chụp
+`25/100 FOG · đồng thuận 67% · mặt mây 2.182m, ΔH −382m · không khuyên đi` ⇒ lời khuyên đúng nhưng NHÃN
+SAI: app bảo "chìm trong mây" giữa một ngày quang (gfs 65 FOG mặt mây 2.182m, icon 5 FOG, ukmo 25 FLOWING
+1.188m). Thêm một ca cho lỗi gốc đã ghi ở mục 01-04/10: engine dựng mây/mặt mây trong ngày quang. Chưa sửa.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
