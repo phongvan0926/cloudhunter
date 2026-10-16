@@ -357,5 +357,29 @@
     "observedAt": "12:05",
     "source": "USER_PHOTO_STAMP",
     "note": "Ảnh Timemark xác thực '12:05 16 Tháng 10, 2026' tại cột cờ: sương mù trắng đặc trùm kín, đông khách, không thấy gì quá lan can. Người dùng: 'trưa nay ở Fansipan mù trùm như ảnh'. KHÔNG chấm (MIDDAY). Cùng ngày 07:25 cũng mù trùm (báo cáo 2026-10-16-fansipan) ⇒ cả 07:25 lẫn 12:05 đều chìm trong mây; giữa hai mốc ra sao thì không biết, nên chưa nói được nhãn 'mây đang tan' của bản chụp là sai, chỉ biết KHÔNG thấy dấu hiệu tan ở hai lần nhìn. BỔ SUNG (người dùng chuyển lời một thông báo nhận được, 16/10, không rõ giờ và không nêu tên điểm): chỉ ĐỈNH Fansipan bị mù, các điểm bên dưới trời khá quang. Tức đây giống MÂY ĐỘI ĐỈNH (xem engine-2.7) hơn là một lớp biển mây dày từ thung lũng lên. Bản chụp đặt mặt mây 3.161m theo kiểu lớp mây liên tục từ dưới lên - lời khuyên đúng, nhưng cơ chế app mô tả có thể sai. Nguồn gián tiếp nên KHÔNG tạo báo cáo 'quang' cho điểm nào khác."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-16",
+    "reportedAt": "2026-10-16T15:30:00+07:00",
+    "id": "2026-10-16-fansipan-chieu",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "AFTERNOON",
+    "observedAt": "14:07",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh có dấu '16/10/26, 14:07' tại cột cờ: sương mù dày trùm kín, sàn ướt. Lời người gửi (anh Phong chuyển lại): 'Đỉnh Fansipan mù trùm, trời có gió nhẹ, mây, nhiệt độ 14 độ'. KHÔNG chấm (AFTERNOON). Cả ngày 16/10 có ba lần nhìn: 07:25, 12:05, 14:07 - lần nào đỉnh cũng chìm trong mây."
+  },
+  {
+    "spotKey": "DEO_O_QUY_HO",
+    "locationName": "Cầu Kính Rồng Mây (đèo Ô Quy Hồ, phía Lai Châu, xã Bình Lư)",
+    "date": "2026-10-16",
+    "reportedAt": "2026-10-16T15:30:00+07:00",
+    "id": "2026-10-16-rongmay-chieu",
+    "seaLevel": "NONE",
+    "timeOfDay": "AFTERNOON",
+    "observedAt": "15:10",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh Timemark '15:10 16 Tháng 10, 2026, X. Bình Lư, Lai Châu' tại Cầu Kính Rồng Mây: chỗ đứng có nắng, trời xanh mây tích, thung lũng bên dưới quang, nhìn rõ xa; một khối mây trắng dày ÔM ĐỈNH và sống núi cao phía dãy Hoàng Liên (bên phải ảnh), chân núi vẫn lộ. Lời người gửi: 'Cầu Kính Rồng Mây thời tiết đẹp'. Không phải đúng toạ độ Đèo Ô Quy Hồ trong thư viện (cùng đèo, cách vài km) và là buổi chiều ⇒ KHÔNG chấm. Giá trị: bằng chứng có giờ cho kiểu MÂY ĐỘI ĐỈNH ngày 16/10 - đỉnh cao mù, bên dưới quang - khớp thông báo 'chỉ đỉnh Fan mù'."
   }
 ]

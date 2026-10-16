@@ -737,6 +737,10 @@ trong mây, chưa thấy dấu hiệu tan; giữa hai mốc thì không biết.
 Anh chuyển lời một thông báo (không rõ giờ, không nêu tên điểm): chỉ ĐỈNH Fan mù, các điểm bên dưới khá
 quang ⇒ giống mây đội đỉnh hơn là lớp mây dày từ thung lũng lên; app đặt mặt mây 3.161m theo kiểu lớp liên
 tục từ dưới, nên lời khuyên đúng mà cơ chế có thể sai. Nguồn gián tiếp, không tạo báo cáo cho điểm khác.
+Chiều cùng ngày có thêm hai ảnh có giờ (không chấm, AFTERNOON): Fansipan 14:07 vẫn mù trùm ("gió nhẹ, 14 độ"),
+còn Cầu Kính Rồng Mây (đèo Ô Quy Hồ phía Lai Châu) 15:10 nắng đẹp, thung lũng quang, một khối mây dày ôm
+đỉnh và sống núi cao dãy Hoàng Liên. Đây là bằng chứng có giờ đầu tiên cho MÂY ĐỘI ĐỈNH: ngày 16/10 đỉnh
+Fansipan chìm trong mây cả ba lần nhìn (07:25, 12:05, 14:07) trong khi bên dưới quang.
 
 Tà Xùa 16/10 (1.800m, anh báo 08:57, không có giờ nhìn cụ thể): **trời trong, không có mây**. Bản chụp
 `25/100 FOG · đồng thuận 67% · mặt mây 2.182m, ΔH −382m · không khuyên đi` ⇒ lời khuyên đúng nhưng NHÃN
