@@ -793,6 +793,22 @@ Vẫn tốt hơn lịch cũ (trung vị 01:34 sáng) nhưng sai số dự đoán
 về khoảng 15-18 UTC — có thể GitHub gom các lần chạy hạng thấp, không phụ thuộc giờ đặt. Mới 7 điểm
 đo, chưa đổi tiếp; kiểm lại sau 2 tuần.
 
+#### Mất thêm ngày 17/10 — `npx vite-node` tự đi tải gói và npm chết giữa chừng
+
+Lần chạy 16/10 13:28 UTC (lead ~8h, đúng giờ) chết cả 4 lần thử với cùng một lỗi
+`npm error Cannot read properties of null (reading 'edgesOut')`, ngay ở bước `npx vite-node`,
+trước khi script kịp chạy dòng nào. Gốc: `vite-node` **chưa bao giờ nằm trong `package.json`**,
+nên mỗi lần chạy `npx` lại tải bản mới nhất từ mạng (nay là 6.0.0, kéo theo vite 8 riêng), và
+lần này chính npm của runner (10.8.2) vấp lỗi khi dựng cây gói. Thử lại 4 lần không cứu được vì
+lỗi không phải chập chờn mạng. Bản chụp 17/10 mất vĩnh viễn; hai báo cáo Fansipan và Ô Quy Hồ
+sáng 17/10 vì thế chỉ chấm được bằng nhãn vệ tinh, không chấm được lời khuyên của app.
+
+Sửa: ghim `vite-node@3.2.4` vào devDependencies (bản này nhận vite 5-7 nên dùng chung vite 6.4
+của repo, không kéo vite thứ hai), và workflow gọi `npx --no-install vite-node` để thiếu gói thì
+chết ngay, rõ ràng, chứ không lặng lẽ đi tải. Đã kiểm: `npm ci` sạch trên bản sao rồi chạy
+`calibrate.ts` qua vite-node cục bộ, chạy được. Bài học: **công cụ mà vòng tự chạy cần thì phải
+ghim trong lockfile**; `npx <gói>` không khai báo là phụ thuộc vào npm registry và npm của ngày hôm đó.
+
 ### 🎯 Năm ngày kiểm chứng NGOÀI MẪU đầu tiên — và lần khuyên đi ĐÚNG đầu tiên (01-04/10/2026)
 
 Người dùng báo (05/10) hai đợt: **03/10 và 04/10 có biển mây trên Tà Xùa**, và **Hang Kia

@@ -381,5 +381,28 @@
     "observedAt": "15:10",
     "source": "USER_PHOTO_STAMP",
     "note": "Ảnh Timemark '15:10 16 Tháng 10, 2026, X. Bình Lư, Lai Châu' tại Cầu Kính Rồng Mây: chỗ đứng có nắng, trời xanh mây tích, thung lũng bên dưới quang, nhìn rõ xa; một khối mây trắng dày ÔM ĐỈNH và sống núi cao phía dãy Hoàng Liên (bên phải ảnh), chân núi vẫn lộ. Lời người gửi: 'Cầu Kính Rồng Mây thời tiết đẹp'. Không phải đúng toạ độ Đèo Ô Quy Hồ trong thư viện (cùng đèo, cách vài km) và là buổi chiều ⇒ KHÔNG chấm. Giá trị: bằng chứng có giờ cho kiểu MÂY ĐỘI ĐỈNH ngày 16/10 - đỉnh cao mù, bên dưới quang - khớp thông báo 'chỉ đỉnh Fan mù'."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Đỉnh Fansipan",
+    "date": "2026-10-17",
+    "reportedAt": "2026-10-17T09:00:00+07:00",
+    "id": "2026-10-17-fansipan",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "08:30",
+    "source": "SOCIAL_POST",
+    "note": "Bài #thoitietsapa anh chuyển lại, ảnh có dấu ngày '17 thg 10, 2026' khoảng 08:3x: 'Đỉnh Fansipan trời mù, gió to, nhiệt độ 12 độ'. Ảnh: sương mù trùm kín đỉnh. 08:30 nằm trong khung 04-09h nên chấm như rạng sáng, nhưng KHÔNG có bản chụp dự báo 17/10 (vòng chụp 16/10 hỏng ở bước npx) nên chỉ chấm được nếu có nhãn vệ tinh, không chấm được lời khuyên của app."
+  },
+  {
+    "spotKey": "DEO_O_QUY_HO",
+    "locationName": "Đèo Ô Quy Hồ",
+    "date": "2026-10-17",
+    "reportedAt": "2026-10-17T09:00:00+07:00",
+    "id": "2026-10-17-oquyho",
+    "seaLevel": "MIXED",
+    "timeOfDay": "DAWN",
+    "source": "SOCIAL_POST",
+    "note": "Cùng bài #thoitietsapa: 'Đèo Ô Quy Hồ lúc quang lúc sương mù'. Ảnh Ô Quy Hồ không có dấu giờ; bài viết khoảng 08:30, nên giờ nhìn chỉ biết là buổi sáng. Không nói mây nằm dưới chân hay trùm chỗ đứng ⇒ MIXED, không suy thêm. Không có bản chụp dự báo 17/10."
   }
 ]

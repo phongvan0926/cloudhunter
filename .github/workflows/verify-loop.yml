@@ -94,7 +94,7 @@ jobs:
           for wait in 0 180 480 900; do
             [ "$wait" -gt 0 ] && { echo "::warning::chụp $D lỗi, chờ ${wait}s rồi thử lại"; sleep "$wait"; }
             if [ -f "data/observations/$D-forecast.json" ]; then echo "đã có bản chụp $D"; exit 0; fi
-            npx vite-node scripts/snapshot-forecast.ts "$D" && exit 0
+            npx --no-install vite-node scripts/snapshot-forecast.ts "$D" && exit 0
           done
           echo "::error::chụp $D thất bại sau 4 lần — ngày này sẽ mất nếu không chạy tay trước rạng sáng"
           exit 1
@@ -140,7 +140,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Bảng hiệu chuẩn (đọc trong log của job)
-        run: npx vite-node scripts/calibrate.ts || true
+        run: npx --no-install vite-node scripts/calibrate.ts || true
       - name: Commit nhãn vệ tinh
         run: |
           git config user.name  "cloudhunter-verify[bot]"
