@@ -428,5 +428,15 @@
     "observedAt": "10:03",
     "source": "USER_PHOTO_STAMP",
     "note": "Ảnh Timemark '10:03 18 Tháng 10, 2026': sương mù trắng đặc trùm kín sàn ngắm, không thấy gì xa. Hai giờ sau ảnh 08:08 thì biển mây đã dâng lên trùm đỉnh - cùng kiểu 14/10 (08:12 quang, 11:13 mây dâng). Sau khung rạng sáng ⇒ KHÔNG chấm."
+  },
+  {
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Bắc Yên, Sơn La)",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-18T22:35:00+07:00",
+    "id": "2026-10-18-taxua",
+    "seaLevel": "BELOW",
+    "source": "SOCIAL_POST",
+    "note": "Bài Facebook anh chuyển lại: 'ĐANG VIRAL - TÀ XÙA SÁNG NAY - BIỂN MÂY LỚN NHẤT NĂM', ảnh Hoàng Thu Thuỷ, 7+ ảnh. Đăng khoảng 09:30 ngày 18/10 (lúc 22:33 hiện '13h'). Ảnh: nắng, trời xanh, biển mây trắng dày phủ kín thung lũng bên dưới tới các dãy núi xa, người đứng trên đồi cỏ/sàn gỗ có hoa, cao hơn mặt mây. Ảnh không có dấu giờ ⇒ để trống timeOfDay như các bài MXH Tà Xùa trước (03, 04, 11/10); chỉ biết chụp trước ~09:30. Không rõ đúng chỗ đứng nào trong vùng Tà Xùa."
   }
 ]

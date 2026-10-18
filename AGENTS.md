@@ -763,6 +763,12 @@ khung 06:00 đỉnh mây 2.821m, dưới chỗ đứng) - báo cáo người nh�
 đặc trùm kín sàn (MORNING, không chấm): biển mây dâng lên trùm đỉnh trong vòng 2 giờ, đúng kiểu 14/10 và đúng
 kinh nghiệm "tháng 10 thì đi sớm". Chuỗi Fansipan có ảnh người nhìn: lời khuyên đúng 7/8 ngày.
 
+Tà Xùa 18/10 cùng sáng (bài Facebook "biển mây lớn nhất năm", đăng ~09:30, ảnh không dấu giờ): biển mây dày phủ kín
+thung lũng, người đứng trên mặt mây. Bản chụp `45/100 STATIC · đồng thuận 100% · mặt mây 1.198m, ΔH +602m · ĐÁNG ĐI`
+⇒ lời khuyên ĐÚNG (gfs 63 · icon 32 · ukmo 45, cả ba STATIC). Điểm 45 nên mức "≥ 65" sẽ BỎ SÓT ca này - dữ kiện
+ngược chiều cho mức đó. Vệ tinh ghi CLEAR, 5/5 khung không có số (lại kiểu sương thung lũng hồng ngoại không thấy,
+như 02/09); báo cáo người đi đè. Lần đầu app khuyên đi ĐÚNG ở Tà Xùa từ bản chụp làm trước.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
