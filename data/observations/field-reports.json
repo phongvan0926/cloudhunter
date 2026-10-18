@@ -415,7 +415,8 @@
     "timeOfDay": "DAWN",
     "observedAt": "06:09",
     "source": "USER_PHOTO_STAMP",
-    "note": "Bốn ảnh Timemark cùng ngày, cả bốn trong khung 04-09h: 06:09 (hai ảnh, 'X. Bản Bo, Lai Châu') bình minh, trời quang, biển mây phủ kín thung lũng bên dưới, chỉ các đỉnh xa nhô lên, có mây tầng cao mỏng ở chân trời; 07:09 biển mây trắng dày, phẳng, kín tới chân trời, vài đỉnh nhô lên, nắng, trời xanh; 08:08 vẫn biển mây dưới đỉnh, vài dải mây bắt đầu vờn quanh chóp phụ và cột mốc. Sàn ướt ở cả bốn ảnh. Biển mây nằm ổn định ít nhất 06:09-08:08. Vệ tinh ghi CLEAR (4/5 khung không có số, khung 06:00 đỉnh mây 2.821m - dưới chỗ đứng 3.143m, khớp ảnh); báo cáo người nhìn đè nhãn vệ tinh."
+    "note": "Bốn ảnh Timemark cùng ngày, cả bốn trong khung 04-09h: 06:09 (hai ảnh, 'X. Bản Bo, Lai Châu') bình minh, trời quang, biển mây phủ kín thung lũng bên dưới, chỉ các đỉnh xa nhô lên, có mây tầng cao mỏng ở chân trời; 07:09 biển mây trắng dày, phẳng, kín tới chân trời, vài đỉnh nhô lên, nắng, trời xanh; 08:08 vẫn biển mây dưới đỉnh, vài dải mây bắt đầu vờn quanh chóp phụ và cột mốc. Sàn ướt ở cả bốn ảnh. Biển mây nằm ổn định ít nhất 06:09-08:08. Vệ tinh ghi CLEAR (4/5 khung không có số, khung 06:00 đỉnh mây 2.821m - dưới chỗ đứng 3.143m, khớp ảnh); báo cáo người nhìn đè nhãn vệ tinh. | Anh Phong nhận định (18/10 22:44): biển mây Fansipan và Tà Xùa sáng nay GIỐNG NHAU - lưa thưa, mỏng, không đậm đặc, nhanh tan. Đính chính cách tả 'dày' ở trên (đó là tôi đọc ảnh) ⇒ duration SHORT; vẫn tính là CÓ biển mây dưới chân.",
+    "duration": "SHORT"
   },
   {
     "spotKey": "FANSIPAN",
@@ -437,6 +438,7 @@
     "id": "2026-10-18-taxua",
     "seaLevel": "BELOW",
     "source": "SOCIAL_POST",
-    "note": "Bài Facebook anh chuyển lại: 'ĐANG VIRAL - TÀ XÙA SÁNG NAY - BIỂN MÂY LỚN NHẤT NĂM', ảnh Hoàng Thu Thuỷ, 7+ ảnh. Đăng khoảng 09:30 ngày 18/10 (lúc 22:33 hiện '13h'). Ảnh: nắng, trời xanh, biển mây trắng dày phủ kín thung lũng bên dưới tới các dãy núi xa, người đứng trên đồi cỏ/sàn gỗ có hoa, cao hơn mặt mây. Ảnh không có dấu giờ ⇒ để trống timeOfDay như các bài MXH Tà Xùa trước (03, 04, 11/10); chỉ biết chụp trước ~09:30. Không rõ đúng chỗ đứng nào trong vùng Tà Xùa."
+    "note": "Bài Facebook anh chuyển lại: 'ĐANG VIRAL - TÀ XÙA SÁNG NAY - BIỂN MÂY LỚN NHẤT NĂM', ảnh Hoàng Thu Thuỷ, 7+ ảnh. Đăng khoảng 09:30 ngày 18/10 (lúc 22:33 hiện '13h'). Ảnh: nắng, trời xanh, biển mây trắng dày phủ kín thung lũng bên dưới tới các dãy núi xa, người đứng trên đồi cỏ/sàn gỗ có hoa, cao hơn mặt mây. Ảnh không có dấu giờ ⇒ để trống timeOfDay như các bài MXH Tà Xùa trước (03, 04, 11/10); chỉ biết chụp trước ~09:30. Không rõ đúng chỗ đứng nào trong vùng Tà Xùa. | Anh Phong nhận định (18/10 22:44): biển mây Fansipan và Tà Xùa sáng nay GIỐNG NHAU - lưa thưa, mỏng, không đậm đặc, nhanh tan. Đính chính cách tả 'dày' ở trên (đó là tôi đọc ảnh) ⇒ duration SHORT; vẫn tính là CÓ biển mây dưới chân.",
+    "duration": "SHORT"
   }
 ]

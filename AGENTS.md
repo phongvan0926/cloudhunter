@@ -769,6 +769,12 @@ thung lũng, người đứng trên mặt mây. Bản chụp `45/100 STATIC · �
 ngược chiều cho mức đó. Vệ tinh ghi CLEAR, 5/5 khung không có số (lại kiểu sương thung lũng hồng ngoại không thấy,
 như 02/09); báo cáo người đi đè.
 
+**Đính chính cùng tối (anh Phong):** biển mây 18/10 ở CẢ Fansipan lẫn Tà Xùa đều **lưa thưa, mỏng, không đậm đặc,
+nhanh tan** - tôi đọc ảnh thành "dày", và bài Facebook gọi là "biển mây lớn nhất năm". Hai báo cáo nay có
+`duration: SHORT`, vẫn tính là CÓ biển mây. Hệ quả: app khuyên đi đúng về có/không, nhưng nhãn STATIC/FLOWING và
+66 điểm ở Fansipan hứa hẹn hơn thực tế; app chưa có cách nói "có nhưng mỏng, tan sớm". Bài học thứ tư về đọc ảnh:
+ảnh chọn lọc trên mạng xã hội phóng đại độ dày, và một ảnh không cho biết mây giữ được bao lâu.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
