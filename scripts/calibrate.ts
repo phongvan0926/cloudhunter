@@ -11,10 +11,16 @@
  * Chạy:
  *   npx vite-node scripts/calibrate.ts                          # dùng data/observations/
  *   npx vite-node scripts/calibrate.ts bao-cao-thuc-dia.json    # kèm báo cáo người dùng
+ *   npx vite-node scripts/calibrate.ts --kem-nhan-yeu           # chấm cả nhãn Facebook độ tin thấp (để so)
+ *
+ * Từ 19/10/2026 có thêm nguồn giữa hai nguồn trên: nhãn tự động từ bài Facebook hằng ngày của người
+ * làm du lịch tại chỗ (fb-auto-reports.json, xem AGENTS.md "Nhãn tự động từ Facebook"). Thứ bậc khi
+ * cùng điểm + ngày: người đi ĐÈ Facebook ĐÈ vệ tinh. Số in ra tách theo nguồn.
  */
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { WORTH_GOING_SCORE, isWorthGoing } from '../services/cloudScoreEngine';
+import { fbUsable, FB_MIN_CONFIDENCE } from './fb-auto';
 
 const DIR = 'data/observations';
 
@@ -76,7 +82,30 @@ function main() {
   // Nguồn 1 — báo cáo thực địa (ưu tiên: cùng điểm+ngày thì ĐÈ nhãn vệ tinh).
   // Đọc cả kho trong repo lẫn file người dùng truyền vào dòng lệnh.
   const repoReports = `${DIR}/field-reports.json`;
-  const reportFiles = [...(existsSync(repoReports) ? [repoReports] : []), ...process.argv.slice(2)];
+  const args = process.argv.slice(2);
+  const withWeak = args.includes('--kem-nhan-yeu');
+
+  // Nguồn 1,5 — nhãn tự động từ Facebook. Đè vệ tinh (người tại chỗ thấy được sương mỏng thung lũng
+  // mà hồng ngoại 2km không thấy, xem 02/09), bị báo cáo người đi đè ở bước dưới.
+  const fbFile = `${DIR}/fb-auto-reports.json`;
+  const fbWeak: string[] = [];
+  if (existsSync(fbFile)) {
+    for (const r of JSON.parse(readFileSync(fbFile, 'utf-8'))) {
+      if (!fbUsable(r) && !(withWeak && r.seaLevel !== 'UNKNOWN')) { fbWeak.push(`${r.date} ${r.spotKey} ${r.seaLevel} tin ${r.confidence}${r.needsReview ? ' cần người xem' : ''}`); continue; }
+      if (r.timeOfDay && r.timeOfDay !== 'DAWN') continue;
+      const p = fc[r.date]?.[r.spotKey];
+      if (!p) { skipped.push(`${r.date} ${r.spotKey}: chưa chụp dự báo cho ngày này (nhãn Facebook)`); continue; }
+      const truth: Truth = (r.seaLevel === 'BELOW' || r.seaLevel === 'AT_EYE') ? 'SEA' : 'NO_SEA';
+      const row: Row = { date: r.date, key: r.spotKey, name: MOUNTAIN_DB[r.spotKey]?.name || r.locationName, truth,
+        truthSrc: 'facebook', truthDetail: `${r.seaLevel}${r.thickness ? ' ' + r.thickness : ''} tin ${r.confidence} — "${r.evidence?.[0]?.text ?? ''}"`,
+        score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel,
+        deltaH: (p as any).deltaH, worthGoing: (p as any).worthGoing, engineVersion: (p as any).engineVersion };
+      const i = rows.findIndex(x => x.date === r.date && x.key === r.spotKey);
+      if (i >= 0) rows[i] = row; else rows.push(row);
+    }
+  }
+
+  const reportFiles = [...(existsSync(repoReports) ? [repoReports] : []), ...args.filter(a => !a.startsWith('--'))];
   for (const arg of reportFiles) {
     for (const r of JSON.parse(readFileSync(arg, 'utf-8'))) {
       const key = r.spotKey || nameToKey(r.locationName);
@@ -113,14 +142,15 @@ function main() {
     return;
   }
 
-  const evalOne = (label: string, predSea: (r: Row) => boolean) => {
+  const evalOne = (label: string, predSea: (r: Row) => boolean, only?: Row[]) => {
+    const set = only ?? rows;
     let tp = 0, fp = 0, fn = 0, tn = 0;
-    for (const r of rows) {
+    for (const r of set) {
       const p = predSea(r);
       if (r.truth === 'SEA') p ? tp++ : fn++;
       else p ? fp++ : tn++;
     }
-    const acc = (tp + tn) / rows.length * 100;
+    const acc = (tp + tn) / set.length * 100;
     const recall = tp + fn ? tp / (tp + fn) * 100 : NaN;
     const prec = tp + fp ? tp / (tp + fp) * 100 : NaN;
     console.log(`\n  ${label}`);
@@ -132,6 +162,7 @@ function main() {
 
   console.log(`\n📊 Hiệu chuẩn CloudHunter — ${rows.length} cặp (dự báo × sự thật), `
     + `${rows.filter(r => r.truthSrc === 'người đi').length} từ người đi, `
+    + `${rows.filter(r => r.truthSrc === 'facebook').length} từ nhãn Facebook${withWeak ? ' (KỂ CẢ nhãn yếu)' : ` (độ tin ≥ ${FB_MIN_CONFIDENCE})`}, `
     + `${rows.filter(r => r.truthSrc === 'vệ tinh').length} từ vệ tinh`);
 
   evalOne(`Theo TRẠNG THÁI (STATIC/FLOWING/FLUCTUATING/ROLLING = có biển mây)`, r => SEA_STATUS.has(r.status));
@@ -155,6 +186,13 @@ function main() {
   const strongPred = (r: Row) => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null })
     && r.score >= STRONG_SCORE;
   evalOne(`Mức "CHẮC ĂN" đang theo dõi: đáng đi ∧ điểm ≥ ${STRONG_SCORE} (CHƯA dùng trong app)`, strongPred);
+  // Cùng luật, tách theo NGUỒN sự thật — vệ tinh mù sương mỏng thung lũng (02/09), Facebook chỉ có
+  // vài điểm và người đăng làm dịch vụ; số gộp che mất chỗ từng nguồn nói khác nhau.
+  for (const src of ['người đi', 'facebook', 'vệ tinh']) {
+    const sub = rows.filter(r => r.truthSrc === src);
+    if (sub.length) evalOne(`   └ luật đáng đi, riêng nguồn ${src} (${sub.length} cặp)`,
+      r => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }), sub);
+  }
   const strongDays = new Set(rows.filter(r => strongPred(r) && r.truth === 'SEA').map(r => r.date));
   console.log(`    ca trúng đến từ ${strongDays.size} NGÀY độc lập: ${[...strongDays].sort().join(', ') || '—'}`
     + (strongDays.size < 5 ? '  ⚠️  <5 ngày — chưa đủ để đổi luật' : ''));
@@ -204,6 +242,7 @@ function main() {
     alarms.slice(0, 20).forEach(r => console.log(
       `     ${r.date} ${r.name.slice(0, 28).padEnd(30)} app: ${r.score}/100 ${r.status.padEnd(12)} · thật: ${r.truthDetail} [${r.truthSrc}]`));
   }
+  if (fbWeak.length) console.log(`\n  Nhãn Facebook KHÔNG chấm (độ tin < ${FB_MIN_CONFIDENCE} hoặc cần người xem; --kem-nhan-yeu để chấm thử): ${fbWeak.length}\n     ${fbWeak.join('\n     ')}`);
   if (skipped.length) {
     console.log(`\n  (bỏ qua ${skipped.length} mục không chấm được — ${skipped.length && skipped[0]})`);
   }

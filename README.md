@@ -153,6 +153,7 @@ npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác ba
 # VÒNG KIỂM CHỨNG ĐỘ CHÍNH XÁC — GitHub Actions tự chạy 2 lần/ngày (.github/workflows/verify-loop.yml); chạy tay:
 npx vite-node scripts/snapshot-forecast.ts [YYYY-MM-DD]               # tối hôm trước: chụp dự báo rạng sáng mai (để trống = mai)
 ~/.venvs/ch-verify/bin/python tools/verify_satellite.py 2026-08-24    # ~8h : nhãn thật từ vệ tinh
+npx vite-node scripts/import-fb-auto.ts <nhan-ngay.json>              # nhập nhãn Facebook tự động (khi bộ thu báo)
 npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app
 ```
 
@@ -172,10 +173,11 @@ Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để ch
    Từ 14/10/2026 nó in thêm mức theo dõi "đáng đi ∧ điểm ≥ 65" kèm số NGÀY độc lập (chưa dùng
    trong app cho tới khi đủ ≥5 ngày), và bỏ qua báo cáo không phải rạng sáng (`timeOfDay`).
 
-> Không cào Facebook/TikTok: API tìm bài công khai của Facebook đã đóng từ 2018, CrowdTangle
-> ngừng hẳn 14/8/2024, bản thay thế chỉ mở cho nghiên cứu học thuật; TikTok tương tự.
-> Cào bằng trình duyệt thì vi phạm điều khoản và vỡ liên tục. Một nút trong app cho dữ liệu
-> sạch hơn nhiều.
+> **Nhãn tự động từ Facebook (từ 19/10/2026):** bài "thời tiết hôm nay" của người làm du lịch tại
+> chỗ ở Tà Xùa và Fansipan được đọc hằng ngày ở máy nhà, mỗi bài gắn nhãn bởi một lượt AI không được
+> xem dự báo. Repo chỉ nhận nhãn (`data/observations/fb-auto-reports.json`, nhập bằng
+> `scripts/import-fb-auto.ts`), không ảnh, không tên. Thứ bậc: người đi > Facebook > vệ tinh;
+> calibrate chỉ chấm nhãn độ tin ≥ 0,6 và in số riêng theo nguồn. Xem AGENTS.md.
 
 > **Kiểm chứng thực địa 25/8/2026 (Tà Xùa — ngày thứ BA liên tiếp):** app ghi `34/100 · FOG`
 > từ hôm trước. Truy ra lỗi gộp phiếu: 4/6 mô hình đặt mặt mây **dưới** chỗ đứng nhưng chia

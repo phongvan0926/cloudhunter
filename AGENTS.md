@@ -99,17 +99,92 @@ chụp là một ngày không bao giờ lấy lại được.
 **số ngày BÁO NHẦM**, kèm chi tiết từng ca để biết chỉnh hằng số nào. Bỏ sót nguy hiểm hơn
 báo nhầm: người dùng bỏ lỡ chuyến đi đẹp và mất niềm tin vào app.
 
-### 🚫 Vì sao KHÔNG cào Facebook/TikTok
+### 📥 Facebook: từ "không cào" sang nhãn tự động hằng ngày (sửa 19/10/2026)
 
-Đã tra kỹ, không phải ngại làm:
-- Facebook đóng API tìm bài công khai từ 2018; **CrowdTangle ngừng hẳn 14/8/2024**; bản thay
-  thế Meta Content Library chỉ mở cho nghiên cứu học thuật/phi lợi nhuận có duyệt hồ sơ.
-- TikTok Research API cũng chỉ cấp cho học thuật; Display API chỉ đọc được nội dung của
-  chính tài khoản mình.
-- Cào bằng trình duyệt vi phạm điều khoản, vỡ mỗi lần Meta đổi DOM, và dễ bị khoá tài khoản.
+Mục này trước ghi "vì sao KHÔNG cào Facebook/TikTok". Các lý do khi ấy là thật và vẫn đúng: API tìm
+bài công khai đóng từ 2018, CrowdTangle ngừng 14/8/2024, TikTok Research API chỉ cấp cho học thuật.
+Nhưng ngày 13/10/2026 anh Phong chốt: rào chặn là vấn đề cần xử lý, không phải lý do dừng. Ngày
+18/10 anh tìm được hai người tại chỗ đăng thời tiết gần như mỗi ngày (Tà Xùa: một người làm xe
+ôm/tour đăng "thời tiết tà xùa hôm nay: ..." khoảng 07-11h; Fansipan: bài "Thời tiết FSP", nhiều
+lần mỗi ngày, ảnh hay có dấu Timemark). Nút ghi tay trong app vẫn giữ nguyên.
 
-Thay vào đó: người dùng thấy bài trên Facebook thì bấm **một nút trong app** để ghi lại —
-mất 5 giây, dữ liệu sạch hơn hẳn scraping (có toạ độ, có ngày, có mốc so với chỗ đứng).
+**Bộ thu chạy ở máy nhà, NGOÀI repo** (đường dẫn trong sổ tay riêng, không ghi vào repo public):
+trình duyệt chỉ đọc, theo nhịp người, hai lần mỗi ngày. Mỗi bài được một lượt Claude gắn nhãn, và
+lượt đó **không được xem app dự báo gì**. Sau đó code thuần gộp nhãn theo ngày. Repo chỉ nhận
+nhãn: không ảnh, không tên người đăng, không mã bài, không đường dẫn nhóm.
+
+Vì sao nguồn này đáng giá: cùng một chỗ, gần như mỗi ngày, và **nói được cả "ít mây"**. Mẫu âm
+tính là thứ video mạng xã hội không bao giờ cho (xem mục "Nguồn của 5 báo cáo này"). Các giới hạn
+phải nhớ:
+- Người đăng làm dịch vụ, nên chữ có thể thiên lạc quan. Không có bài KHÔNG có nghĩa là không có mây.
+- Ảnh có thể là ảnh cũ dùng minh hoạ (bộ gắn nhãn tự nghi điều này ở bài 16/10).
+- "Nhiều mây" / "ít mây" không phân biệt mây dưới chân với mây trên trời. Đo 19/10: cùng câu "ít
+  mây", bộ gắn nhãn cho BELOW ở ngày 12 và 15/10 nhưng NONE ở ngày 16 và 17/10. Cả bốn ngày đều có
+  độ tin ≤ 0,6 nên không được chấm. Đây chính là lý do phải có ngưỡng độ tin.
+
+#### Thứ bậc nguồn và cách chấm
+
+Khi cùng điểm và ngày: **người đi / ảnh có giờ > FB_AUTO > vệ tinh.** Facebook đứng trên vệ tinh
+vì ở Tà Xùa vệ tinh mù với sương thung lũng (đã thấy từ 02/09). Lượt đầu đo được: ba ngày Facebook
+nói có biển mây dày mà vệ tinh không bị che (27/09, 02/10, 03/10), vệ tinh ghi CLEAR cả ba. Ngày
+03/10 người dùng cũng báo có biển mây.
+
+- `scripts/import-fb-auto.ts <nhan-ngay.json>` dựng lại `data/observations/fb-auto-reports.json` (commit
+  tệp này) và in bảng đối chiếu với `field-reports.json`, tức độ tin của chính bộ gắn nhãn.
+- `calibrate.ts` chỉ chấm nhãn có độ tin ≥ `FB_MIN_CONFIDENCE` = 0,6 (`scripts/fb-auto.ts`), không
+  cần người xem, seaLevel rõ. Ngưỡng này **chốt trước khi chấm**, đừng chỉnh cho vừa kết quả.
+  `--kem-nhan-yeu` chấm thêm nhãn yếu để so. Luật "đáng đi" được in thêm từng dòng riêng theo nguồn.
+
+**Việc phải làm mỗi lần bộ thu báo có nhãn mới:**
+1. Chạy import, đọc bảng đối chiếu. Có dòng `✗ LỆCH` với người nhìn thì dừng lại, ghi vào mục này,
+   và xem lại lời nhắc của bộ gắn nhãn trước khi tin tiếp.
+2. Chạy calibrate, xem dòng "riêng nguồn facebook" và các ca BỎ SÓT / BÁO NHẦM gắn `[facebook]`.
+3. Ngày `needsReview` không tự chọn hộ. Ngày nào quan trọng (app khuyên đi, hoặc có điểm ≥ 65) thì hỏi anh.
+4. Commit `fb-auto-reports.json`. Không sửa engine vì một ngày mới, mà làm theo "Luật cổng" ngay dưới.
+
+#### Lượt đầu (19/10/2026): 21 nhãn ngày, 10 nhãn đủ tin
+
+Khớp có/không với báo cáo người nhìn **6/6** (bộ gắn nhãn bỏ trống thêm 2 ngày, Fansipan 15 và 18/10,
+vì các bài nói ngược nhau). Có 4 cặp chấm mới (các ngày khác đã có người đi đè, hoặc thuộc ngày bản
+chụp đã mất): Tà Xùa 27/09, 02/10 và 08/10 **có biển mây, app không khuyên đi cả ba**; 30/09 "ít mây",
+app không khuyên đi, đúng.
+
+Gộp mọi nguồn đủ tin, Tà Xùa có biển mây ở 6 ngày có bản chụp (27/09, 02, 03, 04, 08, 18/10), và
+**app khuyên đi đúng 1/6** (18/10). Đây là điểm app trượt có hệ thống.
+
+**Manh mối (CHƯA sửa, vì là sửa lớn):** những ngày trượt đó, ICON/UKMO đặt mặt mây ở đúng
+~2.200m (2.167-2.207m vào 27/09, 02/10, 03/10, 15/10, 16/10), nên ΔH ≈ −400m và nhãn ra FOG. Trên
+toàn kho, **1.268/5.482 (23%) mặt mây của từng mô hình rơi vào 2.150-2.215m, và 715 (13%) rơi vào
+3.540-3.590m.** Nguyên nhân là `estimateCloudTop` tính mặt mây = mực ẩm cuối cùng + 150m (hoặc mực
+700hPa + 400m), nên mặt mây bám vào lưới mực áp suất. Chỉ cần RH ≥ 80% ở 800hPa (~2.050m) là engine
+coi lớp mây liên tục kéo tới đó, trong khi RH 80% chưa phải mây. Đây là lỗi gốc đã ghi ("dựng mây
+trong ngày quang", mục 01-04/10). Nay chuỗi Tà Xùa cho thấy nó còn làm **BỎ SÓT** ngày có biển mây
+thật, chứ không chỉ báo nhầm.
+
+### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
+
+Lời anh, nguyên văn: *"Phiên CloudHunter có quyền sửa, nhưng nói họ kiểm tra thật kỹ và nếu cần gọi
+agent độc lập về chuyên ngành này kiểm định lại 1 lần trước khi sửa lớn, còn tinh chỉnh nhỏ theo dữ
+liệu thực tế cung cấp thì k quá cần. tôi chỉ cần review lại theo 1 thời gian, tôi không phải chuyên
+gia thời tiết nên hãy chọn cách nào mà có sự chính xác tự quyết tốt nhất và sát thực tế nhất"*
+
+1. **Tinh chỉnh nhỏ** (nhập dữ liệu, công cụ đo, chữ hiển thị, hằng số phụ không quyết định lời
+   khuyên): tự làm. Vẫn chấm trên toàn kho nếu có đụng tới số, và ghi vào `NHAT-KY-HIEU-CHINH.md`.
+2. **Sửa lớn** gồm: đổi cấu trúc engine (`estimateCloudTop`, `combineModels`, các cổng trạng thái),
+   đổi ngưỡng lõi (luật "đáng đi", biên ΔH, `observerInCloud`, thang gió), đổi trọng số chính của
+   điểm, hoặc trọng số hoá mô hình. Bắt buộc theo thứ tự:
+   a. Viết giả thuyết và phép đo TRƯỚC khi nhìn kết quả.
+   b. Chấm luật cũ và luật mới trên **toàn kho bản chụp, cùng một mẻ dữ liệu**, tách theo nguồn sự
+      thật. In danh sách mọi ca đổi kết luận, theo cả hai chiều.
+   c. **Không được làm tăng BỎ SÓT** trên các ca người đi + Facebook. Nếu báo nhầm tăng thì phải nêu
+      rõ đổi lấy gì. Ca dùng để nghĩ ra bản sửa không được tính là lợi ích của nó.
+   d. Gọi **một agent độc lập** đóng vai chuyên gia khí tượng / vi khí hậu vùng núi để phản biện một
+      lần. Đưa cho agent đó giả thuyết, số đo và danh sách ca đổi, nhưng không đưa kết luận mình mong
+      muốn. Ghi lại từng ý phản biện và cách đã xử lý ý đó.
+   e. Đổi `ENGINE_VERSION`, cập nhật AGENTS.md/README, rồi ghi một mục vào `NHAT-KY-HIEU-CHINH.md`
+      để anh xem lại theo đợt.
+3. **Không bao giờ:** chụp bù bản chụp, sửa nhãn sự thật cho vừa app, chỉnh `FB_MIN_CONFIDENCE` hay
+   ngưỡng nào khác theo kết quả chấm.
 
 ### ⚠️ engine-2.3 (24/8/2026) — ca kiểm chứng thứ hai, cùng một điểm
 
@@ -938,7 +1013,7 @@ cổng hay không** — cổng chỉ thật sự đổi kết luận ở 25/192 
 #### Nguồn của 5 báo cáo này: VIDEO MẠNG XÃ HỘI, không phải người đo tại chỗ
 
 Người dùng cho biết (05/10): *"không ai đo cả, chỉ check video trên mạng xã hội thấy có thì báo
-lại lên đây thôi."* Đúng theo đường đã thiết kế (xem mục "Vì sao KHÔNG cào Facebook/TikTok":
+lại lên đây thôi."* Đúng theo đường đã thiết kế (xem mục "Facebook: từ không cào sang nhãn tự động" - hồi đó:
 người dùng thấy bài thì bấm một nút, không cào). Nhưng phải ghi rõ kênh này đo được gì:
 
 | | |

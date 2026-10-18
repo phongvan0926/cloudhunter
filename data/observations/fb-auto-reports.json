@@ -1,0 +1,447 @@
+[
+ {
+  "id": "2026-10-14-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-14",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-14T10:58:22+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-14T10:58:22+07:00",
+    "seaLevel": "NONE",
+    "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 14 độ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-15-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-15",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "06:16",
+  "confidence": 0.4,
+  "needsReview": true,
+  "firstPostAt": "2026-10-15T07:10:03+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-15T07:10:03+07:00",
+    "seaLevel": "AT_EYE",
+    "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 6 độ",
+    "stamps": [
+     "06:16 AT_EYE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-15T08:22:54+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fan lại có biển mây rồi, checkin ngay thôi cả nhà ơi",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-15T09:22:45+07:00",
+    "seaLevel": "NONE",
+    "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 13 độ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-17-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-17",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "confidence": 0.75,
+  "firstPostAt": "2026-10-17T07:35:24+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-17T07:35:24+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù, gió to nhiệt độ 10 độ",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-17T09:02:37+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù, gió to nhiệt độ 12 độ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-18-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-18",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:08",
+  "confidence": 0.4,
+  "needsReview": true,
+  "firstPostAt": "2026-10-18T07:14:37+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-18T07:14:37+07:00",
+    "seaLevel": "NONE",
+    "text": "Đỉnh Fansipan trời nắng nhiệt độ 7 độ",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-18T08:24:32+07:00",
+    "seaLevel": "BELOW",
+    "text": "Sapa hôm nay trời nắng đẹp khắp các mặt trận",
+    "stamps": [
+     "07:08 BELOW",
+     "07:09 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-10-18T08:49:31+07:00",
+    "seaLevel": "NONE",
+    "text": "Đỉnh Fansipan trời nắng nhiệt độ 18 độ",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-18T10:54:15+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời có biển mây gió nhẹ, nhiệt độ 18 độ",
+    "stamps": [
+     "08:07 BELOW",
+     "10:03 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-09-27-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-09-27",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.8,
+  "firstPostAt": "2026-09-27T08:59:57+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-09-27T08:59:57+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời tiết tà xùa hôm nay: Biển mây bồng bềnh. Siu đẹp luôn ạ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-09-28-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-09-28",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.75,
+  "firstPostAt": "2026-09-28T10:41:04+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-09-28T10:41:04+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời tiết tà xùa hôm nay: nắng đẹp + siu phẩm chuổi 3 ngày biển mây liên tục",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-09-30-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-09-30",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "thickness": "SPARSE",
+  "confidence": 0.75,
+  "firstPostAt": "2026-09-30T07:55:37+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-09-30T07:55:37+07:00",
+    "seaLevel": "NONE",
+    "text": "Thời tiết tà xùa hôm nay: nắng đẹp + nhưng ít mây",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-01-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-01",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-01T08:06:11+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-01T08:06:11+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời tiết tà xùa đầu tháng : nắng đẹp +rất ưu ái khách",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-02-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-02",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.85,
+  "firstPostAt": "2026-10-02T07:15:53+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-02T07:15:53+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: lại biển mây + nắng đẹp",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-03-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-03",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.8,
+  "firstPostAt": "2026-10-03T07:06:40+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-03T07:06:40+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: tiếp tục chuỗi biển mây bồng bềnh",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-04-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-04",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.8,
+  "firstPostAt": "2026-10-04T07:53:04+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-04T07:53:04+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: Lại Biển mây + nắng đẹp nha các mom",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-05-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-05",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.7,
+  "firstPostAt": "2026-10-05T08:30:12+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-05T08:30:12+07:00",
+    "seaLevel": "BELOW",
+    "text": "Trời quang, không nóng + nhiều mây lắm nha các chế",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-06-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-06",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "confidence": 0.45,
+  "firstPostAt": "2026-10-06T09:30:27+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-06T09:30:27+07:00",
+    "seaLevel": "NONE",
+    "text": "Không mưa, nhiều chỗ quang + có mây nhưng rất lạnh",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-07-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-07",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.55,
+  "firstPostAt": "2026-10-07T08:16:58+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-07T08:16:58+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + nhiều mây",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-08-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-08",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "confidence": 0.7,
+  "firstPostAt": "2026-10-08T07:13:52+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-08T07:13:52+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + nhiều mây",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-10-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-10",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-10T11:25:29+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-10T11:25:29+07:00",
+    "seaLevel": "BELOW",
+    "text": "Mát mẻ không nóng, hơi lạnh + nhiều chỗ có mây",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-11-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-11",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "thickness": "SPARSE",
+  "confidence": 0.45,
+  "needsReview": true,
+  "firstPostAt": "2026-10-11T10:18:03+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-11T10:18:03+07:00",
+    "seaLevel": "NONE",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + thời tiết mát mẻ + có mây nha",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-12-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-12",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.5,
+  "needsReview": true,
+  "firstPostAt": "2026-10-12T10:11:57+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-12T10:11:57+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + ít mây nhưng thời tiết mát mẻ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-15-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-15",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-15T09:35:35+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-15T09:35:35+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + Ít mây+ Mát mẻ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-16-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-16",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "confidence": 0.6,
+  "firstPostAt": "2026-10-16T11:33:26+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-16T11:33:26+07:00",
+    "seaLevel": "NONE",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + Ít mây+ Mát mẻ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-17-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-17",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-17T08:42:47+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-17T08:42:47+07:00",
+    "seaLevel": "NONE",
+    "text": "thời tiết tà xùa hôm nay: ít mây + nắng đẹp + Thời tiết mát mẻ",
+    "stamps": []
+   }
+  ]
+ }
+]
