@@ -404,5 +404,29 @@
     "timeOfDay": "DAWN",
     "source": "SOCIAL_POST",
     "note": "Cùng bài #thoitietsapa: 'Đèo Ô Quy Hồ lúc quang lúc sương mù'. Ảnh Ô Quy Hồ không có dấu giờ; bài viết khoảng 08:30, nên giờ nhìn chỉ biết là buổi sáng. Không nói mây nằm dưới chân hay trùm chỗ đứng ⇒ MIXED, không suy thêm. Không có bản chụp dự báo 17/10."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Đỉnh Fansipan",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-18T10:30:00+07:00",
+    "id": "2026-10-18-fansipan",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "08:08",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh Timemark '08:08 18 Tháng 10, 2026': trời xanh, nắng trên đỉnh, biển mây trắng trải kín tới chân trời BÊN DƯỚI đỉnh, vài dải mây vờn quanh chóp phụ và cột mốc, sàn còn ướt. 08:08 nằm trong khung 04-09h nên chấm như rạng sáng. Vệ tinh ghi CLEAR (4/5 khung không có số, khung 06:00 đỉnh mây 2.821m - dưới chỗ đứng 3.143m, khớp ảnh); báo cáo người nhìn đè nhãn vệ tinh."
+  },
+  {
+    "spotKey": "FANSIPAN",
+    "locationName": "Đỉnh Fansipan",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-18T10:30:00+07:00",
+    "id": "2026-10-18-fansipan-sang-muon",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "MORNING",
+    "observedAt": "10:03",
+    "source": "USER_PHOTO_STAMP",
+    "note": "Ảnh Timemark '10:03 18 Tháng 10, 2026': sương mù trắng đặc trùm kín sàn ngắm, không thấy gì xa. Hai giờ sau ảnh 08:08 thì biển mây đã dâng lên trùm đỉnh - cùng kiểu 14/10 (08:12 quang, 11:13 mây dâng). Sau khung rạng sáng ⇒ KHÔNG chấm."
   }
 ]

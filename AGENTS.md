@@ -751,6 +751,17 @@ Cùng sáng, Đèo Ô Quy Hồ (ảnh ~08:00): người đứng trong nắng, m�
 BỎ SÓT (tính rạng sáng vì 08:00 nằm trong khung 04-09h); gfs `65 ROLLING` mặt mây 2.029m gần ảnh nhất. Chỉ
 là lớp mây đang tan (duration SHORT), lúc 5-6h ra sao không ai biết.
 
+Fansipan 17/10 (bài #thoitietsapa, ~08:30): mù, gió to, 12 độ; vệ tinh FOGGED_IN đỉnh mây 3.882m, khớp. Không có
+bản chụp ngày này (xem "Mất thêm ngày 17/10") nên không chấm được lời khuyên.
+
+Fansipan 18/10, ảnh Timemark **08:08**: nắng, trời xanh, **biển mây trải kín bên dưới đỉnh** tới chân trời. Bản chụp
+(làm 17/10 19:23 VN, lead ~10h) `66/100 FLOWING · đồng thuận 67% · mặt mây 2.208m, ΔH +935m · ĐÁNG ĐI` ⇒ lời
+khuyên ĐÚNG (gfs 63 FOG mặt mây 3.172m · icon 66 FLOWING · ukmo 66 FLOWING). Đây cũng là ca trúng của mức
+"đáng đi ∧ điểm ≥ 65" ở một **ngày độc lập mới** (ngoài 13/10 và 02/10). Vệ tinh ghi CLEAR (4/5 khung không có số,
+khung 06:00 đỉnh mây 2.821m, dưới chỗ đứng) - báo cáo người nhìn đè nhãn này. Ảnh **10:03** cùng ngày thì sương
+đặc trùm kín sàn (MORNING, không chấm): biển mây dâng lên trùm đỉnh trong vòng 2 giờ, đúng kiểu 14/10 và đúng
+kinh nghiệm "tháng 10 thì đi sớm". Chuỗi Fansipan có ảnh người nhìn: lời khuyên đúng 7/8 ngày.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
