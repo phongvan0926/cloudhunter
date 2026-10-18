@@ -767,7 +767,7 @@ Tà Xùa 18/10 cùng sáng (bài Facebook "biển mây lớn nhất năm", đăn
 thung lũng, người đứng trên mặt mây. Bản chụp `45/100 STATIC · đồng thuận 100% · mặt mây 1.198m, ΔH +602m · ĐÁNG ĐI`
 ⇒ lời khuyên ĐÚNG (gfs 63 · icon 32 · ukmo 45, cả ba STATIC). Điểm 45 nên mức "≥ 65" sẽ BỎ SÓT ca này - dữ kiện
 ngược chiều cho mức đó. Vệ tinh ghi CLEAR, 5/5 khung không có số (lại kiểu sương thung lũng hồng ngoại không thấy,
-như 02/09); báo cáo người đi đè. Lần đầu app khuyên đi ĐÚNG ở Tà Xùa từ bản chụp làm trước.
+như 02/09); báo cáo người đi đè.
 
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
