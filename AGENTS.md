@@ -754,7 +754,8 @@ là lớp mây đang tan (duration SHORT), lúc 5-6h ra sao không ai biết.
 Fansipan 17/10 (bài #thoitietsapa, ~08:30): mù, gió to, 12 độ; vệ tinh FOGGED_IN đỉnh mây 3.882m, khớp. Không có
 bản chụp ngày này (xem "Mất thêm ngày 17/10") nên không chấm được lời khuyên.
 
-Fansipan 18/10, ảnh Timemark **08:08**: nắng, trời xanh, **biển mây trải kín bên dưới đỉnh** tới chân trời. Bản chụp
+Fansipan 18/10, bốn ảnh Timemark **06:09, 06:09, 07:09, 08:08**: bình minh quang rồi nắng, **biển mây trải kín bên
+dưới đỉnh** tới chân trời, nằm yên ít nhất 2 giờ (08:08 mới có vài dải mây vờn quanh chóp). Bản chụp
 (làm 17/10 19:23 VN, lead ~10h) `66/100 FLOWING · đồng thuận 67% · mặt mây 2.208m, ΔH +935m · ĐÁNG ĐI` ⇒ lời
 khuyên ĐÚNG (gfs 63 FOG mặt mây 3.172m · icon 66 FLOWING · ukmo 66 FLOWING). Đây cũng là ca trúng của mức
 "đáng đi ∧ điểm ≥ 65" ở một **ngày độc lập mới** (ngoài 13/10 và 02/10). Vệ tinh ghi CLEAR (4/5 khung không có số,
