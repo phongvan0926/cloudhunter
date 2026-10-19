@@ -123,6 +123,41 @@
   ]
  },
  {
+  "id": "2026-10-19-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-19",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "confidence": 0.5,
+  "firstPostAt": "2026-10-19T07:37:33+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-19T07:37:33+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời có biển mây gió nhẹ, nhiệt độ 11 độ",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-19T09:30:32+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời có nắng đẹp biển mây gió nhẹ, nhiệt độ 13 độ",
+    "stamps": [
+     "09:21 AT_EYE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-19T10:34:45+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời có nắng đẹp biển mây gió nhẹ, nhiệt độ 15 độ",
+    "stamps": [
+     "10:19 AT_EYE",
+     "10:20 AT_EYE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -398,6 +433,7 @@
   "seaLevel": "BELOW",
   "thickness": "SPARSE",
   "confidence": 0.5,
+  "needsReview": true,
   "firstPostAt": "2026-10-15T09:35:35+07:00",
   "evidence": [
    {
@@ -440,6 +476,25 @@
     "postedAt": "2026-10-17T08:42:47+07:00",
     "seaLevel": "NONE",
     "text": "thời tiết tà xùa hôm nay: ít mây + nắng đẹp + Thời tiết mát mẻ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-19-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-19",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.55,
+  "firstPostAt": "2026-10-19T08:04:48+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-19T08:04:48+07:00",
+    "seaLevel": "BELOW",
+    "text": "thời tiết tà xùa hôm nay: nắng đẹp + nhiều mây + Mát mẻ",
     "stamps": []
    }
   ]
