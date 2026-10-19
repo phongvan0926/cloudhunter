@@ -161,6 +161,39 @@ coi lớp mây liên tục kéo tới đó, trong khi RH 80% chưa phải mây. 
 trong ngày quang", mục 01-04/10). Nay chuỗi Tà Xùa cho thấy nó còn làm **BỎ SÓT** ngày có biển mây
 thật, chứ không chỉ báo nhầm.
 
+#### Quy tắc gắn nhãn v2 (19/10/2026, anh Phong chốt): ảnh có dấu giờ là bằng chứng chính
+
+Bộ thu cũ bỏ sót ảnh của 19 bài đăng dạng lưới, nay đã sửa (12 bài có ảnh trở lại). Quy tắc mới: ảnh
+có dấu giờ là chính, chữ người bán tour chỉ để tham khảo, và có dải mây mỏng dưới chân thì ghi BELOW
+kèm độ dày. So v1 và v2 với báo cáo người nhìn (`nhan-ngay.v1.json` là bản cũ, nằm ở bộ thu):
+
+```
+                 v1                v2                   người nhìn
+Fansipan 15/10   bỏ trống 0,4      AT_EYE 0,8 (06:16)   ABOVE ("~06:00 trùm một phần")   ← ranh giới, gần như cùng ý
+Fansipan 16/10   không có          ABOVE 0,9 (07:24)    ABOVE 07:25                       ✓
+Fansipan 18/10   bỏ trống 0,4      BELOW 0,5 (06:08)    BELOW 06:09                       ✓
+Fansipan 19/10   BELOW 0,5         BELOW 0,85 (06:21)   —
+Tà Xùa 11/10     NONE 0,45         BELOW MONG 0,5       NONE                              ✗ (cả hai đều cần người xem)
+khớp có/không    6/6               6/8
+```
+
+**Đọc bảng này cẩn thận: nó KHÔNG phải phép thử độc lập.** Ảnh Timemark Fansipan anh gửi (06:09,
+07:09, 08:08, 10:03 ngày 18/10) có đúng những mốc giờ như ảnh trong bài Facebook, nên rất có thể là
+cùng một bộ ảnh. Còn báo cáo Tà Xùa 11/10 là anh chép chữ của chính người đăng này. Vậy "khớp" ở đây
+chỉ đo hai người đọc cùng một bằng chứng có ra cùng kết luận hay không, chưa đo sự thật.
+
+Kết luận:
+- **Fansipan: v2 tốt hơn rõ.** Ảnh có giờ, nhãn cụ thể tới từng phút, độ tin cao. Ngày 19/10 thành ca
+  chấm được: BELOW lúc 06:21, độ tin 0,85, trong khi bản chụp ghi `41 DISSIPATING ΔH +447m`, không khuyên đi ⇒ **BỎ SÓT**.
+- **Tà Xùa: v2 làm mất lớp âm tính.** Ảnh của người đăng không có giờ và có thể là ảnh cũ dùng lại
+  (bộ gắn nhãn tự nghi ở ngày 11 và 16/10). Với quy tắc "có dải mỏng là BELOW", 21/22 ngày thành BELOW.
+  Chấm thêm cả nhãn yếu (`--kem-nhan-yeu`) thì nguồn Facebook có 11 cặp, cả 11 đều là ngày CÓ, 0 ngày KHÔNG.
+  Nguồn như vậy chỉ đo được bỏ sót, không đo được báo nhầm. Đa số ngày Tà Xùa giờ ở mức 0,5 nên không
+  được chấm, đúng như ngưỡng đã định.
+- Chấm sau v2 (độ tin ≥ 0,6): 4 cặp Facebook, gồm Tà Xùa 27/09 và 07/10, Fansipan 19/10 bỏ sót, và Tà Xùa
+  19/10 khuyên đi đúng (`39 FLUCTUATING ΔH +354m`). **Không sửa thuật toán** từ đợt này. Hướng sửa vẫn
+  là `estimateCloudTop` bám lưới mực áp suất, làm theo luật cổng.
+
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
 Lời anh, nguyên văn: *"Phiên CloudHunter có quyền sửa, nhưng nói họ kiểm tra thật kỹ và nếu cần gọi

@@ -1,34 +1,14 @@
 [
  {
-  "id": "2026-10-14-FANSIPAN-fb",
-  "spotKey": "FANSIPAN",
-  "locationName": "Fansipan (Nóc nhà Đông Dương)",
-  "date": "2026-10-14",
-  "source": "FB_AUTO",
-  "seaLevel": "NONE",
-  "confidence": 0.5,
-  "firstPostAt": "2026-10-14T10:58:22+07:00",
-  "evidence": [
-   {
-    "postedAt": "2026-10-14T10:58:22+07:00",
-    "seaLevel": "NONE",
-    "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 14 độ",
-    "stamps": []
-   }
-  ]
- },
- {
   "id": "2026-10-15-FANSIPAN-fb",
   "spotKey": "FANSIPAN",
   "locationName": "Fansipan (Nóc nhà Đông Dương)",
   "date": "2026-10-15",
   "source": "FB_AUTO",
-  "seaLevel": "UNKNOWN",
-  "thickness": "THIN",
+  "seaLevel": "AT_EYE",
   "timeOfDay": "DAWN",
   "observedAt": "06:16",
-  "confidence": 0.4,
-  "needsReview": true,
+  "confidence": 0.8,
   "firstPostAt": "2026-10-15T07:10:03+07:00",
   "evidence": [
    {
@@ -36,7 +16,8 @@
     "seaLevel": "AT_EYE",
     "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 6 độ",
     "stamps": [
-     "06:16 AT_EYE"
+     "06:16 AT_EYE",
+     "06:17 AT_EYE"
     ]
    },
    {
@@ -47,9 +28,44 @@
    },
    {
     "postedAt": "2026-10-15T09:22:45+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "Đỉnh Fansipan trời có nắng, gió nhẹ, nhiệt độ 13 độ",
-    "stamps": []
+    "stamps": [
+     "09:11 BELOW",
+     "09:12 BELOW"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-10-16-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-16",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:24",
+  "confidence": 0.9,
+  "firstPostAt": "2026-10-16T07:28:43+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-16T07:28:43+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời có gió nhẹ, mây nhiệt độ 11 độ",
+    "stamps": [
+     "07:24 ABOVE",
+     "07:25 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-16T08:53:55+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Hôm nay đỉnh Fansipan mù thì mời đoàn mình di chuyển đi Ô Quy Hồ săn mây",
+    "stamps": [
+     "08:24 ABOVE",
+     "08:25 ABOVE"
+    ]
    }
   ]
  },
@@ -60,20 +76,27 @@
   "date": "2026-10-17",
   "source": "FB_AUTO",
   "seaLevel": "ABOVE",
-  "confidence": 0.75,
+  "timeOfDay": "DAWN",
+  "observedAt": "07:16",
+  "confidence": 0.9,
   "firstPostAt": "2026-10-17T07:35:24+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-17T07:35:24+07:00",
     "seaLevel": "ABOVE",
     "text": "Đỉnh Fansipan trời mù, gió to nhiệt độ 10 độ",
-    "stamps": []
+    "stamps": [
+     "07:16 ABOVE",
+     "07:17 ABOVE"
+    ]
    },
    {
     "postedAt": "2026-10-17T09:02:37+07:00",
     "seaLevel": "ABOVE",
     "text": "Đỉnh Fansipan trời mù, gió to nhiệt độ 12 độ",
-    "stamps": []
+    "stamps": [
+     "08:30 ABOVE"
+    ]
    }
   ]
  },
@@ -83,18 +106,21 @@
   "locationName": "Fansipan (Nóc nhà Đông Dương)",
   "date": "2026-10-18",
   "source": "FB_AUTO",
-  "seaLevel": "UNKNOWN",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
   "timeOfDay": "DAWN",
-  "observedAt": "07:08",
-  "confidence": 0.4,
-  "needsReview": true,
+  "observedAt": "06:08",
+  "confidence": 0.5,
   "firstPostAt": "2026-10-18T07:14:37+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-18T07:14:37+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "Đỉnh Fansipan trời nắng nhiệt độ 7 độ",
-    "stamps": []
+    "stamps": [
+     "06:08 BELOW",
+     "06:09 BELOW"
+    ]
    },
    {
     "postedAt": "2026-10-18T08:24:32+07:00",
@@ -107,16 +133,20 @@
    },
    {
     "postedAt": "2026-10-18T08:49:31+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "Đỉnh Fansipan trời nắng nhiệt độ 18 độ",
-    "stamps": []
+    "stamps": [
+     "08:07 ABOVE",
+     "08:07 BELOW",
+     "08:08 BELOW"
+    ]
    },
    {
     "postedAt": "2026-10-18T10:54:15+07:00",
-    "seaLevel": "BELOW",
+    "seaLevel": "AT_EYE",
     "text": "Đỉnh Fansipan trời có biển mây gió nhẹ, nhiệt độ 18 độ",
     "stamps": [
-     "08:07 BELOW",
+     "08:07 AT_EYE",
      "10:03 ABOVE"
     ]
    }
@@ -129,18 +159,23 @@
   "date": "2026-10-19",
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
-  "confidence": 0.5,
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "06:21",
+  "confidence": 0.85,
   "firstPostAt": "2026-10-19T07:37:33+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-19T07:37:33+07:00",
     "seaLevel": "BELOW",
     "text": "Đỉnh Fansipan trời có biển mây gió nhẹ, nhiệt độ 11 độ",
-    "stamps": []
+    "stamps": [
+     "06:21 BELOW"
+    ]
    },
    {
     "postedAt": "2026-10-19T09:30:32+07:00",
-    "seaLevel": "BELOW",
+    "seaLevel": "AT_EYE",
     "text": "Đỉnh Fansipan trời có nắng đẹp biển mây gió nhẹ, nhiệt độ 13 độ",
     "stamps": [
      "09:21 AT_EYE"
@@ -148,7 +183,7 @@
    },
    {
     "postedAt": "2026-10-19T10:34:45+07:00",
-    "seaLevel": "BELOW",
+    "seaLevel": "AT_EYE",
     "text": "Đỉnh Fansipan trời có nắng đẹp biển mây gió nhẹ, nhiệt độ 15 độ",
     "stamps": [
      "10:19 AT_EYE",
@@ -183,14 +218,14 @@
   "date": "2026-09-28",
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
-  "thickness": "THICK",
-  "confidence": 0.75,
+  "thickness": "THIN",
+  "confidence": 0.5,
   "firstPostAt": "2026-09-28T10:41:04+07:00",
   "evidence": [
    {
     "postedAt": "2026-09-28T10:41:04+07:00",
     "seaLevel": "BELOW",
-    "text": "Thời tiết tà xùa hôm nay: nắng đẹp + siu phẩm chuổi 3 ngày biển mây liên tục",
+    "text": "nắng đẹp + siu phẩm chuổi 3 ngày biển mây liên tục",
     "stamps": []
    }
   ]
@@ -201,14 +236,14 @@
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
   "date": "2026-09-30",
   "source": "FB_AUTO",
-  "seaLevel": "NONE",
+  "seaLevel": "BELOW",
   "thickness": "SPARSE",
-  "confidence": 0.75,
+  "confidence": 0.5,
   "firstPostAt": "2026-09-30T07:55:37+07:00",
   "evidence": [
    {
     "postedAt": "2026-09-30T07:55:37+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "Thời tiết tà xùa hôm nay: nắng đẹp + nhưng ít mây",
     "stamps": []
    }
@@ -241,13 +276,13 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THICK",
-  "confidence": 0.85,
+  "confidence": 0.5,
   "firstPostAt": "2026-10-02T07:15:53+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-02T07:15:53+07:00",
     "seaLevel": "BELOW",
-    "text": "thời tiết tà xùa hôm nay: lại biển mây + nắng đẹp",
+    "text": "lại biển mây + nắng đẹp các bạn nha",
     "stamps": []
    }
   ]
@@ -260,7 +295,7 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THICK",
-  "confidence": 0.8,
+  "confidence": 0.75,
   "firstPostAt": "2026-10-03T07:06:40+07:00",
   "evidence": [
    {
@@ -279,13 +314,13 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THICK",
-  "confidence": 0.8,
+  "confidence": 0.75,
   "firstPostAt": "2026-10-04T07:53:04+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-04T07:53:04+07:00",
     "seaLevel": "BELOW",
-    "text": "thời tiết tà xùa hôm nay: Lại Biển mây + nắng đẹp nha các mom",
+    "text": "thời tiết tà xùa hôm nay: Lại Biển mây + nắng đẹp",
     "stamps": []
    }
   ]
@@ -298,31 +333,13 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THICK",
-  "confidence": 0.7,
+  "confidence": 0.5,
   "firstPostAt": "2026-10-05T08:30:12+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-05T08:30:12+07:00",
     "seaLevel": "BELOW",
-    "text": "Trời quang, không nóng + nhiều mây lắm nha các chế",
-    "stamps": []
-   }
-  ]
- },
- {
-  "id": "2026-10-06-TA_XUA_SON_LA-fb",
-  "spotKey": "TA_XUA_SON_LA",
-  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
-  "date": "2026-10-06",
-  "source": "FB_AUTO",
-  "seaLevel": "NONE",
-  "confidence": 0.45,
-  "firstPostAt": "2026-10-06T09:30:27+07:00",
-  "evidence": [
-   {
-    "postedAt": "2026-10-06T09:30:27+07:00",
-    "seaLevel": "NONE",
-    "text": "Không mưa, nhiều chỗ quang + có mây nhưng rất lạnh",
+    "text": "thời tiết tà xùa hôm nay: Trời quang, không nóng + nhiều mây lắm nha",
     "stamps": []
    }
   ]
@@ -335,7 +352,7 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THICK",
-  "confidence": 0.55,
+  "confidence": 0.7,
   "firstPostAt": "2026-10-07T08:16:58+07:00",
   "evidence": [
    {
@@ -354,7 +371,7 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THIN",
-  "confidence": 0.7,
+  "confidence": 0.5,
   "firstPostAt": "2026-10-08T07:13:52+07:00",
   "evidence": [
    {
@@ -372,14 +389,14 @@
   "date": "2026-10-10",
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
-  "thickness": "SPARSE",
+  "thickness": "THIN",
   "confidence": 0.5,
   "firstPostAt": "2026-10-10T11:25:29+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-10T11:25:29+07:00",
     "seaLevel": "BELOW",
-    "text": "Mát mẻ không nóng, hơi lạnh + nhiều chỗ có mây",
+    "text": "Mát mẻ không nóng, hơi lạnh + nhiều chỗ có mây thích hợp di chuyển checkin",
     "stamps": []
    }
   ]
@@ -390,15 +407,15 @@
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
   "date": "2026-10-11",
   "source": "FB_AUTO",
-  "seaLevel": "NONE",
-  "thickness": "SPARSE",
-  "confidence": 0.45,
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "confidence": 0.5,
   "needsReview": true,
   "firstPostAt": "2026-10-11T10:18:03+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-11T10:18:03+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "thời tiết tà xùa hôm nay: nắng đẹp + thời tiết mát mẻ + có mây nha",
     "stamps": []
    }
@@ -431,7 +448,7 @@
   "date": "2026-10-15",
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
-  "thickness": "SPARSE",
+  "thickness": "THIN",
   "confidence": 0.5,
   "needsReview": true,
   "firstPostAt": "2026-10-15T09:35:35+07:00",
@@ -451,7 +468,8 @@
   "date": "2026-10-16",
   "source": "FB_AUTO",
   "seaLevel": "NONE",
-  "confidence": 0.6,
+  "confidence": 0.45,
+  "needsReview": true,
   "firstPostAt": "2026-10-16T11:33:26+07:00",
   "evidence": [
    {
@@ -468,13 +486,14 @@
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
   "date": "2026-10-17",
   "source": "FB_AUTO",
-  "seaLevel": "NONE",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
   "confidence": 0.5,
   "firstPostAt": "2026-10-17T08:42:47+07:00",
   "evidence": [
    {
     "postedAt": "2026-10-17T08:42:47+07:00",
-    "seaLevel": "NONE",
+    "seaLevel": "BELOW",
     "text": "thời tiết tà xùa hôm nay: ít mây + nắng đẹp + Thời tiết mát mẻ",
     "stamps": []
    }
@@ -487,8 +506,8 @@
   "date": "2026-10-19",
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
-  "thickness": "SPARSE",
-  "confidence": 0.55,
+  "thickness": "THIN",
+  "confidence": 0.65,
   "firstPostAt": "2026-10-19T08:04:48+07:00",
   "evidence": [
    {
