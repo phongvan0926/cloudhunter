@@ -464,5 +464,17 @@
     "observedAt": "06:00-07:00",
     "source": "USER_RELAY",
     "note": "Anh Phong chuyển lời (20/10): sáng sớm 18/10 đỉnh Ngũ Chỉ Sơn có biển mây đẹp, khoảng 6-7h. Tin thuật lại, không có ảnh hay dấu giờ, không rõ độ dày/thời lượng. Vệ tinh cùng sáng SEA_CONFIRMED (đỉnh mây trung vị 2.677m, dưới chỗ đứng 2.858m) - khớp."
+  },
+  {
+    "id": "2026-10-18-lungcung",
+    "spotKey": "LUNG_CUNG",
+    "locationName": "Lùng Cúng",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-20T00:30:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm (cùng tin Pha Luông, Ngũ Chỉ Sơn 6-7h)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong chuyển lời (20/10): sáng 18/10 đỉnh Lùng Cúng cũng có biển mây đẹp. Tin thuật lại, không ảnh, không dấu giờ, không rõ độ dày/thời lượng. Bản chụp: 74/100 STATIC, đồng thuận 100%, mặt mây 2.209m, ΔH +704m, đáng đi. Vệ tinh SEA_MARGINAL, đỉnh mây 2.987-3.114m sát chỗ đứng 2.913m - mặt mây thật cao hơn app tính ~800m."
   }
 ]

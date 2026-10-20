@@ -892,6 +892,14 @@ tinh), nay có một ngày người đi xác nhận ở chính điểm đó - th
 trọng. Mức ≥ 65 bắt được Pha Luông nhưng bỏ sót Ngũ Chỉ Sơn (51). Cả hai cùng ngày 18/10 nên không thêm ngày độc lập
 (mức ≥ 65 vẫn 4 ngày: 02, 13, 18, 19/10). Riêng nguồn người đi, luật đáng đi nay 7 đúng · 8 bỏ sót · 1 nhầm.
 
+Anh báo thêm Lùng Cúng cùng sáng cũng có biển mây đẹp: bản chụp `74/100 STATIC · 100% · mặt mây 2.209m, ΔH +704m · ĐÁNG ĐI`
+⇒ đúng. **18/10 là sự kiện diện rộng thứ hai sau 13/10:** app khuyên đi 22/55 điểm, trong đó 11 điểm ≥ 65 (nhiều nhất
+kho, 13/10 có 9); vệ tinh thấy SEA ở 5 điểm (13/10: 10), nhưng 15 điểm bị mây cao che và 10 điểm FOGGED_IN nên vệ tinh
+đếm thiếu. Có người nhìn xác nhận 5 điểm (Fansipan, Tà Xùa, Pha Luông, Ngũ Chỉ Sơn, Lùng Cúng; Tà Xùa và Fansipan mỏng,
+tan nhanh), app khuyên đi cả 5. Cũng như 13/10, mặt mây app tính bám ~2.208m ở hầu hết đỉnh Hoàng Liên Sơn còn vệ tinh đo
+2.650-3.110m (Tà Chì Nhù 2.715m, Lùng Cúng ~3.067m): lời khuyên đúng, nhưng khoảng hở thật nhỏ hơn app khai 500-900m.
+Thêm bằng chứng cho lỗi bám lưới của `estimateCloudTop`.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh
