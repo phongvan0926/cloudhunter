@@ -193,6 +193,14 @@ Kết luận:
 - Chấm sau v2 (độ tin ≥ 0,6): 4 cặp Facebook, gồm Tà Xùa 27/09 và 07/10, Fansipan 19/10 bỏ sót, và Tà Xùa
   19/10 khuyên đi đúng (`39 FLUCTUATING ΔH +354m`). **Không sửa thuật toán** từ đợt này. Hướng sửa vẫn
   là `estimateCloudTop` bám lưới mực áp suất, làm theo luật cổng.
+- Nhãn 20/10 (bộ thu tự báo): **Fansipan BELOW, độ tin 0,85**, hai ảnh có dấu giờ 08:19 và 09:19 ("trời có nắng, biển mây
+  gió nhẹ"). Bản chụp `45/100 DISSIPATING · 33% · mặt mây 3.185m, ΔH −42m · không khuyên đi` ⇒ calibrate chấm **BỎ SÓT**
+  (08:19 nằm trong khung 04-09h nên tính là rạng sáng, theo đúng luật đã có). Nhưng vệ tinh 04:30-05:30 đo đỉnh mây
+  3.206-3.719m, TRÊN đỉnh 3.143m (FOGGED_IN, độ phát xạ 0,65 nên có thể là mây mỏng tầng trên), và nhãn của app là
+  "mây đang tan" với mặt mây ngang đỉnh. Nhiều khả năng lúc rạng sáng đỉnh còn trong mây, tới 08:19 mới tan xuống thành
+  biển mây, giống 15/10. Ảnh sau 8h không nói được lúc 5-6h ra sao, nên ca này giữ là bỏ sót trong bảng mà không dùng để
+  sửa gì. Tà Xùa 20/10 BELOW lưa thưa, độ tin 0,5, không chấm (app khuyên đi `42 STATIC ΔH +600m`). Nguồn Facebook nay
+  5 cặp: 1 đúng · 4 bỏ sót.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
