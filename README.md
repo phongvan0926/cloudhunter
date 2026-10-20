@@ -154,6 +154,7 @@ npx vite-node scripts/diff-rank.ts truoc.json sau.json   # đếm chính xác ba
 npx vite-node scripts/snapshot-forecast.ts [YYYY-MM-DD]               # tối hôm trước: chụp dự báo rạng sáng mai (để trống = mai)
 ~/.venvs/ch-verify/bin/python tools/verify_satellite.py 2026-08-24    # ~8h : nhãn thật từ vệ tinh
 npx vite-node scripts/import-fb-auto.ts <nhan-ngay.json>              # nhập nhãn Facebook tự động (khi bộ thu báo)
+npx vite-node scripts/regional-days.ts                                # bảng thời tiết vùng 05h, tìm ngày diện rộng tương tự
 npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app
 ```
 

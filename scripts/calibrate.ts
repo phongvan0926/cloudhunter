@@ -197,6 +197,47 @@ function main() {
   console.log(`    ca trúng đến từ ${strongDays.size} NGÀY độc lập: ${[...strongDays].sort().join(', ') || '—'}`
     + (strongDays.size < 5 ? '  ⚠️  <5 ngày — chưa đủ để đổi luật' : ''));
 
+  // NGÀY DIỆN RỘNG (20/10/2026) — chấm theo NGÀY, không theo điểm. Hai giả thuyết, ngưỡng chốt hôm đặt ra
+  // (từ 13, 18, 19/10, tức trong mẫu), từ 20/10 trở đi mới là phép thử thật:
+  //   A. bản chụp tối hôm trước có ≥ 4 đỉnh "đáng đi ∧ điểm ≥ 65"  ⇒ ngày nhiều đỉnh có biển mây
+  //   B. Sa Pa 05h (regional-days.json): gió 850 ≤ 3 km/h, mưa 0-6h ≤ 0,3mm, T−Td 2m ≤ 0,3°C, khí áp 24h không giảm
+  // Sự thật "diện rộng" = ≥ 4 điểm có biển mây (mọi nguồn, đã đè theo thứ bậc). Ngày nhìn được < 15 điểm
+  // mà chưa tới 4 điểm có thì là KHÔNG RÕ, không tính là âm tính. Đừng chỉnh các số này theo kết quả.
+  const WIDE_PEAKS = 4, WIDE_TRUTH = 4, WIDE_MIN_SEEN = 15, WIDE_IN_SAMPLE_END = '2026-10-19';
+  const regFile = `${DIR}/regional-days.json`;
+  const reg = existsSync(regFile) ? JSON.parse(readFileSync(regFile, 'utf-8')).days : {};
+  const predB = (d: string): boolean | null => {
+    const s = reg[d]?.SAPA;
+    return s ? s.wind850 <= 3 && s.rainNight <= 0.3 && s.dpd2m <= 0.3 && s.dmsl24 >= 0 : null;
+  };
+  const wideRows = Object.keys(fc).sort().map(d => {
+    const peaks = Object.values(fc[d]).filter((s: any) => s.score >= STRONG_SCORE
+      && isWorthGoing({ status: s.status, agreement: s.agreement, deltaH: s.deltaH ?? null })).length;
+    const day = rows.filter(r => r.date === d);
+    const sea = day.filter(r => r.truth === 'SEA').length;
+    const truth: boolean | null = sea >= WIDE_TRUTH ? true : day.length >= WIDE_MIN_SEEN ? false : null;
+    return { d, peaks, seen: day.length, sea, truth, a: peaks >= WIDE_PEAKS, b: predB(d) };
+  });
+  const score = (pick: (w: typeof wideRows[0]) => boolean | null, set: typeof wideRows) => {
+    let tp = 0, fp = 0, fn = 0, tn = 0;
+    for (const w of set) {
+      const p = pick(w);
+      if (w.truth === null || p === null) continue;
+      if (w.truth) p ? tp++ : fn++; else p ? fp++ : tn++;
+    }
+    return `báo đúng ${tp} · bỏ sót ${fn} · báo nhầm ${fp} · đúng không ${tn}`;
+  };
+  console.log(`\n  NGÀY DIỆN RỘNG (≥ ${WIDE_TRUTH} điểm có biển mây) — chấm theo ngày, CHƯA dùng trong app`);
+  for (const [lbl, set] of [['trong mẫu ≤ ' + WIDE_IN_SAMPLE_END, wideRows.filter(w => w.d <= WIDE_IN_SAMPLE_END)],
+    ['NGOÀI MẪU (phép thử thật)', wideRows.filter(w => w.d > WIDE_IN_SAMPLE_END)]] as const) {
+    console.log(`    ${lbl}:  A (≥ ${WIDE_PEAKS} đỉnh ≥ ${STRONG_SCORE}) ${score(w => w.a, set)}`);
+    console.log(`    ${' '.repeat(lbl.length)}   B (Sa Pa lặng, khô đêm, bão hoà)  ${score(w => w.b, set)}`);
+  }
+  const shown = wideRows.filter(w => w.a || w.b || w.truth || w.d > WIDE_IN_SAMPLE_END);
+  console.log(`    ngày đáng xem (A hoặc B bật, hoặc diện rộng thật, hoặc ngoài mẫu):`);
+  for (const w of shown) console.log(`      ${w.d}  A ${String(w.peaks).padStart(2)} đỉnh${w.a ? ' ✓' : '  '}  B ${w.b === null ? '—' : w.b ? '✓' : '·'}`
+    + `   thật: ${w.sea}/${w.seen} điểm có  ⇒ ${w.truth === null ? 'không rõ' : w.truth ? 'DIỆN RỘNG' : 'không'}`);
+
   // …và app THỰC SỰ đã khuyên gì lúc đó (cờ lưu trong bản chụp) — hai dòng lệch nhau nghĩa là
   // luật đã đổi kể từ lần chụp.
   const withFlag = rows.filter(r => r.worthGoing !== undefined);

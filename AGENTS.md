@@ -900,6 +900,35 @@ tan nhanh), app khuyên đi cả 5. Cũng như 13/10, mặt mây app tính bám 
 2.650-3.110m (Tà Chì Nhù 2.715m, Lùng Cúng ~3.067m): lời khuyên đúng, nhưng khoảng hở thật nhỏ hơn app khai 500-900m.
 Thêm bằng chứng cho lỗi bám lưới của `estimateCloudTop`.
 
+#### Ngày diện rộng: chấm theo NGÀY, tìm ngày tương tự (20/10/2026)
+
+Hai buổi sáng nhiều đỉnh có biển mây nhất kho là 13/10 và 18/10. Anh gợi ý tìm điều kiện thời tiết chung để
+nhận ra ngày tương tự. Đo bằng bảng thời tiết vùng 05h (ECMWF, lưu trữ historical-forecast) cho 4 cụm núi:
+
+- **Hai ngày thuộc hai kiểu khác hẳn.** 13/10 (Sa Pa): RH 700hPa 30%, gió 850 đông bắc, tầng 850-700 rất ổn
+  định, một tuần sau đợt lạnh 05-06/10 - kiểu khí chìm có nắp, sách vở. 18/10: RH 700 86%, gió nam yếu, mây
+  cao đêm 86%. Không có một "khuôn" thông số chung.
+- **Điểm chung cần mà chưa đủ:** gió 850 gần lặng, đêm không mưa, sát đất gần bão hoà, khí áp không giảm. Bộ
+  lọc này (giả thuyết B) bật 6 ngày trong mẫu, trúng 3; 14/10 giống 13/10 gần như mọi số vùng mà gần như không
+  có biển mây. Số vùng 25km không đủ tách ngày tốt khỏi ngày thường.
+- **Tín hiệu tốt hơn nằm sẵn trong bản chụp (giả thuyết A):** số đỉnh "đáng đi ∧ điểm ≥ 65" tối hôm trước. Ngày có
+  ≥ 4 đỉnh (13, 18, 19/10) đều là ngày diện rộng, 0 báo nhầm; nhưng bỏ sót 4 ngày diện rộng (06/09, 27/09, 03/10,
+  15/10) mà app chỉ cho 0-2 đỉnh.
+
+```
+trong mẫu (≤ 19/10)   A ≥4 đỉnh: đúng 3 · sót 4 · nhầm 0 · đúng không 19
+                      B Sa Pa:   đúng 3 · sót 4 · nhầm 3 · đúng không 16
+```
+
+Cả hai ngưỡng chốt ngày 20/10 từ chính các ngày trên, nên bảng là TRONG MẪU. `calibrate.ts` in mục "NGÀY DIỆN
+RỘNG" mỗi ngày, tách trong/ngoài mẫu; sự thật = ≥ 4 điểm có biển mây (mọi nguồn), ngày nhìn được < 15 điểm thì
+"không rõ". Ngày ngoài mẫu đầu tiên: 20/10, bản chụp có 5 đỉnh ⇒ A dự đoán diện rộng.
+`scripts/regional-days.ts` ghi bảng vùng vào `data/observations/regional-days.json` (job vệ tinh chạy mỗi ngày,
+chỉ thêm ngày thiếu). Lưu ý: số này gần với phân tích, không phải thứ app thấy tối hôm trước; muốn dùng để dự báo
+phải kiểm lại trên dự báo.
+**Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
+rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh

@@ -139,6 +139,9 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Bảng thời tiết vùng 05h (tìm ngày tương tự ngày diện rộng)
+        # chỉ thêm ngày còn thiếu; lỗi mạng thì bỏ qua, mai chạy lại tự bù
+        run: npx --no-install vite-node scripts/regional-days.ts || echo "::warning::regional-days lỗi, mai tự bù"
       - name: Bảng hiệu chuẩn (đọc trong log của job)
         run: npx --no-install vite-node scripts/calibrate.ts || true
       - name: Commit nhãn vệ tinh
