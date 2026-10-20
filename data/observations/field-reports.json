@@ -476,5 +476,17 @@
     "observedAt": "sáng sớm (cùng tin Pha Luông, Ngũ Chỉ Sơn 6-7h)",
     "source": "USER_RELAY",
     "note": "Anh Phong chuyển lời (20/10): sáng 18/10 đỉnh Lùng Cúng cũng có biển mây đẹp. Tin thuật lại, không ảnh, không dấu giờ, không rõ độ dày/thời lượng. Bản chụp: 74/100 STATIC, đồng thuận 100%, mặt mây 2.209m, ΔH +704m, đáng đi. Vệ tinh SEA_MARGINAL, đỉnh mây 2.987-3.114m sát chỗ đứng 2.913m - mặt mây thật cao hơn app tính ~800m."
+  },
+  {
+    "id": "2026-10-18-phusaphin",
+    "spotKey": "PHU_SA_PHIN",
+    "locationName": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-20T12:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm (không rõ giờ cụ thể)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong thu thập thêm (20/10): sáng 18/10 đỉnh Phu Sa Phìn 2.868m có biển mây đẹp. Tin thuật lại, không ảnh, không dấu giờ, không rõ độ dày/thời lượng. Bản chụp: 74/100 STATIC, đồng thuận 100% (cả 3 mô hình STATIC), mặt mây 2.058m, ΔH +807m, đáng đi ⇒ ĐÚNG. Vệ tinh ghi CLEAR nhưng khung 04:30 đo được đỉnh mây 2.726m, dưới chỗ đứng 2.865m, các khung sau không có số - người đi đè. Mặt mây thật nhiều khả năng ~2.700m, cao hơn app tính ~650m."
   }
 ]

@@ -895,8 +895,9 @@ trọng. Mức ≥ 65 bắt được Pha Luông nhưng bỏ sót Ngũ Chỉ Sơn
 Anh báo thêm Lùng Cúng cùng sáng cũng có biển mây đẹp: bản chụp `74/100 STATIC · 100% · mặt mây 2.209m, ΔH +704m · ĐÁNG ĐI`
 ⇒ đúng. **18/10 là sự kiện diện rộng thứ hai sau 13/10:** app khuyên đi 22/55 điểm, trong đó 11 điểm ≥ 65 (nhiều nhất
 kho, 13/10 có 9); vệ tinh thấy SEA ở 5 điểm (13/10: 10), nhưng 15 điểm bị mây cao che và 10 điểm FOGGED_IN nên vệ tinh
-đếm thiếu. Có người nhìn xác nhận 5 điểm (Fansipan, Tà Xùa, Pha Luông, Ngũ Chỉ Sơn, Lùng Cúng; Tà Xùa và Fansipan mỏng,
-tan nhanh), app khuyên đi cả 5. Cũng như 13/10, mặt mây app tính bám ~2.208m ở hầu hết đỉnh Hoàng Liên Sơn còn vệ tinh đo
+đếm thiếu. Có người nhìn xác nhận 6 điểm (Fansipan, Tà Xùa, Pha Luông, Ngũ Chỉ Sơn, Lùng Cúng, Phu Sa Phìn; Tà Xùa và Fansipan
+mỏng, tan nhanh), app khuyên đi cả 6. Phu Sa Phìn (báo thêm 20/10): `74/100 STATIC · 100% · mặt mây 2.058m, ΔH +807m`;
+vệ tinh ghi CLEAR nhưng khung 04:30 đo đỉnh mây 2.726m, dưới chỗ đứng 2.865m. Cũng như 13/10, mặt mây app tính bám ~2.208m ở hầu hết đỉnh Hoàng Liên Sơn còn vệ tinh đo
 2.650-3.110m (Tà Chì Nhù 2.715m, Lùng Cúng ~3.067m): lời khuyên đúng, nhưng khoảng hở thật nhỏ hơn app khai 500-900m.
 Thêm bằng chứng cho lỗi bám lưới của `estimateCloudTop`.
 
