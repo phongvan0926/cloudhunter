@@ -883,6 +883,15 @@ nhanh tan** - tôi đọc ảnh thành "dày", và bài Facebook gọi là "bi�
 66 điểm ở Fansipan hứa hẹn hơn thực tế; app chưa có cách nói "có nhưng mỏng, tan sớm". Bài học thứ tư về đọc ảnh:
 ảnh chọn lọc trên mạng xã hội phóng đại độ dày, và một ảnh không cho biết mây giữ được bao lâu.
 
+Cũng sáng 18/10, anh chuyển lời (20/10, không ảnh, không dấu giờ): **Pha Luông và Ngũ Chỉ Sơn có biển mây đẹp
+khoảng 6-7h.** Bản chụp đã khuyên đi cả hai: Pha Luông `72/100 FLUCTUATING · 100% · mặt mây 1.750m, ΔH +130m`,
+Ngũ Chỉ Sơn `51/100 FLOWING · 67% · mặt mây 2.208m, ΔH +650m` ⇒ hai lời khuyên ĐÚNG. Vệ tinh: Ngũ Chỉ Sơn
+SEA_CONFIRMED (đỉnh mây 2.677m, dưới chỗ đứng 2.858m) khớp; Pha Luông CLEAR 5/5 khung không có số, lại là sương
+thung lũng hồng ngoại không thấy. Đáng ghi: Pha Luông từng nằm trong nhóm "báo nhầm" của mức ≥ 65 (chấm bằng vệ
+tinh), nay có một ngày người đi xác nhận ở chính điểm đó - thêm lý do đọc "nhầm" ở núi thấp bằng vệ tinh cho thận
+trọng. Mức ≥ 65 bắt được Pha Luông nhưng bỏ sót Ngũ Chỉ Sơn (51). Cả hai cùng ngày 18/10 nên không thêm ngày độc lập
+(mức ≥ 65 vẫn 4 ngày: 02, 13, 18, 19/10). Riêng nguồn người đi, luật đáng đi nay 7 đúng · 8 bỏ sót · 1 nhầm.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh

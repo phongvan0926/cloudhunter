@@ -440,5 +440,29 @@
     "source": "SOCIAL_POST",
     "note": "Bài Facebook anh chuyển lại: 'ĐANG VIRAL - TÀ XÙA SÁNG NAY - BIỂN MÂY LỚN NHẤT NĂM', ảnh Hoàng Thu Thuỷ, 7+ ảnh. Đăng khoảng 09:30 ngày 18/10 (lúc 22:33 hiện '13h'). Ảnh: nắng, trời xanh, biển mây trắng dày phủ kín thung lũng bên dưới tới các dãy núi xa, người đứng trên đồi cỏ/sàn gỗ có hoa, cao hơn mặt mây. Ảnh không có dấu giờ ⇒ để trống timeOfDay như các bài MXH Tà Xùa trước (03, 04, 11/10); chỉ biết chụp trước ~09:30. Không rõ đúng chỗ đứng nào trong vùng Tà Xùa. | Anh Phong nhận định (18/10 22:44): biển mây Fansipan và Tà Xùa sáng nay GIỐNG NHAU - lưa thưa, mỏng, không đậm đặc, nhanh tan. Đính chính cách tả 'dày' ở trên (đó là tôi đọc ảnh) ⇒ duration SHORT; vẫn tính là CÓ biển mây dưới chân.",
     "duration": "SHORT"
+  },
+  {
+    "id": "2026-10-18-phaluong",
+    "spotKey": "PHA_LUONG",
+    "locationName": "Đỉnh Pha Luông",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-20T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:00-07:00",
+    "source": "USER_RELAY",
+    "note": "Anh Phong chuyển lời (20/10): sáng sớm 18/10 đỉnh Pha Luông có biển mây đẹp, khoảng 6-7h. Tin thuật lại, không có ảnh hay dấu giờ, không rõ độ dày/thời lượng. Vệ tinh cùng sáng CLEAR 5/5 khung không có số (lại kiểu sương thung lũng hồng ngoại không thấy); báo cáo người đi đè."
+  },
+  {
+    "id": "2026-10-18-nguchison",
+    "spotKey": "NGU_CHI_SON",
+    "locationName": "Ngũ Chỉ Sơn",
+    "date": "2026-10-18",
+    "reportedAt": "2026-10-20T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:00-07:00",
+    "source": "USER_RELAY",
+    "note": "Anh Phong chuyển lời (20/10): sáng sớm 18/10 đỉnh Ngũ Chỉ Sơn có biển mây đẹp, khoảng 6-7h. Tin thuật lại, không có ảnh hay dấu giờ, không rõ độ dày/thời lượng. Vệ tinh cùng sáng SEA_CONFIRMED (đỉnh mây trung vị 2.677m, dưới chỗ đứng 2.858m) - khớp."
   }
 ]
