@@ -935,6 +935,15 @@ RỘNG" mỗi ngày, tách trong/ngoài mẫu; sự thật = ≥ 4 điểm có b
 `scripts/regional-days.ts` ghi bảng vùng vào `data/observations/regional-days.json` (job vệ tinh chạy mỗi ngày,
 chỉ thêm ngày thiếu). Lưu ý: số này gần với phân tích, không phải thứ app thấy tối hôm trước; muốn dùng để dự báo
 phải kiểm lại trên dự báo.
+**Kết quả 20/10 (ngày ngoài mẫu đầu tiên): A đoán ĐÚNG ngày, nhưng SAI chỗ.** Có 11/44 điểm có biển mây: vệ tinh thấy 9,
+anh báo thêm Tà Xùa và Ky Quan San (sáng sớm). Nhưng 5 đỉnh ≥ 65 mà app nêu tên (A Pa Chải 80, Pù Luông 80, Kim Bon 74, Pha
+Luông 72, Chiêu Lầu Thi 69) không có đỉnh nào được vệ tinh xác nhận: 3 đỉnh CLEAR là núi thấp, nơi vệ tinh hay mù với sương
+thung lũng, nên chưa chắc là nhầm. Các điểm có biển mây thật lại là nhóm đỉnh cao Hoàng Liên Sơn (Lảo Thẩn, Nhìu Cồ San, Ngũ
+Chỉ Sơn, Cú Nhù San, Putaleng, Tả Liên Sơn, Ky Quan San), đỉnh mây vệ tinh đo 2.610-3.210m, và app chỉ cho 18-49 điểm ở nhóm này.
+Ky Quan San (`40 FOG`, ΔH +1.361m) và Nhìu Cồ San (`43 FOG`, ΔH +333m) **bỏ sót kiểu tự mâu thuẫn**: mặt mây app tính nằm dưới
+chân, nhãn vẫn là "chìm trong mây". Nhiều khả năng mặt mây thật nằm sát đỉnh, cách 100-250m, nên RH nội suy tại chỗ đứng cao
+và cổng `observerInCloud` bật, trong khi `estimateCloudTop` lại đặt mặt mây quá thấp. Hai lỗi này cùng một gốc: mặt mây bám
+lưới mực áp suất. Vì vậy dòng "đêm nay nhiều đỉnh đẹp" nếu đưa lên app chỉ được nói về NGÀY, không được kèm danh sách đỉnh.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 

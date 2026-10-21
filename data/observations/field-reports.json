@@ -488,5 +488,29 @@
     "observedAt": "sáng sớm (không rõ giờ cụ thể)",
     "source": "USER_RELAY",
     "note": "Anh Phong thu thập thêm (20/10): sáng 18/10 đỉnh Phu Sa Phìn 2.868m có biển mây đẹp. Tin thuật lại, không ảnh, không dấu giờ, không rõ độ dày/thời lượng. Bản chụp: 74/100 STATIC, đồng thuận 100% (cả 3 mô hình STATIC), mặt mây 2.058m, ΔH +807m, đáng đi ⇒ ĐÚNG. Vệ tinh ghi CLEAR nhưng khung 04:30 đo được đỉnh mây 2.726m, dưới chỗ đứng 2.865m, các khung sau không có số - người đi đè. Mặt mây thật nhiều khả năng ~2.700m, cao hơn app tính ~650m."
+  },
+  {
+    "id": "2026-10-20-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-10-20",
+    "reportedAt": "2026-10-21T08:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm (không rõ giờ cụ thể)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (21/10): sáng sớm 20/10 Tà Xùa có biển mây. Tin thuật lại, không ảnh, không dấu giờ, không rõ độ dày/thời lượng. Bản chụp: 42/100 STATIC, đồng thuận 100% (gfs 44 FLUCTUATING mặt mây 1.682m · icon 42 STATIC 1.200m · ukmo 37 STATIC 1.197m), mặt mây 1.200m, ΔH +600m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số (sương thung lũng hồng ngoại không thấy) - người đi đè. Nhãn FB_AUTO cùng ngày: BELOW lưa thưa, độ tin 0,5."
+  },
+  {
+    "id": "2026-10-20-kyquansan",
+    "spotKey": "KY_QUAN_SAN",
+    "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "date": "2026-10-20",
+    "reportedAt": "2026-10-21T08:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm (không rõ giờ cụ thể)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (21/10): sáng sớm 20/10 Ky Quan San có biển mây. Tin thuật lại, không ảnh, không dấu giờ. Bản chụp: 40/100 FOG, đồng thuận 67% (gfs 49 FOG mặt mây 1.679m · icon 28 FOG 1.691m · ukmo 40 FLOWING 2.209m), mặt mây 1.685m, ΔH +1.361m, KHÔNG khuyên đi ⇒ BỎ SÓT. App tự mâu thuẫn: hai mô hình đặt mặt mây thấp hơn chỗ đứng ~1.360m mà vẫn gắn FOG - nhiều khả năng do cổng observerInCloud (RH nội suy 800↔700hPa tại 3.046m), chưa kiểm được vì bản chụp không lưu mặt cắt. Vệ tinh SEA_MARGINAL, đỉnh mây 2.840-2.996m (04:30-05:00), dưới chỗ đứng 3.046m - khớp người đi; mặt mây thật cao hơn app tính ~1.200m."
   }
 ]
