@@ -512,5 +512,18 @@
     "observedAt": "sáng sớm (không rõ giờ cụ thể)",
     "source": "USER_RELAY",
     "note": "Anh Phong báo (21/10): sáng sớm 20/10 Ky Quan San có biển mây. Tin thuật lại, không ảnh, không dấu giờ. Bản chụp: 40/100 FOG, đồng thuận 67% (gfs 49 FOG mặt mây 1.679m · icon 28 FOG 1.691m · ukmo 40 FLOWING 2.209m), mặt mây 1.685m, ΔH +1.361m, KHÔNG khuyên đi ⇒ BỎ SÓT. App tự mâu thuẫn: hai mô hình đặt mặt mây thấp hơn chỗ đứng ~1.360m mà vẫn gắn FOG - nhiều khả năng do cổng observerInCloud (RH nội suy 800↔700hPa tại 3.046m), chưa kiểm được vì bản chụp không lưu mặt cắt. Vệ tinh SEA_MARGINAL, đỉnh mây 2.840-2.996m (04:30-05:00), dưới chỗ đứng 3.046m - khớp người đi; mặt mây thật cao hơn app tính ~1.200m."
+  },
+  {
+    "id": "2026-10-20-phaluong",
+    "spotKey": "PHA_LUONG",
+    "locationName": "Đỉnh Pha Luông",
+    "date": "2026-10-20",
+    "reportedAt": "2026-10-21T15:45:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "khoảng 6-8h (ước theo góc mặt trời trong ảnh, không có dấu giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình một bài đăng nhóm leo núi trên Facebook (đăng tối 20/10): ảnh mặt trời vừa nhô khỏi sống núi, biển mây trắng dày phủ kín bên dưới tới chân trời, trời xanh không mây bên trên. Giờ ước theo góc mặt trời, không có dấu giờ. Bản chụp: 72/100 FLUCTUATING, đồng thuận 100% (gfs 85 · icon 68 · ukmo 72, cả ba FLUCTUATING), mặt mây 1.763m, ΔH +117m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số - người đi đè (lần thứ hai ở Pha Luông, sau 18/10). Đây là đỉnh duy nhất trong 5 đỉnh ≥65 của ngày 20/10 có người xác nhận."
   }
 ]

@@ -938,12 +938,15 @@ phải kiểm lại trên dự báo.
 **Kết quả 20/10 (ngày ngoài mẫu đầu tiên): A đoán ĐÚNG ngày, nhưng SAI chỗ.** Có 11/44 điểm có biển mây: vệ tinh thấy 9,
 anh báo thêm Tà Xùa và Ky Quan San (sáng sớm). Nhưng 5 đỉnh ≥ 65 mà app nêu tên (A Pa Chải 80, Pù Luông 80, Kim Bon 74, Pha
 Luông 72, Chiêu Lầu Thi 69) không có đỉnh nào được vệ tinh xác nhận: 3 đỉnh CLEAR là núi thấp, nơi vệ tinh hay mù với sương
-thung lũng, nên chưa chắc là nhầm. Các điểm có biển mây thật lại là nhóm đỉnh cao Hoàng Liên Sơn (Lảo Thẩn, Nhìu Cồ San, Ngũ
+thung lũng, nên chưa chắc là nhầm. Đúng vậy: anh gửi ảnh Pha Luông sáng 20/10 (bài nhóm leo núi, ~6-8h ước theo mặt trời), biển
+mây dày phủ kín bên dưới - app `72 FLUCTUATING · 100% · ΔH +117m` khuyên đi ĐÚNG, vệ tinh CLEAR lần thứ hai ở chính đỉnh này. Các điểm có biển mây thật lại là nhóm đỉnh cao Hoàng Liên Sơn (Lảo Thẩn, Nhìu Cồ San, Ngũ
 Chỉ Sơn, Cú Nhù San, Putaleng, Tả Liên Sơn, Ky Quan San), đỉnh mây vệ tinh đo 2.610-3.210m, và app chỉ cho 18-49 điểm ở nhóm này.
 Ky Quan San (`40 FOG`, ΔH +1.361m) và Nhìu Cồ San (`43 FOG`, ΔH +333m) **bỏ sót kiểu tự mâu thuẫn**: mặt mây app tính nằm dưới
 chân, nhãn vẫn là "chìm trong mây". Nhiều khả năng mặt mây thật nằm sát đỉnh, cách 100-250m, nên RH nội suy tại chỗ đứng cao
 và cổng `observerInCloud` bật, trong khi `estimateCloudTop` lại đặt mặt mây quá thấp. Hai lỗi này cùng một gốc: mặt mây bám
 lưới mực áp suất. Vì vậy dòng "đêm nay nhiều đỉnh đẹp" nếu đưa lên app chỉ được nói về NGÀY, không được kèm danh sách đỉnh.
+21/10 (ngoài mẫu thứ hai): A bật với 6 đỉnh, vệ tinh thấy 8/37 điểm có biển mây ⇒ đúng ngày lần thứ hai. Lần này 3/6 đỉnh được
+vệ tinh xác nhận (Sa Mu 76, Lùng Cúng 70, Phu Sa Phìn 69); Pù Luông và Ba Vì CLEAR (núi thấp, vệ tinh hay mù), Kim Bon FOGGED_IN.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
