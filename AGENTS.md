@@ -947,6 +947,9 @@ và cổng `observerInCloud` bật, trong khi `estimateCloudTop` lại đặt m�
 lưới mực áp suất. Vì vậy dòng "đêm nay nhiều đỉnh đẹp" nếu đưa lên app chỉ được nói về NGÀY, không được kèm danh sách đỉnh.
 21/10 (ngoài mẫu thứ hai): A bật với 6 đỉnh, vệ tinh thấy 8/37 điểm có biển mây ⇒ đúng ngày lần thứ hai. Lần này 3/6 đỉnh được
 vệ tinh xác nhận (Sa Mu 76, Lùng Cúng 70, Phu Sa Phìn 69); Pù Luông và Ba Vì CLEAR (núi thấp, vệ tinh hay mù), Kim Bon FOGGED_IN.
+Ba Vì 21/10 (ảnh bài trang địa phương, đăng ~09:45, không rõ giờ chụp): mây tích rời, mỏng, tan nhanh, ngang và dưới đỉnh đền
+Bác. App `69 STATIC ΔH +555m` khuyên đi. Ghi MORNING nên không chấm, và ngày đó vẫn chấm bằng nhãn vệ tinh CLEAR (thành một báo
+nhầm). Có người thấy mây buổi sáng nên CLEAR ở đây đáng ngờ, nhưng không đổi luật vì một ca.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 

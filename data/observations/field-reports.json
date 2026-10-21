@@ -525,5 +525,19 @@
     "observedAt": "khoảng 6-8h (ước theo góc mặt trời trong ảnh, không có dấu giờ)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh chụp màn hình một bài đăng nhóm leo núi trên Facebook (đăng tối 20/10): ảnh mặt trời vừa nhô khỏi sống núi, biển mây trắng dày phủ kín bên dưới tới chân trời, trời xanh không mây bên trên. Giờ ước theo góc mặt trời, không có dấu giờ. Bản chụp: 72/100 FLUCTUATING, đồng thuận 100% (gfs 85 · icon 68 · ukmo 72, cả ba FLUCTUATING), mặt mây 1.763m, ΔH +117m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số - người đi đè (lần thứ hai ở Pha Luông, sau 18/10). Đây là đỉnh duy nhất trong 5 đỉnh ≥65 của ngày 20/10 có người xác nhận."
+  },
+  {
+    "id": "2026-10-21-bavi",
+    "spotKey": "BA_VI",
+    "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "date": "2026-10-21",
+    "reportedAt": "2026-10-21T15:50:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "SPARSE",
+    "duration": "SHORT",
+    "timeOfDay": "MORNING",
+    "observedAt": "không rõ, trước ~09:45 (giờ đăng bài); nắng trắng, mặt trời đã lên cao trong ảnh",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình một bài trang địa phương trên Facebook (đăng ~09:45 ngày 21/10, \"biển mây nhìn từ đền Bác trên đỉnh Ba Vì sáng nay\"): mây tích trắng rời rạc ngang và dưới tầm mắt, nhìn xuyên xuống thấy rừng bên dưới. Anh đánh giá (không có mặt ở đó): mây không dày, không đặc, tan rất nhanh. Giờ chụp không rõ, ánh sáng cho thấy đã khá lâu sau bình minh ⇒ ghi MORNING, KHÔNG chấm rạng sáng (đổi sang DAWN nếu biết ảnh chụp lúc 5-7h). Bản chụp: 69/100 STATIC, đồng thuận 100% (gfs 68 · icon 78 STATIC · ukmo 69 FLOWING), mặt mây 741m, ΔH +555m, đáng đi. Vệ tinh CLEAR (05:00 đỉnh mây 2.251m, 06:00 1.531m, ba khung không có số). Kiểu mây trong ảnh là mây tích rời nâng lên sau bình minh, không phải thảm mây phẳng app mô tả."
   }
 ]
