@@ -950,6 +950,9 @@ vệ tinh xác nhận (Sa Mu 76, Lùng Cúng 70, Phu Sa Phìn 69); Pù Luông v�
 Ba Vì 21/10 (ảnh bài trang địa phương, đăng ~09:45, không rõ giờ chụp): mây tích rời, mỏng, tan nhanh, ngang và dưới đỉnh đền
 Bác. App `69 STATIC ΔH +555m` khuyên đi. Ghi MORNING nên không chấm, và ngày đó vẫn chấm bằng nhãn vệ tinh CLEAR (thành một báo
 nhầm). Có người thấy mây buổi sáng nên CLEAR ở đây đáng ngờ, nhưng không đổi luật vì một ca.
+Ảnh có khung thông số anh gửi thêm hoá ra là của **20/10 lúc 08:06** (không phải 21/10): mây rời, mỏng, đang bốc lên ngang và dưới
+đường lên đỉnh. Bản chụp 20/10 `55 STATIC · 67% · ΔH +599m` khuyên đi ⇒ ĐÚNG, vệ tinh CLEAR - người đi đè. Toạ độ in trong khung
+ảnh là vùng UAE, nên khung có thể do ứng dụng ghép; giờ khớp với độ cao mặt trời nên vẫn dùng. 20/10 nay 13 điểm có biển mây.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
