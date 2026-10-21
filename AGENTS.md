@@ -201,6 +201,15 @@ Kết luận:
   biển mây, giống 15/10. Ảnh sau 8h không nói được lúc 5-6h ra sao, nên ca này giữ là bỏ sót trong bảng mà không dùng để
   sửa gì. Tà Xùa 20/10 BELOW lưa thưa, độ tin 0,5, không chấm (app khuyên đi `42 STATIC ΔH +600m`). Nguồn Facebook nay
   5 cặp: 1 đúng · 4 bỏ sót.
+- Nhãn 21/10: **Fansipan BELOW mỏng, độ tin 0,85**, ảnh có dấu giờ 05:56-05:58 và 07:37 ("trời quang, gió nhẹ, 9 độ"). Lần
+  này ảnh nằm đúng lúc rạng sáng. Bản chụp `69/100 RAIN · 33%` (gfs 69 FOG · icon 73 ROLLING · ukmo 67 RAIN), chia ba kết luận 1-1-1
+  nên luật hoà phiếu chọn nhãn nặng nhất. Cả ba mô hình đặt mặt mây ở 3.182-3.194m, chỉ cao hơn chỗ đứng 40-50m ⇒ **BỎ SÓT**. Vệ
+  tinh FOGGED_IN (04:30-05:30 đỉnh mây 3.090-3.677m), khung 05:00 thì đỉnh mây dưới chỗ đứng; ảnh người tại chỗ đè.
+  **Ba ngày liền Fansipan bỏ sót theo cùng một kiểu** (19/10 `41 DISSIPATING`, 20/10 `45 DISSIPATING ΔH −42m`, 21/10 `69 RAIN ΔH −51m`).
+  Mặt mây app tính nằm ngay ngang đỉnh, trong khi thật ra biển mây mỏng nằm dưới chân. Đây là mặt ngược của lỗi bám lưới: ở các
+  đỉnh 2.900-3.050m mặt mây bị đặt quá thấp, còn ở Fansipan nó bị kéo lên mực 700hPa (~3.100m) + đệm. Ba ngày này là cùng một
+  điểm và cùng một đợt thời tiết, nên chúng là bằng chứng cho bản sửa `estimateCloudTop` theo luật cổng, không phải lý do để
+  chỉnh riêng Fansipan. Nguồn Facebook nay 6 cặp: 1 đúng · 5 bỏ sót.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
