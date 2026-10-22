@@ -210,6 +210,11 @@ Kết luận:
   đỉnh 2.900-3.050m mặt mây bị đặt quá thấp, còn ở Fansipan nó bị kéo lên mực 700hPa (~3.100m) + đệm. Ba ngày này là cùng một
   điểm và cùng một đợt thời tiết, nên chúng là bằng chứng cho bản sửa `estimateCloudTop` theo luật cổng, không phải lý do để
   chỉnh riêng Fansipan. Nguồn Facebook nay 6 cặp: 1 đúng · 5 bỏ sót.
+- Nhãn 22/10: **Fansipan KHONG_RO, cần người xem** (không chấm). Ba bài có dấu giờ kể một diễn biến: 07:49 và 08:38 đỉnh còn trong
+  sương ("trời sương, gió nhẹ, 12 độ"), 09:38-09:40 nắng, biển mây mỏng bên dưới. Bản chụp `24/100 DISSIPATING · 67% · mặt mây 3.186m,
+  ΔH −43m · không khuyên đi` khớp đúng diễn biến đó ("mây đang tan"). Vệ tinh lại ghi SEA_CONFIRMED (04:30-05:30 đỉnh mây 2.857-3.083m,
+  dưới chỗ đứng; 06:00 lên 4.137m), nên calibrate đang chấm ngày này là BỎ SÓT theo vệ tinh. Ảnh 07:49 nói ngược vệ tinh, nhưng theo
+  luật thì nhãn cần người xem không tự chọn hộ, và app không khuyên đi, điểm dưới 65 nên không thuộc loại phải hỏi anh. Giữ nguyên.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
@@ -962,6 +967,9 @@ Bác. App `69 STATIC ΔH +555m` khuyên đi. Lúc đầu ghi MORNING vì không 
 Ảnh có khung thông số anh gửi thêm hoá ra là của **20/10 lúc 08:06** (không phải 21/10): mây rời, mỏng, đang bốc lên ngang và dưới
 đường lên đỉnh. Bản chụp 20/10 `55 STATIC · 67% · ΔH +599m` khuyên đi ⇒ ĐÚNG, vệ tinh CLEAR - người đi đè. Toạ độ in trong khung
 ảnh là vùng UAE, nên khung có thể do ứng dụng ghép; giờ khớp với độ cao mặt trời nên vẫn dùng. 20/10 nay 13 điểm có biển mây.
+22/10 (ngoài mẫu thứ ba): **A trượt lần đầu.** Bản chụp chỉ có 1 đỉnh ≥ 65 nên A đoán ngày thường, mà vệ tinh thấy 6/40 điểm có biển mây
+(Fansipan, Phu Sa Phìn, Chiêu Lầu Thi, Tây Côn Lĩnh, Sa Mu, Tà Xùa). Bỏ Fansipan (ảnh 07:49 còn trong sương) thì vẫn 5, vẫn diện rộng theo
+định nghĩa đã chốt. Ngoài mẫu A nay đúng 2 · bỏ sót 1 · nhầm 0. Không đổi ngưỡng A hay ngưỡng "diện rộng" theo kết quả này.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
