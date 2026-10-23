@@ -215,6 +215,14 @@ Kết luận:
   ΔH −43m · không khuyên đi` khớp đúng diễn biến đó ("mây đang tan"). Vệ tinh lại ghi SEA_CONFIRMED (04:30-05:30 đỉnh mây 2.857-3.083m,
   dưới chỗ đứng; 06:00 lên 4.137m), nên calibrate đang chấm ngày này là BỎ SÓT theo vệ tinh. Ảnh 07:49 nói ngược vệ tinh, nhưng theo
   luật thì nhãn cần người xem không tự chọn hộ, và app không khuyên đi, điểm dưới 65 nên không thuộc loại phải hỏi anh. Giữ nguyên.
+- Nhãn 23/10, cả hai cần người xem (không chấm):
+  - **Fansipan KHONG_RO, độ tin 0,2.** Ảnh 07:18-07:19 đỉnh còn trong mây, 10:15 mây ngang tầm mắt; hai bài khác khoe "biển mây"
+    nhưng không có ảnh mang giờ. Bản chụp `35/100 DISSIPATING · 100% · không khuyên đi` (ba mô hình đều "mây đang tan"). Vệ tinh lại
+    SEA_CONFIRMED, đỉnh mây 2.727-3.001m dưới chỗ đứng. Ngày thứ hai liền ảnh có giờ nói "trong mây lúc 7h" còn vệ tinh nói "biển mây
+    dưới chân". Ô 2km nhìn từ trên không tách được lớp mây mỏng ôm đỉnh, giống 02/09. Chưa đủ để đè nhãn vệ tinh bằng nhãn yếu.
+  - **Tà Xùa BELOW mỏng, độ tin 0,5**, chỉ có chữ "nắng đẹp + nhiều mây" lúc 10:28, không ảnh có giờ. App KHUYÊN ĐI (`37 FLOWING ·
+    67% · ΔH +453m`), vệ tinh CLEAR 5/5 khung không có số. Theo luật, ngày app khuyên đi mà nhãn cần người xem thì hỏi anh, không
+    tự chọn.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
@@ -970,6 +978,9 @@ Bác. App `69 STATIC ΔH +555m` khuyên đi. Lúc đầu ghi MORNING vì không 
 22/10 (ngoài mẫu thứ ba): **A trượt lần đầu.** Bản chụp chỉ có 1 đỉnh ≥ 65 nên A đoán ngày thường, mà vệ tinh thấy 6/40 điểm có biển mây
 (Fansipan, Phu Sa Phìn, Chiêu Lầu Thi, Tây Côn Lĩnh, Sa Mu, Tà Xùa). Bỏ Fansipan (ảnh 07:49 còn trong sương) thì vẫn 5, vẫn diện rộng theo
 định nghĩa đã chốt. Ngoài mẫu A nay đúng 2 · bỏ sót 1 · nhầm 0. Không đổi ngưỡng A hay ngưỡng "diện rộng" theo kết quả này.
+23/10 (ngoài mẫu thứ tư): **A trượt lần hai liền.** Bản chụp có 2 đỉnh ≥ 65, vệ tinh thấy 11/49 điểm có biển mây. Ngoài mẫu A nay
+đúng 2 · bỏ sót 2 · nhầm 0. Đọc kỹ: A chưa báo nhầm lần nào, nhưng hai ngày trượt cho thấy nó chỉ bắt được những ngày mà engine đã thấy
+rõ, đúng như trong mẫu (bỏ sót 4/7). A có ích như tín hiệu "chắc chắn có", không phải "chắc chắn không".
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
