@@ -223,6 +223,13 @@ Kết luận:
   - **Tà Xùa BELOW mỏng, độ tin 0,5**, chỉ có chữ "nắng đẹp + nhiều mây" lúc 10:28, không ảnh có giờ. App KHUYÊN ĐI (`37 FLOWING ·
     67% · ΔH +453m`), vệ tinh CLEAR 5/5 khung không có số. Theo luật, ngày app khuyên đi mà nhãn cần người xem thì hỏi anh, không
     tự chọn.
+- Nhãn 24/10: **Fansipan ABOVE, độ tin 0,95** (chấm được). Ba bài có ảnh mang giờ 07:23, 08:24-08:25 và 09:16, cả ba "trời mù, gió mạnh,
+  11-14 độ". Bản chụp `37/100 DISSIPATING · 100% · không khuyên đi` ⇒ **ĐÚNG**. Nguồn Facebook nay 7 cặp: 2 đúng · 5 bỏ sót.
+  Vệ tinh lại ghi SEA_CONFIRMED (04:30-06:00 đỉnh mây 2.745-2.954m, dưới chỗ đứng); nhãn Facebook đè. **Ba ngày liền (22, 23, 24/10)
+  ảnh có giờ thấy đỉnh trong mây mà vệ tinh đo đỉnh mây thấp hơn đỉnh 200-400m.** Trong khi 08-14/10 vệ tinh khớp người nhìn 5/5 ở
+  chính đỉnh này. Cách giải thích hợp nhất: một lớp mây mỏng ôm đỉnh, gió mạnh, ô 2km gần như toàn sườn thấp hơn đỉnh nên đỉnh mây
+  đo được là của biển mây bên dưới, không thấy cái mũ mây trên chóp. Hệ quả: với Fansipan, nhãn vệ tinh SEA ngày gió mạnh có thể là
+  đúng-cho-vùng nhưng sai-cho-chỗ-đứng. Chưa sửa gì trong tool vệ tinh, ghi lại để soi khi làm công cụ so cloudTop với vệ tinh.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
@@ -981,6 +988,8 @@ Bác. App `69 STATIC ΔH +555m` khuyên đi. Lúc đầu ghi MORNING vì không 
 23/10 (ngoài mẫu thứ tư): **A trượt lần hai liền.** Bản chụp có 2 đỉnh ≥ 65, vệ tinh thấy 11/49 điểm có biển mây. Ngoài mẫu A nay
 đúng 2 · bỏ sót 2 · nhầm 0. Đọc kỹ: A chưa báo nhầm lần nào, nhưng hai ngày trượt cho thấy nó chỉ bắt được những ngày mà engine đã thấy
 rõ, đúng như trong mẫu (bỏ sót 4/7). A có ích như tín hiệu "chắc chắn có", không phải "chắc chắn không".
+24/10 (ngoài mẫu thứ năm): A trượt lần ba (3 đỉnh ≥ 65, vệ tinh 8/43 điểm). Ngoài mẫu A nay đúng 2 · bỏ sót 3 · nhầm 0. Bản chụp
+25/10 có 4 đỉnh ⇒ A đoán diện rộng; đó là phép thử tiếp theo cho chiều "có".
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
