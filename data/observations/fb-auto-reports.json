@@ -383,6 +383,37 @@
   ]
  },
  {
+  "id": "2026-10-25-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-25",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:06",
+  "confidence": 0.9,
+  "firstPostAt": "2026-10-25T07:28:12+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-25T07:28:12+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fan lại có biển mây rồi, checkin ngay thôi cả nhà ơi",
+    "stamps": [
+     "07:06 BELOW",
+     "07:07 BELOW",
+     "07:08 NONE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-25T08:05:27+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fansipan hôm nay trông có giống đứng trên thiên đình không cơ chứ",
+    "stamps": []
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",

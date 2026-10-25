@@ -230,6 +230,12 @@ Kết luận:
   chính đỉnh này. Cách giải thích hợp nhất: một lớp mây mỏng ôm đỉnh, gió mạnh, ô 2km gần như toàn sườn thấp hơn đỉnh nên đỉnh mây
   đo được là của biển mây bên dưới, không thấy cái mũ mây trên chóp. Hệ quả: với Fansipan, nhãn vệ tinh SEA ngày gió mạnh có thể là
   đúng-cho-vùng nhưng sai-cho-chỗ-đứng. Chưa sửa gì trong tool vệ tinh, ghi lại để soi khi làm công cụ so cloudTop với vệ tinh.
+- Nhãn 25/10: **Fansipan BELOW, độ tin 0,9**, ảnh có dấu giờ 07:06-07:07 ("Fan lại có biển mây rồi"), bài 08:05 khoe "đứng trên thiên đình".
+  Bản chụp `42/100 DISSIPATING · 67% · mặt mây 2.199m, ΔH +944m · không khuyên đi` ⇒ **BỎ SÓT**. ICON và UKMO đặt mặt mây ~2.200m, dưới
+  chân gần 1.000m, mà nhãn vẫn là "mây đang tan" (GFS `44 FOG` mặt mây 3.554m). Bản chụp không lưu lý do từng mô hình nên chưa biết cổng nào
+  đổi sang DISSIPATING; nghi cổng gió tại chỗ đứng (đã ra nhãn đúng ngày 15/10) nhưng CHƯA kiểm. Vệ tinh CLEAR, 5/5 khung không có số.
+  Nguồn Facebook nay 8 cặp: 2 đúng · 6 bỏ sót. Fansipan đã có 5 ca bỏ sót theo Facebook (19, 20, 21, 25/10 và 15/10 trong bảng đối chiếu),
+  đủ để khi làm bản sửa `estimateCloudTop` thì in thêm cổng nào ra nhãn ở từng ca. Không chỉnh riêng Fansipan.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
@@ -990,6 +996,8 @@ Bác. App `69 STATIC ΔH +555m` khuyên đi. Lúc đầu ghi MORNING vì không 
 rõ, đúng như trong mẫu (bỏ sót 4/7). A có ích như tín hiệu "chắc chắn có", không phải "chắc chắn không".
 24/10 (ngoài mẫu thứ năm): A trượt lần ba (3 đỉnh ≥ 65, vệ tinh 8/43 điểm). Ngoài mẫu A nay đúng 2 · bỏ sót 3 · nhầm 0. Bản chụp
 25/10 có 4 đỉnh ⇒ A đoán diện rộng; đó là phép thử tiếp theo cho chiều "có".
+25/10 (ngoài mẫu thứ sáu): A bật với 4 đỉnh, vệ tinh và Facebook thấy 13/44 điểm có ⇒ **A đúng lần ba**. Ngoài mẫu A nay đúng 3 · bỏ sót 3 ·
+nhầm 0: vẫn chưa báo nhầm lần nào. Bản chụp 26/10 có 5 đỉnh ⇒ A lại đoán diện rộng.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
