@@ -1004,8 +1004,14 @@ nhầm 0: vẫn chưa báo nhầm lần nào. Bản chụp 26/10 có 5 đỉnh �
 Ba Vì 24/10, **06:50** (giờ người đăng ghi trong bài, đăng 07:02): biển mây trắng dày, phẳng, phủ kín bên dưới, trời xanh bên trên. Bản
 chụp `59/100 FOG · 100% · mặt mây 2.168m, ΔH −872m · không khuyên đi` ⇒ **BỎ SÓT**, cả ba mô hình nói "chìm trong mây". Mặt mây 2.168m đúng
 là mốc bám lưới (800hPa + 150m) đã ghi ở mục Facebook. Vệ tinh FOGGED_IN (2.454-2.814m) cùng chiều với app, nhưng ảnh có dải mây tầng giữa mỏng
-phía trên, nhiều khả năng là thứ vệ tinh đo; người đi đè. Đây là ca rõ nhất cho thấy lỗi bám lưới làm BỎ SÓT ở núi thấp chứ không chỉ ở
-Tà Xùa: ba mô hình đồng thuận 100%, điểm 59, chỉ riêng mặt mây là sai. Riêng nguồn người đi nay 32 cặp: 14 đúng · 10 bỏ sót · 1 nhầm.
+phía trên, nhiều khả năng là thứ vệ tinh đo; người đi đè. Ca này cho thấy lỗi bám lưới cũng làm BỎ SÓT ở núi thấp chứ không chỉ ở Tà Xùa
+(ba mô hình đồng thuận 100%, điểm 59, chỉ riêng mặt mây là sai). Riêng nguồn người đi nay 32 cặp: 14 đúng · 10 bỏ sót · 1 nhầm.
+**Kinh nghiệm anh Phong (25/10/2026, ý kiến cá nhân, CHƯA đo bằng số):** Ba Vì nên coi là điểm tham khảo. Núi thấp (1.296m), đứng lẻ giữa
+đồng bằng chứ không nằm trong vùng nhiều núi giữ ẩm, và không lạnh bằng các nơi khác, nên biển mây ở đây hiếm hơn. Khớp vật lý: biển mây Ba
+Vì là sương bức xạ của đồng bằng xung quanh, lớp mỏng, tan sớm (20 và 21/10 đều mỏng, tan nhanh). Ba báo cáo có mây 20, 21, 24/10 KHÔNG bác
+được ý này, vì người ta chỉ đăng hôm có mây. Cách xử lý: Ba Vì vẫn ở trong thư viện và trong phép chấm (bỏ ra là chọn dữ liệu cho vừa ý),
+nhưng **không dùng ca Ba Vì làm lý do chính cho bất kỳ bản sửa engine nào**; bản sửa `estimateCloudTop` phải đứng được trên các đỉnh vùng
+núi (Tà Xùa, Hoàng Liên Sơn) trước, Ba Vì chỉ là ca phụ. Khi làm bảng chấm cho bản sửa đó thì tách riêng núi thấp đứng lẻ (Ba Vì) với vùng núi.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
