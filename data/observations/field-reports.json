@@ -553,5 +553,18 @@
     "observedAt": "08:06 (khung thông số ảnh iPhone: 2026.10.20 08:06:34)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh (21/10), nói là ở đỉnh Ba Vì: đường có lan can, mây trắng bồng bềnh ngang và dưới tầm mắt, đang bốc lên, mặt trời đã khá cao, trời xanh. Khung thông số ghi 2026.10.20 08:06:34 ⇒ ảnh của ngày 20/10, KHÔNG phải 21/10. Lưu ý độ tin của khung: toạ độ in trong khung là 24°50'N 55°24'E (vùng UAE), sai hẳn so với Ba Vì 21,06°N 105,37°E ⇒ khung có thể do ứng dụng ghép, giờ/ngày lấy theo đồng hồ máy; giờ khớp với độ cao mặt trời trong ảnh nên vẫn dùng. 08:06 nằm trong khung 04-09h nên chấm như rạng sáng (cùng luật với Ô Quy Hồ 16/10 và Fansipan 20/10). Mây lúc đó mỏng, rời, đang tan/bốc ⇒ SPARSE, SHORT. Bản chụp 20/10: 55/100 STATIC, đồng thuận 67% (gfs 55 STATIC mặt mây 1.040m · icon 75 STATIC 353m · ukmo 47 FOG 1.693m), mặt mây 697m, ΔH +599m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số - người đi đè."
+  },
+  {
+    "id": "2026-10-23-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-10-23",
+    "reportedAt": "2026-10-25T09:00:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "SPARSE",
+    "timeOfDay": "DAWN",
+    "observedAt": "trước 08:00 (bài đăng lúc 08:00, tiêu đề \"Tà Xùa sáng 23/10\"; ảnh không có dấu giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài Facebook của một người làm tour ở Tà Xùa, đăng 08:00 ngày 23/10: \"mây sáng nay hơi ít, nhưng cũng được cái gọi là có mây để ngắm\". Ảnh: biển mây trắng mỏng, lưa thưa trong thung lũng bên dưới, các sống núi nhô lên trên. Anh xác nhận: có biển mây mỏng. Bản chụp: 37/100 FLOWING, đồng thuận 67% (gfs 42 STATIC · icon 37 FOG · ukmo 3 FLOWING), mặt mây 1.347m, ΔH +453m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số - người đi đè. Nhãn FB_AUTO cùng ngày (BELOW mỏng 0,5, chỉ có chữ lúc 10:28) cùng chiều."
   }
 ]

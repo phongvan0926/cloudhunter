@@ -223,6 +223,9 @@ Kết luận:
   - **Tà Xùa BELOW mỏng, độ tin 0,5**, chỉ có chữ "nắng đẹp + nhiều mây" lúc 10:28, không ảnh có giờ. App KHUYÊN ĐI (`37 FLOWING ·
     67% · ΔH +453m`), vệ tinh CLEAR 5/5 khung không có số. Theo luật, ngày app khuyên đi mà nhãn cần người xem thì hỏi anh, không
     tự chọn.
+    **Anh trả lời (25/10):** có biển mây mỏng, kèm ảnh bài của một người làm tour đăng 08:00 "Tà Xùa sáng 23/10, mây sáng nay hơi
+    ít": mây trắng lưa thưa trong thung lũng bên dưới. Đã ghi thành báo cáo người nhìn (`SPARSE`, DAWN) ⇒ app khuyên đi **ĐÚNG**, vệ tinh
+    CLEAR bị đè. Riêng nguồn người đi nay 31 cặp: 14 đúng · 9 bỏ sót · 1 nhầm.
 - Nhãn 24/10: **Fansipan ABOVE, độ tin 0,95** (chấm được). Ba bài có ảnh mang giờ 07:23, 08:24-08:25 và 09:16, cả ba "trời mù, gió mạnh,
   11-14 độ". Bản chụp `37/100 DISSIPATING · 100% · không khuyên đi` ⇒ **ĐÚNG**. Nguồn Facebook nay 7 cặp: 2 đúng · 5 bỏ sót.
   Vệ tinh lại ghi SEA_CONFIRMED (04:30-06:00 đỉnh mây 2.745-2.954m, dưới chỗ đứng); nhãn Facebook đè. **Ba ngày liền (22, 23, 24/10)
