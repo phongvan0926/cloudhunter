@@ -4832,6 +4832,80 @@
     "rainPrevAfternoon": 2.3,
     "rainNight": 1.4
    }
+  },
+  "2026-10-25": {
+   "SAPA": {
+    "msl": 1014,
+    "dmsl24": 2,
+    "t850": 19.7,
+    "dt850_24": 0.6,
+    "lapse850_700": 7.8,
+    "rh925": 90,
+    "rh850": 88,
+    "rh700": 41,
+    "wind850": 2.6,
+    "wdir850": 225,
+    "dpd2m": 0.3,
+    "low": 34,
+    "midNight": 1,
+    "highNight": 35.6,
+    "rainPrevAfternoon": 0.2,
+    "rainNight": 0
+   },
+   "MU_CANG_CHAI": {
+    "msl": 1014.1,
+    "dmsl24": 1.8,
+    "t850": 19.7,
+    "dt850_24": 0.5,
+    "lapse850_700": 7.8,
+    "rh925": 90,
+    "rh850": 88,
+    "rh700": 37,
+    "wind850": 2.7,
+    "wdir850": 180,
+    "dpd2m": 0.1,
+    "low": 47,
+    "midNight": 2,
+    "highNight": 28.3,
+    "rainPrevAfternoon": 1.6,
+    "rainNight": 0
+   },
+   "MOC_CHAU": {
+    "msl": 1012.9,
+    "dmsl24": 2,
+    "t850": 20,
+    "dt850_24": 0.1,
+    "lapse850_700": 8.6,
+    "rh925": 99,
+    "rh850": 83,
+    "rh700": 51,
+    "wind850": 8.3,
+    "wdir850": 186,
+    "dpd2m": 0.2,
+    "low": 56,
+    "midNight": 4.5,
+    "highNight": 29.9,
+    "rainPrevAfternoon": 1.6,
+    "rainNight": 0
+   },
+   "HA_GIANG": {
+    "msl": 1014.4,
+    "dmsl24": 2,
+    "t850": 18.1,
+    "dt850_24": 0.2,
+    "lapse850_700": 6.5,
+    "rh925": 100,
+    "rh850": 99,
+    "rh700": 47,
+    "wind850": 7.4,
+    "wdir850": 169,
+    "dpd2m": 0.2,
+    "low": 99,
+    "midNight": 0,
+    "highNight": 5.5,
+    "rainPrevAfternoon": 1.8,
+    "rainNight": 1.4
+   }
   }
  }
 }
