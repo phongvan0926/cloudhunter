@@ -566,5 +566,18 @@
     "observedAt": "trước 08:00 (bài đăng lúc 08:00, tiêu đề \"Tà Xùa sáng 23/10\"; ảnh không có dấu giờ)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh chụp màn hình bài Facebook của một người làm tour ở Tà Xùa, đăng 08:00 ngày 23/10: \"mây sáng nay hơi ít, nhưng cũng được cái gọi là có mây để ngắm\". Ảnh: biển mây trắng mỏng, lưa thưa trong thung lũng bên dưới, các sống núi nhô lên trên. Anh xác nhận: có biển mây mỏng. Bản chụp: 37/100 FLOWING, đồng thuận 67% (gfs 42 STATIC · icon 37 FOG · ukmo 3 FLOWING), mặt mây 1.347m, ΔH +453m, đáng đi ⇒ ĐÚNG. Vệ tinh CLEAR 5/5 khung không có số - người đi đè. Nhãn FB_AUTO cùng ngày (BELOW mỏng 0,5, chỉ có chữ lúc 10:28) cùng chiều."
+  },
+  {
+    "id": "2026-10-24-bavi",
+    "spotKey": "BA_VI",
+    "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "date": "2026-10-24",
+    "reportedAt": "2026-10-25T10:00:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:50 (người đăng ghi trong bài \"6h50 sáng 24/10/2026\", bài đăng 07:02)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài của một trang địa phương, đăng 07:02 ngày 24/10: \"ngay lúc này biển mây Ba Vì rất đẹp 6h50\". Ảnh chụp ở đoạn đường trên núi (có xe máy, đông người, có thể thấp hơn Đỉnh Vua), biển mây trắng dày, phẳng phủ kín bên dưới tới chân trời; phía trên trời xanh, có dải mây tầng giữa mỏng. Bản chụp: 59/100 FOG, đồng thuận 100% (gfs 52 FOG mặt mây 3.535m · icon 66 FOG 2.168m · ukmo 59 FOG 2.168m), mặt mây 2.168m, ΔH −872m, không khuyên đi ⇒ BỎ SÓT. Mặt mây 2.168m đúng là mốc bám lưới 800hPa + đệm của estimateCloudTop. Vệ tinh FOGGED_IN (đỉnh mây 2.454-2.814m) cùng chiều với app nhưng nhiều khả năng đo dải mây tầng giữa thấy trong ảnh; người đi đè."
   }
 ]

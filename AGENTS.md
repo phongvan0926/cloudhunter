@@ -1001,6 +1001,11 @@ rõ, đúng như trong mẫu (bỏ sót 4/7). A có ích như tín hiệu "chắ
 25/10 có 4 đỉnh ⇒ A đoán diện rộng; đó là phép thử tiếp theo cho chiều "có".
 25/10 (ngoài mẫu thứ sáu): A bật với 4 đỉnh, vệ tinh và Facebook thấy 13/44 điểm có ⇒ **A đúng lần ba**. Ngoài mẫu A nay đúng 3 · bỏ sót 3 ·
 nhầm 0: vẫn chưa báo nhầm lần nào. Bản chụp 26/10 có 5 đỉnh ⇒ A lại đoán diện rộng.
+Ba Vì 24/10, **06:50** (giờ người đăng ghi trong bài, đăng 07:02): biển mây trắng dày, phẳng, phủ kín bên dưới, trời xanh bên trên. Bản
+chụp `59/100 FOG · 100% · mặt mây 2.168m, ΔH −872m · không khuyên đi` ⇒ **BỎ SÓT**, cả ba mô hình nói "chìm trong mây". Mặt mây 2.168m đúng
+là mốc bám lưới (800hPa + 150m) đã ghi ở mục Facebook. Vệ tinh FOGGED_IN (2.454-2.814m) cùng chiều với app, nhưng ảnh có dải mây tầng giữa mỏng
+phía trên, nhiều khả năng là thứ vệ tinh đo; người đi đè. Đây là ca rõ nhất cho thấy lỗi bám lưới làm BỎ SÓT ở núi thấp chứ không chỉ ở
+Tà Xùa: ba mô hình đồng thuận 100%, điểm 59, chỉ riêng mặt mây là sai. Riêng nguồn người đi nay 32 cặp: 14 đúng · 10 bỏ sót · 1 nhầm.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
