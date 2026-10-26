@@ -397,9 +397,13 @@ export interface FallbackResult<T> {
 export function fallbackPriority(id: string): number {
   const lower = id.toLowerCase();
   const m = lower.match(/(\d+(?:\.\d+)?)/);
-  const version = m ? parseFloat(m[1]) : (lower.includes('latest') ? 900 : 0);
+  // Alias -latest (không có số) xếp SAU mọi bản Flash có số ổn định: Google không công bố alias đang
+  // trỏ tới bản nào, nên dự phòng sang alias là ghi "lời bình do Flash nào đó viết". Anh Phong gặp
+  // thật 26/10: chọn 3.8 Flash bị quá giờ, rơi sang gemini-flash-latest, "vẫn không biết model nào trả lời".
+  // Vẫn đứng trước preview/Lite/Gemma để còn đường lui khi key không thấy bản số nào.
+  const version = m ? parseFloat(m[1]) : 0;
   let score = version * 10;
-  if (lower.includes('latest')) score += 5;                                  // alias -latest nhỉnh hơn bản số cùng loại
+  if (lower.includes('latest')) score += 5;
   if (lower.includes('preview') || lower.includes('exp')) score -= 100;      // bản thử nghiệm sau bản ổn định
   if (lower.includes('lite')) score -= 100000;                               // Lite = gần cuối hàng
   // Gemma là họ model khác (open-weights, nhỏ hơn) — KHÔNG được chen vào bậc thang Flash.

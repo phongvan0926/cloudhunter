@@ -1774,7 +1774,12 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
    "stable, preview hoặc experimental"). Alias chỉ dùng khi key không thấy bản số nào. Mặc định
    tự dò thì KHÔNG lưu xuống máy (lưu là ghim người dùng ở mặc định cũ); `getStoredModel` xoá
    một lần alias mà bản 14/10 đã tự lưu. Kết quả hiện thêm `→ Google chạy: <modelVersion>` khi
-   tên Google báo trong phản hồi khác tên đã gọi, để luôn biết alias phân giải ra bản nào. `classifyTier` xếp
+   tên Google báo trong phản hồi khác tên đã gọi, để luôn biết alias phân giải ra bản nào.
+   **Dự phòng (26/10/2026):** anh chạy key thật, 3.8 Flash quá 60 giây, app rơi sang `gemini-flash-latest`
+   và anh "vẫn không biết model nào trả lời". Nay `fallbackPriority` xếp alias không số SAU mọi Flash có
+   số ổn định (vẫn trước preview/Lite/Gemma), và `modelFallbackNote` kèm bản Google báo đã chạy, hoặc nói
+   thẳng "Google không báo tên bản". Timeout 60s giữ nguyên: một lần quá giờ chưa đủ để biết 3.8 Flash luôn
+   chậm hay chỉ chậm hôm đó. `classifyTier` xếp
    pro/ultra/argon/thinking vào **Cao cấp**: chỉ chạy khi người dùng tự chọn, không mặc định,
    không vào `buildFallbackChain` (Argon: "not available on the Free tier", đo trang pricing
    14/10). Chuỗi dự phòng chỉ gồm Flash + Gemma cuối; họ model tên mã lạ ('custom') cũng bị

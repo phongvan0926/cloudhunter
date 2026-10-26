@@ -63,7 +63,8 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   nhật); mặc định là bản Flash có số phiên bản cao nhất mà key thấy (hiện 3.8 Flash), nên ra
   model Flash mới thì app dùng ngay không cần sửa code. Alias `gemini-flash-latest` vẫn chọn tay
   được, nhưng Google không nói nó đang trỏ bản nào (16/10/2026 nó ra 2.5 Flash), nên kết quả
-  hiện thêm tên model Google báo đã chạy thật. Model cao cấp (vd **Gemini 4 Argon**,
+  hiện thêm tên model Google báo đã chạy thật. Khi phải dự phòng, alias đứng SAU mọi bản Flash có số
+  (26/10/2026), và ghi chú dự phòng nói luôn bản Google báo đã chạy. Model cao cấp (vd **Gemini 4 Argon**,
   chỉ gói trả phí) chọn tay được, kèm cảnh báo, nhưng không bao giờ là mặc định hay dự phòng
   tự động; họ model mới chưa rõ giá cũng vậy.
 - 🕐 **Ngày giờ neo theo Asia/Ho_Chi_Minh** — đúng ngày Việt Nam kể cả khi thiết bị đặt

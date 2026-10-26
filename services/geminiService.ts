@@ -496,9 +496,13 @@ async function generateNarrative(base: CloudAnalysis, model?: string): Promise<C
   if (fallbackRes.fallbackOccurred) {
     const why = fallbackRes.attemptErrors[primaryModel] || 'không phản hồi';
     const whyShort = /429|quota|resource_exhausted/i.test(why) ? 'hết hạn mức (429)' :
-                     /timeout/i.test(why) ? 'quá thời gian chờ' :
+                     /timeout/i.test(why) ? 'quá thời gian chờ (60 giây)' :
                      /404|not found|deprecated/i.test(why) ? 'model không tồn tại/ngừng hỗ trợ' : why;
-    modelFallbackNote = `Model bạn chọn (${primaryModel}) bị lỗi: ${whyShort} — lời bình được viết bởi ${fallbackRes.modelUsed}. Con số dự báo KHÔNG bị ảnh hưởng (engine tính, không phụ thuộc model AI).`;
+    // Nói luôn bản Google THẬT chạy (response.modelVersion), vì modelUsed có thể là alias không rõ bản.
+    const reported = typeof fallbackRes.result?.modelVersion === 'string' ? fallbackRes.result.modelVersion.replace(/^models\//, '') : '';
+    const realModel = reported && reported !== fallbackRes.modelUsed ? ` (Google báo bản thật: ${reported})`
+      : reported ? '' : ' (Google không báo tên bản trong phản hồi)';
+    modelFallbackNote = `Model bạn chọn (${primaryModel}) bị lỗi: ${whyShort} - lời bình được viết bởi ${fallbackRes.modelUsed}${realModel}. Con số dự báo KHÔNG bị ảnh hưởng (engine tính, không phụ thuộc model AI).`;
   }
 
   const parsed = JSON.parse(extractJson(fallbackRes.result.text));

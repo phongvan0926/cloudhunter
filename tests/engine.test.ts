@@ -362,7 +362,9 @@ describe('buildFallbackChain — thứ tự model dự phòng', () => {
     ];
     const chain = buildFallbackChain('gemini-3.7-flash', models);
     expect(chain[0]).toBe('gemini-3.7-flash');            // luôn ưu tiên lựa chọn của người dùng
-    expect(chain[1]).toBe('gemini-flash-latest');         // alias flash mới nhất kế tiếp
+    expect(chain[1]).toBe('gemini-3.5-flash');            // Flash có số gần nhất kế tiếp
+    // alias -latest (không rõ bản) đứng sau mọi Flash có số ổn định (anh Phong 26/10)
+    expect(chain.indexOf('gemini-flash-latest')).toBeGreaterThan(chain.indexOf('gemini-2.5-flash'));
     // mọi bản "lite" phải đứng SAU mọi bản flash thường (bug cũ: lite-latest nhảy lên đầu)
     const firstLite = chain.findIndex(id => id.includes('lite'));
     const lastNonLite = chain.reduce((acc, id, i) => (!id.includes('lite') ? i : acc), 0);
@@ -373,7 +375,7 @@ describe('buildFallbackChain — thứ tự model dự phòng', () => {
 });
 
 describe('buildFallbackChain — bậc thang đúng với danh sách model thật của user (18/8/2026)', () => {
-  it('3.7 lỗi → flash-latest → 3.6 → 3.5 → 2.5 → preview → mọi bản Lite cuối cùng', async () => {
+  it('3.7 lỗi → 3.6 → 3.5 → 2.5 → flash-latest → preview → mọi bản Lite cuối cùng', async () => {
     const { buildFallbackChain } = await import('../services/modelDiscoveryService');
     const mk = (id: string) => ({ id, name: id, displayName: id, tier: 'flash' as const, tierLabel: '⚡' });
     const models = [
@@ -385,10 +387,10 @@ describe('buildFallbackChain — bậc thang đúng với danh sách model thậ
     const chain = buildFallbackChain('gemini-3.7-flash', models);
     expect(chain.slice(0, 5)).toEqual([
       'gemini-3.7-flash',      // lựa chọn của người dùng
-      'gemini-flash-latest',   // alias flash mạnh nhất hiện có
-      'gemini-3.6-flash',      // xuống dần từng bậc...
+      'gemini-3.6-flash',      // xuống dần từng bậc Flash CÓ SỐ...
       'gemini-3.5-flash',
       'gemini-2.5-flash',
+      'gemini-flash-latest',   // alias không rõ bản: sau mọi bản có số (26/10), trước preview/Lite
     ]);
     const firstLite = chain.findIndex(id => id.includes('lite'));
     expect(chain.slice(0, firstLite)).not.toContain('gemini-3.5-flash-lite');
