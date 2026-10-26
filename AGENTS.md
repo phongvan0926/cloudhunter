@@ -239,6 +239,12 @@ Kết luận:
   đổi sang DISSIPATING; nghi cổng gió tại chỗ đứng (đã ra nhãn đúng ngày 15/10) nhưng CHƯA kiểm. Vệ tinh CLEAR, 5/5 khung không có số.
   Nguồn Facebook nay 8 cặp: 2 đúng · 6 bỏ sót. Fansipan đã có 5 ca bỏ sót theo Facebook (19, 20, 21, 25/10 và 15/10 trong bảng đối chiếu),
   đủ để khi làm bản sửa `estimateCloudTop` thì in thêm cổng nào ra nhãn ở từng ca. Không chỉnh riêng Fansipan.
+- Nhãn 26/10: **Fansipan KHONG_RO, độ tin 0,5, cần người xem** (không chấm). Ảnh có dấu giờ 06:13-06:15, 07:16-07:17 và 08:16-08:17
+  đều là biển mây mỏng dưới chân ("trời nắng, có mây, 8 độ"), tới 09:17-09:18 thì "lúc nắng, lúc mù" (mây dâng lên đỉnh, giống 18/10).
+  Bộ gắn nhãn hạ độ tin vì trong chữ có một ngày lệch (31/10) và vì bài 09:17 nói ngược. Bản chụp `74/100 FOG · 67% · mặt mây 2.623m,
+  ΔH +520m · không khuyên đi` (gfs 57 FOG mặt mây 2.056m · icon 83 FOG 3.189m · ukmo 74 FLOWING 2.215m): lại tự mâu thuẫn, mặt mây gộp
+  dưới chân 520m mà nhãn vẫn "chìm trong mây". Vệ tinh CLEAR, khung 06:00 đỉnh mây 2.861m (dưới chỗ đứng). Nếu nhận là BELOW thì là ca
+  **BỎ SÓT** thứ 7 của Fansipan theo cùng kiểu. Điểm 74 ≥ 65 nên theo luật phải hỏi anh, không tự chọn (đã đưa vào "Cần anh quyết").
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
