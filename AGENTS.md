@@ -245,6 +245,7 @@ Kết luận:
   ΔH +520m · không khuyên đi` (gfs 57 FOG mặt mây 2.056m · icon 83 FOG 3.189m · ukmo 74 FLOWING 2.215m): lại tự mâu thuẫn, mặt mây gộp
   dưới chân 520m mà nhãn vẫn "chìm trong mây". Vệ tinh CLEAR, khung 06:00 đỉnh mây 2.861m (dưới chỗ đứng). Nếu nhận là BELOW thì là ca
   **BỎ SÓT** thứ 7 của Fansipan theo cùng kiểu. Điểm 74 ≥ 65 nên theo luật phải hỏi anh, không tự chọn (đã đưa vào "Cần anh quyết").
+  **Anh trả lời (26/10 tối): để "không rõ".** Giữ nguyên nhãn của bộ gắn nhãn, ngày này không được chấm và không tính là bỏ sót.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
