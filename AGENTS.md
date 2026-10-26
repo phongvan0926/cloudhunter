@@ -1012,6 +1012,10 @@ Vì là sương bức xạ của đồng bằng xung quanh, lớp mỏng, tan s�
 được ý này, vì người ta chỉ đăng hôm có mây. Cách xử lý: Ba Vì vẫn ở trong thư viện và trong phép chấm (bỏ ra là chọn dữ liệu cho vừa ý),
 nhưng **không dùng ca Ba Vì làm lý do chính cho bất kỳ bản sửa engine nào**; bản sửa `estimateCloudTop` phải đứng được trên các đỉnh vùng
 núi (Tà Xùa, Hoàng Liên Sơn) trước, Ba Vì chỉ là ca phụ. Khi làm bảng chấm cho bản sửa đó thì tách riêng núi thấp đứng lẻ (Ba Vì) với vùng núi.
+26/10 (ngoài mẫu thứ bảy): A bật với 5 đỉnh, vệ tinh thấy 10/39 điểm ⇒ **A đúng lần bốn**. Ngoài mẫu A nay đúng 4 · bỏ sót 3 · nhầm 0.
+Cùng lúc, mức "đáng đi ∧ điểm ≥ 65" (mục 13/10) đã có ca trúng ở **9 ngày độc lập** (02, 13, 18, 19, 20, 21, 23, 25, 26/10), vượt ngưỡng
+5 ngày tự đặt; chính xác 47% (27 trúng · 30 nhầm) so với 17% của luật đáng đi. Bước tiếp theo là soi 30 ca nhầm (bao nhiêu ca ở núi thấp
+nơi vệ tinh mù sương mỏng) rồi mới đề xuất đưa lên app, theo luật cổng.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
 rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
 
