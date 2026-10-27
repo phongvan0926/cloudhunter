@@ -467,6 +467,44 @@
   ]
  },
  {
+  "id": "2026-10-27-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-27",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:06",
+  "confidence": 0.4,
+  "needsReview": true,
+  "firstPostAt": "2026-10-27T07:57:40+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-27T07:57:40+07:00",
+    "seaLevel": "BELOW",
+    "text": "Best view hiện tại có biển mây ace ơi",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-27T08:17:34+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù, có mưa nhỏ, gió nhẹ nhiệt độ 12 độ",
+    "stamps": [
+     "08:06 ABOVE",
+     "08:07 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-27T10:24:10+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù, gió nhẹ nhiệt độ 17 độ",
+    "stamps": [
+     "10:00 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",

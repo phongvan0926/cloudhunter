@@ -246,6 +246,10 @@ Kết luận:
   dưới chân 520m mà nhãn vẫn "chìm trong mây". Vệ tinh CLEAR, khung 06:00 đỉnh mây 2.861m (dưới chỗ đứng). Nếu nhận là BELOW thì là ca
   **BỎ SÓT** thứ 7 của Fansipan theo cùng kiểu. Điểm 74 ≥ 65 nên theo luật phải hỏi anh, không tự chọn (đã đưa vào "Cần anh quyết").
   **Anh trả lời (26/10 tối): để "không rõ".** Giữ nguyên nhãn của bộ gắn nhãn, ngày này không được chấm và không tính là bỏ sót.
+- Nhãn 27/10: **Fansipan KHONG_RO, độ tin 0,4, cần người xem** (không chấm). Bài 07:57 khoe "có biển mây" nhưng không có ảnh mang giờ;
+  ảnh có dấu giờ 08:06-08:07 và 10:00 đều "trời mù, mưa nhỏ, 12-17 độ", tức đỉnh trong mây. Bản chụp `54/100 RAIN · 67% · mặt mây 3.403m,
+  ΔH −260m · không khuyên đi` cùng chiều với ảnh có giờ. Vệ tinh BLOCKED_ABOVE (đỉnh mây 4.842-5.470m). App không khuyên đi, điểm dưới 65
+  nên không thuộc loại phải hỏi anh. Giữ nguyên.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 
