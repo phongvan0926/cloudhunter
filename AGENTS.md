@@ -802,6 +802,7 @@ loạt ảnh hằng ngày bắt đầu từ 13/10 (7 ảnh, chú thích "biển 
 `duration: LONG`) và 14/10 (5 ảnh, 08:12). Ảnh 08-12/10 không có trên máy chủ, chỉ người dùng có.
 Lưu ý: cùng thư viện đó lộ cả PDF vé của khách - lọc `fansipan-` trong tên tệp, không mở thứ khác.
 Chưa dựng job tự lấy: ảnh còn trên máy chủ nên chưa có gì mất, và nhãn phải do người nhìn ảnh.
+**Kiểm lại sau 2 tuần (29/10/2026):** trong 17 ngày (`13->29/10`), trang chỉ đăng ảnh `fansipan-*` ở **6/17 ngày** (`13, 14, 15, 23, 26, 29/10` - bỏ trống liền 7 ngày `16->22/10`), trong khi nguồn bài Facebook hằng ngày tại Fansipan đã thu tự động mỗi sáng cùng bộ ảnh Timemark. Kết luận: **không dựng job định kỳ riêng** cho trang này; chỉ tra cứu bổ sung khi cần (ngày `29/10` có bộ 6 ảnh Timemark `07:27` xác nhận biển mây dày dưới đỉnh ~2.880m trong khi cờ trên đỉnh 3.143m bay ngang theo gió tầng trên nắp nghịch nhiệt - đã ghi vào `field-reports.json`).
 
 Người dùng gửi thêm ảnh có dấu giờ của 08, 10 và 12/10, cả ba KHÔNG có biển mây. Chuỗi Fansipan 5 ngày,
 mỗi ngày đều có bản chụp dự báo làm TRƯỚC, ảnh người nhìn và nhãn vệ tinh:
@@ -854,6 +855,11 @@ kết luận đúng, nhưng lề an toàn app khai (1.300m) gấp ~5-10 lần l�
 so với mặt mây app đã chụp, sẽ ra **sai số ΔH thật** trên hàng chục điểm/ngày — thay cho con số
 "±200m" vẫn ghi từ trước tới nay mà chưa ai đo bằng sự thật. Lưu ý khi làm: lọc `BLOCKED_ABOVE`
 (đỉnh mây 9-15km ở Lang Biang, Măng Đen… là mây tầng cao, không phải biển mây).
+
+**ĐÃ DỰNG CÔNG CỤ ĐO TOÀN KHO (`scripts/audit-cloud-top.ts`, 29/10/2026):** lọc cả fill âm `-999` (tệp trước 05/10) lẫn các khung mây tầng cao (`> min(6.000m, observerAlt + 1.500m)`) bị trộn vào `cloudTopMedian_m` (ví dụ Lảo Thẩn 26/10 `4.302m`). Đo trên **329 cặp có mây tầng thấp thuộc 34 ngày** (22 ngày có `>= 5` điểm đo được):
+- Sai số `(vệ tinh - app)` có **trung vị `+668m`** (IQR `+246m..+1.101m`), `|sai số|` trung vị **`727m`**; giả định cũ "±200m" chỉ đúng ở **12%** số ca (`<= 500m`: 34%).
+- Riêng đỉnh cao `>= 2.400m` (`n = 208`): trung vị **`+824m`** (`|sai số|` trung vị `829m`, chỉ `8%` nằm trong `±200m`); khi app khuyên đi (`n = 118`), trung vị `+854m`.
+- Nguyên nhân lộ rõ trên bảng 22 ngày: ở **21/22 ngày**, trung vị mặt mây app ghim cứng vào dải **`2.130-2.236m`** (`800hPa + 150m`; tỉ lệ ghim cụm này là GFS `20%`, ICON `33%`, UKMO `33%`), trong khi mặt mây thật của vệ tinh nằm ở **`2.540-3.340m`** - đúng vào **khe mù thẳng đứng `1.130m` giữa mực `800hPa (~2.060m)` và `700hPa (~3.190m)`** nơi Open-Meteo không có mực `750hPa`. Ở mặt đối diện, trên `239` cặp đỉnh `>= 2.400m` vệ tinh quang cả 5 khung (`CLEAR`), engine vẫn dựng `cloudTop != null` ở **190/239 (`79%`)** và khuyên đi ở **133/239 (`56%`)**.
 
 Ngũ Chỉ Sơn 09/10 (người dùng báo nắng, quang) không chấm được: bản chụp 09/10 là ngày đã mất. Vệ tinh
 CLEAR, khớp người đi.
@@ -1033,6 +1039,25 @@ nơi vệ tinh mù sương mỏng) rồi mới đề xuất đưa lên app, theo
 - **29/10:** khí chìm ổn định mạnh (`lapse850_700` Sa Pa 6,0°C/km, Hà Giang 3,9°C/km, gió 850 Sa Pa 1,9km/h), A 2 đỉnh (Pù Luông 74, Kim Bon 65), B tắt do mây cao đêm 33%; vệ tinh thấy 8/39 điểm có, nguyên dải 8 đỉnh cao Hoàng Liên Sơn - Lai Châu. App khuyên đi trúng 4 đỉnh (Nhìu Cồ San 60, Lảo Thẩn 59, Cú Nhù San 59, Ky Quan San 43) và **bỏ sót đúng 4 đỉnh thuộc `Zone B`** (Fansipan 36, Putaleng 27, Tả Liên Sơn 27, Ngũ Chỉ Sơn 32 - đều `DISSIPATING` dù ΔH +634 đến +1.413m). Đo bằng `hindcast.ts` ngày 29/10 xác nhận nghi vấn treo từ ca Fansipan 25/10: gió nội suy 850↔700hPa về 3.049-3.143m ra 15,2-25,5km/h, vượt ngưỡng `> 15km/h` của `Zone B` (Putaleng GFS 15,2km/h vượt đúng 0,2km/h), nên engine gán "gió xé nát cấu trúc mây" trong khi mặt mây nằm sâu dưới nắp nghịch nhiệt và gió 850hPa chỉ 2-3km/h.
 - **Tổng kết 10 ngày ngoài mẫu (20→29/10):** A đúng 4 · bỏ sót 6 · nhầm 0 · **đúng không 0**; B đúng 3 · bỏ sót 7 · nhầm 0 · **đúng không 0**. Phát hiện phương pháp: cả 10/10 ngày cuối tháng 10 đều có 6-13 điểm có mây thấp (0 ngày âm tính theo định nghĩa "≥ 4 điểm"). Vào chính vụ khô lạnh, ngưỡng sự thật "≥ 4/55 điểm" thành nền hằng ngày (100%), không còn tách được ngày đặc biệt khỏi ngày thường.
 **Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): trước khi xét tiếp phải định nghĩa lại sự thật ngày diện rộng cho mùa chính (theo tỉ lệ điểm nhìn được hoặc theo cụm núi), không giữ ngưỡng phẳng 4 điểm.
+
+#### Kiểm định mức "đáng đi ∧ điểm ≥ 65" theo luật cổng (29/10/2026): ĐỨNG VỮNG ở ≥ 2.400m nhưng CHƯA ĐƯA LÊN GIAO DIỆN
+
+Mức `worthGoing && score >= 65` (đặt ngày 14/10 từ dữ liệu `<= 13/10`) đã vượt ngưỡng 5 ngày độc lập (9 ngày trúng: `02, 13, 18, 19, 20, 21, 23, 25, 26/10`). Trước khi đưa thành bậc hiển thị phụ bên trong "đáng đi", đã thực hiện đủ quy trình luật cổng trên **1.485 cặp** (cắt ngoài mẫu nghiêm ngặt tại `>= 14/10`, `n = 601`) kèm một lượt phản biện độc lập từ agent chuyên gia khí tượng núi cao:
+
+1. **Số đo phân tầng (cùng một mẻ dữ liệu):**
+   - Toàn kho (`1.485` cặp): `score >= 65` đạt **45,8%** (`27 TP - 32 FP`) so với **14,9%** (`56 TP - 319 FP`) của `score < 65`. Ngoài mẫu `>= 14/10` (`601` cặp): `43,2%` (`19 TP - 25 FP`, 7 ngày TP) so với `29,2%` (`45 TP - 109 FP`).
+   - Nguồn người đi (`33` cặp): `score >= 65` đạt **100%** (`9 TP - 0 FP`, trong đó 6/9 ca vệ tinh gốc hôm đó ghi `CLEAR` vì mù sương mỏng).
+   - **Tách theo cao độ chỗ đứng (`calibrate.ts` nay in trực tiếp hai dòng này):**
+     - **Đỉnh cao `>= 2.400m` (`506` cặp):** `score >= 65` đạt **85,2%** (`23 TP - 4 FP`; riêng ngoài mẫu `>= 14/10` đạt **80,0%**, `16 TP - 4 FP`, tỷ số hợp lý dương `LR+ = 4,70` trên nền tỷ lệ mây thật `46,0%`), bỏ xa nhánh `score < 65` (`19,4%` toàn kho, `37,4%` ngoài mẫu, `LR+ = 0,70`). Lý do vật lý: để vượt 65 ở đỉnh cao, hạng mục ngưng tụ phải đóng góp `25-34` điểm (ép buộc có thảm stratocumulus dày thật), chặn sạch lớp mặt mây giả `~2.200m` do `rootedLowLayer` (`RH >= 80%` dù `cc = 0%`) sinh ra ở nhánh `< 65`.
+     - **Điểm `< 2.400m` (`979` cặp):** `score >= 65` chỉ đạt **12,5%** (`4 TP` đều từ người đi - `28 FP` đều từ vệ tinh, gồm `25 CLEAR` + `1 FOGGED_IN` ở `< 2.000m`, `1 CLEAR` ở `2.190m`, `1 FOGGED_IN` ở `2.402m` sát ranh). Riêng **`PU_LUONG` (`1.700m`, đáy `400m`) chiếm `12/32` ca FP toàn kho** (nổ `>= 65` ở `13/52` ngày bản chụp, đứng Top 1 toàn quốc `6/15` đêm ngoài mẫu; `KIM_BON` đáy `120m` cũng nổ với tốc độ `3/12 = 25%` ngày).
+
+2. **Bốn phát hiện phản biện độc lập chặn việc đưa ngay bậc `>= 65` lên giao diện:**
+   - **Nghịch lý hàm điểm ngược ở đuôi cao `77-80` do cộng trùng 3 lần ẩm đáy thung lũng thấp (`scoreOneModel`):** trong 59 cặp `worthGoing && score >= 65`, dải `65-72` đúng `54,8%` (`23/42`), `73-76` đúng `44,4%` (`4/9`), nhưng dải cao nhất **`77-80` đúng `0,0%` (`0 TP - 8 FP`, `7/8` là `PU_LUONG`)**! Ở thung lũng thấp `120-400m` đón ẩm vịnh Bắc Bộ, khi `T - Td <= 0,4°C` và `RH >= 95%`, code cộng `valleySaturation (+34)` rồi cộng trùng tiếp `spread <= 1,5 (+12)` và `seaRH >= 90 (+8)` = **`54` điểm dù `cloud_low_dawn = 0%`**, thêm mùa thu `+8` và ổn định cột `+18` thành `80/100` cho một lớp sương đáy ruộng mỏng `560-610m`. Cộng thêm `PU_LUONG` đang ghi cao độ cứng `1.700m` (DEM tại toạ độ là `1.468m`, còn khách săn mây thực tế đứng ở `400-1.200m`), gắn huy hiệu mạnh lúc này sẽ làm `Pù Luông` / `Kim Bon` chiếm sóng đầu bảng `TonightRanking` ngay trong các đêm Hoàng Liên Sơn mới là nơi có biển mây thật (như `29/10`).
+   - **Vách đá `seasonAdjust` ngày `01/12`:** cả `27/27` ca TP đều rơi vào tháng 10 khi miền Bắc được cộng cứng `+8` điểm, và `18/27` (`67%`) ca TP nằm ở `66-72` điểm. Ngày `01/12`, `seasonAdjust` miền Bắc tụt từ `+8` về `0`, sẽ tự động xoá 2/3 số ngày biển mây mạnh thật khỏi ngưỡng cứng `65` (và miền Trung đang chịu `-12`).
+   - **Bỏ sót hành vi & lật bậc 3-so-với-6 mô hình:** nhánh `< 65` đang giữ `67,5%` (`56/83`) tổng số ca khuyên đúng, gồm **100% ca trúng ở Tà Xùa** (`0/52` ngày `>= 65`) và **100% đợt biển mây hậu không khí lạnh khô** (`28-29/10`, các đỉnh cao đạt `40-62` điểm). Ngoài ra `12/27` ca TP nằm sát mép `65-69`, dễ bị lật huy hiệu khi bấm từ `TonightRanking` (3 mô hình) vào `AnalysisResult` (6 mô hình, lệch trung bình `~4` điểm).
+   - **Lỗi biên trong `verify_satellite.py`:** tham số `OPAQUE_EMISS` chưa dùng và `SEA_CONFIRMED >= 2` xét trước `BLOCKED_ABOVE`, làm 4 ngày nhiễu mây ti mỏng (`emiss 0,00-0,14` cạnh khung `11,8-13,7km`) ở `BA_DEN` bị gán nhầm `SEA_CONFIRMED`.
+
+3. **Quyết định kỹ thuật (chọn Lộ trình A):** **Giữ nguyên giao diện 1 bậc "Đủ điều kiện săn mây", chưa tách bậc hiển thị `>= 65`** (`ENGINE_VERSION` không đổi). Xếp 3 gốc vật lý vừa bóc tách (khử cộng trùng 3 lần ẩm đáy thung lũng trong `scoreOneModel`, chuẩn hoá cao độ điểm ngắm `PU_LUONG`, tách `seasonAdjust` khỏi `ingredientScore`) vào đợt sửa engine lớn cùng `estimateCloudTop` và cổng gió `Zone B`; sau đợt đó mới chấm lại bậc phân tầng trên `ingredientScore`.
 
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
@@ -1744,7 +1769,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 | `components/RadarPanel.tsx` | Radar mưa RainViewer (weather-maps.json, CORS *; composite phủ VN thật) trên nền 3×3 tile OSM lọc màu tối; khung nowcast dán nhãn "dự báo". |
 | `services/verificationService.ts` | Vòng đối chiếu: dự báo đã lưu vs ERA5 archive (cloud_cover_low 4-9h, trễ ~5 ngày, ngưỡng biển mây 40%); ngày chưa có ERA5 → hit=null, không phán. |
 | `components/VerificationPanel.tsx` | UI trúng/trượt/chờ từng ngày + tổng kết; nói rõ ERA5 là proxy, không phải mắt thấy. |
-| `tests/engine.test.ts` | 125 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, múi giờ VN, alias thư viện (vitest). |
+| `tests/engine.test.ts` | 128 golden tests: vật lý & chấm điểm (kể cả profile geopotential thật, lớp mây liên tục, BLH), bậc thang fallback model, lọc model ảnh, lọc nhiễu khung vệ tinh đo mặt mây, múi giờ VN, alias thư viện (vitest). |
 | `constants/mountains.ts`, `constants.ts` | **58 điểm toàn quốc** đã xác thực + mặt cắt địa hình (tài sản quý — giữ cập nhật). |
 | `components/AnalysisResult.tsx` | UI kết quả **verdict-first**: khối phán quyết ĐI/KHÔNG ở đầu trang, thẻ ngày là `<details>` thu gọn (chỉ ngày tốt nhất mở sẵn — trang từng dài 11.1 màn hình mobile, nay ~5.8), quality badge, "Vì sao", consensus thật, ΔH theo waypoint, GPX/TXT/PNG export, banner dữ liệu cũ. |
 
@@ -1821,7 +1846,7 @@ InputForm → analyzeLocation (DB → Nominatim/Open-Meteo geocode → AI cuối
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 125 golden tests engine
+npm test       # vitest — 128 golden tests engine
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

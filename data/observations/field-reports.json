@@ -579,5 +579,18 @@
     "observedAt": "06:50 (người đăng ghi trong bài \"6h50 sáng 24/10/2026\", bài đăng 07:02)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh chụp màn hình bài của một trang địa phương, đăng 07:02 ngày 24/10: \"ngay lúc này biển mây Ba Vì rất đẹp 6h50\". Ảnh chụp ở đoạn đường trên núi (có xe máy, đông người, có thể thấp hơn Đỉnh Vua), biển mây trắng dày, phẳng phủ kín bên dưới tới chân trời; phía trên trời xanh, có dải mây tầng giữa mỏng. Bản chụp: 59/100 FOG, đồng thuận 100% (gfs 52 FOG mặt mây 3.535m · icon 66 FOG 2.168m · ukmo 59 FOG 2.168m), mặt mây 2.168m, ΔH −872m, không khuyên đi ⇒ BỎ SÓT. Mặt mây 2.168m đúng là mốc bám lưới 800hPa + đệm của estimateCloudTop. Vệ tinh FOGGED_IN (đỉnh mây 2.454-2.814m) cùng chiều với app nhưng nhiều khả năng đo dải mây tầng giữa thấy trong ảnh; người đi đè."
+  },
+  {
+    "id": "2026-10-29-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-10-29",
+    "reportedAt": "2026-10-29T18:30:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "07:27",
+    "source": "WEBCAM_PAGE",
+    "note": "Ảnh thực tế từ đỉnh trên vecaptreosapa.com (6 ảnh fansipan-29-10-2026-*.webp qua WordPress media API), có dấu Timemark Verified '07:27 Thứ Năm, 29 Tháng 10, 2026, X. Tả Van, Lào Cai': trời xanh nắng sớm, thảm mây tầng thấp dày phẳng trải kín tới chân trời ngay dưới khu chùa (~2.850-2.900m); lá cờ trên đỉnh 3.143m bay ngang theo gió tầng trên nắp nghịch nhiệt mà thảm mây bên dưới vẫn nằm nguyên. Bản chụp 2026-10-29 (chụp 28/10 15:22Z): 36/100 DISSIPATING, đồng thuận 100% (gfs 27 DISSIPATING mặt mây 2.338m · icon 36 DISSIPATING 2.221m · ukmo 48 DISSIPATING 2.227m), mặt mây 2.227m, ΔH +916m, không khuyên đi => BỎ SÓT (do cổng gió nội suy > 15km/h của Zone B tại 3.143m, trong khi gió 850hPa trong lớp mây chỉ 1,9-3km/h). Vệ tinh cùng ngày: SEA_CONFIRMED, đỉnh mây trung vị 2.883m - khớp sát ảnh thực tế, cao hơn mặt mây app tính 656m."
   }
 ]

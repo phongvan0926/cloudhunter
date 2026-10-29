@@ -3,7 +3,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Vitest-125_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-128_golden_tests-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Open-Meteo](https://img.shields.io/badge/Open--Meteo-6_models-00B4D8)](https://open-meteo.com/)
 
 **CloudHunter AI** dự báo biển mây cho dân săn mây, trekking và nhiếp ảnh tại núi cao Việt
@@ -131,7 +131,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 125 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới
+npm test         # 128 golden tests: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -156,6 +156,7 @@ npx vite-node scripts/snapshot-forecast.ts [YYYY-MM-DD]               # tối h�
 ~/.venvs/ch-verify/bin/python tools/verify_satellite.py 2026-08-24    # ~8h : nhãn thật từ vệ tinh
 npx vite-node scripts/import-fb-auto.ts <nhan-ngay.json>              # nhập nhãn Facebook tự động (khi bộ thu báo)
 npx vite-node scripts/regional-days.ts                                # bảng thời tiết vùng 05h, tìm ngày diện rộng tương tự
+npx vite-node scripts/audit-cloud-top.ts                              # đo sai số độ cao mặt mây thật (bản chụp × vệ tinh Himawari)
 npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app
 ```
 
@@ -172,8 +173,9 @@ Ba nguồn sự thật độc lập, **không dùng mô hình dự báo để ch
    `BLOCKED_ABOVE` và **bị loại khỏi phép chấm** thay vì đoán bừa.
 3. **`scripts/calibrate.ts`** ghép hai nguồn trên với dự báo đã chụp, in ra tỉ lệ đúng,
    danh sách ngày **BỎ SÓT** và ngày **BÁO NHẦM** — chỉnh hằng số nào là nhìn thẳng vào đó.
-   Từ 14/10/2026 nó in thêm mức theo dõi "đáng đi ∧ điểm ≥ 65" kèm số NGÀY độc lập (chưa dùng
-   trong app cho tới khi đủ ≥5 ngày), và bỏ qua báo cáo không phải rạng sáng (`timeOfDay`).
+   Từ 14/10/2026 nó in thêm mức theo dõi "đáng đi ∧ điểm ≥ 65" kèm số NGÀY độc lập và tách theo cao độ
+   (đỉnh ≥ 2.400m đạt 85% toàn kho / 80% ngoài mẫu, nhưng chưa đưa lên giao diện do lỗi cộng trùng ẩm ở
+   thung lũng thấp và bước nhảy mùa ngày 01/12 - xem `AGENTS.md`), và bỏ qua báo cáo không phải rạng sáng (`timeOfDay`).
 
 > **Nhãn tự động từ Facebook (từ 19/10/2026):** bài "thời tiết hôm nay" của người làm du lịch tại
 > chỗ ở Tà Xùa và Fansipan được đọc hằng ngày ở máy nhà, mỗi bài gắn nhãn bởi một lượt AI không được

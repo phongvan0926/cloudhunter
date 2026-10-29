@@ -27,6 +27,7 @@ const DIR = 'data/observations';
 type Truth = 'SEA' | 'NO_SEA';
 interface Row {
   date: string; key: string; name: string;
+  observerAlt?: number;
   truth: Truth; truthSrc: string; truthDetail: string;
   score: number; status: string; agreement: number;
   deltaH?: number | null; worthGoing?: boolean;   // có từ engine-2.8; bản chụp cũ không có
@@ -71,7 +72,9 @@ function main() {
         skipped.push(`${o.date} ${o.key}: vệ tinh không nhìn được xuống dưới (${o.verdict})`); continue;
       }
       const truth: Truth = (o.verdict === 'SEA_CONFIRMED' || o.verdict === 'SEA_MARGINAL') ? 'SEA' : 'NO_SEA';
-      rows.push({ date: o.date, key: o.key, name: o.name, truth, truthSrc: 'vệ tinh',
+      rows.push({ date: o.date, key: o.key, name: o.name,
+        observerAlt: (p as any).observerAlt ?? o.observerAlt ?? MOUNTAIN_DB[o.key]?.elevation,
+        truth, truthSrc: 'vệ tinh',
         truthDetail: `${o.verdict}, đỉnh mây ${o.cloudTopMedian_m ?? '—'}m`,
         score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel,
         deltaH: (p as any).deltaH, worthGoing: (p as any).worthGoing,
@@ -96,7 +99,9 @@ function main() {
       const p = fc[r.date]?.[r.spotKey];
       if (!p) { skipped.push(`${r.date} ${r.spotKey}: chưa chụp dự báo cho ngày này (nhãn Facebook)`); continue; }
       const truth: Truth = (r.seaLevel === 'BELOW' || r.seaLevel === 'AT_EYE') ? 'SEA' : 'NO_SEA';
-      const row: Row = { date: r.date, key: r.spotKey, name: MOUNTAIN_DB[r.spotKey]?.name || r.locationName, truth,
+      const row: Row = { date: r.date, key: r.spotKey, name: MOUNTAIN_DB[r.spotKey]?.name || r.locationName,
+        observerAlt: (p as any).observerAlt ?? MOUNTAIN_DB[r.spotKey]?.elevation,
+        truth,
         truthSrc: 'facebook', truthDetail: `${r.seaLevel}${r.thickness ? ' ' + r.thickness : ''} tin ${r.confidence} — "${r.evidence?.[0]?.text ?? ''}"`,
         score: p.score, status: p.status, agreement: p.agreement, perModel: (p as any).perModel,
         deltaH: (p as any).deltaH, worthGoing: (p as any).worthGoing, engineVersion: (p as any).engineVersion };
@@ -125,10 +130,12 @@ function main() {
       }
       const truth: Truth = (r.seaLevel === 'BELOW' || r.seaLevel === 'AT_EYE') ? 'SEA' : 'NO_SEA';
       const i = rows.findIndex(x => x.date === r.date && x.key === key);
-      const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName, truth,
+      const row: Row = { date: r.date, key, name: MOUNTAIN_DB[key]?.name || r.locationName,
+        observerAlt: (p as any)?.observerAlt ?? MOUNTAIN_DB[key]?.elevation,
+        truth,
         truthSrc: 'người đi', truthDetail: r.seaLevel + (r.duration === 'SHORT' ? ' (tan nhanh)' : '') + (r.note ? ` — "${r.note}"` : ''),
         score, status, agreement: p?.agreement ?? 0, perModel: (p as any)?.perModel,
-        deltaH: (p as any)?.deltaH, worthGoing: (p as any)?.worthGoing,
+        deltaH: (p as any)?.deltaH, worthGoing: (p as any)?.deltaH !== undefined ? (p as any)?.worthGoing : undefined,
         engineVersion: (p as any)?.engineVersion };
       if (i >= 0) rows[i] = row; else rows.push(row);
     }
@@ -185,7 +192,11 @@ function main() {
   const STRONG_SCORE = 65;
   const strongPred = (r: Row) => isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null })
     && r.score >= STRONG_SCORE;
-  evalOne(`Mức "CHẮC ĂN" đang theo dõi: đáng đi ∧ điểm ≥ ${STRONG_SCORE} (CHƯA dùng trong app)`, strongPred);
+  evalOne(`Mức "CHẮC ĂN" đang theo dõi: đáng đi ∧ điểm ≥ ${STRONG_SCORE} (CHƯA dùng trong app — xem AGENTS.md 29/10)`, strongPred);
+  const highAltRows = rows.filter(r => (r.observerAlt ?? 0) >= 2400);
+  const lowAltRows = rows.filter(r => (r.observerAlt ?? 0) < 2400);
+  if (highAltRows.length) evalOne(`   └ mức ≥ ${STRONG_SCORE}, riêng đỉnh ≥ 2.400m (${highAltRows.length} cặp)`, strongPred, highAltRows);
+  if (lowAltRows.length) evalOne(`   └ mức ≥ ${STRONG_SCORE}, riêng điểm < 2.400m (${lowAltRows.length} cặp — vệ tinh mù sương mỏng & thung lũng thấp cộng trùng ẩm)`, strongPred, lowAltRows);
   // Cùng luật, tách theo NGUỒN sự thật — vệ tinh mù sương mỏng thung lũng (02/09), Facebook chỉ có
   // vài điểm và người đăng làm dịch vụ; số gộp che mất chỗ từng nguồn nói khác nhau.
   for (const src of ['người đi', 'facebook', 'vệ tinh']) {

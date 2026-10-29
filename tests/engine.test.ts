@@ -1558,3 +1558,47 @@ describe('Model mới tự lên đời — Gemini 4 Argon và alias -latest (14/
     }
   });
 });
+
+describe('audit-cloud-top: lọc nhiễu khung vệ tinh khi đo sai số mặt mây', () => {
+  it('loại khung mây tầng cao (> observerAlt + 1500m) bị trộn vào cloudTopMedian_m kiểu Lảo Thẩn 26/10', async () => {
+    const { cleanLowCloudTop } = await import('../scripts/audit-cloud-top');
+    const res = cleanLowCloudTop({
+      key: 'LAO_THAN',
+      name: 'Lảo Thẩn (Y Tý)',
+      date: '2026-10-26',
+      verdict: 'SEA_MARGINAL',
+      observerAlt: 2860,
+      valleyElevation: 1800,
+      cloudTopMedian_m: 4850,
+      frames: [
+        { vn: '04:30', top_m: 2840, emiss: 0.9 },
+        { vn: '05:00', top_m: 2900, emiss: 0.9 },
+        { vn: '05:30', top_m: 4850, emiss: 0.7 },
+        { vn: '06:00', top_m: 5120, emiss: 0.8 },
+        { vn: '06:30', top_m: 5300, emiss: 0.8 },
+      ],
+    });
+    expect(res).toEqual({ top: 2870, contaminated: true, lowFrames: 2 });
+  });
+
+  it('bỏ fill âm -999 (tệp trước 05/10) và đòi ít nhất 2 khung mây thấp hợp lệ trên đáy thung lũng + 150m', async () => {
+    const { cleanLowCloudTop } = await import('../scripts/audit-cloud-top');
+    // chỉ 1 khung hợp lệ + các khung -999/null -> không đủ 2 khung, trả null (không lấy nhiễu đơn lẻ)
+    expect(cleanLowCloudTop({
+      key: 'PU_LUONG',
+      name: 'Pù Luông',
+      date: '2026-09-25',
+      verdict: 'CLEAR',
+      observerAlt: 1700,
+      valleyElevation: 400,
+      cloudTopMedian_m: -999,
+      frames: [
+        { vn: '04:30', top_m: -999, emiss: -999 },
+        { vn: '05:00', top_m: -999, emiss: -999 },
+        { vn: '05:30', top_m: 510, emiss: 0.4 }, // <= valley(400) + 150 -> chưa vượt sàn thung lũng
+        { vn: '06:00', top_m: 2115, emiss: 0.5 }, // lẻ 1 khung duy nhất
+        { vn: '06:30', top_m: null, emiss: null },
+      ],
+    })).toEqual({ top: null, contaminated: false, lowFrames: 1 });
+  });
+});
