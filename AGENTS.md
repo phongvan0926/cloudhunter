@@ -1027,8 +1027,12 @@ núi (Tà Xùa, Hoàng Liên Sơn) trước, Ba Vì chỉ là ca phụ. Khi làm
 Cùng lúc, mức "đáng đi ∧ điểm ≥ 65" (mục 13/10) đã có ca trúng ở **9 ngày độc lập** (02, 13, 18, 19, 20, 21, 23, 25, 26/10), vượt ngưỡng
 5 ngày tự đặt; chính xác 47% (27 trúng · 30 nhầm) so với 17% của luật đáng đi. Bước tiếp theo là soi 30 ca nhầm (bao nhiêu ca ở núi thấp
 nơi vệ tinh mù sương mỏng) rồi mới đề xuất đưa lên app, theo luật cổng.
-**Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): chờ A đúng ở ≥ 5 ngày ngoài mẫu. Khi có ~8-10 ngày diện
-rộng thì tìm lại kiểu thời tiết theo từng nhóm (khí chìm sau đợt lạnh / ẩm gió nam), không theo một khuôn.
+27-29/10 (ngoài mẫu thứ tám đến mười, đợt không khí lạnh 1.021hPa, `t850` Sa Pa hạ từ 19,7 xuống 15,3°C):
+- **27/10:** đầu đợt lạnh nhiều mây cao (che 30/56 điểm), A 0 đỉnh, B tắt; vệ tinh thấy 6/26 điểm nhìn được có ⇒ diện rộng (A và B cùng sót).
+- **28/10:** khô lạnh sau front (`t850` Sa Pa 15,3°C, gió 2,9km/h, đêm khô, `dpd2m` 0°C ⇒ **B bật đúng**), A 0 đỉnh (cao nhất Pù Luông 64); vệ tinh thấy 9/39 điểm có, app khuyên đi trúng nhóm đỉnh cao Hoàng Liên Sơn (Lảo Thẩn 62, Nhìu Cồ San 62, Pusilung 56, Ky Quan San 51, Putaleng 40, Tả Liên Sơn 18).
+- **29/10:** khí chìm ổn định mạnh (`lapse850_700` Sa Pa 6,0°C/km, Hà Giang 3,9°C/km, gió 850 Sa Pa 1,9km/h), A 2 đỉnh (Pù Luông 74, Kim Bon 65), B tắt do mây cao đêm 33%; vệ tinh thấy 8/39 điểm có, nguyên dải 8 đỉnh cao Hoàng Liên Sơn - Lai Châu. App khuyên đi trúng 4 đỉnh (Nhìu Cồ San 60, Lảo Thẩn 59, Cú Nhù San 59, Ky Quan San 43) và **bỏ sót đúng 4 đỉnh thuộc `Zone B`** (Fansipan 36, Putaleng 27, Tả Liên Sơn 27, Ngũ Chỉ Sơn 32 - đều `DISSIPATING` dù ΔH +634 đến +1.413m). Đo bằng `hindcast.ts` ngày 29/10 xác nhận nghi vấn treo từ ca Fansipan 25/10: gió nội suy 850↔700hPa về 3.049-3.143m ra 15,2-25,5km/h, vượt ngưỡng `> 15km/h` của `Zone B` (Putaleng GFS 15,2km/h vượt đúng 0,2km/h), nên engine gán "gió xé nát cấu trúc mây" trong khi mặt mây nằm sâu dưới nắp nghịch nhiệt và gió 850hPa chỉ 2-3km/h.
+- **Tổng kết 10 ngày ngoài mẫu (20→29/10):** A đúng 4 · bỏ sót 6 · nhầm 0 · **đúng không 0**; B đúng 3 · bỏ sót 7 · nhầm 0 · **đúng không 0**. Phát hiện phương pháp: cả 10/10 ngày cuối tháng 10 đều có 6-13 điểm có mây thấp (0 ngày âm tính theo định nghĩa "≥ 4 điểm"). Vào chính vụ khô lạnh, ngưỡng sự thật "≥ 4/55 điểm" thành nền hằng ngày (100%), không còn tách được ngày đặc biệt khỏi ngày thường.
+**Chưa đưa lên app** (kiểu "đêm nay nhiều đỉnh đẹp"): trước khi xét tiếp phải định nghĩa lại sự thật ngày diện rộng cho mùa chính (theo tỉ lệ điểm nhìn được hoặc theo cụm núi), không giữ ngưỡng phẳng 4 điểm.
 
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
@@ -1069,8 +1073,10 @@ cuối và từ chối đè.
 Và lịch 08:37 UTC **không** cho giờ nổ như đã tính: 7 lần chạy từ 06/10 nổ 14:38-18:08 UTC (trễ
 6-9,5 giờ, so với 2,8-7 giờ đo ở lịch cũ), tức 21:38-01:08 giờ VN, lead tới rạng sáng 3,9-7,4 giờ.
 Vẫn tốt hơn lịch cũ (trung vị 01:34 sáng) nhưng sai số dự đoán lớn. Đáng chú ý: cả hai lịch đều đổ
-về khoảng 15-18 UTC — có thể GitHub gom các lần chạy hạng thấp, không phụ thuộc giờ đặt. Mới 7 điểm
-đo, chưa đổi tiếp; kiểm lại sau 2 tuần.
+về khoảng 15-18 UTC — có thể GitHub gom các lần chạy hạng thấp, không phụ thuộc giờ đặt.
+Đo lại sau 3 tuần (29/10/2026, 23 lần chạy): giờ nổ 12:20-18:08 UTC, trung vị **14:38 UTC (21:38 VN)**;
+riêng 12 ngày liên tiếp 17→28/10 sau khi ghim `vite-node` đều thành công 12/12, nổ 12:20-15:48 UTC
+(19:20-22:48 VN, 0 lần qua nửa đêm VN, kho bản chụp phủ kín 18→29/10). Giữ nguyên lịch 08:37 UTC.
 
 #### Mất thêm ngày 17/10 — `npx vite-node` tự đi tải gói và npm chết giữa chừng
 
