@@ -250,6 +250,14 @@ Kết luận:
   ảnh có dấu giờ 08:06-08:07 và 10:00 đều "trời mù, mưa nhỏ, 12-17 độ", tức đỉnh trong mây. Bản chụp `54/100 RAIN · 67% · mặt mây 3.403m,
   ΔH −260m · không khuyên đi` cùng chiều với ảnh có giờ. Vệ tinh BLOCKED_ABOVE (đỉnh mây 4.842-5.470m). App không khuyên đi, điểm dưới 65
   nên không thuộc loại phải hỏi anh. Giữ nguyên.
+- Nhãn 28-29/10 (bộ gắn nhãn chạy bù sau lúc Claude hết hạn mức):
+  - **Fansipan 28/10 KHONG_RO, độ tin 0,6, cần người xem** (không chấm). Ảnh có giờ 06:10-06:12 và 09:09-09:10 là BELOW ("nắng đẹp, 5 độ", "nắng, biển mây, 11 độ"),
+    nhưng ảnh 07:11 là ABOVE ("có mây và hửng nắng"), diễn biến lúc trong lúc dưới nên bộ gắn nhãn không chốt. Bản chụp `46/100 DISSIPATING · 33% · mặt mây 2.229m,
+    ΔH +914m · không khuyên đi`; vệ tinh CLEAR (đỉnh mây 2.824m). Điểm dưới 65 và app không khuyên đi nên không hỏi anh; nếu nhận BELOW thì là thêm một ca bỏ sót.
+  - **Fansipan 29/10 BELOW, độ tin 0,85** (ảnh 07:27, 08:23-08:24 "nắng đẹp"), khớp báo cáo người nhìn cùng ngày (✓), nên người nhìn đè và không thêm cặp Facebook mới.
+    Bản chụp `36/100 DISSIPATING · 100% · ΔH +916m · không khuyên đi` ⇒ bỏ sót (vệ tinh SEA_CONFIRMED 2.883m dưới chỗ đứng). Cùng kiểu cổng gió Zone B đã ghi ở mục 27-29/10.
+  - **Tà Xùa 29/10 BELOW, độ tin 0,4**, chỉ có chữ "nắng đẹp + nhiều mây" 10:49, không ảnh có giờ. Bản chụp `36/100 FOG · 100% · ΔH −424m · không khuyên đi`, vệ tinh CLEAR.
+    Không chấm, không hỏi anh (không khuyên đi, điểm < 65). Nguồn Facebook vẫn 8 cặp: 2 đúng · 6 bỏ sót.
 
 ### 🧭 Luật cổng khi tự sửa engine (anh Phong uỷ quyền 18/10/2026)
 

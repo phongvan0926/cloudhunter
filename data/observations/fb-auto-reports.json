@@ -505,6 +505,95 @@
   ]
  },
  {
+  "id": "2026-10-28-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-28",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "06:10",
+  "confidence": 0.6,
+  "needsReview": true,
+  "firstPostAt": "2026-10-28T06:27:19+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-28T06:27:19+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời nắng đẹp nhiệt độ 5 độ",
+    "stamps": [
+     "06:10 BELOW",
+     "06:11 BELOW",
+     "06:11 BELOW",
+     "06:11 BELOW",
+     "06:12 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-10-28T08:36:32+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời có mây và hửng nắng nhiệt độ 12 độ",
+    "stamps": [
+     "07:11 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-10-28T09:25:12+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fan nắng rồi, checkin thôi cả nhà ơi",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-10-28T09:36:50+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời có nắng, biển mây nhiệt độ 11 độ",
+    "stamps": [
+     "09:09 BELOW",
+     "09:10 BELOW"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-10-29-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-10-29",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:27",
+  "confidence": 0.85,
+  "firstPostAt": "2026-10-29T07:38:14+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-29T07:38:14+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời nắng đẹp nhiệt độ 10 độ",
+    "stamps": [
+     "07:27 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-10-29T08:36:15+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời nắng đẹp nhiệt độ 11 độ",
+    "stamps": [
+     "08:23 BELOW",
+     "08:24 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-10-29T10:28:51+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fansipan hôm nay đúng đỉnh luôn cả nhà ơi",
+    "stamps": []
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -865,6 +954,25 @@
     "postedAt": "2026-10-23T10:28:17+07:00",
     "seaLevel": "BELOW",
     "text": "thời tiết tà xùa hôm nay: nắng đẹp + nhiều mây + Mát mẻ",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-10-29-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-10-29",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "SPARSE",
+  "confidence": 0.4,
+  "firstPostAt": "2026-10-29T10:49:28+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-10-29T10:49:28+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời Tiết tà Xùa hôm nay nắng đẹp + nhiều mây",
     "stamps": []
    }
   ]
