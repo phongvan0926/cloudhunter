@@ -361,7 +361,15 @@ function capByInversion(top: number, m: DayModelData, valleyElev: number, base: 
   return inv.height;
 }
 
-export function estimateCloudTop(m: DayModelData, valleyElev: number): number | null {
+/** Biến thể đo thử của estimateCloudTop (đợt 30/10/2026, xem NHAT-KY-HIEU-CHINH.md). Mặc định = engine-2.8.3. */
+export interface CloudTopOpts {
+  /** Ngưỡng RH coi một mực là "có mây". Mặc định 80. */
+  rhCloudy?: number;
+  /** Mặt mây = giao điểm nội suy RH giữa mực có mây cuối và mực kế tiếp (khe ≤ LEVEL_GAP_INTERP_MAX). */
+  interp?: boolean;
+}
+
+export function estimateCloudTop(m: DayModelData, valleyElev: number, opts?: CloudTopOpts): number | null {
   // Cổng cloud_cover_low một mình từng làm engine trả "CLEAR" cho ngày thung lũng bão hoà
   // (AIFS 23/8/2026 báo mây thấp 7% giữa lúc RH 99%) → nhận thêm tín hiệu bão hoà.
   if (m.cloud_low_dawn < 15
@@ -372,23 +380,35 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number): number | 
     .filter(l => l.h > valleyElev)
     .sort((a, b) => a.h - b.h);
   if (profile.length > 0) {
+    const rhCloudy = opts?.rhCloudy ?? 80;
     const isCloudy = (l: { rh: number; cc: number }) =>
-      (Number.isFinite(l.cc) && l.cc >= 45) || (Number.isFinite(l.rh) && l.rh >= 80);
+      (Number.isFinite(l.cc) && l.cc >= 45) || (Number.isFinite(l.rh) && l.rh >= rhCloudy);
     // Mặt biển mây = đỉnh của LỚP MÂY LIÊN TỤC từ tầng thấp nhất có mây đi lên.
     // Không nhảy cóc lên tầng mây trung/cao tách rời phía trên (đó là lớp mây khác).
     const firstCloudy = profile.findIndex(isCloudy);
     let moistTop = -1;
+    let lastIdx = -1;
     if (firstCloudy >= 0) {
       let i = firstCloudy;
       while (i < profile.length && isCloudy(profile[i])) {
         moistTop = profile[i].h;
+        lastIdx = i;
         i++;
       }
     }
     let top: number;
     if (moistTop < 0) top = base + 350;              // mây thấp nông, không tầng nào rõ mây
     else if (moistTop >= 2900) top = moistTop + 400; // lớp mây liên tục tới ~700hPa → trùm dày
-    else top = moistTop + 150;
+    else {
+      top = moistTop + 150;
+      // V1: mực quan trắc chỉ cho biết mây tới ÍT NHẤT đó; mặt mây nằm giữa hai mực.
+      const nxt = profile[lastIdx + 1], cur = profile[lastIdx];
+      if (opts?.interp && nxt && cur && nxt.h - cur.h <= LEVEL_GAP_INTERP_MAX
+          && Number.isFinite(cur.rh) && Number.isFinite(nxt.rh) && cur.rh >= rhCloudy && nxt.rh < rhCloudy) {
+        const f = (cur.rh - rhCloudy) / (cur.rh - nxt.rh);
+        top = cur.h + f * (nxt.h - cur.h);
+      }
+    }
     return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
   }
   const levels = [
@@ -676,11 +696,11 @@ export function scoreOneModel(
   model: WeatherModelId, m: DayModelData, ctx: DayContext, dateStr: string,
   // Chỉ dùng cho script đo: truyền Infinity để chấm lại bằng luật TRƯỚC engine-2.8.4 trên
   // cùng một mẻ dữ liệu (hai lần fetch không so được — Open-Meteo viết đè quá khứ).
-  opts?: { observerFogMaxDeltaH?: number }
+  opts?: { observerFogMaxDeltaH?: number; cloudTop?: CloudTopOpts }
 ): ModelDayScore {
   const reasons: string[] = [];
   const inv = computeInversion(m, ctx.valleyElevation);
-  const top = estimateCloudTop(m, ctx.valleyElevation);
+  const top = estimateCloudTop(m, ctx.valleyElevation, opts?.cloudTop);
   // GIÓ NÀO mới phá được biển mây? Nắp nghịch nhiệt tồn tại chính là để CHẶN xáo trộn thẳng
   // đứng. Khi mặt biển mây nằm hẳn dưới nắp, gió 850hPa (~1500m) thổi ở tầng BÊN TRÊN nắp,
   // không với xuống lớp mây được — lúc đó gió quyết định là gió TRONG lớp mây (925hPa ~760m).

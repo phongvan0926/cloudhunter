@@ -1068,6 +1068,10 @@ Mức `worthGoing && score >= 65` (đặt ngày 14/10 từ dữ liệu `<= 13/10
 
 3. **Quyết định kỹ thuật (chọn Lộ trình A):** **Giữ nguyên giao diện 1 bậc "Đủ điều kiện săn mây", chưa tách bậc hiển thị `>= 65`** (`ENGINE_VERSION` không đổi). Xếp 3 gốc vật lý vừa bóc tách (khử cộng trùng 3 lần ẩm đáy thung lũng trong `scoreOneModel`, chuẩn hoá cao độ điểm ngắm `PU_LUONG`, tách `seasonAdjust` khỏi `ingredientScore`) vào đợt sửa engine lớn cùng `estimateCloudTop` và cổng gió `Zone B`; sau đợt đó mới chấm lại bậc phân tầng trên `ingredientScore`.
 
+#### Đợt `estimateCloudTop` 30/10/2026: thử 4 biến thể, KHÔNG đổi engine
+
+Nội suy giao điểm RH (V1) giảm sai số mặt mây 3%, nâng ngưỡng RH 80→90 (V2a) làm tệ đi 23%, nên không đổi gì (`engine-2.8.3`). Phản biện độc lập: sai số +650m so với vệ tinh là chênh giữa HAI ước lượng, vệ tinh IR có thể lệch cao ở chế độ nghịch nhiệt, nên đừng viết "app thấp 650m" như sự thật. Việc kế tiếp: hiệu chuẩn vệ tinh bằng ảnh có dấu giờ + DEM, rồi tách theo `cloud_cover_mid`. Chi tiết và 14 ý phản biện ở `NHAT-KY-HIEU-CHINH.md`; công cụ `scripts/replay-raw.ts`, `scripts/ab-cloudtop.ts`.
+
 #### Tà Xùa chuẩn = 1.800m, chỗ cao nhất xe lên được (14/10/2026)
 
 Người dùng phát hiện mục chọn nhanh "Tà Xùa (Sống lưng Khủng Long)" vẫn ghi **2.865m** — đó là đỉnh

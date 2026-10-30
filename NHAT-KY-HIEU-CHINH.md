@@ -37,3 +37,38 @@ Viết và commit TRƯỚC khi chạy bất kỳ phép đo nào của đợt nà
 3. Báo nhầm tăng thì nêu rõ đổi lấy gì. Ca dùng để nghĩ ra bản sửa (Fansipan 25-29/10, Tà Xùa 04/10) không được tính là lợi ích.
 4. Số tách riêng: đỉnh ≥ 2.400m / < 2.400m, Ba Vì tách hẳn (núi thấp đứng lẻ), Tà Xùa và Fansipan riêng.
 5. Mọi ca đổi kết luận liệt kê theo cả hai chiều rồi đưa agent khí tượng độc lập phản biện. Không đạt điều kiện 1 thì KHÔNG đổi engine, chỉ ghi kết quả.
+
+### Kết quả đợt `estimateCloudTop` (30/10/2026) - KHÔNG ĐỔI ENGINE
+
+Chấm 4 biến thể đã đăng ký trước trên cùng một mẻ dữ liệu thô (`scripts/replay-raw.ts` lấy từ
+historical-forecast-api, 2.723 điểm×ngày; `scripts/ab-cloudtop.ts` chấm; 1.494 hàng có sự thật:
+36 người đi, 8 Facebook, 1.450 vệ tinh). Số liệu chính (đỉnh >= 2.400m, ngày vệ tinh thấy biển mây, khung sạch, n=120):
+
+```
+              V0      V1      V2a     V2
+sai số TV    650m    628m    800m    805m     (vệ tinh - app, |.| trung vị 663/642/803/816m)
+người đi+FB  đúng22 sót12 nhầm2 | V1 y hệt | V2a đúng25 sót9 nhầm3 | V2 đúng25 sót9 nhầm3
+vệ tinh      đúng65 sót64 nhầm333 | V1 nhầm320 | V2a đúng73 sót56 nhầm410 | V2 nhầm410
+ngày vệ tinh quang, đỉnh >=2400m: app vẫn dựng mặt mây 81% / 81% / 80% / 80%
+```
+
+**Kết luận theo luật đã ghi trước:** H1 (nội suy giảm sai số >= 25%) BỊ BÁC: V1 giảm 3%, V2a làm tệ đi 23%.
+Điều kiện 2 thất bại nên không đổi engine, `ENGINE_VERSION` giữ `engine-2.8.3`. Hai tham số `rhCloudy`/`interp`
+của `estimateCloudTop` giữ lại làm công cụ đo (mặc định không đổi, 128 test xanh). H3: V2a cứu 3 ca Tà Xùa/Fansipan/Suôi Thầu
+(đúng hơn 3 ca người đi/FB) nhưng mất ca Suôi Thầu 25/8, thêm 1 báo nhầm Tà Xùa 29/10 và +77 "nhầm" theo vệ tinh.
+
+**Phản biện của agent khí tượng độc lập và cách xử lý:**
+1. V1 thua vì toán học (RH rớt mạnh giữa 800 và 700hPa thì giao điểm xấp xỉ +150m cũ). Ghi nhận, không thêm biến thể cứu.
+2. CldTopHght (IR) có thể lệch CAO ở chế độ nghịch nhiệt (profile NWP làm trơn, đỉnh sương tự lạnh, thị sai vệ tinh, ô 2km trên sườn dốc). Nên "sai số 650m" là chênh giữa HAI ước lượng, chưa phải lỗi của app. Xử lý: từ nay không viết "app thấp 650m" như sự thật; việc kế tiếp là hiệu chuẩn vệ tinh bằng 10-20 ca ảnh có dấu giờ + DEM.
+3. Mây tầng giữa mỏng có thể bị vệ tinh ghi thay biển mây. Xử lý: phép đo kế tiếp tách sai số theo `cloud_cover_mid` và `CldTopEmss` (hiện là tham số chết trong `classify`).
+4. Chưa dùng `cloud_cover_mid`, sát khe 800-700hPa. Xử lý: đưa vào đề xuất phép đo kế tiếp, viết giả thuyết trước.
+5. "V2a cứu Tà Xùa nên RH80 là gốc" không vững: 3 ca cùng vùng, nút xoay đơn điệu, số ngày độc lập 2-3. Xử lý: không dùng làm bằng chứng; H3 chỉ là đối chứng yếu. Phép phân biệt đề xuất: quét ngưỡng RH 70..98 xem có "đầu gối", tách < 2.400m, dùng sự thật không phải vệ tinh.
+6. 81% dựng mặt mây ngày vệ tinh quang: chưa kết luận được lỗi engine hay vệ tinh mù. Phép thử rẻ nhất: trong ca đó, mặt mây dựng từ cloud_cover thật hay chỉ từ RH >= 80%.
+7. Thứ tự đo đề xuất: (1) hiệu chuẩn vệ tinh bằng ảnh có giờ, (2) tách cc thật với chỉ RH, (3) thử cloud_cover_mid, (4) đổi đầu ra thành KHOẢNG [mực cuối còn ẩm, mực đầu tiên khô] với ΔH có cận, (5) ERA5 37 mực chỉ để đo khe mù. Không chỉnh ngưỡng RH tiếp.
+8. Sai số chỉ tính trên ngày vệ tinh thấy biển mây và có top: thu hẹp về mẫu thuận lợi. Ghi nhận; lần sau in tỉ lệ ca bị loại mỗi biến thể.
+9. Số ngày hiệu dụng ~34 (người đi+FB ~17-20 ngày), nên "+77 nhầm" không phải 77 quan sát. Xử lý: lần sau bootstrap theo ngày.
+10. Replay là dữ liệu gần lead 0, tuyệt đối chỉ là cận trên; chỉ so tương đối giữa biến thể là hợp lệ.
+11. Rò rỉ in-sample nhẹ (giả thuyết nghĩ sau khi đã xem Tà Xùa/Fansipan). Đã loại các ca đó khỏi "lợi ích" theo luật 3.
+12. "đúng-không" bị lớp phủ định chi phối; lần sau báo LR+/LR- hoặc balanced accuracy theo nhóm.
+13. Nhãn vệ tinh và thước đo sai số dùng chung CldTopHght, không độc lập. Ghi nhận như điểm 2.
+14. Giữ đúng luật: điều kiện 2 thất bại thì không đổi engine, không lấy +3 ca người đi để lách. Đã làm theo.
