@@ -72,3 +72,23 @@ của `estimateCloudTop` giữ lại làm công cụ đo (mặc định không �
 12. "đúng-không" bị lớp phủ định chi phối; lần sau báo LR+/LR- hoặc balanced accuracy theo nhóm.
 13. Nhãn vệ tinh và thước đo sai số dùng chung CldTopHght, không độc lập. Ghi nhận như điểm 2.
 14. Giữ đúng luật: điều kiện 2 thất bại thì không đổi engine, không lấy +3 ca người đi để lách. Đã làm theo.
+
+### Phép đo kế tiếp (30/10/2026) - GIẢ THUYẾT VIẾT TRƯỚC KHI ĐO: mặt mây dựng từ RH thuần hay từ mây trực tiếp
+
+Đây là việc 2 và 3 trong thứ tự agent đề xuất; chỉ ĐO, không đổi engine.
+- Với mỗi (mô hình × điểm × ngày) ở đỉnh >= 2.400m mà V0 dựng được mặt mây, gọi lớp là "có mây trực tiếp" nếu ít nhất một mực trong lớp (từ đáy thung lũng tới mặt mây - 150m) có `cc >= 45`, ngược lại là "chỉ RH".
+- **H4:** tỉ lệ "chỉ RH" ở ngày vệ tinh CLEAR cao gấp >= 2 lần ở ngày vệ tinh SEA_*. Nếu đúng, lớp chỉ-RH là bằng chứng yếu, hướng sửa sau này là đòi mây trực tiếp (làm theo luật cổng, không làm ở lượt này). Nếu không đúng, bỏ giả thuyết "dựng mây từ RH" là gốc.
+- **H5 (cloud_mid):** `cloud_mid_dawn` trung vị cao hơn ở ngày vệ tinh SEA/FOGGED_IN so với CLEAR, và sai số mặt mây (vệ tinh - app) tương quan dương với `cloud_mid_dawn`. Nếu không thì cloud_mid không giải thích khe mù.
+- Báo cáo kèm tỉ lệ ca bị loại và số NGÀY (không chỉ số hàng).
+
+**Kết quả (30/10/2026, `scripts/rh-vs-cc.ts`, đỉnh >= 2.400m, 1.261 ca mô hình×điểm×ngày có mặt mây, 254 ca không dựng):**
+```
+vệ tinh     n    số ngày   mặt mây chỉ từ RH   cloud_mid trung vị
+CLEAR      647     37            80%                 0%
+SEA_*      348     26            69%                 0%
+FOGGED_IN  259     24            49%                 3%
+```
+- **H4 BỊ BÁC:** tỉ lệ chỉ-RH ở ngày CLEAR / ngày SEA = 80/69 = 1,16, xa ngưỡng 2. Lớp chỉ-RH xuất hiện nhiều ở CẢ ngày có biển mây thật, nên "dựng mây từ RH" không phải gốc phân biệt được ngày quang. Không đòi mây trực tiếp.
+- **H5 BỊ BÁC:** `cloud_mid_dawn` trung vị gần 0 ở mọi nhóm, Spearman với sai số = -0,10 (n=348). Cloud_mid không giải thích khe mù, bỏ hướng này.
+- Quan sát phụ (không phải giả thuyết đã đăng ký, chỉ ghi lại): sai số (vệ tinh - app) lớn hơn khi mặt mây chỉ từ RH (768m, n=239) so với có mây trực tiếp (537m, n=109). Cả hai đều còn xa 0, nên cũng không cứu được.
+- Hai hướng rẻ nhất của agent đều không ra gì, nên bước đáng làm tiếp là hiệu chuẩn chính vệ tinh bằng ảnh có dấu giờ (việc 1), vì phần lớn khoảng cách 650m có thể nằm ở phía vệ tinh. Cần ảnh từ anh hoặc từ bộ thu: ca có giờ 05:30-07:00 và nhìn thấy địa hình nhô khỏi biển mây.
