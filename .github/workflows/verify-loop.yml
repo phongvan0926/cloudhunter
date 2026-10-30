@@ -98,6 +98,17 @@ jobs:
           done
           echo "::error::chụp $D thất bại sau 4 lần — ngày này sẽ mất nếu không chạy tay trước rạng sáng"
           exit 1
+      - name: Chụp dự báo XA NGÀY (lead 1-7, miền Bắc)
+        # Phụ, KHÔNG được chặn bản chụp chính ở trên: lỗi thì chỉ cảnh báo. Ngày chụp neo vào lịch cron
+        # = ngày mục tiêu - 1 (cùng luật với job này), nên lead của rạng sáng mục tiêu luôn là 1.
+        continue-on-error: true
+        run: |
+          T="$(date -u -d "${{ steps.target.outputs.date }} -1 day" +%F)"
+          for wait in 0 180 480; do
+            [ "$wait" -gt 0 ] && { echo "::warning::chụp xa ngày $T lỗi, chờ ${wait}s"; sleep "$wait"; }
+            npx --no-install vite-node scripts/snapshot-week.ts "$T" && exit 0
+          done
+          echo "::warning::chụp xa ngày $T thất bại, bản chụp chính vẫn giữ"
       - name: Commit bản chụp
         run: |
           git config user.name  "cloudhunter-verify[bot]"
