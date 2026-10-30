@@ -72,6 +72,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 - 🕘 **Lịch sử dự báo** (localStorage): mở lại tức thì, và là nền tảng để đối chiếu
   "app đoán gì vs thực tế" sau chuyến đi.
 - 📥 **Xuất GPX/TXT offline** với tọa độ thật của địa điểm.
+- 📅 **"Cuối tuần đi đâu?"** (30/10/2026): bảng điểm miền Bắc × 7 rạng sáng tới (1 call Open-Meteo, cùng engine và luật "đáng đi"), cột T7/CN nổi bật, ô viền đứt = dự báo xa hơn 3 ngày. Không có % xác suất; ★ = điểm đã kiểm chứng thực địa (Tà Xùa, Fansipan).
 - 🌄 **"Đêm nay đi đâu săn mây?"**: xếp hạng TOÀN BỘ thư viện cho rạng sáng mai trong
   1 call batch — cùng engine + cùng 41 biến (đủ profile 7 tầng) với bản đầy đủ, chỉ khác
   dùng 3 mô hình GFS+ICON+UKMO (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích

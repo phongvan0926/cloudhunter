@@ -19,7 +19,7 @@ import {
   addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS,
   getCachedValley, setCachedValley,
 } from './weatherService';
-import { scoreOneModel, combineModels, isWorthGoing, ENGINE_VERSION } from './cloudScoreEngine';
+import { scoreOneModel, combineModels, isWorthGoing, climateRegion, ENGINE_VERSION } from './cloudScoreEngine';
 import { StatusCode } from '../types';
 
 const RANK_MODELS: WeatherModelId[] = ['gfs_seamless', 'icon_seamless', 'ukmo_seamless'];
@@ -235,4 +235,92 @@ export async function rankSpotsForDawn(
   RANK_CACHE = { targetDate, ts: Date.now(), results };
   saveRankCache(targetDate, results);
   return results;
+}
+
+
+// ───────────────────────── Tuần tới (7 rạng sáng) cho miền Bắc ─────────────────────────
+
+export interface WeekDay {
+  date: string;
+  leadDays: number;          // số ngày từ hôm nay tới rạng sáng đó; càng xa càng kém tin
+  score: number;
+  status: StatusCode;
+  agreement: number;
+  deltaH: number | null;
+  worthGoing: boolean;
+}
+export interface WeekRow {
+  key: string; name: string; elevation: number; zone: string;
+  days: WeekDay[];
+  worthDays: number;         // số rạng sáng "đáng đi" trong cửa sổ
+}
+
+/** Dự báo xa hơn 3 ngày là UNCERTAIN theo qualityForDaysAhead; giữ đúng ranh giới đó. */
+export const WEEK_CONFIDENT_LEAD_DAYS = 3;
+
+const WEEK_LS_KEY = 'ch-week-cache-v1';
+let WEEK_CACHE: { sig: string; ts: number; rows: WeekRow[] } | null = null;
+
+/**
+ * Chấm N rạng sáng liên tiếp cho các điểm MIỀN BẮC bằng CHÍNH engine + 3 mô hình của bảng
+ * "đêm nay". Một call duy nhất phủ cả cửa sổ (Open-Meteo tính hạn ngạch theo số điểm, không theo
+ * số ngày). KHÔNG sinh xác suất: đồng thuận giữa 3 mô hình chỉ là độ nhất quán, không phải tần
+ * suất thực; độ tin giảm theo ngày dự báo và vòng kiểm chứng mới chỉ có bản chụp trước ~1 ngày.
+ */
+export async function rankSpotsForWeek(
+  today: string, dates: string[], onProgress?: (msg: string) => void
+): Promise<WeekRow[]> {
+  const sig = `${ENGINE_VERSION}|${today}|${dates.join(',')}`;
+  if (WEEK_CACHE && WEEK_CACHE.sig === sig && Date.now() - WEEK_CACHE.ts < RANK_CACHE_TTL_MS) return WEEK_CACHE.rows;
+  try {
+    const c = JSON.parse(localStorage.getItem(WEEK_LS_KEY) || 'null');
+    if (c && c.sig === sig && Date.now() - c.ts < RANK_CACHE_TTL_MS && Array.isArray(c.rows) && c.rows.length) {
+      WEEK_CACHE = c; return c.rows;
+    }
+  } catch { /* bỏ qua */ }
+
+  const MIN_GAP_M = 80;
+  const spots = Object.entries(MOUNTAIN_DB).filter(([, m]) => !m.needsReview && climateRegion(m.lat) === 'NORTH');
+  const valleys = await valleyElevationsForAll(onProgress);
+  const usable = spots.filter(([k, m]) => typeof valleys[k] === 'number' && valleys[k] <= m.elevation - MIN_GAP_M);
+  if (!usable.length) throw new Error('Không đo được độ cao thung lũng từ DEM - kiểm tra kết nối mạng.');
+  onProgress?.(`Tải dự báo ${dates.length} ngày cho ${usable.length} điểm miền Bắc (1 call)...`);
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${usable.map(([, m]) => m.lat.toFixed(4)).join(',')}` +
+    `&longitude=${usable.map(([, m]) => m.lon.toFixed(4)).join(',')}` +
+    `&elevation=${usable.map(([k]) => Math.round(valleys[k])).join(',')}` +
+    `&hourly=${RANK_VARS.join(',')}&models=${RANK_MODELS.join(',')}` +
+    `&start_date=${addDaysStr(dates[0], -1)}&end_date=${dates[dates.length - 1]}&timezone=Asia%2FBangkok`;
+  const data = await fetchJson(url);
+  const arr: any[] = Array.isArray(data) ? data : [data];
+
+  const rows: WeekRow[] = [];
+  usable.forEach(([key, mt], i) => {
+    const loc = arr[i];
+    if (!loc?.hourly) return;
+    const block = makeHourlyBlock(loc.hourly);
+    const ctx = { valleyElevation: Math.round(valleys[key]), observerAlt: mt.elevation, zone: mt.zone, lat: mt.lat };
+    const days: WeekDay[] = [];
+    for (const d of dates) {
+      const per = [];
+      for (const model of RANK_MODELS) {
+        const agg = aggregateDayModel(block, block, model, d, addDaysStr(d, -1));
+        if (agg) per.push(scoreOneModel(model, agg, ctx, d));
+      }
+      if (!per.length) continue;   // ngày thiếu dữ liệu thì để trống, không bịa
+      const c = combineModels(per);
+      const deltaH = c.cloudTop !== null ? mt.elevation - c.cloudTop : null;
+      days.push({
+        date: d, leadDays: Math.round((Date.parse(d) - Date.parse(today)) / 86400000),
+        score: c.score, status: c.status, agreement: c.agreement, deltaH,
+        worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
+      });
+    }
+    if (days.length) rows.push({ key, name: mt.name, elevation: mt.elevation, zone: mt.zone, days, worthDays: days.filter(x => x.worthGoing).length });
+  });
+  rows.sort((a, b) => b.worthDays - a.worthDays || Math.max(...b.days.map(x => x.score)) - Math.max(...a.days.map(x => x.score)));
+  WEEK_CACHE = { sig, ts: Date.now(), rows };
+  try { localStorage.setItem(WEEK_LS_KEY, JSON.stringify(WEEK_CACHE)); } catch { /* hết quota */ }
+  return rows;
 }

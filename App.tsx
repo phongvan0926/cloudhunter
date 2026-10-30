@@ -4,6 +4,7 @@ import { InputForm } from './components/InputForm';
 import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
+import { WeekRanking } from './components/WeekRanking';
 import { VerificationPanel } from './components/VerificationPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { UpdateBanner } from './components/UpdateBanner';
@@ -47,6 +48,7 @@ const App: React.FC = () => {
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [historyList, setHistoryList] = useState(() => listRuns());
   const [showTonight, setShowTonight] = useState(false);
+  const [showWeek, setShowWeek] = useState(false);
   const [verifyTarget, setVerifyTarget] = useState<CloudAnalysis | null>(null);
 
   // Mở app bằng link chia sẻ → chạy thẳng phân tích điểm đó
@@ -230,6 +232,36 @@ const App: React.FC = () => {
                         observerAlt: elevation,
                         model: undefined,
                       }, true); // điểm từ thư viện xác thực → bỏ màn xác nhận
+                    }}
+                  />
+                )}
+
+                <div className="max-w-xl mx-auto mb-4">
+                  <button
+                    onClick={() => setShowWeek(v => !v)}
+                    className={`w-full min-h-11 py-3.5 rounded-2xl font-bold text-sm transition-all border flex justify-center items-center gap-2 shadow-lg ${
+                      showWeek
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
+                        : 'bg-gradient-to-r from-emerald-700/90 to-teal-700/90 text-white border-emerald-400/50 hover:from-emerald-600 hover:to-teal-600'
+                    }`}
+                  >
+                    <span>📅</span>
+                    <span>{showWeek ? 'Ẩn bảng 7 ngày' : 'Cuối tuần đi đâu? - 7 ngày tới các điểm miền Bắc'}</span>
+                  </button>
+                </div>
+                {showWeek && (
+                  <WeekRanking
+                    today={vnTodayStr()}
+                    dates={Array.from({ length: 7 }, (_, i) => addDaysStr(vnTodayStr(), i + 1))}
+                    onPickSpot={(name, elevation) => {
+                      setShowWeek(false);
+                      handleInputSubmit({
+                        locationName: name,
+                        startDate: vnTodayStr(),
+                        endDate: addDaysStr(vnTodayStr(), 7),
+                        observerAlt: elevation,
+                        model: undefined,
+                      }, true);
                     }}
                   />
                 )}
