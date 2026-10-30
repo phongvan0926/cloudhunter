@@ -592,5 +592,30 @@
     "observedAt": "07:27",
     "source": "WEBCAM_PAGE",
     "note": "Ảnh thực tế từ đỉnh trên vecaptreosapa.com (6 ảnh fansipan-29-10-2026-*.webp qua WordPress media API), có dấu Timemark Verified '07:27 Thứ Năm, 29 Tháng 10, 2026, X. Tả Van, Lào Cai': trời xanh nắng sớm, thảm mây tầng thấp dày phẳng trải kín tới chân trời ngay dưới khu chùa (~2.850-2.900m); lá cờ trên đỉnh 3.143m bay ngang theo gió tầng trên nắp nghịch nhiệt mà thảm mây bên dưới vẫn nằm nguyên. Bản chụp 2026-10-29 (chụp 28/10 15:22Z): 36/100 DISSIPATING, đồng thuận 100% (gfs 27 DISSIPATING mặt mây 2.338m · icon 36 DISSIPATING 2.221m · ukmo 48 DISSIPATING 2.227m), mặt mây 2.227m, ΔH +916m, không khuyên đi => BỎ SÓT (do cổng gió nội suy > 15km/h của Zone B tại 3.143m, trong khi gió 850hPa trong lớp mây chỉ 1,9-3km/h). Vệ tinh cùng ngày: SEA_CONFIRMED, đỉnh mây trung vị 2.883m - khớp sát ảnh thực tế, cao hơn mặt mây app tính 656m."
+  },
+  {
+    "id": "2026-10-29-sithauchai",
+    "spotKey": "SI_THAU_CHAI",
+    "locationName": "Sì Thâu Chải",
+    "date": "2026-10-29",
+    "reportedAt": "2026-10-30T09:00:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "07:47 (giờ đăng bài Facebook \"Hôm qua lúc 07:47\" nhìn ngày 30/10; ảnh không có dấu giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài \"Lên Sì Thâu Chải săn mây ngay mọi người ơi\" đăng 07:47 ngày 29/10 và xác nhận sáng 29/10 Sì Thâu Chải có biển mây. Ảnh: biển mây trắng dày, phẳng phủ kín thung lũng bên dưới, nhiều người ngồi ngắm, trời xanh bên trên. Bản chụp: 35/100 ROLLING, đồng thuận 67%, mặt mây 1.705m, ΔH −245m, không khuyên đi ⇒ BỎ SÓT. Vệ tinh CLEAR (lại kiểu sương thung lũng hồng ngoại không thấy); người đi đè."
+  },
+  {
+    "id": "2026-10-29-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-10-29",
+    "reportedAt": "2026-10-30T09:10:00+07:00",
+    "seaLevel": "ABOVE",
+    "timeOfDay": null,
+    "observedAt": "sáng 29/10, không rõ giờ (anh Phong gửi ảnh, không dấu giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong: sáng 29/10 Tà Xùa mây nhiều nhưng bị bốc cao lên, không có biển mây phẳng bên dưới. Ảnh: khối mây tích lớn dâng ngang và trên tầm mắt người đứng trên sàn gỗ, sườn núi lộ ra phía dưới, trời xanh xen kẽ. Không rõ giờ chụp nên timeOfDay để trống, calibrate không chấm. Bản chụp: 36/100 FOG, đồng thuận 100%, ΔH −424m, không khuyên đi - cùng chiều với ảnh (mây ngang và trên đầu). Vệ tinh CLEAR. Nhãn FB_AUTO cùng ngày (BELOW 0,4, chỉ có chữ) ngược ảnh này; độ tin thấp nên không chấm. Cùng sáng Sì Thâu Chải có biển mây dày: mây bốc cao ở Tà Xùa là mây dâng sau bình minh, không phải biển mây rạng sáng."
   }
 ]
