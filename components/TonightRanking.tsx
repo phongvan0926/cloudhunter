@@ -81,7 +81,7 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-semibold text-slate-100 truncate">{r.name}</span>
                     <span className="block text-[11px] text-slate-400">
-                      {STATUS_TEXT[r.status]} · đứng {r.elevation}m
+                      {r.worthGoing && <b className="text-emerald-300">✓ Đáng đi · </b>}{STATUS_TEXT[r.status]} · đứng {r.elevation}m
                       {r.deltaH !== null && ` · ${r.deltaH > 0 ? 'trên mặt mây' : 'dưới mặt mây'} ${Math.abs(Math.round(r.deltaH))}m`}
                       {' '}· đồng thuận {r.agreement}%
                     </span>
@@ -102,7 +102,8 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
             </button>
           )}
           <p className="mt-2 text-[10px] text-slate-500">
-            {ranks.length}/{TOTAL_SPOTS} điểm có đủ dữ liệu · cùng engine + cùng 41 biến (đủ profile
+            "✓ Đáng đi" = các mô hình kết luận có biển mây và bạn đứng cao hơn mặt mây; con số bên phải là
+            điểm nguyên liệu, chỉ để xếp hạng, KHÔNG phải mức khuyên (điểm thấp vẫn có thể đáng đi). {ranks.length}/{TOTAL_SPOTS} điểm có đủ dữ liệu · cùng engine + cùng 41 biến (đủ profile
             7 tầng) với bản đầy đủ — chỉ khác dùng 3 mô hình GFS+ICON+UKMO thay vì 6 nên điểm
             có thể lệch vài đơn vị (đo thực tế: trung bình ~4/100).
           </p>

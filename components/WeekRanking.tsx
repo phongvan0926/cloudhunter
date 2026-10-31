@@ -42,8 +42,9 @@ export const WeekRanking: React.FC<Props> = ({ today, dates, onPickSpot }) => {
     <div className="max-w-xl mx-auto mt-4 bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl border border-slate-700 shadow-xl animate-fade-in-up">
       <h3 className="text-base font-bold text-emerald-300 flex items-center gap-2"><span>📅</span><span>7 ngày tới săn mây ở đâu? (miền Bắc)</span></h3>
       <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-        Mỗi ô là một rạng sáng. <b className="text-emerald-300">✓</b> = engine kết luận đáng đi.
-        ★ = điểm đã kiểm chứng thực địa. Ô viền đứt = dự báo xa hơn {WEEK_CONFIDENT_LEAD_DAYS} ngày, chỉ để tham khảo, hãy xem lại gần ngày đi.
+        Mỗi ô là một rạng sáng. <b className="text-emerald-300">✓ Đáng đi</b> = các mô hình kết luận có biển mây và bạn đứng
+        cao hơn mặt mây (không dựa vào điểm). <b>Số</b> = điểm nguyên liệu sương bức xạ, chỉ để xếp hạng, KHÔNG phải mức khuyên:
+        ô ✓ vẫn có thể kèm điểm thấp. ★ = điểm đã kiểm chứng thực địa. Ô viền đứt = dự báo xa hơn {WEEK_CONFIDENT_LEAD_DAYS} ngày, chỉ để tham khảo, hãy xem lại gần ngày đi.
       </p>
       {error && <p className="mt-3 text-xs text-rose-300 bg-rose-950/50 border border-rose-700/50 rounded-xl p-3">Không xếp hạng được: {error}</p>}
       {!rows && !error && <p className="mt-3 text-xs text-cyan-300">{progress}</p>}
@@ -88,7 +89,9 @@ export const WeekRanking: React.FC<Props> = ({ today, dates, onPickSpot }) => {
                             title={x ? `${STATUS_TEXT[x.status]} · điểm ${x.score} · đồng thuận ${x.agreement}%${x.deltaH !== null ? ` · ΔH ${Math.round(x.deltaH)}m` : ''}${far ? ' · dự báo xa, tham khảo' : ''}` : 'thiếu dữ liệu'}
                             className={`inline-block min-w-[1.65rem] px-0.5 py-1.5 rounded-md text-[10px] border font-mono font-bold ${cls} ${far ? 'border-dashed' : ''}`}
                           >
-                            {x ? (x.worthGoing ? '✓' : x.score) : '-'}
+                            {x ? (x.worthGoing
+                              ? <span className="flex flex-col leading-tight"><span>✓</span><span className="text-[9px] font-normal opacity-70">{x.score}</span></span>
+                              : x.score) : '-'}
                           </span>
                         </td>
                       );
