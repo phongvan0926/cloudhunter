@@ -617,5 +617,41 @@
     "observedAt": "trước 09:00 sáng 29/10 (anh Phong xác nhận ngày 30/10; không rõ phút, ảnh không dấu giờ)",
     "source": "USER_RELAY",
     "note": "Anh Phong: sáng 29/10 Tà Xùa mây nhiều nhưng bị bốc cao lên, không có biển mây phẳng bên dưới. Ảnh: khối mây tích lớn dâng ngang và trên tầm mắt người đứng trên sàn gỗ, sườn núi lộ ra phía dưới, trời xanh xen kẽ. Anh xác nhận ảnh chụp trước 09:00 nên tính là rạng sáng và được chấm (app không khuyên đi, ảnh không phải biển mây bên dưới ⇒ ĐÚNG). Bản chụp: 36/100 FOG, đồng thuận 100%, ΔH −424m, không khuyên đi - cùng chiều với ảnh (mây ngang và trên đầu). Vệ tinh CLEAR. Nhãn FB_AUTO cùng ngày (BELOW 0,4, chỉ có chữ) ngược ảnh này; độ tin thấp nên không chấm. Cùng sáng Sì Thâu Chải có biển mây dày: mây bốc cao ở Tà Xùa là mây dâng sau bình minh, không phải biển mây rạng sáng."
+  },
+  {
+    "date": "2026-10-31",
+    "reportedAt": "2026-10-31T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm 31/10 (anh Phong báo bằng chữ, không kèm ảnh/giờ cụ thể)",
+    "source": "USER_RELAY",
+    "id": "2026-10-31-ta_xua_son_la",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "note": "Anh Phong: sáng sớm 31/10 Tà Xùa có biển mây. Không ảnh, không độ dày, không thời lượng."
+  },
+  {
+    "date": "2026-10-31",
+    "reportedAt": "2026-10-31T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm 31/10 (anh Phong báo bằng chữ, không kèm ảnh/giờ cụ thể)",
+    "source": "USER_RELAY",
+    "id": "2026-10-31-ta_chi_nhu",
+    "spotKey": "TA_CHI_NHU",
+    "locationName": "Tà Chì Nhù (Đồi hoa tím)",
+    "note": "Anh Phong: sáng sớm 31/10 Tà Chì Nhù có biển mây. Không ảnh, không độ dày, không thời lượng."
+  },
+  {
+    "date": "2026-10-31",
+    "reportedAt": "2026-10-31T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng sớm 31/10 (anh Phong báo bằng chữ, không kèm ảnh/giờ cụ thể)",
+    "source": "USER_RELAY",
+    "id": "2026-10-31-ba_vi",
+    "spotKey": "BA_VI",
+    "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "note": "Anh Phong: sáng sớm 31/10 Ba Vì cũng có biển mây. Không ảnh, không độ dày. Ba Vì là núi thấp đứng lẻ (xem kinh nghiệm anh 25/10): dùng làm ca phụ."
   }
 ]
