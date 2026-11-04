@@ -653,5 +653,41 @@
     "spotKey": "BA_VI",
     "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
     "note": "Anh Phong: sáng sớm 31/10 Ba Vì cũng có biển mây. Không ảnh, không độ dày. Ba Vì là núi thấp đứng lẻ (xem kinh nghiệm anh 25/10): dùng làm ca phụ."
+  },
+  {
+    "date": "2026-11-04",
+    "reportedAt": "2026-11-04T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "UNKNOWN",
+    "observedAt": "sáng 04/11, anh Phong báo bằng chữ, chưa nói giờ nhìn (chờ anh xác nhận trước/sau 09:00 rồi đổi timeOfDay thành DAWN hoặc MORNING)",
+    "source": "USER_RELAY",
+    "id": "2026-11-04-ta_xua_son_la",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "note": "Anh Phong: Tà Xùa có biển mây. Bối cảnh anh nêu: chiều 03/11 không khí lạnh tràn về, nhiệt độ cả miền Bắc giảm, Hà Nội mưa chiều hôm đó; sáng 04/11 nhiều nơi có biển mây. Không ảnh, không độ dày, không thời lượng."
+  },
+  {
+    "date": "2026-11-04",
+    "reportedAt": "2026-11-04T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "UNKNOWN",
+    "observedAt": "sáng 04/11, anh Phong báo bằng chữ, chưa nói giờ nhìn (chờ anh xác nhận trước/sau 09:00 rồi đổi timeOfDay thành DAWN hoặc MORNING)",
+    "source": "USER_RELAY",
+    "id": "2026-11-04-ba_vi",
+    "spotKey": "BA_VI",
+    "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "note": "Anh Phong: Ba Vì có biển mây. Bối cảnh anh nêu: chiều 03/11 không khí lạnh tràn về, nhiệt độ cả miền Bắc giảm, Hà Nội mưa chiều hôm đó; sáng 04/11 nhiều nơi có biển mây. Không ảnh, không độ dày, không thời lượng."
+  },
+  {
+    "date": "2026-11-04",
+    "reportedAt": "2026-11-04T00:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "UNKNOWN",
+    "observedAt": "sáng 04/11, anh Phong báo bằng chữ, chưa nói giờ nhìn (chờ anh xác nhận trước/sau 09:00 rồi đổi timeOfDay thành DAWN hoặc MORNING)",
+    "source": "USER_RELAY",
+    "id": "2026-11-04-ky_quan_san",
+    "spotKey": "KY_QUAN_SAN",
+    "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "note": "Anh Phong: Núi Muối của Ky Quan San có biển mây. Bối cảnh anh nêu: chiều 03/11 không khí lạnh tràn về, nhiệt độ cả miền Bắc giảm, Hà Nội mưa chiều hôm đó; sáng 04/11 nhiều nơi có biển mây. Không ảnh, không độ dày, không thời lượng."
   }
 ]
