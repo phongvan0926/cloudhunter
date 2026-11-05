@@ -689,5 +689,17 @@
     "spotKey": "KY_QUAN_SAN",
     "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
     "note": "Anh Phong: Núi Muối của Ky Quan San có biển mây. Bối cảnh anh nêu: chiều 03/11 không khí lạnh tràn về, nhiệt độ cả miền Bắc giảm, Hà Nội mưa chiều hôm đó; sáng 04/11 nhiều nơi có biển mây. Không ảnh, không độ dày, không thời lượng."
+  },
+  {
+    "id": "2026-11-05-taxua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-11-05",
+    "reportedAt": "2026-11-05T18:24:00+07:00",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "hôm nay 05/11, anh Phong báo bằng chữ không nêu giờ; theo quy ước anh chốt 04/11 tính là trước 09:00 (mưa có thể kéo dài cả ngày)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong: Tà Xùa hôm nay bị mây mù và trời mưa, tức không có biển mây bên dưới, người đứng trong mây. Vệ tinh cùng sáng FOGGED_IN (đỉnh mây 2.490m, trên chỗ đứng 1.800m)."
   }
 ]
