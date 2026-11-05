@@ -701,5 +701,17 @@
     "observedAt": "hôm nay 05/11, anh Phong báo bằng chữ không nêu giờ; theo quy ước anh chốt 04/11 tính là trước 09:00 (mưa có thể kéo dài cả ngày)",
     "source": "USER_RELAY",
     "note": "Anh Phong: Tà Xùa hôm nay bị mây mù và trời mưa, tức không có biển mây bên dưới, người đứng trong mây. Vệ tinh cùng sáng FOGGED_IN (đỉnh mây 2.490m, trên chỗ đứng 1.800m)."
+  },
+  {
+    "id": "2026-11-05-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-11-05",
+    "reportedAt": "2026-11-05T20:47:00+07:00",
+    "seaLevel": "ABOVE",
+    "timeOfDay": "DAWN",
+    "observedAt": "trước 09:00 sáng 05/11 (anh Phong trả lời câu #q3e00 trên Trạm; không rõ phút)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong chọn 'Không có biển mây, đỉnh trong mây' cho Fansipan sáng 05/11 trước 9h. Ảnh bộ thu: 06:12 trời mù, sau đó nắng lên lúc nắng lúc mây. App khuyên đi ⇒ BÁO NHẦM (54/100 FLOWING, ΔH +937m); vệ tinh FOGGED_IN cùng chiều anh."
   }
 ]
