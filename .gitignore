@@ -29,3 +29,4 @@ dist-ssr
 # Python bytecode của tools/
 __pycache__/
 *.pyc
+anh-gui/

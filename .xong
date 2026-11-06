@@ -1,0 +1,2 @@
+# .xong - cấu hình lệnh `xong` cho CloudHunter (07/11/2026). Không có dịch vụ chạy: PWA tĩnh, deploy qua push.
+KIEM=npm run lint && npm test && npm run build
