@@ -208,3 +208,11 @@ Kết luận:
 - Nhãn 05/11: **Fansipan KHONG_RO, độ tin 0,5, cần người xem** (không chấm). Ảnh có giờ 06:12 "trời mù, gió nhẹ, 13 độ" (đỉnh trong mây lúc đầu), sau đó "nắng đã lên trên đỉnh Fan" và "lúc nắng lúc mây" (mây tan dần), không rõ có biển mây bên dưới hay không. Bản chụp `54/100 FLOWING · 67% · mặt mây 2.206m, ΔH +937m · ĐÁNG ĐI` (app KHUYÊN ĐI). Vệ tinh FOGGED_IN (đỉnh mây 3.455m, trên đỉnh 3.143m): cùng chiều với ảnh 06:12 "trời mù", ngược với lời khuyên đi. Theo luật, ngày app khuyên đi mà nhãn cần người xem thì hỏi anh, không tự chọn: đã gửi Trạm câu hỏi (g7b73). **Anh trả lời (05/11 tối, #q3e00): không có biển mây, đỉnh trong mây** ⇒ báo cáo người nhìn `ABOVE DAWN`; app khuyên đi ⇒ **BÁO NHẦM**, ca báo nhầm thứ hai của nguồn người đi. Nguồn Facebook vẫn 13 cặp: 6 đúng · 7 bỏ sót (nhãn KHONG_RO không chấm). Đối chiếu khớp 10/13, không dòng lệch mới.
 - **Anh báo 29/10 (30/10, kèm 2 ảnh):** Sì Thâu Chải có biển mây dày phẳng (bài đăng 07:47) ⇒ báo cáo người nhìn `BELOW THICK DAWN`. Bản chụp `35/100 ROLLING · 67% · mặt mây 1.705m, ΔH −245m · không khuyên đi` ⇒ **BỎ SÓT**, vệ tinh CLEAR (sương thung lũng hồng ngoại không thấy). Tà Xùa cùng sáng: mây nhiều nhưng bốc cao, khối mây tích ngang và trên tầm mắt, không có biển mây phẳng bên dưới ⇒ `ABOVE`, anh xác nhận chụp trước 09:00 nên tính rạng sáng và chấm: app không khuyên đi ⇒ ĐÚNG; bản chụp `36 FOG ΔH −424m` cùng chiều. Cùng một đợt lạnh, Fansipan và Sì Thâu Chải có biển mây còn Tà Xùa thì mây dâng cao. Riêng nguồn người đi nay 35 cặp: 14 đúng · 12 bỏ sót · 1 nhầm.
 
+
+#### Nhãn FB 06/11/2026 (phiếu #g13d6)
+
+- FANSIPAN ABOVE tin 0,85 (ảnh có dấu giờ 06:11 và 07:11, "mây gió nhẹ 8 độ", sau đó mưa): được chấm. App 53/100 FOG,
+  ΔH -38m, không khuyên đi, **đúng-không**. Nhãn FB nay 14 cặp: 1 đúng-có, 7 bỏ sót, 0 nhầm, 6 đúng-không.
+- TA_XUA_SON_LA BELOW tin 0,5 ("chỗ nào cũng biển mây luôn", bài 07:26, lệch ngày 23/11 trong chữ): cần người xem, calibrate
+  không chấm. App 33/100 FOG, không khuyên đi. Nếu anh xác nhận có biển mây thì thêm một ca bỏ sót Tà Xùa; chưa hỏi anh vì
+  app không khuyên đi và chưa có dấu hiệu sai ngược. Không sửa engine.
