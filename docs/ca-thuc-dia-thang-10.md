@@ -394,3 +394,7 @@ ghim trong lockfile**; `npx <gói>` không khai báo là phụ thuộc vào npm 
 #### 07/11/2026 - Tà Xùa có biển mây đẹp (anh Phong, rạng sáng theo quy ước)
 
 App (bản chụp 23h10 06/11) 32/100 RAIN, đồng thuận 33%, ΔH -413m, không khuyên đi => **bỏ sót**. Báo cáo `2026-11-07-ta-xua` (BELOW, DAWN). Ca thứ hai liên tiếp Tà Xùa có biển mây mà các mô hình (2/3 báo mưa) không thấy; cùng kiểu với 04/11. Không sửa engine vì một ca, gom vào đợt sửa lớn theo Luật cổng.
+
+#### 07/11/2026 - Fansipan 09:28 có biển mây dưới chân (video Facebook anh gửi)
+
+Dòng chữ trên video: "Đỉnh Fan 9h28 ngày 07/11". Thấy biển mây dày dưới chân, sườn núi và trụ cáp treo nhô ra. Quá 09:00 nên ghi `MORNING`, calibrate không chấm. App (bản chụp rạng sáng) 26/100 RAIN, đồng thuận 100%, mặt mây 3.177m ngang đỉnh (ΔH -34m), không khuyên đi. Chưa kết luận đúng/sai vì thiếu ảnh trước 9h; biển mây lúc 9h28 chỉ cho biết khoảng cuối buổi sáng có mây dưới đỉnh. Nếu bộ thu có ảnh Fansipan 06-07h hôm nay thì chấm theo đó.

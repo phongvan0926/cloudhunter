@@ -725,5 +725,17 @@
     "observedAt": "sáng 07/11, giờ theo quy ước của anh (trước 09:00); anh nhắn trong phiên, không rõ phút",
     "source": "USER_RELAY",
     "note": "Anh Phong: 'Sáng nay ở Tà Xùa có biển mây đẹp'. Mức BELOW theo cách anh nói chung (biển mây dưới chân); chưa có ảnh/độ dày. App (bản chụp 23h10 06/11): 32/100 RAIN, đồng thuận 33%, ΔH -413m, không khuyên đi => BỎ SÓT."
+  },
+  {
+    "id": "2026-11-07-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-11-07",
+    "reportedAt": "2026-11-07T10:30:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MORNING",
+    "observedAt": "09:28 sáng 07/11 (dòng chữ trên video Facebook của trang Hội Mê Sapa, anh Phong gửi ảnh chụp màn hình)",
+    "source": "USER_RELAY",
+    "note": "Video đỉnh Fansipan 09:28: biển mây dày dưới chân, thấy sườn núi và trụ cáp treo nhô ra. Quá 09:00 nên MORNING, calibrate không chấm. Chưa có ảnh trước 9h để chấm rạng sáng."
   }
 ]
