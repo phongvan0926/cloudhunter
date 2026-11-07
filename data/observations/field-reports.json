@@ -713,5 +713,17 @@
     "observedAt": "trước 09:00 sáng 05/11 (anh Phong trả lời câu #q3e00 trên Trạm; không rõ phút)",
     "source": "USER_RELAY",
     "note": "Anh Phong chọn 'Không có biển mây, đỉnh trong mây' cho Fansipan sáng 05/11 trước 9h. Ảnh bộ thu: 06:12 trời mù, sau đó nắng lên lúc nắng lúc mây. App khuyên đi ⇒ BÁO NHẦM (54/100 FLOWING, ΔH +937m); vệ tinh FOGGED_IN cùng chiều anh."
+  },
+  {
+    "id": "2026-11-07-ta-xua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-11-07",
+    "reportedAt": "2026-11-07T07:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 07/11, giờ theo quy ước của anh (trước 09:00); anh nhắn trong phiên, không rõ phút",
+    "source": "USER_RELAY",
+    "note": "Anh Phong: 'Sáng nay ở Tà Xùa có biển mây đẹp'. Mức BELOW theo cách anh nói chung (biển mây dưới chân); chưa có ảnh/độ dày. App (bản chụp 23h10 06/11): 32/100 RAIN, đồng thuận 33%, ΔH -413m, không khuyên đi => BỎ SÓT."
   }
 ]

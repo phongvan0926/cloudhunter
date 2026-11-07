@@ -390,3 +390,7 @@ chết ngay, rõ ràng, chứ không lặng lẽ đi tải. Đã kiểm: `npm ci
 `calibrate.ts` qua vite-node cục bộ, chạy được. Bài học: **công cụ mà vòng tự chạy cần thì phải
 ghim trong lockfile**; `npx <gói>` không khai báo là phụ thuộc vào npm registry và npm của ngày hôm đó.
 
+
+#### 07/11/2026 - Tà Xùa có biển mây đẹp (anh Phong, rạng sáng theo quy ước)
+
+App (bản chụp 23h10 06/11) 32/100 RAIN, đồng thuận 33%, ΔH -413m, không khuyên đi => **bỏ sót**. Báo cáo `2026-11-07-ta-xua` (BELOW, DAWN). Ca thứ hai liên tiếp Tà Xùa có biển mây mà các mô hình (2/3 báo mưa) không thấy; cùng kiểu với 04/11. Không sửa engine vì một ca, gom vào đợt sửa lớn theo Luật cổng.
