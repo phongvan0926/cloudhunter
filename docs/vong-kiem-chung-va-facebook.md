@@ -216,3 +216,8 @@ Kết luận:
 - TA_XUA_SON_LA BELOW tin 0,5 ("chỗ nào cũng biển mây luôn", bài 07:26, lệch ngày 23/11 trong chữ): cần người xem, calibrate
   không chấm. App 33/100 FOG, không khuyên đi. Nếu anh xác nhận có biển mây thì thêm một ca bỏ sót Tà Xùa; chưa hỏi anh vì
   app không khuyên đi và chưa có dấu hiệu sai ngược. Không sửa engine.
+
+#### Nhãn FB 07/11/2026 (phiếu #g8b6e)
+
+- TA_XUA_SON_LA BELOW tin 0,85 (ảnh dấu giờ 08:28): **khớp anh Phong** báo biển mây đẹp sáng nay. Ca đã tính bằng báo cáo người đi (bỏ sót, app 32 RAIN); nhãn FB không thêm cặp mới. Khớp có/không giữa FB và người nhìn nay 11/14.
+- FANSIPAN KHONG_RO tin 0,8, cần người xem, calibrate không chấm. Diễn biến theo dấu giờ ảnh: 07:12 mù (ABOVE), 08:18 BELOW (có biển mây), 09:10 và 10:11 BELOW. Khớp video 09:28 anh gửi. Vậy biển mây thành hình khoảng 08:00-08:20, tức TRƯỚC 9h nhưng không phải rạng sáng sớm. App 26/100 RAIN, không khuyên đi. Chưa chấm vì ảnh 07:12 nói ngược; nếu anh xác nhận "sáng nay trước 9h có biển mây" thì thêm một ca bỏ sót Fansipan.

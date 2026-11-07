@@ -861,6 +861,57 @@
   ]
  },
  {
+  "id": "2026-11-07-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-07",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:12",
+  "confidence": 0.8,
+  "needsReview": true,
+  "firstPostAt": "2026-11-07T07:25:56+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-07T07:25:56+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù, gió nhẹ, nhiệt độ 12 độ",
+    "stamps": [
+     "07:12 ABOVE",
+     "07:13 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-11-07T08:35:30+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời đẹp gió nhẹ, nhiệt độ 12 độ",
+    "stamps": [
+     "08:18 BELOW",
+     "08:19 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-11-07T09:48:33+07:00",
+    "seaLevel": "BELOW",
+    "text": "Fan có biển mây cả nhà ơi",
+    "stamps": [
+     "09:10 BELOW",
+     "09:11 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-11-07T10:46:14+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời quang, nhiệt độ 11 độ",
+    "stamps": [
+     "10:11 BELOW",
+     "10:12 BELOW"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -1319,6 +1370,29 @@
     "seaLevel": "BELOW",
     "text": "Thời Tiết tà Xùa hôm nay: chỗ nào cũng biển mây luôn",
     "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-11-07-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-07",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:28",
+  "confidence": 0.85,
+  "firstPostAt": "2026-11-07T09:23:58+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-07T09:23:58+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời Tiết tà Xùa hôm nay: Quá Đẹp Luôn Các Mom ơi",
+    "stamps": [
+     "08:28 BELOW"
+    ]
    }
   ]
  }
