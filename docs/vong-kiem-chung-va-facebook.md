@@ -227,3 +227,7 @@ Kết luận:
 - FANSIPAN BELOW tin 0,8 (bài 07:50 "có chút mù, biển mây", ảnh 09:12 BELOW): được chấm. App 47/100 DISSIPATING, ΔH -54m, đồng thuận 100%, không khuyên đi => **bỏ sót**.
 - TA_XUA_SON_LA AT_EYE tin 0,6 (bài 08:11 "chỗ mù, chỗ biển mây", ảnh 08:01): đúng ngưỡng 0,6 nên được chấm, AT_EYE tính là có biển mây. App 21/100 FOG, ΔH -435m, không khuyên đi => **bỏ sót**. Độ tin chạm ngưỡng và bài nói "chỗ mù chỗ biển mây" nên ca này yếu, đừng dùng làm bằng chứng mạnh.
 - Nhãn FB nay 16 cặp: 1 đúng-có, 9 bỏ sót, 0 nhầm, 6 đúng-không (bắt 10% số ngày có biển mây). Không sửa engine; ca bỏ sót Tà Xùa/Fansipan gom cho đợt sửa lớn theo Luật cổng.
+
+#### Nhãn FB 09/11/2026 (phiếu #g89dd)
+
+- FANSIPAN KHONG_RO tin 0,5, cần người xem, calibrate không chấm (nhãn FB vẫn 16 cặp). Dấu giờ ảnh: 06:14 ABOVE (sương), 08:44 BELOW, 10:10 AT_EYE; bài nói trời có sương, gió to lạnh buốt, rồi quang. Mâu thuẫn nên không kết luận có biển mây. App 11/100 DISSIPATING, ΔH -467m, không khuyên đi: không có gì để nói app sai. Không sửa engine.
