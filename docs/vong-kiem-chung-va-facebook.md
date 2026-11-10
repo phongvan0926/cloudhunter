@@ -231,3 +231,9 @@ Kết luận:
 #### Nhãn FB 09/11/2026 (phiếu #g89dd)
 
 - FANSIPAN KHONG_RO tin 0,5, cần người xem, calibrate không chấm (nhãn FB vẫn 16 cặp). Dấu giờ ảnh: 06:14 ABOVE (sương), 08:44 BELOW, 10:10 AT_EYE; bài nói trời có sương, gió to lạnh buốt, rồi quang. Mâu thuẫn nên không kết luận có biển mây. App 11/100 DISSIPATING, ΔH -467m, không khuyên đi: không có gì để nói app sai. Không sửa engine.
+
+#### Nhãn FB 10/11/2026 (phiếu #g5b3c)
+
+- FANSIPAN ABOVE tin 0,9 (ảnh 08:19, "có sương, 2 độ"): được chấm. App 48/100 DISSIPATING, ΔH -44m, không khuyên đi => **đúng-không**.
+- TA_XUA_SON_LA NONE tin 0,7 (bài 11:49 "các điểm quang", ảnh 06:56 NONE): được chấm. App 48/100 FOG, đồng thuận 67%, ΔH -287m, không khuyên đi => **đúng-không**.
+- Nhãn FB nay 18 cặp: 1 đúng-có, 9 bỏ sót, 0 nhầm, 8 đúng-không. Chưa có ca báo nhầm nào từ nguồn này. Không sửa engine.

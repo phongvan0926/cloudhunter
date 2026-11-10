@@ -979,6 +979,29 @@
   ]
  },
  {
+  "id": "2026-11-10-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-10",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:19",
+  "confidence": 0.9,
+  "firstPostAt": "2026-11-10T08:35:58+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-10T08:35:58+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời có sương, gió nhẹ, nhiệt độ 2 độ",
+    "stamps": [
+     "08:19 ABOVE",
+     "08:20 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -1482,6 +1505,28 @@
     "text": "chỗ mù, chỗ biển mây nha các bạn",
     "stamps": [
      "08:01 AT_EYE"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-11-10-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-10",
+  "source": "FB_AUTO",
+  "seaLevel": "NONE",
+  "timeOfDay": "DAWN",
+  "observedAt": "06:56",
+  "confidence": 0.7,
+  "firstPostAt": "2026-11-10T11:49:37+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-10T11:49:37+07:00",
+    "seaLevel": "NONE",
+    "text": "Các điểm quang trời hôm nay: thảo nguyên, cây cô đơn, lán cô đơn, Hồ Mắt Ngọc",
+    "stamps": [
+     "06:56 NONE"
     ]
    }
   ]
