@@ -737,5 +737,17 @@
     "observedAt": "09:28 sáng 07/11 (dòng chữ trên video Facebook của trang Hội Mê Sapa, anh Phong gửi ảnh chụp màn hình)",
     "source": "USER_RELAY",
     "note": "Video đỉnh Fansipan 09:28: biển mây dày dưới chân, thấy sườn núi và trụ cáp treo nhô ra. Quá 09:00 nên MORNING, calibrate không chấm. Chưa có ảnh trước 9h để chấm rạng sáng."
+  },
+  {
+    "id": "2026-11-11-ta-xua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-11-11",
+    "reportedAt": "2026-11-11T15:00:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:15 sáng 11/11 (dòng chữ trên bài Facebook trang Review Tà Xùa, anh Phong gửi ảnh chụp màn hình)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong: 'Tà Xùa sáng nay có biển mây rất đẹp'. Ảnh 06:15: biển mây phủ kín thung lũng dưới chân, bình minh trên mây, thấy đỉnh núi nhô lên. App (bản chụp 23h34 10/11): 26/100 FLOWING, đồng thuận 67%, ΔH +675m, KHUYÊN ĐI => báo đúng có."
   }
 ]
