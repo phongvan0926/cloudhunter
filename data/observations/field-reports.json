@@ -749,5 +749,17 @@
     "observedAt": "06:15 sáng 11/11 (dòng chữ trên bài Facebook trang Review Tà Xùa, anh Phong gửi ảnh chụp màn hình)",
     "source": "USER_RELAY",
     "note": "Anh Phong: 'Tà Xùa sáng nay có biển mây rất đẹp'. Ảnh 06:15: biển mây phủ kín thung lũng dưới chân, bình minh trên mây, thấy đỉnh núi nhô lên. App (bản chụp 23h34 10/11): 26/100 FLOWING, đồng thuận 67%, ΔH +675m, KHUYÊN ĐI => báo đúng có."
+  },
+  {
+    "id": "2026-11-11-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-11-11",
+    "reportedAt": "2026-11-11T23:44:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MORNING",
+    "observedAt": "sáng 11/11, anh không nói giờ; ảnh bộ thu cho thấy sương trên đỉnh lúc 08:26 và 09:21 (ABOVE), bài 10:59 'biển mây từ cabin cáp treo'",
+    "source": "USER_RELAY",
+    "note": "Anh Phong: 'Fansipan sáng nay có biển mây'. Quy ước anh thường báo trước 9h, NHƯNG dấu giờ ảnh độc lập cho thấy đỉnh còn trong sương đến 09:21 và biển mây được thấy từ cabin lúc ~11h. Nên ghi MORNING (không chấm) để khỏi tính nhầm bỏ sót. Nếu anh xác nhận thấy biển mây trước 9h thì đổi thành DAWN: app 32/100 DISSIPATING, ΔH -21m, không khuyên đi => sẽ là bỏ sót."
   }
 ]

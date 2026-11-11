@@ -402,3 +402,7 @@ Dòng chữ trên video: "Đỉnh Fan 9h28 ngày 07/11". Thấy biển mây dày
 #### 11/11/2026 - Tà Xùa biển mây đẹp 06:15 (anh Phong + ảnh Facebook)
 
 Ảnh có dấu giờ 06:15: biển mây phủ kín dưới chân, mặt trời mọc trên mây. App (bản chụp 23h34 10/11) 26/100 FLOWING, đồng thuận 67% (GFS STATIC 54, ICON FLOWING 26, UKMO CLEAR 16), mặt mây 1.125m, ΔH +675m, **khuyên đi => báo đúng có**. Đây là lần đầu từ 04/11 Tà Xùa có biển mây mà app khuyên đi; điểm chỉ 26 nên điểm số không phản ánh, chỉ luật đáng đi (verdict + đồng thuận + ΔH) bắt được. Báo cáo `2026-11-11-ta-xua` (BELOW, DAWN).
+
+#### 11/11/2026 - Fansipan "sáng nay có biển mây" (anh Phong, không nói giờ)
+
+App (bản chụp rạng sáng) 32/100 DISSIPATING, đồng thuận 100%, mặt mây 3.164m ngang đỉnh (ΔH -21m), không khuyên đi. Theo quy ước thì ghi DAWN, nhưng ảnh bộ thu có dấu giờ 08:26 và 09:21 vẫn là sương trên đỉnh (ABOVE) và bài 10:59 mới nói thấy biển mây từ cabin cáp treo (nằm dưới đỉnh). Bằng chứng độc lập nghiêng về biển mây thấy muộn hơn 9h, nên ghi `MORNING`, calibrate không chấm. Chưa kết luận app sai. Nếu anh xác nhận trước 9h có biển mây (ví dụ từ điểm dưới đỉnh), đổi thành DAWN, thành ca bỏ sót; ghi nhận Fansipan hay có biển mây dưới đỉnh ~2.900-3.000m mà vệ tinh/mô hình đặt đỉnh trên mặt mây ±50m.
