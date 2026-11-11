@@ -237,3 +237,8 @@ Kết luận:
 - FANSIPAN ABOVE tin 0,9 (ảnh 08:19, "có sương, 2 độ"): được chấm. App 48/100 DISSIPATING, ΔH -44m, không khuyên đi => **đúng-không**.
 - TA_XUA_SON_LA NONE tin 0,7 (bài 11:49 "các điểm quang", ảnh 06:56 NONE): được chấm. App 48/100 FOG, đồng thuận 67%, ΔH -287m, không khuyên đi => **đúng-không**.
 - Nhãn FB nay 18 cặp: 1 đúng-có, 9 bỏ sót, 0 nhầm, 8 đúng-không. Chưa có ca báo nhầm nào từ nguồn này. Không sửa engine.
+
+#### Nhãn FB 11/11/2026 (phiếu #g73b6)
+
+- TA_XUA_SON_LA BELOW tin 0,5 ("chỗ nào cũng biển mây", bài 09:37): cần người xem nên calibrate không chấm, nhưng **khớp** báo cáo anh Phong và ảnh 06:15 (người đi đã chấm: app 26 FLOWING khuyên đi, đúng). Khớp có/không FB với người nhìn nay 12/15.
+- FANSIPAN KHONG_RO tin 0,75, cần người xem, không chấm. Ảnh 08:26 và 09:21 ABOVE (sương, 6 độ), bài 10:59 "biển mây từ cabin cáp treo" (không dấu giờ ảnh). Sáng trước 9h có sương, chưa thấy biển mây; app 32/100 DISSIPATING, ΔH -21m, không khuyên đi. Không có gì để nói app sai. Nhãn FB vẫn 18 cặp. Không sửa engine.
