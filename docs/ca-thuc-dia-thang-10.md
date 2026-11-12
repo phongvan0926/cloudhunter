@@ -406,3 +406,7 @@ Dòng chữ trên video: "Đỉnh Fan 9h28 ngày 07/11". Thấy biển mây dày
 #### 11/11/2026 - Fansipan "sáng nay có biển mây" (anh Phong, không nói giờ)
 
 App (bản chụp rạng sáng) 32/100 DISSIPATING, đồng thuận 100%, mặt mây 3.164m ngang đỉnh (ΔH -21m), không khuyên đi. Theo quy ước thì ghi DAWN, nhưng ảnh bộ thu có dấu giờ 08:26 và 09:21 vẫn là sương trên đỉnh (ABOVE) và bài 10:59 mới nói thấy biển mây từ cabin cáp treo (nằm dưới đỉnh). Bằng chứng độc lập nghiêng về biển mây thấy muộn hơn 9h, nên ghi `MORNING`, calibrate không chấm. Chưa kết luận app sai. Nếu anh xác nhận trước 9h có biển mây (ví dụ từ điểm dưới đỉnh), đổi thành DAWN, thành ca bỏ sót; ghi nhận Fansipan hay có biển mây dưới đỉnh ~2.900-3.000m mà vệ tinh/mô hình đặt đỉnh trên mặt mây ±50m.
+
+#### 12/11/2026 - Tà Xùa có biển mây lúc ~15:20 chiều (anh Phong + livestream)
+
+Video livestream trang Tà Xùa Lu Trế đăng 21 phút trước giờ anh nhắn 15:40: biển mây phủ kín thung lũng, đỉnh núi nhô lên. Là buổi chiều nên ghi `AFTERNOON`, calibrate không chấm (luật chỉ chấm rạng sáng); không dùng để kết luận độ đúng của dự báo rạng sáng. Bản chụp rạng sáng 12/11: 53/100 STATIC, đồng thuận 67%, ΔH +727m, khuyên đi, nên nếu sáng nay cũng có biển mây thì app đã đúng. Ghi nhận để so sau: biển mây tồn tại đến chiều là một dữ liệu về ngày diện rộng/ổn định, chưa có luật nào dùng.
