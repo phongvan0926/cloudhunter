@@ -421,4 +421,17 @@ Sửa `scripts/calibrate.ts` (quy tắc nhỏ, đo lường, không đụng engi
 - **Không** thấy biển mây ngoài rạng sáng thì **không chấm**: mây tan sau rạng sáng, nên không chứng minh rạng sáng không có. Đây là điểm mình giữ lại, nhờ anh soát xem có hợp ý không.
 - NIGHT vẫn không chấm (lệch cả ngày).
 
-Tác động (đo trên toàn kho, cùng một mẻ): nguồn người đi 45 -> 48 cặp. Trước: 20 đúng-có · 14 bỏ sót · 2 nhầm · 9 đúng-không. Sau: 21 đúng-có · 17 bỏ sót · 2 nhầm · 8 đúng-không. Ba ca mới là Fansipan 07/11 và 11/11 (bỏ sót, app không khuyên đi) và Tà Xùa 12/11 (đúng-có, app 53 STATIC khuyên đi), cộng thêm hai ca cũ đổi dòng (Fansipan 14-15/10, lúc đó thấy biển mây trưa/sáng muộn). Bỏ sót tăng 14 -> 17 vì quy tắc cũ đang che ca Fansipan; đây là số liệu đúng hơn chứ không phải app tệ đi. Ca Fansipan 11/11 còn một điểm đáng ngờ: biển mây thấy từ cabin (dưới đỉnh) lúc ~11h, đỉnh có thể vẫn trong sương, nên giá trị chứng cứ yếu hơn các ca trên đỉnh.
+Tác động (đo trên toàn kho, cùng một mẻ): nguồn người đi 45 -> 48 cặp. Trước: 20 đúng-có · 14 bỏ sót · 2 nhầm · 9 đúng-không. Sau: 21 đúng-có · 17 bỏ sót · 2 nhầm · 8 đúng-không. Ba ca mới là Fansipan 07/11 và 11/11 (bỏ sót, app không khuyên đi) và Tà Xùa 12/11 (đúng-có, app 53 STATIC khuyên đi), cộng thêm hai ca cũ đổi dòng (Fansipan 14-15/10, lúc đó thấy biển mây trưa/sáng muộn). Bỏ sót tăng 14 -> 17 vì quy tắc cũ đang che ca Fansipan; đây là số liệu đúng hơn chứ không phải app tệ đi. (Mình từng nghi ca Fansipan 11/11 vì thấy từ cabin; anh chốt 12/11: có dấu hiệu xác nhận biển mây chuẩn thì cứ coi là có, xem mục dưới.)
+
+
+#### 12/11/2026 - Dự báo của app ngày 11/11: bao nhiêu nơi báo có biển mây (phiếu g0a53)
+
+Anh: có dấu hiệu xác nhận biển mây chuẩn thì coi là có (Fansipan 11/11 giữ nguyên là có, không còn nghi vì thấy từ cabin); hôm qua nhiều nơi có biển mây, hỏi app báo bao nhiêu nơi.
+
+Đo trên bản chụp `2026-11-11-forecast.json` (engine-2.8.3, chụp 10/11 23:34 giờ VN, 55 điểm):
+- **Khuyên đi (đáng đi): 2/55** - Chiềng Công (50, STATIC, ΔH 307m) và Tà Xùa (26, FLOWING, ΔH 675m).
+- Trạng thái kiểu biển mây (STATIC/FLOWING/ROLLING) tổng 3/55: thêm Phà Lương (30, ROLLING, ΔH -74m nên không khuyên đi).
+- Phần còn lại: 19 DISSIPATING (mây tan), 17 FOG (sương ở chỗ đứng), 10 CLEAR, 6 RAIN. Fansipan là DISSIPATING 32, ΔH -21m: app không báo có.
+- Có bằng chứng thật cho 11/11: chỉ **2 điểm** (Tà Xùa có, Fansipan có). Cả hai đều có biển mây, app bắt đúng Tà Xùa, bỏ sót Fansipan.
+- Vệ tinh 11/11 không phân xử được các điểm còn lại: 45/56 điểm BLOCKED_ABOVE (mây cao che), chỉ 2 FOGGED_IN (Phu Sa Phìn, Sa Mù U Bồ), 9 CLEAR. Nên "nhiều nơi có biển mây" mình chưa kiểm chứng được ngoài 2 điểm có báo cáo; cần thêm ảnh/báo cáo từng điểm (Fansipan, Tà Xùa, Chiềng Công, Phà Lương, Lảo Thẩn, Ký Quan San...) mới đếm được bỏ sót thật.
+- Số này chỉ để đo, engine chưa đổi (đã xếp hàng chờ đợt sửa lớn theo Luật cổng).
