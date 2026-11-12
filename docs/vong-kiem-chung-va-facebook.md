@@ -242,3 +242,8 @@ Kết luận:
 
 - TA_XUA_SON_LA BELOW tin 0,5 ("chỗ nào cũng biển mây", bài 09:37): cần người xem nên calibrate không chấm, nhưng **khớp** báo cáo anh Phong và ảnh 06:15 (người đi đã chấm: app 26 FLOWING khuyên đi, đúng). Khớp có/không FB với người nhìn nay 12/15.
 - FANSIPAN KHONG_RO tin 0,75, cần người xem, không chấm. Ảnh 08:26 và 09:21 ABOVE (sương, 6 độ), bài 10:59 "biển mây từ cabin cáp treo" (không dấu giờ ảnh). Sáng trước 9h có sương, chưa thấy biển mây; app 32/100 DISSIPATING, ΔH -21m, không khuyên đi. Không có gì để nói app sai. Nhãn FB vẫn 18 cặp. Không sửa engine.
+
+#### Nhãn FB 12/11/2026 (phiếu #gfaa7)
+
+- FANSIPAN ABOVE tin 0,9 (không cần người xem): bài 07:42, ảnh có dấu giờ 07:06 và 07:07 đều ABOVE ("đỉnh có sương, gió nhẹ, 4 độ"). Calibrate chấm là không có biển mây. App (bản chụp 12/11) báo RAIN 28, ΔH -17m, không khuyên đi: **đúng-không**. Nguồn FB: 18 -> 19 cặp.
+- Lưu ý đọc kết quả: ảnh chỉ đến 07:07, chưa có ảnh sau 9h (hôm 11/11 biển mây ở Fansipan chỉ thấy từ cabin lúc ~11h), nên "không có" này chắc cho rạng sáng, chưa nói gì về trưa. Engine không đổi.

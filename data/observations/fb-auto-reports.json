@@ -1039,6 +1039,29 @@
   ]
  },
  {
+  "id": "2026-11-12-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-12",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:06",
+  "confidence": 0.9,
+  "firstPostAt": "2026-11-12T07:42:43+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-12T07:42:43+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời có sương, gió nhẹ, nhiệt độ 4 độ",
+    "stamps": [
+     "07:06 ABOVE",
+     "07:07 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
