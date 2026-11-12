@@ -42,8 +42,8 @@ Hai lỗi đo lường lộ ra trong lúc soi ca này, đều đã sửa:
   "đáng đi = 0, ΔH = None" cho cả thư viện. Suýt báo với người dùng "mấy ngày tới không điểm nào
   đáng đi" trong khi đó chỉ là cột bị thiếu.
 - Báo cáo ban đêm (ảnh Tà Xùa đăng 23:29 ngày 12/10) mà ghép vào dự báo rạng sáng cùng ngày là chấm
-  app trên một thời điểm cách 18 tiếng. Báo cáo nay có `timeOfDay`; `calibrate.ts` bỏ qua mọi báo
-  cáo không phải `DAWN` và nói rõ lý do.
+  app trên một thời điểm cách 18 tiếng. Báo cáo nay có `timeOfDay`. (Quy tắc "bỏ mọi báo cáo không phải
+  `DAWN`" bị anh Phong đính chính 12/11, xem mục cuối tài liệu này: nay chỉ bỏ NIGHT và các ca KHÔNG thấy biển mây ngoài rạng sáng.)
 
 #### Ngay hôm sau, 14/10: Fansipan KHÔNG có biển mây mà app vẫn khuyên đi
 
@@ -405,8 +405,20 @@ Dòng chữ trên video: "Đỉnh Fan 9h28 ngày 07/11". Thấy biển mây dày
 
 #### 11/11/2026 - Fansipan "sáng nay có biển mây" (anh Phong, không nói giờ)
 
-App (bản chụp rạng sáng) 32/100 DISSIPATING, đồng thuận 100%, mặt mây 3.164m ngang đỉnh (ΔH -21m), không khuyên đi. Theo quy ước thì ghi DAWN, nhưng ảnh bộ thu có dấu giờ 08:26 và 09:21 vẫn là sương trên đỉnh (ABOVE) và bài 10:59 mới nói thấy biển mây từ cabin cáp treo (nằm dưới đỉnh). Bằng chứng độc lập nghiêng về biển mây thấy muộn hơn 9h, nên ghi `MORNING`, calibrate không chấm. Chưa kết luận app sai. Nếu anh xác nhận trước 9h có biển mây (ví dụ từ điểm dưới đỉnh), đổi thành DAWN, thành ca bỏ sót; ghi nhận Fansipan hay có biển mây dưới đỉnh ~2.900-3.000m mà vệ tinh/mô hình đặt đỉnh trên mặt mây ±50m.
+App (bản chụp rạng sáng) 32/100 DISSIPATING, đồng thuận 100%, mặt mây 3.164m ngang đỉnh (ΔH -21m), không khuyên đi. Theo quy ước thì ghi DAWN, nhưng ảnh bộ thu có dấu giờ 08:26 và 09:21 vẫn là sương trên đỉnh (ABOVE) và bài 10:59 mới nói thấy biển mây từ cabin cáp treo (nằm dưới đỉnh). Bằng chứng độc lập nghiêng về biển mây thấy muộn hơn 9h, nên ghi `MORNING` (từ 12/11 ca thấy biển mây ngoài rạng sáng vẫn được chấm: thành bỏ sót; xem mục 12/11). Chưa kết luận app sai. Nếu anh xác nhận trước 9h có biển mây (ví dụ từ điểm dưới đỉnh), đổi thành DAWN, thành ca bỏ sót; ghi nhận Fansipan hay có biển mây dưới đỉnh ~2.900-3.000m mà vệ tinh/mô hình đặt đỉnh trên mặt mây ±50m.
 
 #### 12/11/2026 - Tà Xùa có biển mây lúc ~15:20 chiều (anh Phong + livestream)
 
 Video livestream trang Tà Xùa Lu Trế đăng 21 phút trước giờ anh nhắn 15:40: biển mây phủ kín thung lũng, đỉnh núi nhô lên. Là buổi chiều nên ghi `AFTERNOON`, calibrate không chấm (luật chỉ chấm rạng sáng); không dùng để kết luận độ đúng của dự báo rạng sáng. Bản chụp rạng sáng 12/11: 53/100 STATIC, đồng thuận 67%, ΔH +727m, khuyên đi, nên nếu sáng nay cũng có biển mây thì app đã đúng. Ghi nhận để so sau: biển mây tồn tại đến chiều là một dữ liệu về ngày diện rộng/ổn định, chưa có luật nào dùng.
+
+
+#### 12/11/2026 - Anh đính chính: không bao giờ nói "chỉ chấm trước 9h" (phiếu gaf51)
+
+Anh: "tôi không nói là chỉ chấm các ca từ 9h sáng trở về bao giờ, chỉ từng nói là các biển mây chụp được thường hay là chụp từ trước 9h sáng thôi". Đúng: quy tắc "calibrate bỏ mọi báo cáo không phải DAWN" do một phiên AI đặt ngày 15/10 (sau ca ảnh Tà Xùa 23:29), mình đã nhầm coi nó là ý anh và còn dùng nó để không chấm ca chiều 12/11 và ca Fansipan 07/11, 11/11. Nói thẳng: lỗi của mình.
+
+Sửa `scripts/calibrate.ts` (quy tắc nhỏ, đo lường, không đụng engine):
+- Thấy biển mây (BELOW/AT_EYE) lúc sáng muộn, trưa, chiều **được chấm** như "ngày đó có biển mây". Lý do vật lý: biển mây còn đó lúc 15h thì gần như chắc rạng sáng cũng có.
+- **Không** thấy biển mây ngoài rạng sáng thì **không chấm**: mây tan sau rạng sáng, nên không chứng minh rạng sáng không có. Đây là điểm mình giữ lại, nhờ anh soát xem có hợp ý không.
+- NIGHT vẫn không chấm (lệch cả ngày).
+
+Tác động (đo trên toàn kho, cùng một mẻ): nguồn người đi 45 -> 48 cặp. Trước: 20 đúng-có · 14 bỏ sót · 2 nhầm · 9 đúng-không. Sau: 21 đúng-có · 17 bỏ sót · 2 nhầm · 8 đúng-không. Ba ca mới là Fansipan 07/11 và 11/11 (bỏ sót, app không khuyên đi) và Tà Xùa 12/11 (đúng-có, app 53 STATIC khuyên đi), cộng thêm hai ca cũ đổi dòng (Fansipan 14-15/10, lúc đó thấy biển mây trưa/sáng muộn). Bỏ sót tăng 14 -> 17 vì quy tắc cũ đang che ca Fansipan; đây là số liệu đúng hơn chứ không phải app tệ đi. Ca Fansipan 11/11 còn một điểm đáng ngờ: biển mây thấy từ cabin (dưới đỉnh) lúc ~11h, đỉnh có thể vẫn trong sương, nên giá trị chứng cứ yếu hơn các ca trên đỉnh.

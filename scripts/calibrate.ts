@@ -115,12 +115,16 @@ function main() {
     for (const r of JSON.parse(readFileSync(arg, 'utf-8'))) {
       const key = r.spotKey || nameToKey(r.locationName);
       if (!key) { skipped.push(`${r.date} ${r.locationName}: không map được về điểm trong thư viện`); continue; }
-      // App chỉ dự báo RẠNG SÁNG. Báo cáo quan sát ban đêm/chiều (vd ảnh đăng 23:29 ngày 12/10)
-      // mà ghép vào dự báo rạng sáng cùng ngày là chấm app trên một thời điểm cách 18 tiếng.
-      // Giữ trong kho làm tư liệu, nhưng KHÔNG chấm — và nói ra, không lặng lẽ bỏ.
-      // 'DAWN' = trong khung quan sát 04:00-09:00 của engine (chuẩn hoá 15/10/2026); sau 09:00 là MORNING.
-      if (r.timeOfDay && r.timeOfDay !== 'DAWN') {
-        skipped.push(`${r.date} ${key}: quan sát lúc ${r.timeOfDay}${r.observedAt ? ' ' + r.observedAt : ''}, không phải rạng sáng — không chấm`); continue;
+      // App chỉ dự báo RẠNG SÁNG. Quy tắc (sửa 12/11/2026 theo anh Phong, phiếu gaf51; bản cũ bỏ mọi báo cáo
+      // không phải DAWN, đó là lựa chọn của một phiên AI 15/10, KHÔNG phải lời anh):
+      //  - Thấy biển mây (BELOW/AT_EYE) lúc sáng muộn/trưa/chiều VẪN chấm: biển mây còn đó lúc ấy thì gần như chắc
+      //    rạng sáng cũng có (nó không tự sinh ra giữa trưa), nên là bằng chứng "ngày đó có biển mây".
+      //  - KHÔNG thấy (ABOVE/NONE/...) lúc sáng muộn/trưa/chiều thì KHÔNG chấm: mây tan sau rạng sáng nên không
+      //    chứng minh rạng sáng không có.
+      //  - NIGHT (đêm trước/sau) vẫn không chấm: lệch cả ngày so với dự báo rạng sáng (ca Tà Xùa 12/10, 23:29).
+      const POS = r.seaLevel === 'BELOW' || r.seaLevel === 'AT_EYE';
+      if (r.timeOfDay && r.timeOfDay !== 'DAWN' && !(POS && r.timeOfDay !== 'NIGHT')) {
+        skipped.push(`${r.date} ${key}: quan sát lúc ${r.timeOfDay}${r.observedAt ? ' ' + r.observedAt : ''}, ${POS ? 'ban đêm' : 'không thấy biển mây ngoài rạng sáng không chứng minh được gì'} — không chấm`); continue;
       }
       const p = fc[r.date]?.[key];
       const score = r.predictedScore ?? p?.score;
