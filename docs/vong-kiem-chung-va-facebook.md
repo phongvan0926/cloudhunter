@@ -247,3 +247,9 @@ Kết luận:
 
 - FANSIPAN ABOVE tin 0,9 (không cần người xem): bài 07:42, ảnh có dấu giờ 07:06 và 07:07 đều ABOVE ("đỉnh có sương, gió nhẹ, 4 độ"). Calibrate chấm là không có biển mây. App (bản chụp 12/11) báo RAIN 28, ΔH -17m, không khuyên đi: **đúng-không**. Nguồn FB: 18 -> 19 cặp.
 - Lưu ý đọc kết quả: ảnh chỉ đến 07:07, chưa có ảnh sau 9h (hôm 11/11 biển mây ở Fansipan chỉ thấy từ cabin lúc ~11h), nên "không có" này chắc cho rạng sáng, chưa nói gì về trưa. Engine không đổi.
+
+#### Nhãn FB 13/11/2026 (phiếu #g9f84)
+
+- FANSIPAN BELOW tin 0,8 (không cần người xem), 3 bài: 09:16 "quang mây, thời tiết đẹp" (ảnh 09:08), 09:39 "trời quang, 5 độ" (ảnh 09:27), 11:12 "Best view biển mây đẹp ace ơi" (không dấu giờ ảnh). Không có ảnh trước 9h nên `timeOfDay` để trống; theo quy tắc calibrate 12/11 (thấy biển mây lúc nào cũng chấm) ca này được chấm là **có biển mây**.
+- App (bản chụp 13/11) báo RAIN 23, ΔH -8m, không khuyên đi: **bỏ sót**. Nguồn FB: 19 -> 20 cặp, bỏ sót 9 -> 10 (đúng-có 1, đúng-không 9).
+- Độ chắc: bằng chứng là bài 11:12 và chữ "quang mây" của hai bài trước hơi mơ hồ (có thể là trời quang, biển mây ở dưới). Không có ảnh rạng sáng để biết giờ biển mây đẹp nhất. Fansipan nay bỏ sót 11/11 và 13/11, đúng-không 12/11 (sương trên đỉnh); mẫu cho "cổng mặt mây dưới chân" đã xếp hàng chờ đợt sửa lớn theo Luật cổng. Engine không đổi.
