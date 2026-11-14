@@ -824,14 +824,15 @@
   },
   {
     "id": "2026-11-14-sin-ho",
-    "locationName": "Sìn Hồ (Lai Châu) - điểm ngắm ven đường, chưa có trong thư viện",
+    "locationName": "Sìn Hồ (điểm ngắm ven đường, Lai Châu)",
     "date": "2026-11-14",
     "reportedAt": "2026-11-14T16:54:00+07:00",
     "seaLevel": "BELOW",
     "timeOfDay": "DAWN",
     "observedAt": "bài Facebook đăng 07:30 thứ Bảy 14/11/2026",
     "source": "USER_RELAY",
-    "note": "Phiếu g1785: anh Phong chuyển ảnh bài FB (Lâm Thảo, 'Job make 🍓 Sìn Hồ', bình luận 'biển mây đẹp nhất từng thấy'), biển mây dày dưới lan can đường. Ảnh lưu anh-gui/20261114-165456-1.jpg. Không có spotKey vì Sìn Hồ chưa vào thư viện (chưa xác minh được toạ độ chỗ đứng), nên calibrate bỏ qua dòng này."
+    "note": "Phiếu g1785: anh Phong chuyển ảnh bài FB (Lâm Thảo, 'Job make 🍓 Sìn Hồ', bình luận 'biển mây đẹp nhất từng thấy'), biển mây dày dưới lan can đường. Ảnh lưu anh-gui/20261114-165456-1.jpg. Đã thêm điểm SIN_HO vào thư viện (phiếu gf7d2, toạ độ anh gửi, DEM 1503m) và gắn spotKey; 14/11 chưa có bản chụp dự báo nên calibrate chưa chấm.",
+    "spotKey": "SIN_HO"
   },
   {
     "id": "2026-11-14-pha-luong",

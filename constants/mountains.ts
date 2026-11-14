@@ -29,6 +29,15 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['ta xua', 'khung long', 'song lung', 'bac yen', 'thiên đường mây', 'tà xùa', 'bắc yên', 'sống lưng khủng long', 'ta xua son la',
               'trạm phát sóng tà xùa', 'tram phat song ta xua', 'trung tâm tà xùa', 'cột phát sóng tà xùa']
   },
+  // 14/11/2026 (phiếu gf7d2): điểm ngắm ven đường ở Sìn Hồ (Lai Châu), nơi có biển mây dày 14/11 (bài Facebook
+  // 07:30). Toạ độ do anh Phong gửi, đọc từ định vị Google Maps: 22°17'03"N 103°12'30"E = 22.28417, 103.20833.
+  // DEM (Open-Meteo) tại đúng điểm 1.503m, quanh đó 1.448-1.583m trong ~150m; độ cao = đúng DEM theo luật điểm ngắm.
+  SIN_HO: {
+    name: "Sìn Hồ (điểm ngắm ven đường, Lai Châu)",
+    lat: 22.28417, lon: 103.20833, elevation: 1503,   // nguồn: định vị Google Maps anh Phong gửi 14/11/2026; DEM 1503m tại điểm
+    zone: "A_CLOUD_TRAP",
+    aliases: ['sin ho', 'sìn hồ', 'lai chau', 'lai châu', 'huyện sìn hồ', 'job make sìn hồ']
+  },
   PHA_LUONG: {
     name: "Đỉnh Pha Luông",
     lat: 20.6727, lon: 104.6346, elevation: 1880,   // nguồn: OSM node "Núi Pha Luông" ele=1880 (DEM 1858m)

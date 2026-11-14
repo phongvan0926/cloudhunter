@@ -10,6 +10,16 @@
     "needsReview": null
   },
   {
+    "key": "SIN_HO",
+    "name": "Sìn Hồ (điểm ngắm ven đường, Lai Châu)",
+    "lat": 22.28417,
+    "lon": 103.20833,
+    "elevation": 1503,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
     "key": "PHA_LUONG",
     "name": "Đỉnh Pha Luông",
     "lat": 20.6727,
