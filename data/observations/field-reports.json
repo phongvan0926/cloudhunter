@@ -797,5 +797,29 @@
     "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
     "source": "USER_RELAY",
     "note": "Anh Phong 14/11 11:04: 'Sáng nay cả ở Tà Xùa và đỉnh Phan Xi Păng đều có biển mây, tôi đã xem ảnh và biển mây hôm nay rất đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp 13/11 lỗi 4 lần), nên chưa chấm được app."
+  },
+  {
+    "id": "2026-11-14-nhiu-co-san",
+    "spotKey": "NHIU_CO_SAN",
+    "locationName": "Nhìu Cồ San (Sừng Trâu)",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T11:05:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong 14/11 11:05: 'Hôm nay ở Nhìu Cồ San và Ky Quan San cũng có biển mây đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp lỗi 4 lần) nên chưa chấm được app."
+  },
+  {
+    "id": "2026-11-14-ky-quan-san",
+    "spotKey": "KY_QUAN_SAN",
+    "locationName": "Ky Quan San (Bạch Mộc Lương Tử)",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T11:05:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong 14/11 11:05: 'Hôm nay ở Nhìu Cồ San và Ky Quan San cũng có biển mây đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp lỗi 4 lần) nên chưa chấm được app."
   }
 ]
