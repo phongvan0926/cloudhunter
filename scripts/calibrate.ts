@@ -239,6 +239,8 @@ function main() {
     return { d, peaks, seen: day.length, sea, truth, a: peaks >= WIDE_PEAKS, b: predB(d), c: predC(d) };
   });
   // Cho phân tích ngoài (scripts/capped-fog-study.py): sự thật theo ngày, cùng định nghĩa trên.
+  // Cho phân tích ngoài: từng dòng (điểm-ngày) đã ghép sự thật, kể cả trạng thái engine.
+  if (process.env.DUMP_ROWS) writeFileSync(process.env.DUMP_ROWS, JSON.stringify(rows.map(({ perModel, ...r }) => r)));
   if (process.env.DUMP_WIDE_DAYS) writeFileSync(process.env.DUMP_WIDE_DAYS, JSON.stringify(wideRows.map(({ d, seen, sea, truth }) => ({ d, seen, sea, truth }))));
   const score = (pick: (w: typeof wideRows[0]) => boolean | null, set: typeof wideRows) => {
     let tp = 0, fp = 0, fn = 0, tn = 0;

@@ -159,6 +159,7 @@ npx vite-node scripts/import-fb-auto.ts <nhan-ngay.json>              # nhập n
 npx vite-node scripts/regional-days.ts                                # bảng thời tiết vùng 05h, tìm ngày diện rộng tương tự
 npx vite-node scripts/audit-cloud-top.ts                              # đo sai số độ cao mặt mây thật (bản chụp × vệ tinh Himawari)
 npx vite-node scripts/calibrate.ts                                    # chấm điểm chính app
+DUMP_ROWS=/tmp/rows.json npx vite-node scripts/calibrate.ts             # như trên + xuất từng dòng điểm-ngày đã ghép sự thật (phân tích ngoài)
 ```
 
 ### 🔁 App tự biết mình sai ở đâu

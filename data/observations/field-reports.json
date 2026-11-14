@@ -821,5 +821,16 @@
     "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
     "source": "USER_RELAY",
     "note": "Anh Phong 14/11 11:05: 'Hôm nay ở Nhìu Cồ San và Ky Quan San cũng có biển mây đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp lỗi 4 lần) nên chưa chấm được app."
+  },
+  {
+    "id": "2026-11-14-sin-ho",
+    "locationName": "Sìn Hồ (Lai Châu) - điểm ngắm ven đường, chưa có trong thư viện",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T16:54:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "bài Facebook đăng 07:30 thứ Bảy 14/11/2026",
+    "source": "USER_RELAY",
+    "note": "Phiếu g1785: anh Phong chuyển ảnh bài FB (Lâm Thảo, 'Job make 🍓 Sìn Hồ', bình luận 'biển mây đẹp nhất từng thấy'), biển mây dày dưới lan can đường. Ảnh lưu anh-gui/20261114-165456-1.jpg. Không có spotKey vì Sìn Hồ chưa vào thư viện (chưa xác minh được toạ độ chỗ đứng), nên calibrate bỏ qua dòng này."
   }
 ]

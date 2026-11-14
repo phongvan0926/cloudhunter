@@ -439,7 +439,7 @@ Anh: có dấu hiệu xác nhận biển mây chuẩn thì coi là có (Fansipan
 #### 14/11/2026 - Anh báo Tà Xùa và Fansipan đều có biển mây "rất đẹp" (phiếu g9f8f)
 
 - Anh xem ảnh, không nói giờ nên ghi DAWN. Hai báo cáo BELOW vào `field-reports.json`: `2026-11-14-ta-xua`, `2026-11-14-fansipan`. Hôm nay có biển mây ở CẢ hai điểm (mình chưa đếm xem ngày như vậy hiếm cỡ nào).
-- **Không chấm được app ngày này: mất bản chụp dự báo 14/11.** Job "Vòng kiểm chứng hằng ngày" chạy 13/11 (16:40 UTC) lỗi cả 4 lần thử ("chụp 2026-11-14 thất bại sau 4 lần", mỗi lần chờ 900s, tổng 27 phút), nên `data/observations/2026-11-14-forecast.json` không tồn tại. Mình KHÔNG chụp bù lúc 11h sáng 14/11: dự báo lấy sau rạng sáng không còn là dự báo của buổi tối hôm trước (luật không chụp bù bản chụp). Hai báo cáo này nằm trong kho, calibrate sẽ tự ghép khi có bản chụp, nhưng với ngày này sẽ không có.
+- **Không chấm được bằng bản chụp rạng sáng: mất bản chụp dự báo 14/11.** (Sửa 14/11 chiều, phiếu g1785: vẫn có dự báo PHÁT HÀNH TRƯỚC trong bản chụp tuần `far/`, lead 2-7, xem mục "Sìn Hồ" bên dưới.) Job "Vòng kiểm chứng hằng ngày" chạy 13/11 (16:40 UTC) lỗi cả 4 lần thử ("chụp 2026-11-14 thất bại sau 4 lần", mỗi lần chờ 900s, tổng 27 phút), nên `data/observations/2026-11-14-forecast.json` không tồn tại. Mình KHÔNG chụp bù lúc 11h sáng 14/11: dự báo lấy sau rạng sáng không còn là dự báo của buổi tối hôm trước (luật không chụp bù bản chụp). Hai báo cáo này nằm trong kho, calibrate sẽ tự ghép khi có bản chụp, nhưng với ngày này sẽ không có.
 - **Nguyên nhân (đo 14/11, phiếu gd48e): không phải máy anh tắt** (job chạy trên máy GitHub). Log cho thấy 'fetch failed' ở bước đo đáy thung lũng (Elevation API, 26 điểm) từ 23:41 đến 00:08 VN ngày 13/11, cả 4 lần thử. Đáy thung lũng là địa hình, không đổi, nhưng máy GitHub bắt đầu với localStorage trống nên lần nào cũng đo lại: một điểm hỏng đơn lẻ không cần thiết. Chưa biết lỗi mạng gốc (DNS/TLS/hết giờ) vì thông báo cũ không kèm nguyên nhân.
 - **Không chụp bù được, đã thử:** (a) chạy `snapshot-forecast.ts` lúc 11h sáng: bản chụp thành bằng chứng giả vì đã biết kết quả, cấm theo quy tắc; (b) previous-runs API của Open-Meteo: chỉ có biến mặt đất, không có mực áp suất, engine không chạy được; (c) historical-forecast: gần phân tích, dùng cho `regional-days.ts` và hindcast, không phải dự báo đã phát hành.
 - **Đã khắc phục vòng chụp (gd48e):** `data/valley-dem-seed.json` lưu 56 đáy đã đo (có vân tay toạ độ, sửa toạ độ thì điểm đó tự đo lại); `snapshot-forecast.ts` và `snapshot-week.ts` nạp bảng này trước khi chạy và ghi lại sau, workflow commit kèm file; `fetchJson` nay in nguyên nhân gốc của 'fetch failed'. `scripts/valley-measure.ts` đo lại bảng khi thêm điểm mới. Dự báo giờ chỉ còn phụ thuộc API dự báo.
@@ -467,4 +467,27 @@ Anh hỏi app có tự tìm được ngày giống hôm nay và báo khi ngườ
 - Đo thử trên dự báo 15/11 (đêm đầu có cờ): 0 điểm MATCH, nhưng nhiều điểm có hai điều kiện hiếm (ổn định + khô trên cao) ở 2-3/3 mô hình (vd Phia Oắc 3/3, Tam Đảo 2/3), tức khí quyển ở trạng thái gần với 14/11 chỉ thiếu bão hoà sát đất hoặc đêm khô. Không kết luận gì từ đây.
 - **Việc đợi mẫu:** khi có >= 5 ngày MATCH trong bản chụp thật, chấm C trên chính các đỉnh cao; chỉ khi đó mới cân nhắc đưa vào engine theo Luật cổng (sửa lớn). Trong lúc chờ, ngưỡng C không được chỉnh theo kết quả.
 - Quan sát phụ: lần đo thử đầu Open-Meteo trả HTTP 200 nhưng thân JSON bị cắt giữa chừng (lần thử lại ổn). Cùng họ lỗi với 08/10; vòng thử lại 4 lần của job chụp đã bao.
+
+#### 14/11/2026 - Sìn Hồ cũng có biển mây: ngày diện rộng 5 điểm, chấm lại bằng bản chụp tuần (phiếu g1785)
+
+- **Ca:** anh Phong chuyển ảnh bài Facebook (đăng 07:30 thứ Bảy 14/11, "Job make 🍓 Sìn Hồ", bình luận "biển mây đẹp nhất từng thấy"): biển mây dày phủ kín thung lũng dưới lan can đường. Ghi `2026-11-14-sin-ho` (BELOW, DAWN). Ảnh giữ ở `anh-gui/20261114-165456-1.jpg` (thư mục này không lên git, repo public). **Sìn Hồ chưa có trong thư viện** nên báo cáo không có `spotKey`, calibrate bỏ qua (nằm trong danh sách "bỏ qua"). Không thêm điểm: ảnh không cho biết chỗ đứng, Nominatim không trả kết quả khi thử, mà luật thư viện cấm lấy toạ độ trung tâm thị trấn cho một điểm ngắm. Cần anh (hoặc người đăng) gửi plus code chỗ đứng chụp ảnh là thêm được.
+- **Ngày 14/11 có biển mây ở 5 nơi đã biết:** Tà Xùa, Fansipan, Nhìu Cồ San, Ky Quan San, Sìn Hồ (trải từ Sơn La, Lào Cai tới Lai Châu, độ cao chỗ đứng từ ~1.500m tới 3.143m). Vệ tinh chỉ thấy 3 điểm (Lão Thần xác nhận, Tây Côn Lĩnh và Suối Thầu biên) và nói CLEAR ở cả 4 điểm người thấy: thêm một ca vệ tinh mù với biển mây thung lũng.
+- **Chấm bằng dự báo phát hành trước (bản chụp tuần, đo 14/11):**
+
+  | Chụp ngày | Lead | Điểm khuyên đi/48 | (điểm >= 65) | Tà Xùa | Fansipan | Ky Quan San | Nhìu Cồ San |
+  |---|---|---|---|---|---|---|---|
+  | 07/11 | 7 | 10 | 5 | 46 STATIC, ĐI | 44 DISSIPATING ΔH+910 | 40 DISSIPATING | 14 DISSIPATING |
+  | 08/11 | 6 | 3 | 3 | 50 DISSIPATING 33% | 52 DISSIPATING ΔH+953 | 46 DISSIPATING | 20 DISSIPATING |
+  | 09/11 | 5 | 9 | 6 | 49 FLUCTUATING, ĐI | 34 DISSIPATING | 32 DISSIPATING | 4 DISSIPATING |
+  | 10/11 | 4 | 12 | 7 | 33 FLUCTUATING, ĐI | 42 DISSIPATING | 19 DISSIPATING | 4 DISSIPATING |
+  | 11/11 | 3 | 10 | 6 | 36 STATIC, ĐI | 42 DISSIPATING ΔH+923 | 37 DISSIPATING | 24 DISSIPATING |
+  | 12/11 | 2 | 9 | 5 | 42 STATIC 100% ΔH+609, ĐI | 38 DISSIPATING ΔH+843 | 14 DISSIPATING ΔH+1612 | 4 DISSIPATING |
+
+  Tà Xùa đúng ở 5/6 lần phát hành (trừ 08/11). Ba đỉnh cao bị sót ở MỌI lead, và cùng một kiểu: engine thấy lớp mây nằm sâu dưới chân (ΔH +800 tới +1.600m) nhưng xếp DISSIPATING (sẽ tan) nên không khuyên đi. Tức là lỗi không phải "không thấy mây" mà là phán "mây sẽ tan". Theo giả thuyết A (>= 4 đỉnh khuyên đi và >= 65) thì cả 6 lần phát hành đều báo ngày diện rộng, nhưng A bật gần như hằng ngày giữa mùa (xem SO-TAY, VIỆC 2) nên đây không phải bằng chứng A có tài.
+- **Đo trên toàn kho (calibrate 14/11, `DUMP_ROWS`, 1.801 dòng đã ghép sự thật):** khi engine nói DISSIPATING với ΔH > 0, người đi + Facebook thấy biển mây 6/10 lần (thêm 3 ca 14/11 từ bản chụp tuần thì 9/13); vệ tinh 49/165 (vệ tinh mù thung lũng nên số này thấp tự nhiên). Tỷ lệ có biển mây chung của các dòng người đi + Facebook là 49/68 (72%), nên 60% còn thấp hơn nền một chút: CHƯA chứng minh được DISSIPATING là cổng sai. Mẫu quá nhỏ để kết luận.
+- **Nên làm thế nào (đã quyết trong phiên, theo Luật cổng):**
+  1. DISSIPATING ở đỉnh cao xếp vào gói sửa lớn VIỆC 3 (cùng ý 2: cổng gió Zone B dìm 4 đỉnh cao về DISSIPATING sáng 29/10). Giả thuyết viết TRƯỚC khi chấm: "rạng sáng, ΔH >= +500m và nghịch nhiệt có nắp ở >= 2 mô hình thì DISSIPATING không được chặn lời khuyên đi". Chấm cũ/mới trên toàn kho cùng mẻ, tách nguồn, in mọi ca đổi; 4 ca 14/11 là ca nghĩ ra giả thuyết nên KHÔNG được tính là lợi ích. Không sửa engine trong phiên này.
+  2. Bản chụp tuần là nguồn dự báo phát hành trước hợp lệ khi mất bản chụp rạng sáng. Đưa vào `calibrate-lead.ts` (lịch ~20/11) để chấm theo lead; KHÔNG ghép nó vào bản chụp rạng sáng (khác giờ phát hành, sẽ là chụp bù trá hình).
+  3. Thêm Sìn Hồ (và các điểm đông người lên ảnh như vậy) vào thư viện khi có toạ độ chỗ đứng xác minh được.
+  4. Cờ capWatch "giống sáng 14/11" tiếp tục theo dõi; ngưỡng đóng băng.
 
