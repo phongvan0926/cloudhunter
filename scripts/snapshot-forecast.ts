@@ -17,6 +17,7 @@ if (typeof (globalThis as any).localStorage === 'undefined') {
     removeItem: (k: string) => { mem.delete(k); },
   };
 }
+import { seedValleyCache, dumpValleyCache } from './valley-seed';
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'fs';
 import { rankSpotsForDawn } from '../services/rankingService';
 import { vnTodayStr, addDaysStr } from '../services/weatherService';
@@ -39,6 +40,7 @@ if (existsSync(path) && !FORCE) {
   process.exit(1);
 }
 
+console.log(`   nạp ${seedValleyCache()} đáy thung lũng từ data/valley-dem-seed.json`);
 rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
   mkdirSync('data/observations', { recursive: true });
   writeFileSync(path, JSON.stringify({
@@ -52,5 +54,5 @@ rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
       perModel: r.perModel,
     })),
   }, null, 2) + '\n');
-  console.log(`✅ ${rows.length} điểm → ${path} (${ENGINE_VERSION})`);
+  console.log(`✅ ${rows.length} điểm → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`);
 }).catch(e => { console.error('❌', e?.message || e); process.exit(1); });

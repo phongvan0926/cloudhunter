@@ -16,6 +16,7 @@ if (typeof (globalThis as any).localStorage === 'undefined') {
     removeItem: (k: string) => { mem.delete(k); },
   };
 }
+import { seedValleyCache, dumpValleyCache } from './valley-seed';
 import { mkdirSync, writeFileSync, existsSync } from 'fs';
 import { rankSpotsForWeek } from '../services/rankingService';
 import { vnTodayStr, addDaysStr } from '../services/weatherService';
@@ -26,6 +27,7 @@ const path = `data/observations/far/${TODAY}-week.json`;
 if (existsSync(path)) { console.log(`đã có ${path}, không đè (bản chụp là bằng chứng)`); process.exit(0); }
 
 const dates = Array.from({ length: 7 }, (_, i) => addDaysStr(TODAY, i + 1));
+console.log(`   nạp ${seedValleyCache()} đáy thung lũng từ data/valley-dem-seed.json`);
 rankSpotsForWeek(TODAY, dates, m => console.log('   ' + m)).then(rows => {
   if (!rows.length) throw new Error('không có điểm nào - không ghi file rỗng');
   mkdirSync('data/observations/far', { recursive: true });
@@ -37,5 +39,5 @@ rankSpotsForWeek(TODAY, dates, m => console.log('   ' + m)).then(rows => {
         agreement: d.agreement, deltaH: d.deltaH, worthGoing: d.worthGoing })),
     })),
   }) + '\n');
-  console.log(`✅ ${rows.length} điểm × ${dates.length} ngày → ${path} (${ENGINE_VERSION})`);
+  console.log(`✅ ${rows.length} điểm × ${dates.length} ngày → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`);
 }).catch(e => { console.error('❌', e?.message || e); process.exit(1); });

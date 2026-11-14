@@ -1,0 +1,338 @@
+{
+ "BACH_MA": {
+  "lat": 16.175,
+  "lon": 107.8381,
+  "v": 211,
+  "src": "DEM5"
+ },
+ "BAN_HANG_DA": {
+  "lat": 22.3234,
+  "lon": 103.8821,
+  "v": 1300,
+  "src": "PROFILE"
+ },
+ "BAN_NA": {
+  "lat": 21.00219,
+  "lon": 104.55731,
+  "v": 469,
+  "src": "DEM5"
+ },
+ "BA_DEN": {
+  "lat": 11.3824,
+  "lon": 106.1702,
+  "v": 80,
+  "src": "DEM5"
+ },
+ "BA_VI": {
+  "lat": 21.058,
+  "lon": 105.3673,
+  "v": 100,
+  "src": "PROFILE"
+ },
+ "BINH_LIEU": {
+  "lat": 21.5203,
+  "lon": 107.4883,
+  "v": 367,
+  "src": "DEM5"
+ },
+ "CAU_DAT": {
+  "lat": 11.8829,
+  "lon": 108.5519,
+  "v": 1350,
+  "src": "DEM5"
+ },
+ "CHIENG_CONG": {
+  "lat": 21.43931,
+  "lon": 104.19894,
+  "v": 656,
+  "src": "DEM5"
+ },
+ "CHIEU_LAU_THI": {
+  "lat": 22.6611,
+  "lon": 104.6028,
+  "v": 1000,
+  "src": "PROFILE"
+ },
+ "CUC_TAY_A_PA_CHAI": {
+  "lat": 22.401,
+  "lon": 102.143,
+  "v": 941,
+  "src": "DEM5"
+ },
+ "CU_NHU_SAN": {
+  "lat": 22.5954,
+  "lon": 103.6204,
+  "v": 1200,
+  "src": "PROFILE"
+ },
+ "DEO_KHAU_PHA": {
+  "lat": 21.758,
+  "lon": 104.275,
+  "v": 600,
+  "src": "PROFILE"
+ },
+ "DEO_MA_PI_LENG": {
+  "lat": 23.2389,
+  "lon": 105.3283,
+  "v": 350,
+  "src": "PROFILE"
+ },
+ "DEO_O_QUY_HO": {
+  "lat": 22.355,
+  "lon": 103.774,
+  "v": 1700,
+  "src": "PROFILE"
+ },
+ "DEO_PHA_DIN": {
+  "lat": 21.5558,
+  "lon": 103.5193,
+  "v": 760,
+  "src": "DEM5"
+ },
+ "DEO_THUNG_KHE": {
+  "lat": 20.6725,
+  "lon": 105.1211,
+  "v": 343,
+  "src": "DEM5"
+ },
+ "DOI_MAM_XOI": {
+  "lat": 21.7941,
+  "lon": 104.1519,
+  "v": 700,
+  "src": "PROFILE"
+ },
+ "DONG_VAN": {
+  "lat": 23.24,
+  "lon": 105.3762,
+  "v": 1100,
+  "src": "PROFILE"
+ },
+ "DON_DEN": {
+  "lat": 22.42481,
+  "lon": 105.67906,
+  "v": 173,
+  "src": "DEM5"
+ },
+ "FANSIPAN": {
+  "lat": 22.3033,
+  "lon": 103.775,
+  "v": 1900,
+  "src": "PROFILE"
+ },
+ "HANG_KIA_PA_CO": {
+  "lat": 20.7366,
+  "lon": 104.8833,
+  "v": 800,
+  "src": "PROFILE"
+ },
+ "KEO_LOM": {
+  "lat": 21.0542,
+  "lon": 104.0422,
+  "v": 753,
+  "src": "DEM5"
+ },
+ "KIM_BON": {
+  "lat": 21.121,
+  "lon": 104.6127,
+  "v": 120,
+  "src": "PROFILE"
+ },
+ "KY_QUAN_SAN": {
+  "lat": 22.505,
+  "lon": 103.585,
+  "v": 900,
+  "src": "PROFILE"
+ },
+ "LANG_BIANG": {
+  "lat": 12.0473,
+  "lon": 108.4406,
+  "v": 1467,
+  "src": "DEM5"
+ },
+ "LANG_NHI": {
+  "lat": 21.4952,
+  "lon": 104.5394,
+  "v": 945,
+  "src": "DEM5"
+ },
+ "LAO_THAN": {
+  "lat": 22.61,
+  "lon": 103.685,
+  "v": 1800,
+  "src": "PROFILE"
+ },
+ "LINH_QUY_PHAP_AN": {
+  "lat": 11.435,
+  "lon": 107.8159,
+  "v": 729,
+  "src": "DEM5"
+ },
+ "LUNG_CUNG": {
+  "lat": 21.9025,
+  "lon": 104.2309,
+  "v": 1100,
+  "src": "PROFILE"
+ },
+ "LUNG_VAN": {
+  "lat": 20.5976,
+  "lon": 105.1529,
+  "v": 715,
+  "src": "DEM5"
+ },
+ "MANG_DEN": {
+  "lat": 14.5772,
+  "lon": 108.2775,
+  "v": 1031,
+  "src": "DEM5"
+ },
+ "MAU_SON": {
+  "lat": 21.8497,
+  "lon": 106.9172,
+  "v": 300,
+  "src": "PROFILE"
+ },
+ "NAM_KANG_HO_TAO": {
+  "lat": 22.1504,
+  "lon": 103.9704,
+  "v": 1702,
+  "src": "DEM5"
+ },
+ "NGAI_THAU_THUONG": {
+  "lat": 22.67,
+  "lon": 103.625,
+  "v": 1500,
+  "src": "PROFILE"
+ },
+ "NGOC_SON_LAC_SON": {
+  "lat": 20.44256,
+  "lon": 105.38106,
+  "v": 80,
+  "src": "DEM5"
+ },
+ "NGU_CHI_SON": {
+  "lat": 22.4097,
+  "lon": 103.7426,
+  "v": 1200,
+  "src": "PROFILE"
+ },
+ "NHIU_CO_SAN": {
+  "lat": 22.584,
+  "lon": 103.5833,
+  "v": 1000,
+  "src": "PROFILE"
+ },
+ "PHA_LUONG": {
+  "lat": 20.6727,
+  "lon": 104.6346,
+  "v": 1400,
+  "src": "PROFILE"
+ },
+ "PHIA_OAC": {
+  "lat": 22.6153,
+  "lon": 105.8636,
+  "v": 918,
+  "src": "DEM5"
+ },
+ "PHINH_HO": {
+  "lat": 21.5221,
+  "lon": 104.5418,
+  "v": 377,
+  "src": "DEM5"
+ },
+ "PHU_SA_PHIN": {
+  "lat": 21.4089,
+  "lon": 104.3256,
+  "v": 1735,
+  "src": "DEM5"
+ },
+ "PUSILUNG": {
+  "lat": 22.628,
+  "lon": 102.784,
+  "v": 1561,
+  "src": "DEM5"
+ },
+ "PUTALENG": {
+  "lat": 22.4232,
+  "lon": 103.6036,
+  "v": 800,
+  "src": "PROFILE"
+ },
+ "PU_LUONG": {
+  "lat": 20.4657,
+  "lon": 105.0971,
+  "v": 400,
+  "src": "PROFILE"
+ },
+ "SAPA_HAM_RONG": {
+  "lat": 22.3364,
+  "lon": 103.8438,
+  "v": 1200,
+  "src": "PROFILE"
+ },
+ "SA_MU_U_BO": {
+  "lat": 21.355,
+  "lon": 104.4267,
+  "v": 1400,
+  "src": "PROFILE"
+ },
+ "SI_THAU_CHAI": {
+  "lat": 22.3616,
+  "lon": 103.6017,
+  "v": 718,
+  "src": "DEM5"
+ },
+ "SUOI_THAU": {
+  "lat": 22.68069,
+  "lon": 104.43956,
+  "v": 274,
+  "src": "DEM5"
+ },
+ "TAM_DAO": {
+  "lat": 21.4583,
+  "lon": 105.6458,
+  "v": 200,
+  "src": "PROFILE"
+ },
+ "TAY_CON_LINH": {
+  "lat": 22.8019,
+  "lon": 104.8063,
+  "v": 800,
+  "src": "PROFILE"
+ },
+ "TA_CHI_NHU": {
+  "lat": 21.5707,
+  "lon": 104.3065,
+  "v": 1200,
+  "src": "PROFILE"
+ },
+ "TA_LENG_SAN_MAY": {
+  "lat": 22.43069,
+  "lon": 103.50131,
+  "v": 786,
+  "src": "DEM5"
+ },
+ "TA_LIEN_SON": {
+  "lat": 22.4632,
+  "lon": 103.5561,
+  "v": 1000,
+  "src": "PROFILE"
+ },
+ "TA_NANG": {
+  "lat": 11.5942,
+  "lon": 108.4906,
+  "v": 924,
+  "src": "DEM5"
+ },
+ "TA_XUA_SON_LA": {
+  "lat": 21.2764,
+  "lon": 104.4239,
+  "v": 700,
+  "src": "PROFILE"
+ },
+ "XIM_VANG": {
+  "lat": 21.3559,
+  "lon": 104.3204,
+  "v": 1000,
+  "src": "PROFILE"
+ }
+}
