@@ -491,3 +491,5 @@ Anh hỏi app có tự tìm được ngày giống hôm nay và báo khi ngườ
   3. Thêm Sìn Hồ (và các điểm đông người lên ảnh như vậy) vào thư viện khi có toạ độ chỗ đứng xác minh được.
   4. Cờ capWatch "giống sáng 14/11" tiếp tục theo dõi; ngưỡng đóng băng.
 
+**Bổ sung 14/11 17:28 (phiếu ga2db): Pha Luông (Mộc Châu, 1.880m) cũng có biển mây ~07:00.** Ghi `2026-11-14-pha-luong` (BELOW, DAWN). Vậy 14/11 có biển mây ở 6 nơi (thêm Sơn La - Hoà Bình vùng Mộc Châu, nơi đỉnh thấp hơn 2.000m). Dự báo phát hành trước (bản chụp tuần): lead 7 65 DISSIPATING 33%; lead 6 và 5 56 FOG ΔH -315; lead 4 62 DISSIPATING 33%; lead 3 54 ROLLING 67% ΔH+157 KHUYÊN ĐI; lead 2 (12/11) 62 DISSIPATING 33% ΔH+130 không khuyên đi. Tức là 1/6 lần đúng, và lần gần nhất sót vì đồng thuận mô hình chỉ 33% (ΔH đã > 0). Vệ tinh CLEAR. Cùng họ lỗi với 3 đỉnh cao: ΔH dương nhưng DISSIPATING hoặc đồng thuận thấp chặn lời khuyên; gộp vào gói VIỆC 3 ý 2, không chỉnh ngưỡng đồng thuận theo ca này. Con số chung "Tà Xùa 5/6" ở trên không đổi.
+

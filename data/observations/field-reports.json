@@ -832,5 +832,17 @@
     "observedAt": "bài Facebook đăng 07:30 thứ Bảy 14/11/2026",
     "source": "USER_RELAY",
     "note": "Phiếu g1785: anh Phong chuyển ảnh bài FB (Lâm Thảo, 'Job make 🍓 Sìn Hồ', bình luận 'biển mây đẹp nhất từng thấy'), biển mây dày dưới lan can đường. Ảnh lưu anh-gui/20261114-165456-1.jpg. Không có spotKey vì Sìn Hồ chưa vào thư viện (chưa xác minh được toạ độ chỗ đứng), nên calibrate bỏ qua dòng này."
+  },
+  {
+    "id": "2026-11-14-pha-luong",
+    "spotKey": "PHA_LUONG",
+    "locationName": "Đỉnh Pha Luông",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T17:28:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "quanh 07:00 sáng 14/11 (anh Phong báo; video Facebook Chà Porter Pha Luông 'Pha luông 14/11 2026')",
+    "source": "USER_RELAY",
+    "note": "Phiếu ga2db: biển mây dày phủ kín thung lũng dưới chân người ngồi trên mỏm đá đỉnh, nắng sớm. Ảnh anh-gui/20261114-172816-1.jpg. Chưa có bản chụp rạng sáng 14/11 nên calibrate chưa ghép; dự báo phát hành trước nằm trong bản chụp tuần (lead 2: 62 DISSIPATING 33% ΔH+130, không khuyên đi; lead 3: 54 ROLLING 67% ΔH+157, khuyên đi). Vệ tinh: CLEAR (mù biển mây thung lũng)."
   }
 ]
