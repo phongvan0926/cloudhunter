@@ -230,6 +230,24 @@ function main() {
   const predC = (d: string): boolean | null => reg[d] ? Object.values(reg[d] as Record<string, any>).some((c: any) =>
     c.rh925 >= 90 && c.dpd2m <= 1 && c.lapse850_700 <= 5 && c.rh700 <= 40 && c.wind850 <= 10 && c.rainNight <= 0.3) : null;
   const cDays = Object.keys(reg).sort().filter(d => predC(d));
+  // D (phiếu g1a01, 14/11/2026): "đêm quang đầu tiên sau đợt mưa/âm u, diện rộng". CHỐT trước khi chấm, đừng chỉnh:
+  // một cụm bật khi đêm quang trên cao (mid, high <= 20%, mưa đêm <= 0,3) + >= 2/3 ngày trước "ướt" (mưa >= 1mm hoặc
+  // mây tầng giữa >= 80%) + rh700 <= 40; ngày bật khi >= 3/4 cụm bật. Chi tiết: scripts/post-rain-clearing-study.py.
+  const regDays = Object.keys(reg).sort();
+  const wetDay = (c: any) => (c.rainNight + c.rainPrevAfternoon) >= 1 || c.midNight >= 80;
+  const predD = (d: string): boolean | null => {
+    const i = regDays.indexOf(d);
+    if (i < 3 || !reg[d]) return null;
+    let on = 0, known = 0;
+    for (const [k, c] of Object.entries(reg[d] as Record<string, any>)) {
+      const prev = [1, 2, 3].map(j => reg[regDays[i - j]]?.[k]).filter(Boolean);
+      if (prev.length < 3) continue;
+      known++;
+      if (c.midNight <= 20 && c.highNight <= 20 && c.rainNight <= 0.3 && c.rh700 <= 40 && prev.filter(wetDay).length >= 2) on++;
+    }
+    return known >= 3 ? on >= 3 : null;
+  };
+  const dDays = regDays.filter(d => predD(d));
   const wideRows = Object.keys(fc).sort().map(d => {
     const peaks = Object.values(fc[d]).filter((s: any) => s.score >= STRONG_SCORE
       && isWorthGoing({ status: s.status, agreement: s.agreement, deltaH: s.deltaH ?? null })).length;
@@ -260,6 +278,8 @@ function main() {
   }
   console.log(`    C bật ${cDays.length}/${Object.keys(reg).length} ngày của bảng vùng: ${cDays.join(', ') || '—'}`
     + (cDays.length < 5 ? '  ⚠️  <5 ngày - chưa kiểm được, chờ thêm mẫu' : ''));
+  console.log(`    D (đêm quang đầu sau mưa, chốt 14/11) bật ${dDays.length}/${regDays.length} ngày: ${dDays.join(', ') || '—'}`
+    + (dDays.length < 5 ? '  ⚠️  <5 ngày - chưa kiểm được, chờ thêm mẫu' : ''));
   // C trên DỰ BÁO THẬT (cờ capWatch lưu trong bản chụp từ khi có services/capWatch.ts, 14/11/2026). Ngưỡng đóng băng.
   {
     const withCap = rows.filter(r => (fc[r.date]?.[r.key] as any)?.capWatch);

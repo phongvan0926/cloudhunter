@@ -6,7 +6,7 @@
 import { CloudAnalysis } from '../types';
 
 const KEY = 'cloudhunter_history_v1';
-const MAX_RUNS = 5;
+const MAX_RUNS = 10;   // 5 -> 10 (phiếu g1a01, 14/11/2026); hết chỗ thì tự bỏ bản cũ nhất
 // Bump khi shape CloudAnalysis đổi tới mức UI mới không render nổi bản cũ —
 // bản lưu khác version bị bỏ qua lúc đọc (an toàn hơn crash màn trắng)
 const SCHEMA_VERSION = 2;
@@ -52,7 +52,11 @@ export function saveRun(analysis: CloudAnalysis): void {
     all = all.filter(e => !(e.locationName === entry.locationName && e.dateRange === dateRange));
     all.unshift(entry);
     all = all.slice(0, MAX_RUNS);
-    localStorage.setItem(KEY, JSON.stringify(all));
+    // Một bản phân tích đầy đủ khá nặng: hết quota thì bỏ dần bản cũ nhất thay vì không lưu được gì.
+    while (all.length) {
+      try { localStorage.setItem(KEY, JSON.stringify(all)); return; }
+      catch (e) { if (all.length === 1) throw e; all = all.slice(0, -1); }
+    }
   } catch (e) {
     console.warn('Không lưu được lịch sử (localStorage đầy?):', e);
   }

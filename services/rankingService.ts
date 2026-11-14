@@ -167,6 +167,43 @@ function saveRankCache(targetDate: string, results: SpotRank[]): void {
   } catch { /* hết quota / chế độ riêng tư → bỏ qua, chỉ mất tiện lợi */ }
 }
 
+// ───── Lưu lịch sử bảng xếp hạng (phiếu g1a01, 14/11/2026) ─────
+// Cache 30 phút ở trên chỉ để đỡ tốn API. Lịch sử này để XEM LẠI: sau một sáng đẹp như 14/11, mở lại
+// xem tối hôm trước app đã xếp hạng gì, không phải gọi API, không bị tính lại bằng dữ liệu mới.
+// Lưu mỗi ngày rạng sáng một bản (bản mới nhất của ngày đó), tối đa RANK_ARCHIVE_MAX ngày, bỏ perModel cho nhẹ.
+export const RANK_ARCHIVE_KEY = 'ch-rank-archive-v1';
+export const RANK_ARCHIVE_MAX = 14;
+export interface RankArchiveEntry { targetDate: string; savedAt: string; engine: string; results: SpotRank[] }
+
+/** Thuần (test được): chèn bản mới lên đầu, thay bản cũ cùng ngày, cắt còn `max` ngày. */
+export function mergeRankArchive(list: RankArchiveEntry[], entry: RankArchiveEntry, max = RANK_ARCHIVE_MAX): RankArchiveEntry[] {
+  return [entry, ...list.filter(e => e.targetDate !== entry.targetDate)].slice(0, max);
+}
+
+function readRankArchive(): RankArchiveEntry[] {
+  try {
+    const all = JSON.parse(localStorage.getItem(RANK_ARCHIVE_KEY) || '[]');
+    return Array.isArray(all) ? all.filter(e => e && e.targetDate && Array.isArray(e.results)) : [];
+  } catch { return []; }
+}
+
+export function archiveRanking(targetDate: string, results: SpotRank[]): void {
+  const entry: RankArchiveEntry = {
+    targetDate, savedAt: new Date().toISOString(), engine: ENGINE_VERSION,
+    results: results.map(({ perModel, ...r }) => r as SpotRank),
+  };
+  let next = mergeRankArchive(readRankArchive(), entry);
+  // Hết chỗ localStorage thì bỏ dần bản cũ nhất, không làm hỏng việc xếp hạng.
+  while (next.length) {
+    try { localStorage.setItem(RANK_ARCHIVE_KEY, JSON.stringify(next)); return; }
+    catch { next = next.slice(0, -1); }
+  }
+}
+
+export function listRankArchive(): RankArchiveEntry[] {
+  return readRankArchive();
+}
+
 export async function rankSpotsForDawn(
   targetDate: string,
   onProgress?: (msg: string) => void
@@ -243,6 +280,7 @@ export async function rankSpotsForDawn(
   results.sort((a, b) => Number(b.worthGoing) - Number(a.worthGoing) || b.score - a.score);
   RANK_CACHE = { targetDate, ts: Date.now(), results };
   saveRankCache(targetDate, results);
+  archiveRanking(targetDate, results);
   return results;
 }
 

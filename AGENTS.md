@@ -81,6 +81,8 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 chưa kiểm chứng (1/86 ngày), chỉ hiện ghi chú tím trong app và ghi vào bản chụp; KHÔNG tham gia điểm/trạng thái/đáng đi.
 Đừng chỉnh ngưỡng theo kết quả chấm; đưa vào engine chỉ sau >= 5 ngày MATCH trên dự báo thật và qua Luật cổng. Chi tiết:
 `docs/ca-thuc-dia-thang-10.md` (cuối tệp).
+Dấu hiệu vùng D "đêm quang đầu tiên sau đợt mưa" (phiếu g1a01): chốt trước, in trong calibrate, 2/86 ngày; cùng luật đóng băng như C.
+Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanking` lưu bảng xếp hạng 14 ngày (`ch-rank-archive-v1`), xem trong TonightRanking.
 
 ## 🛠️ Quy tắc dev
 
@@ -146,7 +148,7 @@ chưa kiểm chứng (1/86 ngày), chỉ hiện ghi chú tím trong app và ghi 
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 128 golden tests engine
+npm test       # vitest — 156 test (engine + lịch sử + capWatch...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

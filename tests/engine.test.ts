@@ -873,6 +873,62 @@ describe('historyService — dedup + schema version', () => {
   });
 });
 
+describe('Lịch sử bảng xếp hạng + lịch sử phân tích khi hết chỗ (phiếu g1a01)', () => {
+  const rank = (key: string) => ({ key, name: key, lat: 0, lon: 0, elevation: 1800, valleyElev: 700, zone: 'A',
+    score: 50, status: 'STATIC', agreement: 100, cloudTop: 1200, deltaH: 600, worthGoing: true,
+    perModel: [{ model: 'gfs', score: 50, status: 'STATIC', cloudTop: 1200 }] }) as any;
+
+  it('mergeRankArchive: một bản mỗi ngày (bản mới thay bản cũ), mới nhất lên đầu, cắt theo max', async () => {
+    const { mergeRankArchive } = await import('../services/rankingService');
+    const e = (d: string, t: string) => ({ targetDate: d, savedAt: t, engine: 'x', results: [] });
+    let a = mergeRankArchive([], e('2026-11-14', 'a'), 3);
+    a = mergeRankArchive(a, e('2026-11-15', 'b'), 3);
+    a = mergeRankArchive(a, e('2026-11-14', 'c'), 3);
+    expect(a.map(x => x.targetDate + x.savedAt)).toEqual(['2026-11-14c', '2026-11-15b']);
+    for (const d of ['2026-11-16', '2026-11-17']) a = mergeRankArchive(a, e(d, 'z'), 3);
+    expect(a.map(x => x.targetDate)).toEqual(['2026-11-17', '2026-11-16', '2026-11-14']);
+  });
+
+  it('archiveRanking: lưu được, bỏ perModel; hết quota thì bỏ bản cũ nhất thay vì mất hết', async () => {
+    const store: Record<string, string> = {};
+    let limit = Infinity;
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store[k] ?? null,
+      setItem: (k: string, v: string) => { if (v.length > limit) throw new Error('QuotaExceeded'); store[k] = v; },
+    };
+    const { archiveRanking, listRankArchive } = await import('../services/rankingService');
+    archiveRanking('2026-11-13', [rank('A')]);
+    archiveRanking('2026-11-14', [rank('B')]);
+    const l = listRankArchive();
+    expect(l.map(x => x.targetDate)).toEqual(['2026-11-14', '2026-11-13']);
+    expect((l[0].results[0] as any).perModel).toBeUndefined();
+    // Đối chứng âm: chỉ đủ chỗ cho 1 bản -> giữ bản MỚI, bỏ bản cũ
+    limit = JSON.stringify(l.slice(0, 1)).length + 200;
+    archiveRanking('2026-11-15', [rank('C')]);
+    expect(listRankArchive().map(x => x.targetDate)).toEqual(['2026-11-15']);
+    delete (globalThis as any).localStorage;
+  });
+
+  it('historyService: hết quota thì bỏ bản cũ nhất, bản mới vẫn lưu được', async () => {
+    const store: Record<string, string> = {};
+    let limit = Infinity;
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store[k] ?? null,
+      setItem: (k: string, v: string) => { if (v.length > limit) throw new Error('QuotaExceeded'); store[k] = v; },
+    };
+    const { saveRun, listRuns } = await import('../services/historyService');
+    const mk = (loc: string) => ({ locationName: loc, dailyForecasts: [{ date: '2026-11-14' }] }) as any;
+    saveRun(mk('A')); saveRun(mk('B'));
+    expect(listRuns().map(r => r.locationName)).toEqual(['B', 'A']);
+    limit = store['cloudhunter_history_v1'].length - 10;   // không đủ cho 3 bản, đủ cho 1-2 bản
+    saveRun(mk('C'));
+    const names = listRuns().map(r => r.locationName);
+    expect(names[0]).toBe('C');
+    expect(names.length).toBeLessThan(3);
+    delete (globalThis as any).localStorage;
+  });
+});
+
 describe('WEATHER_MODELS — 6 mô hình toàn cầu', () => {
   it('gồm ECMWF/GFS/ICON/JMA/UKMO/AIFS (KMA không phủ VN; AIFS phải là id _single)', async () => {
     const { WEATHER_MODELS, MODEL_LABELS } = await import('../services/weatherService');

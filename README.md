@@ -223,3 +223,7 @@ Dự án của **phongvan0926**. Dữ liệu khí tượng: [Open-Meteo](https:/
 Dự báo chỉ mang tính tham khảo — luôn quan sát thời tiết thực tế khi trekking.
 
 **Cờ theo dõi "giống sáng 14/11"** (`services/capWatch.ts`): nhắc người dùng khi dự báo có tầng thấp bão hoà + nghịch nhiệt có nắp + khô trên cao như sáng 14/11/2026. Là giả thuyết chưa kiểm chứng, không đổi điểm hay lời khuyên; bản chụp dự báo ghi lại cờ để chấm sau.
+
+**Dấu hiệu D "đêm quang đầu tiên sau đợt mưa"** (14/11/2026, `scripts/post-rain-clearing-study.py`, dòng D trong `calibrate.ts`): >= 3/4 cụm vùng có đêm quang trên cao sau >= 2/3 ngày mưa/âm u và khô trên cao (rh700 <= 40). Chốt trước khi chấm, mới bật 2/86 ngày (22/09 chưa có ai đi, 14/11 có biển mây 6 nơi); chỉ theo dõi, chưa vào app.
+
+**Xem lại lịch sử:** "Lần tra gần đây" giữ 10 lần phân tích (trước là 5); bảng "Đêm nay đi đâu săn mây?" tự lưu một bản mỗi ngày rạng sáng, 14 ngày gần nhất, mở lại trong mục "🗂️ Bảng đã lưu" (không gọi API, không tính lại). Hết chỗ localStorage thì tự bỏ bản cũ nhất. Lưu trên máy người dùng, không đồng bộ giữa máy.
