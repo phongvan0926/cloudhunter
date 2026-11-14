@@ -515,3 +515,8 @@ Anh hỏi app có tự tìm được ngày giống hôm nay và báo khi ngườ
   4. **Hiển thị:** khi đủ mẫu, app hiện "ngày hiếm: đêm quang đầu tiên sau mưa" ngay trong bảng xếp hạng (như cờ capWatch). Hiện cờ capWatch (C) đã có; D chỉ log.
 - **Việc KHÔNG làm vì sao:** không đổi ngưỡng DISSIPATING hay "đáng đi" theo ngày này (ca nghĩ ra bản sửa không được tính là lợi ích, Luật cổng); không gán `duration` cho từng điểm vì anh không nói điểm nào; không thêm Pa Phách khi chưa có toạ độ.
 
+
+### PA_PHACH thêm vào thư viện (14/11/2026, phiếu g7692)
+Anh gửi plus code `QM9Q+83 Chieng Son, Son La` (Google Maps). Giải mã với 4 ô tiền tố khả dĩ, chọn ô gần Mộc Châu nhất
+(7PG6): 20.76831, 104.68769, DEM 1180m, nằm đúng xã Chiềng Sơn. Thư viện nay 58 điểm. Báo cáo 14/11 gắn spotKey PA_PHACH,
+nhưng không có bản chụp sáng 14/11 nên chưa chấm được; điểm thấp này sẽ có số đo từ các ngày sau.

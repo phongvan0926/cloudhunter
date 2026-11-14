@@ -20,6 +20,16 @@
     "needsReview": null
   },
   {
+    "key": "PA_PHACH",
+    "name": "Đỉnh Pa Phách (Mộc Châu, Sơn La)",
+    "lat": 20.76831,
+    "lon": 104.68769,
+    "elevation": 1180,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
     "key": "PHA_LUONG",
     "name": "Đỉnh Pha Luông",
     "lat": 20.6727,

@@ -38,6 +38,15 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     zone: "A_CLOUD_TRAP",
     aliases: ['sin ho', 'sìn hồ', 'lai chau', 'lai châu', 'huyện sìn hồ', 'job make sìn hồ']
   },
+  // 14/11/2026 (phiếu g7692): đỉnh Pa Phách, Mộc Châu (Sơn La), điểm thấp có biển mây dày 14/11. Toạ độ giải từ plus code
+  // anh Phong gửi, lấy từ Google Maps: QM9Q+83 Chieng Son, Son La. Mã đầy đủ chọn theo ô gần Mộc Châu nhất (7PG6QM9Q+83;
+  // 3 ô còn lại lệch >= 1 độ, tức >= 100km) = 20.76831, 104.68769. DEM (Open-Meteo) tại điểm 1.180m; độ cao = đúng DEM.
+  PA_PHACH: {
+    name: "Đỉnh Pa Phách (Mộc Châu, Sơn La)",
+    lat: 20.76831, lon: 104.68769, elevation: 1180,   // nguồn: plus code QM9Q+83 Chiềng Sơn (anh Phong, Google Maps) 14/11/2026; DEM 1180m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['pa phach', 'pa phách', 'đỉnh pa phách', 'chieng son', 'chiềng sơn', 'moc chau pa phach']
+  },
   PHA_LUONG: {
     name: "Đỉnh Pha Luông",
     lat: 20.6727, lon: 104.6346, elevation: 1880,   // nguồn: OSM node "Núi Pha Luông" ele=1880 (DEM 1858m)

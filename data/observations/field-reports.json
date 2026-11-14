@@ -848,13 +848,14 @@
   },
   {
     "id": "2026-11-14-pa-phach",
-    "locationName": "Đỉnh Pa Phách (Mộc Châu, Sơn La) - chưa có trong thư viện",
+    "locationName": "Đỉnh Pa Phách (Mộc Châu, Sơn La)",
+    "spotKey": "PA_PHACH",
     "date": "2026-11-14",
     "reportedAt": "2026-11-14T23:24:00+07:00",
     "seaLevel": "BELOW",
     "timeOfDay": "DAWN",
     "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
     "source": "USER_RELAY",
-    "note": "Phiếu g4c6a, anh Phong 14/11 23:24: Pa Phách (điểm thấp của Mộc Châu) cũng có biển mây dày đẹp. Cùng lời anh: 14/11 là ngày biển mây có mặt ở nhiều nơi nhất, dày và đẹp nhất, cuồn cuộn, tồn tại lâu nhất, nhiều nơi qua cả buổi trưa. Chưa có spotKey: chưa có toạ độ chỗ đứng đã xác minh (Nominatim 14/11 không trả kết quả). Không ghi duration cho từng điểm vì anh không nói điểm nào kéo dài."
+    "note": "Phiếu g4c6a, anh Phong 14/11 23:24: Pa Phách (điểm thấp của Mộc Châu) cũng có biển mây dày đẹp. Cùng lời anh: 14/11 là ngày biển mây có mặt ở nhiều nơi nhất, dày và đẹp nhất, cuồn cuộn, tồn tại lâu nhất, nhiều nơi qua cả buổi trưa. Đã gắn spotKey PA_PHACH (phiếu g7692, plus code QM9Q+83 anh gửi, DEM 1180m); không có bản chụp 14/11 nên chưa chấm được. Không ghi duration cho từng điểm vì anh không nói điểm nào kéo dài."
   }
 ]
