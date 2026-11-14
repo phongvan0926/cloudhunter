@@ -17,7 +17,7 @@
  * làm du lịch tại chỗ (fb-auto-reports.json, xem AGENTS.md "Nhãn tự động từ Facebook"). Thứ bậc khi
  * cùng điểm + ngày: người đi ĐÈ Facebook ĐÈ vệ tinh. Số in ra tách theo nguồn.
  */
-import { readdirSync, readFileSync, existsSync } from 'fs';
+import { readdirSync, readFileSync, existsSync, writeFileSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { WORTH_GOING_SCORE, isWorthGoing } from '../services/cloudScoreEngine';
 import { fbUsable, FB_MIN_CONFIDENCE } from './fb-auto';
@@ -225,14 +225,21 @@ function main() {
     const s = reg[d]?.SAPA;
     return s ? s.wind850 <= 3 && s.rainNight <= 0.3 && s.dpd2m <= 0.3 && s.dmsl24 >= 0 : null;
   };
+  // C (phiếu g9518, 14/11/2026): "tầng thấp bão hoà + nghịch nhiệt có nắp, khô trên nắp". CHỐT từ mô tả ngày 14/11,
+  // đừng chỉnh theo kết quả: MỘT cụm bất kỳ có rh925 ≥ 90, T−Td 2m ≤ 1, lapse 850-700 ≤ 5, rh700 ≤ 40, gió 850 ≤ 10, mưa đêm ≤ 0,3.
+  const predC = (d: string): boolean | null => reg[d] ? Object.values(reg[d] as Record<string, any>).some((c: any) =>
+    c.rh925 >= 90 && c.dpd2m <= 1 && c.lapse850_700 <= 5 && c.rh700 <= 40 && c.wind850 <= 10 && c.rainNight <= 0.3) : null;
+  const cDays = Object.keys(reg).sort().filter(d => predC(d));
   const wideRows = Object.keys(fc).sort().map(d => {
     const peaks = Object.values(fc[d]).filter((s: any) => s.score >= STRONG_SCORE
       && isWorthGoing({ status: s.status, agreement: s.agreement, deltaH: s.deltaH ?? null })).length;
     const day = rows.filter(r => r.date === d);
     const sea = day.filter(r => r.truth === 'SEA').length;
     const truth: boolean | null = sea >= WIDE_TRUTH ? true : day.length >= WIDE_MIN_SEEN ? false : null;
-    return { d, peaks, seen: day.length, sea, truth, a: peaks >= WIDE_PEAKS, b: predB(d) };
+    return { d, peaks, seen: day.length, sea, truth, a: peaks >= WIDE_PEAKS, b: predB(d), c: predC(d) };
   });
+  // Cho phân tích ngoài (scripts/capped-fog-study.py): sự thật theo ngày, cùng định nghĩa trên.
+  if (process.env.DUMP_WIDE_DAYS) writeFileSync(process.env.DUMP_WIDE_DAYS, JSON.stringify(wideRows.map(({ d, seen, sea, truth }) => ({ d, seen, sea, truth }))));
   const score = (pick: (w: typeof wideRows[0]) => boolean | null, set: typeof wideRows) => {
     let tp = 0, fp = 0, fn = 0, tn = 0;
     for (const w of set) {
@@ -247,7 +254,10 @@ function main() {
     ['NGOÀI MẪU (phép thử thật)', wideRows.filter(w => w.d > WIDE_IN_SAMPLE_END)]] as const) {
     console.log(`    ${lbl}:  A (≥ ${WIDE_PEAKS} đỉnh ≥ ${STRONG_SCORE}) ${score(w => w.a, set)}`);
     console.log(`    ${' '.repeat(lbl.length)}   B (Sa Pa lặng, khô đêm, bão hoà)  ${score(w => w.b, set)}`);
+    console.log(`    ${' '.repeat(lbl.length)}   C (nắp + khô trên cao, chốt 14/11)  ${score(w => w.c, set)}`);
   }
+  console.log(`    C bật ${cDays.length}/${Object.keys(reg).length} ngày của bảng vùng: ${cDays.join(', ') || '—'}`
+    + (cDays.length < 5 ? '  ⚠️  <5 ngày - chưa kiểm được, chờ thêm mẫu' : ''));
   const shown = wideRows.filter(w => w.a || w.b || w.truth || w.d > WIDE_IN_SAMPLE_END);
   console.log(`    ngày đáng xem (A hoặc B bật, hoặc diện rộng thật, hoặc ngoài mẫu):`);
   for (const w of shown) console.log(`      ${w.d}  A ${String(w.peaks).padStart(2)} đỉnh${w.a ? ' ✓' : '  '}  B ${w.b === null ? '—' : w.b ? '✓' : '·'}`
