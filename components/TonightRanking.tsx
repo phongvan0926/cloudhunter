@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { rankSpotsForDawn, SpotRank } from '../services/rankingService';
 import { STATUS_TEXT } from '../services/cloudScoreEngine';
 import { MOUNTAIN_DB } from '../constants/mountains';
+import { CAP_WATCH_TEXT } from '../services/capWatch';
 
 const TOTAL_SPOTS = Object.keys(MOUNTAIN_DB).length;
 
@@ -63,6 +64,14 @@ export const TonightRanking: React.FC<Props> = ({ targetDate, onPickSpot }) => {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
           </svg>
           {progress}
+        </p>
+      )}
+
+      {ranks && ranks.some(r => r.capWatch?.tier === 'MATCH') && (
+        <p className="mt-3 text-[11px] text-violet-200 bg-violet-950/30 border border-violet-500/30 rounded-xl p-2.5 leading-relaxed">
+          🔎 <b>{ranks.filter(r => r.capWatch?.tier === 'MATCH').length} điểm có điều kiện giống sáng 14/11</b>:{' '}
+          {ranks.filter(r => r.capWatch?.tier === 'MATCH').map(r => r.name).slice(0, 8).join(', ')}
+          {ranks.filter(r => r.capWatch?.tier === 'MATCH').length > 8 && '...'}. {CAP_WATCH_TEXT}
         </p>
       )}
 

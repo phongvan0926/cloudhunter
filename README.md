@@ -220,3 +220,5 @@ và backlog. Trước khi kết thúc mọi phiên sửa code: `npm run lint && 
 Dự án của **phongvan0926**. Dữ liệu khí tượng: [Open-Meteo](https://open-meteo.com/)
 (ECMWF/GFS/ICON). Geocoding: [Nominatim/OpenStreetMap](https://nominatim.org/).
 Dự báo chỉ mang tính tham khảo — luôn quan sát thời tiết thực tế khi trekking.
+
+**Cờ theo dõi "giống sáng 14/11"** (`services/capWatch.ts`): nhắc người dùng khi dự báo có tầng thấp bão hoà + nghịch nhiệt có nắp + khô trên cao như sáng 14/11/2026. Là giả thuyết chưa kiểm chứng, không đổi điểm hay lời khuyên; bản chụp dự báo ghi lại cờ để chấm sau.

@@ -6,6 +6,7 @@ import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
 import { moonInfoForDawn } from '../services/astroService';
 import { FieldReportPanel } from './FieldReportPanel';
+import { CAP_WATCH_TEXT } from '../services/capWatch';
 
 interface AnalysisResultProps {
   result: CloudAnalysis;
@@ -914,6 +915,11 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
                   {day.reliability_note && (
                     <div className="bg-amber-950/30 border border-amber-600/30 rounded-lg p-2.5 text-[11px] text-amber-200">
                       ⏳ {day.reliability_note}
+                    </div>
+                  )}
+                  {day.cap_watch?.tier === 'MATCH' && (
+                    <div className="bg-violet-950/30 border border-violet-500/30 rounded-lg p-2.5 text-[11px] text-violet-200">
+                      🔎 <b>Giống sáng 14/11</b> ({day.cap_watch.modelsAll}/{day.cap_watch.modelsTotal} mô hình). {CAP_WATCH_TEXT}
                     </div>
                   )}
                   {day.recommended_position && (

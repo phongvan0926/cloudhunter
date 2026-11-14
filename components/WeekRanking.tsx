@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { rankSpotsForWeek, WeekRow, WEEK_CONFIDENT_LEAD_DAYS } from '../services/rankingService';
 import { STATUS_TEXT } from '../services/cloudScoreEngine';
+import { CAP_WATCH_TEXT } from '../services/capWatch';
 
 /**
  * WeekRanking - "7 ngày tới săn mây ở đâu": bảng điểm miền Bắc × 7 rạng sáng, cột Thứ 7/Chủ nhật
@@ -55,6 +56,14 @@ export const WeekRanking: React.FC<Props> = ({ today, dates, onPickSpot }) => {
               ? <>Cuối tuần ({weekend.map(dm).join(', ')}) engine thấy đáng đi: <b className="text-emerald-300">{goodOnWeekend.map(r => r.name).join(', ')}</b>.</>
               : <>Cuối tuần ({weekend.map(dm).join(', ') || 'ngoài 7 ngày'}) <b>chưa điểm nào</b> được engine kết luận đáng đi theo dự báo hiện tại.</>}
           </p>
+          {(() => {
+            const capDays = dates.map(d => ({ d, n: rows.filter(r => r.days.some(x => x.date === d && x.capWatch?.tier === 'MATCH')).length })).filter(x => x.n > 0);
+            return capDays.length > 0 && (
+              <p className="mt-2 text-[11px] text-violet-200 bg-violet-950/30 border border-violet-500/30 rounded-xl p-2.5 leading-relaxed">
+                🔎 <b>Ngày giống sáng 14/11:</b> {capDays.map(x => `${dm(x.d)} (${x.n} điểm)`).join(', ')}. {CAP_WATCH_TEXT}
+              </p>
+            );
+          })()}
           <div className="mt-3 overflow-x-auto">
             <table className="w-full text-[11px] border-separate border-spacing-y-1">
               <thead>

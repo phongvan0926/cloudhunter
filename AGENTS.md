@@ -75,6 +75,13 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/rang-buoc-vat-ly.md` - đọc TRƯỚC khi sửa vật lý engine (nghịch nhiệt, mực áp suất, estimateCloudTop, BLH, gió theo zone, mùa, ensemble).
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
 
+### 🔎 Cờ theo dõi "giống sáng 14/11" (14/11/2026, phiếu g6102)
+
+`services/capWatch.ts`: tầng thấp bão hoà + nghịch nhiệt có nắp + khô trên cao (6 điều kiện, ngưỡng đóng băng). Là GIẢ THUYẾT
+chưa kiểm chứng (1/86 ngày), chỉ hiện ghi chú tím trong app và ghi vào bản chụp; KHÔNG tham gia điểm/trạng thái/đáng đi.
+Đừng chỉnh ngưỡng theo kết quả chấm; đưa vào engine chỉ sau >= 5 ngày MATCH trên dự báo thật và qua Luật cổng. Chi tiết:
+`docs/ca-thuc-dia-thang-10.md` (cuối tệp).
+
 ## 🛠️ Quy tắc dev
 
 1. **Mọi call AI qua `executeWithFallback`** — không gọi `ai.models.generateContent` trực tiếp.

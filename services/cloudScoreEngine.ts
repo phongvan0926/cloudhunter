@@ -13,6 +13,7 @@
  *    tính từ thung lũng.
  *  - Độ cao gần đúng các mực áp suất: 925hPa≈760m, 850hPa≈1500m, 700hPa≈3100m (ASL).
  */
+import { capWatchOf } from './capWatch';
 import {
   DailyForecast, DataQuality, StatusCode, SunTimes, TechnicalIndices, TerrainPoint,
 } from '../types';
@@ -1147,6 +1148,7 @@ export function computeDayForecast(day: DayData, ctx: DayContext): EngineDayOutp
       status_code: combined.status,
       status_text: STATUS_TEXT[combined.status],
       worth_going: isWorthGoing({ status: combined.status, agreement: combined.agreement, deltaH }),
+      cap_watch: capWatchOf(day.models),
       reliability_note,
       reasons: combined.representative.reasons,
       sunrise_color_potential: colorPotential,

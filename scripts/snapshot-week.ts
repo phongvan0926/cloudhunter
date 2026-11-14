@@ -36,7 +36,7 @@ rankSpotsForWeek(TODAY, dates, m => console.log('   ' + m)).then(rows => {
     spots: rows.map(r => ({
       key: r.key, name: r.name, observerAlt: r.elevation,
       days: r.days.map(d => ({ date: d.date, lead: d.leadDays, score: d.score, status: d.status,
-        agreement: d.agreement, deltaH: d.deltaH, worthGoing: d.worthGoing })),
+        agreement: d.agreement, deltaH: d.deltaH, worthGoing: d.worthGoing, capWatch: d.capWatch })),
     })),
   }) + '\n');
   console.log(`✅ ${rows.length} điểm × ${dates.length} ngày → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`);

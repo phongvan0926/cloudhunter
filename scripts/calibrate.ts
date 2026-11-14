@@ -258,6 +258,16 @@ function main() {
   }
   console.log(`    C bật ${cDays.length}/${Object.keys(reg).length} ngày của bảng vùng: ${cDays.join(', ') || '—'}`
     + (cDays.length < 5 ? '  ⚠️  <5 ngày - chưa kiểm được, chờ thêm mẫu' : ''));
+  // C trên DỰ BÁO THẬT (cờ capWatch lưu trong bản chụp từ khi có services/capWatch.ts, 14/11/2026). Ngưỡng đóng băng.
+  {
+    const withCap = rows.filter(r => (fc[r.date]?.[r.key] as any)?.capWatch);
+    const hit = withCap.filter(r => (fc[r.date][r.key] as any).capWatch.tier === 'MATCH');
+    const hitDays = new Set(hit.map(r => r.date));
+    const seaOf = (xs: typeof rows) => xs.filter(r => r.truth === 'SEA').length;
+    console.log(`    C trên dự báo thật: ${withCap.length} cặp có cờ, MATCH ${hit.length} cặp (${hitDays.size} ngày: ${[...hitDays].sort().join(', ') || '—'})`
+      + (hit.length ? `; trong MATCH có biển mây ${seaOf(hit)}/${hit.length}, ngoài MATCH ${seaOf(withCap) - seaOf(hit)}/${withCap.length - hit.length}` : '')
+      + (hitDays.size < 5 ? '  ⚠️  <5 ngày MATCH - chưa kết luận được' : ''));
+  }
   const shown = wideRows.filter(w => w.a || w.b || w.truth || w.d > WIDE_IN_SAMPLE_END);
   console.log(`    ngày đáng xem (A hoặc B bật, hoặc diện rộng thật, hoặc ngoài mẫu):`);
   for (const w of shown) console.log(`      ${w.d}  A ${String(w.peaks).padStart(2)} đỉnh${w.a ? ' ✓' : '  '}  B ${w.b === null ? '—' : w.b ? '✓' : '·'}`

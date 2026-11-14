@@ -458,3 +458,13 @@ Anh hỏi sao không tập trung vào điều kiện này. Đã đo, kết quả
 - Cách có thể làm tiếp khi có thêm ngày C bật: chấm C trên chính các ca đỉnh cao (Tà Xùa, Fansipan, Nhìu Cồ San, Ky Quan San) thay vì cả ngày; đặt mục tiêu >= 5 ngày C bật trước khi đụng engine.
 Công cụ: `scripts/capped-fog-study.py` (cần `DUMP_WIDE_DAYS=/tmp/wide.json npx vite-node scripts/calibrate.ts` trước).
 
+#### Cờ theo dõi "giống sáng 14/11" trong app (phiếu g6102, 14/11/2026)
+
+Anh hỏi app có tự tìm được ngày giống hôm nay và báo khi người dùng chọn vùng không. Đã làm, với đúng mức tin cậy hiện có:
+- `services/capWatch.ts` (hàm thuần, có test `tests/capWatch.test.ts` kèm đối chứng âm từng điều kiện): áp luật C (6 điều kiện, ngưỡng đóng băng ở `CAP_WATCH_THRESHOLDS`) lên TỪNG mô hình tại đáy thung lũng 06h của điểm. `MATCH` = từ nửa số mô hình trở lên (tối thiểu 2) thoả đủ 6. Cờ KHÔNG tham gia điểm, trạng thái, "đáng đi", không đổi `ENGINE_VERSION`.
+- Hiện ở 3 chỗ: bảng "Đêm nay đi đâu" (dòng tím liệt kê các điểm MATCH), bảng 7 ngày (ngày nào có điểm MATCH), và thẻ từng ngày trong phân tích đầy đủ. Lời kèm theo nói rõ đây là giả thuyết, trong kho mới có 1 ngày như vậy, không đổi lời khuyên.
+- **Theo dõi:** mỗi bản chụp dự báo (`snapshot-forecast.ts`, `snapshot-week.ts`) ghi `capWatch` từng điểm; `calibrate.ts` in dòng "C trên dự báo thật" (số ngày MATCH, tỉ lệ có biển mây trong/ngoài MATCH), cảnh báo đến khi >= 5 ngày MATCH. Đó là phép thử thật đầu tiên vì dùng dự báo tối hôm trước chứ không phải số gần phân tích.
+- Đo thử trên dự báo 15/11 (đêm đầu có cờ): 0 điểm MATCH, nhưng nhiều điểm có hai điều kiện hiếm (ổn định + khô trên cao) ở 2-3/3 mô hình (vd Phia Oắc 3/3, Tam Đảo 2/3), tức khí quyển ở trạng thái gần với 14/11 chỉ thiếu bão hoà sát đất hoặc đêm khô. Không kết luận gì từ đây.
+- **Việc đợi mẫu:** khi có >= 5 ngày MATCH trong bản chụp thật, chấm C trên chính các đỉnh cao; chỉ khi đó mới cân nhắc đưa vào engine theo Luật cổng (sửa lớn). Trong lúc chờ, ngưỡng C không được chỉnh theo kết quả.
+- Quan sát phụ: lần đo thử đầu Open-Meteo trả HTTP 200 nhưng thân JSON bị cắt giữa chừng (lần thử lại ổn). Cùng họ lỗi với 08/10; vòng thử lại 4 lần của job chụp đã bao.
+

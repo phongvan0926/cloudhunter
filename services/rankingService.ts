@@ -13,10 +13,11 @@
  *    (1 lần xếp hạng ≈ 600+ call quy đổi, từng vượt hạn mức phút của Open-Meteo).
  *  - Điểm nào thiếu dữ liệu thì bị loại khỏi bảng, không chèn số mặc định.
  */
+import { capWatchOf, type CapWatch } from './capWatch';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { NORTHWEST_PEAKS } from '../constants';
 import {
-  addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS,
+  addDaysStr, aggregateDayModel, makeHourlyBlock, WeatherModelId, HOURLY_VARS, type DayModelData,
   getCachedValley, setCachedValley,
 } from './weatherService';
 import { scoreOneModel, combineModels, isWorthGoing, climateRegion, ENGINE_VERSION } from './cloudScoreEngine';
@@ -42,6 +43,7 @@ export interface SpotRank {
   cloudTop: number | null;   // trung vị mặt mây trong nhóm kết luận thắng (m ASL)
   deltaH: number | null;     // elevation − cloudTop; >0 = đứng trên mặt mây
   worthGoing: boolean;       // engine-2.8: xem isWorthGoing — KHÔNG suy từ score
+  capWatch?: CapWatch;       // cờ theo dõi 'giống 14/11' - không ảnh hưởng điểm; optional vì cache cũ
   /**
    * Kết quả TỪNG mô hình, để về sau chấm được mô hình nào đúng trên các ngày đã kiểm chứng.
    * Cần vì ngày 23-24/8/2026 tại Tà Xùa cho thấy các mô hình bất đồng tận gốc: chỉ GFS
@@ -218,9 +220,10 @@ export async function rankSpotsForDawn(
     const block = makeHourlyBlock(loc.hourly);
     const ctx = { valleyElevation: Math.round(valleys[key]), observerAlt: mt.elevation, zone: mt.zone, lat: mt.lat };
     const per = [];
+    const aggs: Record<string, DayModelData> = {};
     for (const model of RANK_MODELS) {
       const agg = aggregateDayModel(block, block, model, targetDate, prevDate);
-      if (agg) per.push(scoreOneModel(model, agg, ctx, targetDate));
+      if (agg) { per.push(scoreOneModel(model, agg, ctx, targetDate)); aggs[model] = agg; }
     }
     if (per.length === 0) return;
     const c = combineModels(per);
@@ -231,6 +234,7 @@ export async function rankSpotsForDawn(
       score: c.score, status: c.status, agreement: c.agreement,
       cloudTop: c.cloudTop, deltaH,
       worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
+      capWatch: capWatchOf(aggs),
       perModel: per.map(x => ({ model: x.model, score: x.score, status: x.status, cloudTop: x.cloudTop })),
     });
   });
@@ -253,6 +257,7 @@ export interface WeekDay {
   agreement: number;
   deltaH: number | null;
   worthGoing: boolean;
+  capWatch?: CapWatch;
 }
 export interface WeekRow {
   key: string; name: string; elevation: number; zone: string;
@@ -309,9 +314,10 @@ export async function rankSpotsForWeek(
     const days: WeekDay[] = [];
     for (const d of dates) {
       const per = [];
+      const aggs: Record<string, DayModelData> = {};
       for (const model of RANK_MODELS) {
         const agg = aggregateDayModel(block, block, model, d, addDaysStr(d, -1));
-        if (agg) per.push(scoreOneModel(model, agg, ctx, d));
+        if (agg) { per.push(scoreOneModel(model, agg, ctx, d)); aggs[model] = agg; }
       }
       if (!per.length) continue;   // ngày thiếu dữ liệu thì để trống, không bịa
       const c = combineModels(per);
@@ -320,6 +326,7 @@ export async function rankSpotsForWeek(
         date: d, leadDays: Math.round((Date.parse(d) - Date.parse(today)) / 86400000),
         score: c.score, status: c.status, agreement: c.agreement, deltaH,
         worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
+        capWatch: capWatchOf(aggs),
       });
     }
     if (days.length) rows.push({ key, name: mt.name, elevation: mt.elevation, zone: mt.zone, days, worthDays: days.filter(x => x.worthGoing).length });
