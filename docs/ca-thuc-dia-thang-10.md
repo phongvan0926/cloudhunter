@@ -435,3 +435,9 @@ Anh: có dấu hiệu xác nhận biển mây chuẩn thì coi là có (Fansipan
 - Có bằng chứng thật cho 11/11: chỉ **2 điểm** (Tà Xùa có, Fansipan có). Cả hai đều có biển mây, app bắt đúng Tà Xùa, bỏ sót Fansipan.
 - Vệ tinh 11/11 không phân xử được các điểm còn lại: 45/56 điểm BLOCKED_ABOVE (mây cao che), chỉ 2 FOGGED_IN (Phu Sa Phìn, Sa Mù U Bồ), 9 CLEAR. Nên "nhiều nơi có biển mây" mình chưa kiểm chứng được ngoài 2 điểm có báo cáo; cần thêm ảnh/báo cáo từng điểm (Fansipan, Tà Xùa, Chiềng Công, Phà Lương, Lảo Thẩn, Ký Quan San...) mới đếm được bỏ sót thật.
 - Số này chỉ để đo, engine chưa đổi (đã xếp hàng chờ đợt sửa lớn theo Luật cổng).
+
+#### 14/11/2026 - Anh báo Tà Xùa và Fansipan đều có biển mây "rất đẹp" (phiếu g9f8f)
+
+- Anh xem ảnh, không nói giờ nên ghi DAWN. Hai báo cáo BELOW vào `field-reports.json`: `2026-11-14-ta-xua`, `2026-11-14-fansipan`. Hôm nay có biển mây ở CẢ hai điểm, đây là ngày mạnh hiếm: Fansipan trước giờ chỉ bỏ sót khi Tà Xùa có.
+- **Không chấm được app ngày này: mất bản chụp dự báo 14/11.** Job "Vòng kiểm chứng hằng ngày" chạy 13/11 (16:40 UTC) lỗi cả 4 lần thử ("chụp 2026-11-14 thất bại sau 4 lần", mỗi lần chờ 900s, tổng 27 phút), nên `data/observations/2026-11-14-forecast.json` không tồn tại. Mình KHÔNG chụp bù lúc 11h sáng 14/11: dự báo lấy sau rạng sáng không còn là dự báo của buổi tối hôm trước (luật không chụp bù bản chụp). Hai báo cáo này nằm trong kho, calibrate sẽ tự ghép khi có bản chụp, nhưng với ngày này sẽ không có.
+- Chưa rõ lỗi chụp là do Open-Meteo (giới hạn tần suất/ngừng dịch vụ) hay lỗi khác: log lỗi của bước chụp không in được qua `gh run view --log-failed` (trống). Việc cần làm sau: đọc log bước "Chụp dự báo rạng sáng ngày mai" của run 43465161183 trên trang Actions rồi xem có phải 429 không; nếu phải thì dãn nhịp thử lại.

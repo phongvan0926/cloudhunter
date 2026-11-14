@@ -773,5 +773,29 @@
     "observedAt": "khoảng 15:20 chiều 12/11 (anh nhắn 15:40 'hiện tại', video livestream trang Tà Xùa Lu Trế đăng 21 phút trước)",
     "source": "USER_RELAY",
     "note": "Anh Phong: 'hiện tại ở Tà Xùa đang có biển mây'. Video: biển mây phủ kín thung lũng, đỉnh núi nhô lên, trời nhiều mây tầng trên. Là buổi chiều nên calibrate không chấm (chỉ chấm rạng sáng). Bản chụp rạng sáng 12/11: 53/100 STATIC, đồng thuận 67%, ΔH +727m, khuyên đi."
+  },
+  {
+    "id": "2026-11-14-ta-xua",
+    "spotKey": "TA_XUA_SON_LA",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T11:04:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong 14/11 11:04: 'Sáng nay cả ở Tà Xùa và đỉnh Phan Xi Păng đều có biển mây, tôi đã xem ảnh và biển mây hôm nay rất đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp 13/11 lỗi 4 lần), nên chưa chấm được app."
+  },
+  {
+    "id": "2026-11-14-fansipan",
+    "spotKey": "FANSIPAN",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T11:04:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong 14/11 11:04: 'Sáng nay cả ở Tà Xùa và đỉnh Phan Xi Păng đều có biển mây, tôi đã xem ảnh và biển mây hôm nay rất đẹp'. Chưa có bản chụp dự báo 14/11 (job chụp 13/11 lỗi 4 lần), nên chưa chấm được app."
   }
 ]
