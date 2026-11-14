@@ -845,5 +845,16 @@
     "observedAt": "quanh 07:00 sáng 14/11 (anh Phong báo; video Facebook Chà Porter Pha Luông 'Pha luông 14/11 2026')",
     "source": "USER_RELAY",
     "note": "Phiếu ga2db: biển mây dày phủ kín thung lũng dưới chân người ngồi trên mỏm đá đỉnh, nắng sớm. Ảnh anh-gui/20261114-172816-1.jpg. Chưa có bản chụp rạng sáng 14/11 nên calibrate chưa ghép; dự báo phát hành trước nằm trong bản chụp tuần (lead 2: 62 DISSIPATING 33% ΔH+130, không khuyên đi; lead 3: 54 ROLLING 67% ΔH+157, khuyên đi). Vệ tinh: CLEAR (mù biển mây thung lũng)."
+  },
+  {
+    "id": "2026-11-14-pa-phach",
+    "locationName": "Đỉnh Pa Phách (Mộc Châu, Sơn La) - chưa có trong thư viện",
+    "date": "2026-11-14",
+    "reportedAt": "2026-11-14T23:24:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 14/11, anh không nói giờ (ghi DAWN theo quy ước báo không giờ)",
+    "source": "USER_RELAY",
+    "note": "Phiếu g4c6a, anh Phong 14/11 23:24: Pa Phách (điểm thấp của Mộc Châu) cũng có biển mây dày đẹp. Cùng lời anh: 14/11 là ngày biển mây có mặt ở nhiều nơi nhất, dày và đẹp nhất, cuồn cuộn, tồn tại lâu nhất, nhiều nơi qua cả buổi trưa. Chưa có spotKey: chưa có toạ độ chỗ đứng đã xác minh (Nominatim 14/11 không trả kết quả). Không ghi duration cho từng điểm vì anh không nói điểm nào kéo dài."
   }
 ]
