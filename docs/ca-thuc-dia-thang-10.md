@@ -520,3 +520,11 @@ Anh hỏi app có tự tìm được ngày giống hôm nay và báo khi ngườ
 Anh gửi plus code `QM9Q+83 Chieng Son, Son La` (Google Maps). Giải mã với 4 ô tiền tố khả dĩ, chọn ô gần Mộc Châu nhất
 (7PG6): 20.76831, 104.68769, DEM 1180m, nằm đúng xã Chiềng Sơn. Thư viện nay 58 điểm. Báo cáo 14/11 gắn spotKey PA_PHACH,
 nhưng không có bản chụp sáng 14/11 nên chưa chấm được; điểm thấp này sẽ có số đo từ các ngày sau.
+
+### Đỉnh Von Vua, Yên Dũng (Bắc Giang) 14/11/2026 (phiếu g6a91)
+Anh chuyển bài Facebook nhóm Check In Bắc Ninh: biển mây cuồn cuộn ở một đỉnh RẤT THẤP vùng trung du, cả 3 ảnh mặt trời sát chân
+trời. Mọc 06:05 tại 21,25N 106,25E, bình minh dân dụng 05:41, nên ảnh chụp khoảng 05:45-06:15, đúng đoán của anh (~6h). Ghi báo cáo
+DAWN, BELOW, chưa có spotKey (toạ độ chưa xác minh; Overpass không có 'Núi Von'). Số tái phân tích Open-Meteo archive cho khu vực:
+13/11 mưa 42,6mm, đêm 13->14 mây cao 0%, RH 98-100%, T-Td < 1°C, mây thấp 100% từ 01h-07h, gió 2-5 km/h: sương/mây bức xạ dày sau
+mưa lớn, cùng kiểu với dấu hiệu D nhưng ở đồng bằng trung du, ngoài 4 cụm Tây Bắc nên không tính vào "D bật N/86". Gợi ý (chưa làm,
+không đổi engine): nếu sau này có thêm mẫu ở vùng thấp, có thể xét mở rộng cụm D ra Đông Bắc/trung du; cần toạ độ thật để chấm.
