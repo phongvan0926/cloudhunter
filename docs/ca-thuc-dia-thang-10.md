@@ -528,3 +528,9 @@ DAWN, BELOW, chưa có spotKey (toạ độ chưa xác minh; Overpass không có
 13/11 mưa 42,6mm, đêm 13->14 mây cao 0%, RH 98-100%, T-Td < 1°C, mây thấp 100% từ 01h-07h, gió 2-5 km/h: sương/mây bức xạ dày sau
 mưa lớn, cùng kiểu với dấu hiệu D nhưng ở đồng bằng trung du, ngoài 4 cụm Tây Bắc nên không tính vào "D bật N/86". Gợi ý (chưa làm,
 không đổi engine): nếu sau này có thêm mẫu ở vùng thấp, có thể xét mở rộng cụm D ra Đông Bắc/trung du; cần toạ độ thật để chấm.
+
+### VON_VUA_YEN_DUNG thêm vào thư viện (15/11/2026, phiếu g8053)
+Anh gửi plus code `668P+32 Yên Dũng`. Giải mã bằng `scripts/pluscode.ts` với tham chiếu Yên Dũng: 7PH8668P+32 = 21.215187,
+106.235062 (ô khác lệch >= 1 độ), DEM 238m, đáy thung lũng đo 80m => đứng cao hơn đáy 158m. Đây là điểm THẤP nhất thư viện
+(238m, trung du): bảng xếp hạng nhận nhưng engine chưa từng chấm ở độ cao này, nên kết quả ở đây là số đo mới, không dùng để
+chỉnh ngưỡng. Báo cáo 14/11 gắn spotKey, chưa chấm được (không có bản chụp sáng 14/11). Thư viện nay 59 điểm.

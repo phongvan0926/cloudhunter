@@ -47,6 +47,16 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     zone: "A_CLOUD_TRAP",
     aliases: ['pa phach', 'pa phách', 'đỉnh pa phách', 'chieng son', 'chiềng sơn', 'moc chau pa phach']
   },
+  // 15/11/2026 (phiếu g8053): Đỉnh Von Vua, Yên Dũng (Bắc Giang; Google Maps ghi Bắc Ninh sau sáp nhập tỉnh), đỉnh RẤT THẤP
+  // có biển mây cuồn cuộn sáng 14/11. Toạ độ giải từ plus code anh Phong gửi: 668P+32 Yên Dũng. Mã đầy đủ chọn ô gần Yên Dũng
+  // (21,25N 106,25E) nhất = 7PH8668P+32 = 21.215187, 106.235062 (scripts/pluscode.ts; các ô khác lệch >= 1 độ). DEM 238m tại điểm
+  // (197-238m quanh đó); độ cao = đúng DEM theo luật điểm ngắm. Đáy thung lũng valley-measure đo 80m (DEM5) => đứng cao hơn đáy 158m, đủ ngưỡng 80m của bảng xếp hạng.
+  VON_VUA_YEN_DUNG: {
+    name: "Đỉnh Von Vua (Yên Dũng, Bắc Giang)",
+    lat: 21.215187, lon: 106.235062, elevation: 238,   // nguồn: plus code 668P+32 Yên Dũng (anh Phong, Google Maps) 15/11/2026; DEM 238m
+    zone: "A_CLOUD_TRAP",
+    aliases: ['von vua', 'đỉnh von vua', 'núi von', 'yen dung', 'yên dũng', 'bac giang', 'bắc giang', 'bac ninh von vua']
+  },
   PHA_LUONG: {
     name: "Đỉnh Pha Luông",
     lat: 20.6727, lon: 104.6346, elevation: 1880,   // nguồn: OSM node "Núi Pha Luông" ele=1880 (DEM 1858m)

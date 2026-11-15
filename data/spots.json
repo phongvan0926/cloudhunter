@@ -30,6 +30,16 @@
     "needsReview": null
   },
   {
+    "key": "VON_VUA_YEN_DUNG",
+    "name": "Đỉnh Von Vua (Yên Dũng, Bắc Giang)",
+    "lat": 21.215187,
+    "lon": 106.235062,
+    "elevation": 238,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
     "key": "PHA_LUONG",
     "name": "Đỉnh Pha Luông",
     "lat": 20.6727,
