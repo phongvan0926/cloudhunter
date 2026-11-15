@@ -548,3 +548,12 @@ Anh chuyển bài Facebook Lý Lở Mẩy 'Đồi bò sáng sớm 15/11': mặt 
 anh đã chốt điểm mới chỉ để tham khảo). Tái phân tích: đêm 14->15 mây thấp 2-16%, RH 89-97%, gió 6-7 km/h, không mưa hôm trước =>
 khác kiểu sương dày sau mưa của 14/11. Dự báo app cho khu Sapa: FOG (Hàm Rồng, Bản Hang Đá), DISSIPATING (Fansipan). Là một mẫu
 "biển mây mỏng" ngày thường, ghi để sau này nhìn mức độ, không đổi engine.
+
+### Nhãn FB 15/11/2026 (phiếu g81b0) và số đo C trên dự báo thật
+Nhập 2 nhãn: FANSIPAN 15/11 ABOVE tin 0,9 (bài 08:17, "sương mù, gió to", ảnh 07:14-07:15 đỉnh chìm trong mây) và TA_XUA_SON_LA 15/11 BELOW
+tin 0,5 (chỉ 1 bài "siêu đẹp luôn", không ảnh giờ; dưới ngưỡng 0,6, cần người xem nên calibrate không chấm). Đối chiếu: app báo
+Fansipan DISSIPATING 29 điểm, không đáng đi => ĐÚNG-KHÔNG với nhãn FB. Vệ tinh cùng ngày nhìn Fansipan SEA_CONFIRMED, trái nhãn FB:
+theo thứ bậc nguồn (người/FB > vệ tinh) giữ nhãn FB, không sửa; vệ tinh thấy biển mây ở xa còn người đứng trên đỉnh thì bị chìm trong mây.
+Ngày 15/11 là ngày diện rộng thứ hai theo vệ tinh (13/49 điểm có biển mây, 5 đỉnh >= 65 đúng ngày). Cờ C trên dự báo thật: 15/11 MATCH 2 cặp
+(SUOI_THAU FOG, CHIEU_LAU_THI DISSIPATING); vệ tinh: Chiêu Lầu Thi SEA_CONFIRMED, Suối Thầu CLEAR => 1/2 có biển mây; mới 1 ngày MATCH, chưa
+đủ 5 để kết luận, không chỉnh ngưỡng. Engine không đổi.

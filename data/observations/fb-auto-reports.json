@@ -1118,6 +1118,29 @@
   ]
  },
  {
+  "id": "2026-11-15-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-15",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:14",
+  "confidence": 0.9,
+  "firstPostAt": "2026-11-15T08:17:43+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-15T08:17:43+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời sương mù, gió to, không mưa nhiệt độ 11 độ",
+    "stamps": [
+     "07:14 ABOVE",
+     "07:15 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -1683,6 +1706,26 @@
     "postedAt": "2026-11-14T08:44:47+07:00",
     "seaLevel": "BELOW",
     "text": "Tà Xùa hôm nay: Biển Mây + bình minh+ hoàng hôn. Phải gọi là siêu phẩm",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-11-15-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-15",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "confidence": 0.5,
+  "needsReview": true,
+  "firstPostAt": "2026-11-15T07:58:28+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-15T07:58:28+07:00",
+    "seaLevel": "BELOW",
+    "text": "Tà Xùa hôm nay: siêu đẹp luôn các Mom ơi",
     "stamps": []
    }
   ]
