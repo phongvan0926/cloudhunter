@@ -860,14 +860,13 @@
   },
   {
     "id": "2026-11-14-von-vua-yen-dung",
-    "locationName": "Đỉnh Von Vua (Yên Dũng, Bắc Giang)",
-    "spotKey": "VON_VUA_YEN_DUNG",
+    "locationName": "Đỉnh Von Vua (Yên Dũng, Bắc Giang) - chỉ để tham khảo, không thuộc thư viện dự báo",
     "date": "2026-11-14",
     "reportedAt": "2026-11-15T11:54:00+07:00",
     "seaLevel": "BELOW",
     "timeOfDay": "DAWN",
     "observedAt": "khoảng 05:45-06:15 sáng 14/11: mặt trời sát chân trời trong cả 3 ảnh (mọc 06:05 tính cho 21,25N 106,25E), anh đoán ~6h khớp",
     "source": "USER_RELAY",
-    "note": "Phiếu g6a91, bài Facebook nhóm Check In Bắc Ninh (Nguyễn Văn Bắc, ảnh Nhung Hoàng) 'Biển mây Đỉnh Von Vua Yên Dũng sáng nay', anh Phong chuyển 15/11. Đỉnh rất thấp, biển mây cuồn cuộn dưới chân, trời trên quang. Đã gắn spotKey VON_VUA_YEN_DUNG (phiếu g8053, plus code 668P+32 anh gửi -> 21.215187, 106.235062, DEM 238m); không có bản chụp sáng 14/11 nên chưa chấm được. Số tái phân tích (Open-Meteo archive, 21,25N 106,25E, mô hình không phải quan trắc): 13/11 mưa 42,6mm, đêm 13->14 quang cao (mây cao 0%), RH 98-100%, T-Td <1°C, mây thấp 100% từ 01h đến 07h, gió 2-5 km/h; sau 08h mây thấp tụt còn 38%. Giống dấu hiệu D (đêm quang đầu tiên sau mưa) nhưng ngoài 4 cụm Tây Bắc của D nên KHÔNG tính vào số ngày D bật."
+    "note": "Phiếu g6a91, bài Facebook nhóm Check In Bắc Ninh (Nguyễn Văn Bắc, ảnh Nhung Hoàng) 'Biển mây Đỉnh Von Vua Yên Dũng sáng nay', anh Phong chuyển 15/11. Đỉnh rất thấp, biển mây cuồn cuộn dưới chân, trời trên quang. KHÔNG có spotKey và KHÔNG thêm vào thư viện (anh Phong 15/11 11:59, phiếu gc1ce: chỉ để tham khảo, không cần dự đoán điểm này). Toạ độ đã xác minh để tra lại: plus code 668P+32 Yên Dũng = 21.215187, 106.235062, DEM 238m, đáy 80m. Số tái phân tích (Open-Meteo archive, 21,25N 106,25E, mô hình không phải quan trắc): 13/11 mưa 42,6mm, đêm 13->14 quang cao (mây cao 0%), RH 98-100%, T-Td <1°C, mây thấp 100% từ 01h đến 07h, gió 2-5 km/h; sau 08h mây thấp tụt còn 38%. Giống dấu hiệu D (đêm quang đầu tiên sau mưa) nhưng ngoài 4 cụm Tây Bắc của D nên KHÔNG tính vào số ngày D bật."
   }
 ]

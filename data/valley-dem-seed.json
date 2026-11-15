@@ -341,12 +341,6 @@
   "v": 700,
   "src": "PROFILE"
  },
- "VON_VUA_YEN_DUNG": {
-  "lat": 21.215187,
-  "lon": 106.235062,
-  "v": 80,
-  "src": "DEM5"
- },
  "XIM_VANG": {
   "lat": 21.3559,
   "lon": 104.3204,

@@ -529,8 +529,8 @@ DAWN, BELOW, chưa có spotKey (toạ độ chưa xác minh; Overpass không có
 mưa lớn, cùng kiểu với dấu hiệu D nhưng ở đồng bằng trung du, ngoài 4 cụm Tây Bắc nên không tính vào "D bật N/86". Gợi ý (chưa làm,
 không đổi engine): nếu sau này có thêm mẫu ở vùng thấp, có thể xét mở rộng cụm D ra Đông Bắc/trung du; cần toạ độ thật để chấm.
 
-### VON_VUA_YEN_DUNG thêm vào thư viện (15/11/2026, phiếu g8053)
-Anh gửi plus code `668P+32 Yên Dũng`. Giải mã bằng `scripts/pluscode.ts` với tham chiếu Yên Dũng: 7PH8668P+32 = 21.215187,
-106.235062 (ô khác lệch >= 1 độ), DEM 238m, đáy thung lũng đo 80m => đứng cao hơn đáy 158m. Đây là điểm THẤP nhất thư viện
-(238m, trung du): bảng xếp hạng nhận nhưng engine chưa từng chấm ở độ cao này, nên kết quả ở đây là số đo mới, không dùng để
-chỉnh ngưỡng. Báo cáo 14/11 gắn spotKey, chưa chấm được (không có bản chụp sáng 14/11). Thư viện nay 59 điểm.
+### Đỉnh Von Vua KHÔNG vào thư viện (15/11/2026, phiếu gc1ce, đảo phiếu g8053)
+Phiếu g8053 đã thêm `VON_VUA_YEN_DUNG` (plus code 668P+32 -> 21.215187, 106.235062, DEM 238m, đáy 80m). Anh Phong chốt lại
+11:59 cùng ngày: chỉ để tham khảo, không cần thêm vào danh mục điểm dự đoán. Đã gỡ khỏi `constants/mountains.ts`; báo cáo 14/11
+giữ lại làm mẫu tham khảo, không có spotKey (nên không bị chấm). Toạ độ đã xác minh nằm trong ghi chú báo cáo, cần thì tra lại.
+Thư viện về 58 điểm.
