@@ -534,3 +534,10 @@ Phiếu g8053 đã thêm `VON_VUA_YEN_DUNG` (plus code 668P+32 -> 21.215187, 106
 11:59 cùng ngày: chỉ để tham khảo, không cần thêm vào danh mục điểm dự đoán. Đã gỡ khỏi `constants/mountains.ts`; báo cáo 14/11
 giữ lại làm mẫu tham khảo, không có spotKey (nên không bị chấm). Toạ độ đã xác minh nằm trong ghi chú báo cáo, cần thì tra lại.
 Thư viện về 58 điểm.
+
+### Mẫu Sơn (Lạng Sơn) sáng 14/11/2026 (phiếu gfc6a, "để tham khảo")
+Anh chuyển bài Facebook Minh Chu: biển mây phủ kín, ảnh nhìn về phía đối nhật (dải hồng + bóng trái đất, mặt trời chưa mọc), nên chụp
+trước bình minh khoảng 05:35-05:55. Ghi báo cáo BELOW/DAWN, spotKey MAU_SON (điểm đã có trong thư viện; không có bản chụp rạng sáng
+14/11 nên chưa chấm). Tái phân tích Open-Meteo: 13/11 mưa 29,1mm, đêm sau RH 100%, mây thấp 93-100% 02-05h, gió < 4 km/h. Bản chụp TUẦN
+07-12/11 cho 14/11 ra FOG (không phải trạng thái có biển mây) ở lead 2-6: giữ làm dữ liệu cho `calibrate-lead` (~20/11), không chạm engine.
+Đây là điểm thứ 5-6 cùng ngày 14/11 cùng kiểu sương/mây bức xạ sau mưa lớn (Pha Luông, Pa Phách, Sìn Hồ, Von Vua, Mẫu Sơn).
