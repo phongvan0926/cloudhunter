@@ -541,3 +541,10 @@ trước bình minh khoảng 05:35-05:55. Ghi báo cáo BELOW/DAWN, spotKey MAU_
 14/11 nên chưa chấm). Tái phân tích Open-Meteo: 13/11 mưa 29,1mm, đêm sau RH 100%, mây thấp 93-100% 02-05h, gió < 4 km/h. Bản chụp TUẦN
 07-12/11 cho 14/11 ra FOG (không phải trạng thái có biển mây) ở lead 2-6: giữ làm dữ liệu cho `calibrate-lead` (~20/11), không chạm engine.
 Đây là điểm thứ 5-6 cùng ngày 14/11 cùng kiểu sương/mây bức xạ sau mưa lớn (Pha Luông, Pa Phách, Sìn Hồ, Von Vua, Mẫu Sơn).
+
+### Đồi Bò (Sa Pa) sáng 15/11/2026 (phiếu g38c0)
+Anh chuyển bài Facebook Lý Lở Mẩy 'Đồi bò sáng sớm 15/11': mặt trời đã lên, chụp khoảng 06:30-08:00 (ước từ ảnh). Mây DƯỚI chỗ
+đứng nhưng là mảng thưa lấp trong thung lũng, không phải biển phủ kín như 14/11. Ghi BELOW/DAWN, không spotKey (không thuộc thư viện,
+anh đã chốt điểm mới chỉ để tham khảo). Tái phân tích: đêm 14->15 mây thấp 2-16%, RH 89-97%, gió 6-7 km/h, không mưa hôm trước =>
+khác kiểu sương dày sau mưa của 14/11. Dự báo app cho khu Sapa: FOG (Hàm Rồng, Bản Hang Đá), DISSIPATING (Fansipan). Là một mẫu
+"biển mây mỏng" ngày thường, ghi để sau này nhìn mức độ, không đổi engine.

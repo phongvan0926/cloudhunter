@@ -880,5 +880,16 @@
     "observedAt": "trước mặt trời mọc 14/11 (khoảng 05:35-05:55): ảnh nhìn về phía đối nhật, thấy dải hồng 'tia đối nhật' + bóng trái đất, mặt trời chưa lên; bài đăng 'sáng sớm qua', hiện '14 hours ago' lúc 12:01 15/11",
     "source": "USER_RELAY",
     "note": "Phiếu gfc6a, bài Facebook Minh Chu (album 'Mẫu Sơn trong mắt M') 'tia đối nhật hiếm có, biển mây trắng bồng bềnh', anh Phong chuyển 15/11 (anh: 'cũng để tham khảo'). Biển mây dày cuồn cuộn phủ kín dưới chân, trời quang. Tái phân tích Open-Meteo archive (mô hình, không phải quan trắc): 13/11 mưa 29,1mm, đêm 13->14 mây cao 0%, RH 100% từ 01h, T=Td, mây thấp 93-100% từ 02h đến 05h rồi tụt 87%->29% lúc 06-08h, gió 0,5-3,6 km/h. Dự báo app lúc đó (bản chụp tuần 07-12/11, KHÔNG phải bản chụp rạng sáng 14/11): FOG ở lead 2-6 (điểm 75-88), đáy: không nói 'có biển mây' => bản chụp rạng sáng 14/11 không tồn tại nên chưa chấm; bản tuần giữ cho calibrate-lead ~20/11. Là thêm một ngày 14/11 sương bức xạ sau mưa lớn (cùng kiểu dấu hiệu D); Mẫu Sơn ngoài 4 cụm D nên không tính vào số ngày D bật."
+  },
+  {
+    "id": "2026-11-15-doi-bo-sapa",
+    "locationName": "Đồi Bò (Sa Pa) - chưa có trong thư viện, chỉ để tham khảo",
+    "date": "2026-11-15",
+    "reportedAt": "2026-11-15T16:48:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "khoảng 06:30-08:00 sáng 15/11: mặt trời đã lên (tia nắng chiếu xiên qua mây ở ảnh 3; Sapa mọc ~06:20), bài 'Đồi bò sáng sớm 15/11/2026' hiện '8h' lúc ~16:48 => đăng ~08:50. Giờ ước từ ảnh, chưa phải anh khai",
+    "source": "USER_RELAY",
+    "note": "Phiếu g38c0, bài Facebook Lý Lở Mẩy (đang ở Sa Pa), anh Phong chuyển 15/11. Mây nằm DƯỚI chỗ đứng nhưng là MẢNG THƯA lấp trong các thung lũng, không phải biển phủ kín như 14/11; trên cao còn mây tầng rải rác. Chưa có spotKey: Đồi Bò không có trong thư viện, chưa có toạ độ xác minh, và anh đã chốt 15/11 (phiếu gc1ce) các điểm mới chỉ để tham khảo. Số tái phân tích Open-Meteo archive (22,33N 103,85E, mô hình, không phải quan trắc): đêm 14->15 mây thấp chỉ 2-16%, RH 89-97%, gió 6-7 km/h, mây thấp 62% lúc 07h rồi 18%: KHÔNG có đêm sương dày như 14/11 (không mưa 14/11, gió cao hơn). Dự báo app (bản chụp 14/11 cho rạng sáng 15/11) quanh khu: SAPA_HAM_RONG FOG, BAN_HANG_DA FOG, FANSIPAN DISSIPATING, đều không báo có biển mây; Đồi Bò ở độ cao khác nên không so từng điểm. Không đổi engine."
   }
 ]
