@@ -557,3 +557,10 @@ theo thứ bậc nguồn (người/FB > vệ tinh) giữ nhãn FB, không sửa;
 Ngày 15/11 là ngày diện rộng thứ hai theo vệ tinh (13/49 điểm có biển mây, 5 đỉnh >= 65 đúng ngày). Cờ C trên dự báo thật: 15/11 MATCH 2 cặp
 (SUOI_THAU FOG, CHIEU_LAU_THI DISSIPATING); vệ tinh: Chiêu Lầu Thi SEA_CONFIRMED, Suối Thầu CLEAR => 1/2 có biển mây; mới 1 ngày MATCH, chưa
 đủ 5 để kết luận, không chỉnh ngưỡng. Engine không đổi.
+
+### Chiêu Lầu Thi 15/11/2026 có biển mây (phiếu g079c)
+Anh chụp lại livestream của Chiêu Lầu Thi 2402m Lodge ('18h' lúc 01:04 16/11 => live ~07:00): biển mây phủ kín tới chân trời,
+mặt trời đã lên vài độ, nên giờ ước 06:30-07:00 (mọc ~06:15). Ghi BELOW/DAWN, spotKey CHIEU_LAU_THI (người nhìn, nguồn cao nhất; vệ tinh cùng
+ngày cũng SEA_CONFIRMED). Dự báo app rạng sáng 15/11: DISSIPATING 52, đồng thuận 100%, ΔH +752m, không đáng đi => BỎ SÓT, cùng kiểu
+DISSIPATING ở đỉnh cao như 14/11 (hàng đợi VIỆC 3 ý 2; không sửa engine, chưa qua Luật cổng). Cờ C (giống sáng 14/11) MATCH ở điểm này nhưng
+là 1 ngày MATCH duy nhất (Suối Thầu cùng ngày CLEAR): 1/2, chưa đủ 5 ngày. calibrate số không đổi vì vệ tinh đã tính điểm này.

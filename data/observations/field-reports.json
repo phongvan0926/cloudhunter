@@ -891,5 +891,17 @@
     "observedAt": "khoảng 06:30-08:00 sáng 15/11: mặt trời đã lên (tia nắng chiếu xiên qua mây ở ảnh 3; Sapa mọc ~06:20), bài 'Đồi bò sáng sớm 15/11/2026' hiện '8h' lúc ~16:48 => đăng ~08:50. Giờ ước từ ảnh, chưa phải anh khai",
     "source": "USER_RELAY",
     "note": "Phiếu g38c0, bài Facebook Lý Lở Mẩy (đang ở Sa Pa), anh Phong chuyển 15/11. Mây nằm DƯỚI chỗ đứng nhưng là MẢNG THƯA lấp trong các thung lũng, không phải biển phủ kín như 14/11; trên cao còn mây tầng rải rác. Chưa có spotKey: Đồi Bò không có trong thư viện, chưa có toạ độ xác minh, và anh đã chốt 15/11 (phiếu gc1ce) các điểm mới chỉ để tham khảo. Số tái phân tích Open-Meteo archive (22,33N 103,85E, mô hình, không phải quan trắc): đêm 14->15 mây thấp chỉ 2-16%, RH 89-97%, gió 6-7 km/h, mây thấp 62% lúc 07h rồi 18%: KHÔNG có đêm sương dày như 14/11 (không mưa 14/11, gió cao hơn). Dự báo app (bản chụp 14/11 cho rạng sáng 15/11) quanh khu: SAPA_HAM_RONG FOG, BAN_HANG_DA FOG, FANSIPAN DISSIPATING, đều không báo có biển mây; Đồi Bò ở độ cao khác nên không so từng điểm. Không đổi engine."
+  },
+  {
+    "id": "2026-11-15-chieu-lau-thi",
+    "locationName": "Đỉnh Chiêu Lầu Thi",
+    "spotKey": "CHIEU_LAU_THI",
+    "date": "2026-11-15",
+    "reportedAt": "2026-11-16T01:04:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "khoảng 06:30-07:00 sáng 15/11: ảnh chụp lại từ phát trực tiếp 'Biển mây Chiêu Lầu Thi ngày 15/11/2026', hiện '18h' lúc 01:04 16/11 (=> live ~07:00); mặt trời đã lên vài độ trên mây (mọc ~06:15 tại 22,66N 104,6E). Giờ ước từ ảnh + dấu 18h, không phải anh khai",
+    "source": "USER_RELAY",
+    "note": "Phiếu g079c, livestream của Chiêu Lầu Thi 2402m Lodge (nhà nghỉ ngay tại đỉnh) anh Phong chụp lại 16/11. Biển mây phủ kín tới chân trời, dày thành lớp, đứng trên cao rõ ràng; trời trên quang. Khớp vệ tinh 15/11 (CHIEU_LAU_THI SEA_CONFIRMED). Dự báo app (bản chụp rạng sáng 15/11): DISSIPATING 52 điểm, đồng thuận 100%, ΔH +752m, KHÔNG đáng đi => BỎ SÓT (cùng kiểu DISSIPATING ở đỉnh cao như 14/11, đã nằm trong hàng đợi VIỆC 3 ý 2, chưa đổi). Cờ C đang MATCH điểm này (xem docs). Không chỉnh ngưỡng."
   }
 ]
