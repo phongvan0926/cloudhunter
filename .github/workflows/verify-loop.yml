@@ -8,6 +8,8 @@
 #   ~20:00 VN snapshot-forecast.ts  → chụp app đã nói gì cho rạng sáng NGÀY MAI (trước khi biết sự thật)
 #             (lịch ĐẶT 15:37 VN; GitHub trả cron trễ 2,8-7 giờ nên thực tế nổ quanh 18:20-22:35 VN)
 #   08:30 VN  verify_satellite.py   → nhãn thật từ Himawari cho rạng sáng HÔM NAY, rồi calibrate
+# KÊNH THỨ HAI (17/11/2026): máy anh chạy tools/snapshot-local.sh (systemd user timer cloudhunter-snapshot, 19:30 + 22:30 VN),
+# cùng ghi data/observations; ai chụp trước thì giữ. Giờ thực đo 12 bản GitHub: 22:00-00:00 VN, có hôm không nổ.
 # Kết quả commit thẳng vào data/observations/ (deploy.yml bỏ qua thư mục này nên không build lại site).
 name: Vòng kiểm chứng hằng ngày
 
