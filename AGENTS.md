@@ -75,6 +75,8 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/rang-buoc-vat-ly.md` - đọc TRƯỚC khi sửa vật lý engine (nghịch nhiệt, mực áp suất, estimateCloudTop, BLH, gió theo zone, mùa, ensemble).
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
 
+`components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
+
 ### 🔎 Cờ theo dõi "giống sáng 14/11" (14/11/2026, phiếu g6102)
 
 `services/capWatch.ts`: tầng thấp bão hoà + nghịch nhiệt có nắp + khô trên cao (6 điều kiện, ngưỡng đóng băng). Là GIẢ THUYẾT

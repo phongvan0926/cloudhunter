@@ -77,6 +77,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   1 call batch — cùng engine + cùng 41 biến (đủ profile 7 tầng) với bản đầy đủ, chỉ khác
   dùng 3 mô hình GFS+ICON+UKMO (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích
   đầy đủ 6 mô hình điểm đó.
+- 📸 **"Bản chụp dự báo hằng ngày"** (17/11/2026): xem lại 14 ngày qua app đã dự báo gì cho từng rạng sáng (đọc `data/observations/<ngày>-forecast.json` từ kho GitHub công khai, không tính lại; vòng kiểm chứng chụp khoảng 22-24h mỗi tối). Component `SnapshotHistory.tsx`.
 - 🛰️ **"Mây LÚC NÀY"**: vòng lặp ảnh vệ tinh Himawari-9 hồng ngoại (JMA, 10 phút/ảnh,
   nhìn được mây cả ban đêm) — kiểm tra biển mây đang thật sự hình thành trước khi xuất
   phát lúc 3-4h sáng.

@@ -5,6 +5,7 @@ import { LocationConfirm } from './components/LocationConfirm';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { TonightRanking } from './components/TonightRanking';
 import { WeekRanking } from './components/WeekRanking';
+import { SnapshotHistory } from './components/SnapshotHistory';
 import { VerificationPanel } from './components/VerificationPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { UpdateBanner } from './components/UpdateBanner';
@@ -49,6 +50,7 @@ const App: React.FC = () => {
   const [historyList, setHistoryList] = useState(() => listRuns());
   const [showTonight, setShowTonight] = useState(false);
   const [showWeek, setShowWeek] = useState(false);
+  const [showSnaps, setShowSnaps] = useState(false);
   const [verifyTarget, setVerifyTarget] = useState<CloudAnalysis | null>(null);
 
   // Mở app bằng link chia sẻ → chạy thẳng phân tích điểm đó
@@ -265,6 +267,21 @@ const App: React.FC = () => {
                     }}
                   />
                 )}
+
+                <div className="max-w-xl mx-auto mb-4">
+                  <button
+                    onClick={() => setShowSnaps(v => !v)}
+                    className={`w-full min-h-11 py-3.5 rounded-2xl font-bold text-sm transition-all border flex justify-center items-center gap-2 shadow-lg ${
+                      showSnaps
+                        ? 'bg-sky-500/20 text-sky-300 border-sky-500/50'
+                        : 'bg-gradient-to-r from-sky-700/90 to-indigo-700/90 text-white border-sky-400/50 hover:from-sky-600 hover:to-indigo-600'
+                    }`}
+                  >
+                    <span>📸</span>
+                    <span>{showSnaps ? 'Ẩn bản chụp hằng ngày' : 'Bản chụp dự báo hằng ngày - xem lại 14 ngày qua'}</span>
+                  </button>
+                </div>
+                {showSnaps && <SnapshotHistory />}
 
                 <div className="mt-4">
                   <InputForm onSubmit={handleInputSubmit} isLoading={isLoading} />
