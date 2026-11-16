@@ -564,3 +564,12 @@ mặt trời đã lên vài độ, nên giờ ước 06:30-07:00 (mọc ~06:15).
 ngày cũng SEA_CONFIRMED). Dự báo app rạng sáng 15/11: DISSIPATING 52, đồng thuận 100%, ΔH +752m, không đáng đi => BỎ SÓT, cùng kiểu
 DISSIPATING ở đỉnh cao như 14/11 (hàng đợi VIỆC 3 ý 2; không sửa engine, chưa qua Luật cổng). Cờ C (giống sáng 14/11) MATCH ở điểm này nhưng
 là 1 ngày MATCH duy nhất (Suối Thầu cùng ngày CLEAR): 1/2, chưa đủ 5 ngày. calibrate số không đổi vì vệ tinh đã tính điểm này.
+
+### Nhãn FB 16/11/2026 (phiếu gb911) và số đo C, D sau 2 ngày mới
+Nhập 2 nhãn: TA_XUA_SON_LA 16/11 BELOW tin 0,8 (bài 11:55 "biển mây + nắng đẹp", mây mỏng, không cần người xem) => calibrate chấm:
+app báo DISSIPATING 7 điểm, không đáng đi, vệ tinh CLEAR => BỎ SÓT (cả app lẫn vệ tinh không thấy; cùng kiểu DISSIPATING 14/11 và
+15/11, hàng đợi VIỆC 3 ý 2, không đổi engine). FANSIPAN 16/11 UNKNOWN tin 0,5, cần người xem, KHÔNG chấm: bài 07:59 và 08:30 ABOVE
+(mây, gió to), bài 10:28 BELOW (biển mây, nắng đẹp) = đỉnh chìm mây buổi sớm rồi mây hạ xuống sau; vệ tinh FOGGED_IN; app DISSIPATING 34.
+Ngày 16/11 diện rộng vệ tinh 14/50. Số đo sau 16/11 (chốt trước, không chỉnh): D bật 3/88 ngày (22/9, 14/11, 15/11);
+C trên dự báo thật MATCH 5 cặp / 2 ngày (15, 16/11), trong MATCH có biển mây 3/5, ngoài MATCH 24/94 (~26%). Mới 2 ngày MATCH,
+chưa đủ 5: chỉ ghi, không đưa vào engine.
