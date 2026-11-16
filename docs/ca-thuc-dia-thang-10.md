@@ -573,3 +573,9 @@ app báo DISSIPATING 7 điểm, không đáng đi, vệ tinh CLEAR => BỎ SÓT 
 Ngày 16/11 diện rộng vệ tinh 14/50. Số đo sau 16/11 (chốt trước, không chỉnh): D bật 3/88 ngày (22/9, 14/11, 15/11);
 C trên dự báo thật MATCH 5 cặp / 2 ngày (15, 16/11), trong MATCH có biển mây 3/5, ngoài MATCH 24/94 (~26%). Mới 2 ngày MATCH,
 chưa đủ 5: chỉ ghi, không đưa vào engine.
+
+## Chiềng Hoa (CHIENG_CONG) sáng 16/11 - phiếu gf9d6
+
+Anh chuyển bài Facebook trang xã "Chiềng Hoa 24/24" (khu Chiềng Công cũ, 5 ảnh): biển mây dày phủ kín thung lũng, người chụp đứng cao hơn mây. Ghi `2026-11-16-chieng-cong`, BELOW, DAWN (giờ chụp ước 06:30-07:30 theo nắng xiên, anh không khai giờ).
+Độ tin thấp hơn báo cáo thường: gắn CHIENG_CONG theo alias có sẵn, bài chỉ nói cấp xã nên chưa chắc chỗ đứng chụp đúng là điểm này.
+App (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260 m, đáng đi = báo đúng (GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12). Không chỉnh gì: một ca trúng không là cớ đổi ngưỡng. Tái phân tích Open-Meteo lưới thô, không dùng đối chiếu được.

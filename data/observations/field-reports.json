@@ -903,5 +903,17 @@
     "observedAt": "khoảng 06:30-07:00 sáng 15/11: ảnh chụp lại từ phát trực tiếp 'Biển mây Chiêu Lầu Thi ngày 15/11/2026', hiện '18h' lúc 01:04 16/11 (=> live ~07:00); mặt trời đã lên vài độ trên mây (mọc ~06:15 tại 22,66N 104,6E). Giờ ước từ ảnh + dấu 18h, không phải anh khai",
     "source": "USER_RELAY",
     "note": "Phiếu g079c, livestream của Chiêu Lầu Thi 2402m Lodge (nhà nghỉ ngay tại đỉnh) anh Phong chụp lại 16/11. Biển mây phủ kín tới chân trời, dày thành lớp, đứng trên cao rõ ràng; trời trên quang. Khớp vệ tinh 15/11 (CHIEU_LAU_THI SEA_CONFIRMED). Dự báo app (bản chụp rạng sáng 15/11): DISSIPATING 52 điểm, đồng thuận 100%, ΔH +752m, KHÔNG đáng đi => BỎ SÓT (cùng kiểu DISSIPATING ở đỉnh cao như 14/11, đã nằm trong hàng đợi VIỆC 3 ý 2, chưa đổi). Cờ C đang MATCH điểm này (xem docs). Không chỉnh ngưỡng."
+  },
+  {
+    "id": "2026-11-16-chieng-cong",
+    "locationName": "Chiềng Hoa (khu Chiềng Công cũ, Mường La, Sơn La)",
+    "spotKey": "CHIENG_CONG",
+    "date": "2026-11-16",
+    "reportedAt": "2026-11-16T23:34:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "sáng 16/11, giờ ước 06:30-07:30 (nắng xiên thấp, bóng núi dài, trời trên còn ánh vàng); bài trang 'Chiềng Hoa 24/24' hiện '10 giờ' lúc 23:34 (đăng ~13:30), anh không khai giờ chụp (ghi DAWN theo quy ước)",
+    "source": "USER_RELAY",
+    "note": "Phiếu gf9d6, bài Facebook trang xã 'Chiềng Hoa 24/24' ('16/11/2026 một ngày rất đỗi bình thường tại Chiềng Hoa, khu vực Chiềng Công cũ'), anh Phong chuyển 16/11. 5 ảnh: biển mây dày phủ kín thung lũng, đỉnh núi nhô lên, người chụp đứng cao hơn mây. ĐỘ TIN THẤP HƠN báo cáo thường: gắn CHIENG_CONG theo alias 'chiềng hoa'/'chiềng công' có sẵn trong thư viện (21.43931, 104.19894, 1350m), nhưng bài chỉ nói cấp xã, chưa xác nhận chỗ đứng chụp đúng là điểm này. Dự báo app (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260m, ĐÁNG ĐI (3 mô hình: GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12) => báo đúng có, nếu chỗ đứng đúng. Tái phân tích Open-Meteo (lưới thô, không mô tả được thung lũng) không dùng được để đối chiếu."
   }
 ]
