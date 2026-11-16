@@ -577,5 +577,5 @@ chưa đủ 5: chỉ ghi, không đưa vào engine.
 ## Chiềng Hoa (CHIENG_CONG) sáng 16/11 - phiếu gf9d6
 
 Anh chuyển bài Facebook trang xã "Chiềng Hoa 24/24" (khu Chiềng Công cũ, 5 ảnh): biển mây dày phủ kín thung lũng, người chụp đứng cao hơn mây. Ghi `2026-11-16-chieng-cong`, BELOW, DAWN (giờ chụp ước 06:30-07:30 theo nắng xiên, anh không khai giờ).
-Độ tin thấp hơn báo cáo thường: gắn CHIENG_CONG theo alias có sẵn, bài chỉ nói cấp xã nên chưa chắc chỗ đứng chụp đúng là điểm này.
-App (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260 m, đáng đi = báo đúng (GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12). Không chỉnh gì: một ca trúng không là cớ đổi ngưỡng. Tái phân tích Open-Meteo lưới thô, không dùng đối chiếu được.
+Anh xác nhận (phiếu gdbe7): ảnh chụp đúng điểm Chiềng Công (Mường La, 1350 m) trong thư viện, nên báo cáo tin cậy như báo cáo thường.
+App (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260 m, đáng đi = báo ĐÚNG (GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12). Không chỉnh gì: một ca trúng không là cớ đổi ngưỡng. Tái phân tích Open-Meteo lưới thô, không dùng đối chiếu được.
