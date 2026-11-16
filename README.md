@@ -78,6 +78,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
   dùng 3 mô hình GFS+ICON+UKMO (đo lệch thực tế ~4/100 điểm); bấm điểm nào là phân tích
   đầy đủ 6 mô hình điểm đó.
 - 📸 **"Bản chụp dự báo hằng ngày"** (17/11/2026): xem lại 14 ngày qua app đã dự báo gì cho từng rạng sáng (đọc `data/observations/<ngày>-forecast.json` từ kho GitHub công khai, không tính lại; vòng kiểm chứng chụp khoảng 22-24h mỗi tối). Component `SnapshotHistory.tsx`.
+- 🔁 **Hai kênh chụp dự báo** (17/11/2026): GitHub Actions (cron hay trễ 3-10h, có hôm không nổ) + máy nhà (`tools/snapshot-local.sh`, systemd user timer `cloudhunter-snapshot` 19:30 và 22:30 giờ VN, bản clone riêng `~/.local/share/cloudhunter-snapshot`). Ai chụp trước thì giữ, bên sau thấy file có rồi thì bỏ qua.
 - 🛰️ **"Mây LÚC NÀY"**: vòng lặp ảnh vệ tinh Himawari-9 hồng ngoại (JMA, 10 phút/ảnh,
   nhìn được mây cả ban đêm) — kiểm tra biển mây đang thật sự hình thành trước khi xuất
   phát lúc 3-4h sáng.
