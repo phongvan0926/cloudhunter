@@ -585,3 +585,6 @@ App (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260
 Anh chuyển bài Facebook "Trekking & Camping Việt Nam" (Pa Giang): "Cập nhật biển mây đỉnh Pha Luông 16/11", 5 ảnh/video, biển mây dày phủ kín thung lũng dưới mỏm đá đỉnh. Ghi `2026-11-16-pha-luong`, BELOW, **MORNING** (nắng đã cao, trời xanh, bóng gắt, không phải bình minh; giờ chụp không rõ). Không điền duration vì chưa có thời lượng, dù biển mây còn dày khi nắng đã cao là gợi ý tồn tại lâu (liên quan giả thuyết E, chưa đủ nhãn LONG).
 App (bản chụp rạng sáng 16/11): DISSIPATING 44, đồng thuận 67%, ΔH +130 m, KHÔNG khuyên đi (GFS ROLLING 66, ICON DISSIPATING 16, UKMO DISSIPATING 44) = bỏ sót. Cùng kiểu với Tà Xùa 16/11 và Chiêu Lầu Thi 15/11: đỉnh cao bị DISSIPATING sau đêm quang. Pha Luông 14/11 cũng có biển mây. Đã xếp vào "VIỆC 3 ý 2" (Luật cổng), KHÔNG chỉnh engine theo ca này.
 Chưa kiểm: calibrate có ghép đúng cặp Pha Luông 16/11 hay không (danh sách bỏ sót in ra bị cắt).
+
+## Chiềng Công 17/11/2026 (phiếu geda3)
+Facebook (Lò Minh Tươi, bài ~08:00), anh xác nhận điểm: biển mây dày, ngày thứ hai liên tiếp. App (bản chụp 17/11): STATIC 30, đồng thuận 67%, ΔH +302m, đáng đi = ĐÚNG. Hai ngày liền (16 và 17/11) luật đáng đi báo đúng ở điểm này dù trạng thái chỉ ROLLING/STATIC; điểm số thấp nhưng ΔH và đồng thuận đủ. Chưa đổi gì trong engine.

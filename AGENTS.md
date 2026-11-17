@@ -77,7 +77,7 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
-Kênh chụp thứ hai (17/11/2026, phiếu gb369): `tools/snapshot-local.sh` + `~/.config/systemd/user/cloudhunter-snapshot.{service,timer}` chạy trên máy anh, dùng bản clone riêng (không đụng thư mục làm việc), commit "[máy nhà]" thẳng lên main. KHÔNG bao giờ `--force`. Bản 17/11 chụp lúc ~01:23 sáng 17/11 (lead ~3,5h, GitHub không nổ), vẫn trước rạng sáng nhưng ngắn hơn bản thường.
+Kênh chụp thứ hai (17/11/2026, phiếu gb369): `tools/snapshot-local.sh` + `~/.config/systemd/user/cloudhunter-snapshot.{service,timer}` chạy trên máy anh, dùng bản clone riêng (không đụng thư mục làm việc), commit "[máy nhà]" thẳng lên main. KHÔNG bao giờ `--force`. Bản 17/11 chụp lúc ~01:23 sáng 17/11 (lead ~3,5h; GitHub nổ trễ lúc ~01:50, sau máy nhà, chỉ ghi được bản tuần vì bản chính đã có), vẫn trước rạng sáng nhưng ngắn hơn bản thường.
 
 ### 🔎 Cờ theo dõi "giống sáng 14/11" (14/11/2026, phiếu g6102)
 
