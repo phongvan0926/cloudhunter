@@ -915,5 +915,17 @@
     "observedAt": "sáng 16/11, giờ ước 06:30-07:30 (nắng xiên thấp, bóng núi dài, trời trên còn ánh vàng); bài trang 'Chiềng Hoa 24/24' hiện '10 giờ' lúc 23:34 (đăng ~13:30), anh không khai giờ chụp (ghi DAWN theo quy ước)",
     "source": "USER_RELAY",
     "note": "Phiếu gf9d6, bài Facebook trang xã 'Chiềng Hoa 24/24' ('16/11/2026 một ngày rất đỗi bình thường tại Chiềng Hoa, khu vực Chiềng Công cũ'), anh Phong chuyển 16/11. 5 ảnh: biển mây dày phủ kín thung lũng, đỉnh núi nhô lên, người chụp đứng cao hơn mây. Anh Phong xác nhận (phiếu gdbe7, 16/11): ảnh chụp đúng điểm săn mây Chiềng Công (Mường La, 1350m) trong thư viện (CHIENG_CONG). Dự báo app (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260m, ĐÁNG ĐI (3 mô hình: GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12) => báo đúng. Tái phân tích Open-Meteo (lưới thô, không mô tả được thung lũng) không dùng được để đối chiếu."
+  },
+  {
+    "id": "2026-11-16-pha-luong",
+    "locationName": "Đỉnh Pha Luông",
+    "spotKey": "PHA_LUONG",
+    "date": "2026-11-16",
+    "reportedAt": "2026-11-17T13:02:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MORNING",
+    "observedAt": "sáng 16/11, giờ không rõ: nắng đã lên cao (trời xanh, bóng đổ gắt), không phải bình minh; ảnh chụp màn hình bài Facebook 'Trekking & Camping Việt Nam' (Pa Giang) hiện '4 hours ago' lúc 13:02 17/11, ghi 'Cập nhật biển mây đỉnh Pha Luông 16/11'",
+    "source": "USER_RELAY",
+    "note": "Phiếu g6de1, anh Phong báo 17/11. 5 ảnh/video: biển mây dày phủ kín thung lũng dưới mỏm đá đỉnh, người ngồi trên mỏm, các đỉnh nhô lên như đảo. Giờ không rõ và nắng cao nên ghi MORNING (không phải DAWN); biển mây còn dày khi nắng đã cao là dấu hiệu tồn tại lâu, nhưng chưa có thời lượng nên không điền duration. Dự báo app (bản chụp rạng sáng 16/11): DISSIPATING 44, đồng thuận 67%, ΔH +130m, KHÔNG khuyên đi (GFS ROLLING 66, ICON DISSIPATING 16, UKMO DISSIPATING 44) => app bỏ sót nếu tính. Pha Luông 14/11 cũng có biển mây."
   }
 ]

@@ -579,3 +579,9 @@ chưa đủ 5: chỉ ghi, không đưa vào engine.
 Anh chuyển bài Facebook trang xã "Chiềng Hoa 24/24" (khu Chiềng Công cũ, 5 ảnh): biển mây dày phủ kín thung lũng, người chụp đứng cao hơn mây. Ghi `2026-11-16-chieng-cong`, BELOW, DAWN (giờ chụp ước 06:30-07:30 theo nắng xiên, anh không khai giờ).
 Anh xác nhận (phiếu gdbe7): ảnh chụp đúng điểm Chiềng Công (Mường La, 1350 m) trong thư viện, nên báo cáo tin cậy như báo cáo thường.
 App (bản chụp rạng sáng 16/11): ROLLING 59, đồng thuận 67%, ΔH +260 m, đáng đi = báo ĐÚNG (GFS ROLLING 59, ICON STATIC 62, UKMO CLEAR 12). Không chỉnh gì: một ca trúng không là cớ đổi ngưỡng. Tái phân tích Open-Meteo lưới thô, không dùng đối chiếu được.
+
+## Pha Luông (PHA_LUONG) sáng 16/11 - phiếu g6de1
+
+Anh chuyển bài Facebook "Trekking & Camping Việt Nam" (Pa Giang): "Cập nhật biển mây đỉnh Pha Luông 16/11", 5 ảnh/video, biển mây dày phủ kín thung lũng dưới mỏm đá đỉnh. Ghi `2026-11-16-pha-luong`, BELOW, **MORNING** (nắng đã cao, trời xanh, bóng gắt, không phải bình minh; giờ chụp không rõ). Không điền duration vì chưa có thời lượng, dù biển mây còn dày khi nắng đã cao là gợi ý tồn tại lâu (liên quan giả thuyết E, chưa đủ nhãn LONG).
+App (bản chụp rạng sáng 16/11): DISSIPATING 44, đồng thuận 67%, ΔH +130 m, KHÔNG khuyên đi (GFS ROLLING 66, ICON DISSIPATING 16, UKMO DISSIPATING 44) = bỏ sót. Cùng kiểu với Tà Xùa 16/11 và Chiêu Lầu Thi 15/11: đỉnh cao bị DISSIPATING sau đêm quang. Pha Luông 14/11 cũng có biển mây. Đã xếp vào "VIỆC 3 ý 2" (Luật cổng), KHÔNG chỉnh engine theo ca này.
+Chưa kiểm: calibrate có ghép đúng cặp Pha Luông 16/11 hay không (danh sách bỏ sót in ra bị cắt).
