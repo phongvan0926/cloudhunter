@@ -256,3 +256,6 @@ Kết luận:
 
 ### Nhãn FB 17/11/2026 (phiếu gb99b)
 TA_XUA_SON_LA BELOW tin 0,75 (1 bài 08:21 "Lại mây nữa", không ảnh giờ): được chấm. App DISSIPATING 17, đồng thuận 33%, không đáng đi = BỎ SÓT, ngày thứ 4 liền (14-17/11) cùng kiểu đỉnh cao DISSIPATING sau đêm quang (hàng đợi VIỆC 3 ý 2, chưa đổi engine). FANSIPAN KHONG_RO tin 0,5 cần người xem (06:43 ABOVE, 07:42 ABOVE, 09:05 BELOW), không chấm; app DISSIPATING 8, ΔH +255, không đáng đi. Nguồn Facebook: 23 cặp (đúng-có 1, sót 12, nhầm 0, đúng-không 10). Cờ C bật 17/11 (3/89 ngày), chưa đủ 5 ngày. Engine không đổi.
+
+### Nhãn FB 18/11/2026 (phiếu g2750)
+FANSIPAN BELOW nhưng tin 0,5 (<0,6) nên calibrate KHÔNG chấm: 3 bài (08:51, 09:17, 10:06) đều "có biển mây", ảnh sớm nhất 08:19, không có ảnh rạng sáng. App (bản chụp 18/11): DISSIPATING 8, đồng thuận 100%, ΔH +918m, không đáng đi. Nếu tính thì là bỏ sót, cùng kiểu đỉnh cao DISSIPATING sau đêm quang (VIỆC 3 ý 2, chưa đổi engine). Nguồn Facebook vẫn 23 cặp. Engine không đổi.
