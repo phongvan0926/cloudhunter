@@ -75,7 +75,28 @@ Lấy các điểm gợi ý + điểm yêu thích trong bán kính (khách 100 k
 ## 10. Đã áp dụng vào CloudHunter
 - **19/11/2026 - Cung đường tới điểm săn mây** (`services/routeService.ts`, `components/RouteWeather.tsx`). Học ý lấy mẫu dọc tuyến + giờ đi qua; tự viết và làm hơn ở chỗ dân phượt cần: cao độ DEM, đèo cao nhất, tổng leo dốc, sương mù / đi trong mây, gió giật, lạnh và băng giá ở cao độ mặt đường, mưa tích luỹ 24h/72h (ngưỡng thang mưa KTTV quốc gia), qua đèo lúc tối, tính ngược giờ đi để tới trước bình minh. Đường dùng OSRM miễn phí (không Google). Giờ đi theo tốc độ TB người dùng chọn vì OSRM quá lạc quan (Hà Nội - Tà Xùa 203 km báo 2h47).
 - **19/11/2026 - Tóm tắt ngày tại đích** (`summarizeDay`): học khung của họ (mây theo buổi, khung giờ mưa, gió, tầm nhìn), bỏ phần burn score/thiên văn; buổi sáng tính từ 5h cho người săn mây.
-- Chụp shadow (`tools/skyradar-shadow.py`, `data/skyradar-shadow/`): đối chứng, không là nhãn.
+- Chụp shadow (`tools/skyradar-shadow.py`, `data/skyradar-shadow/`): đối chứng, không là nhãn. Từ 19/11/2026 (vòng 2 gcc29) chạy hằng ngày trong job `skyradar` của `verify-loop.yml` (cùng lịch với job snapshot, 18 điểm, giãn 6 s, UA trình duyệt chung chung, chỉ giữ 03-09h). Thiếu điểm thì vẫn ghi phần đọc được rồi ĐỎ; không đọc được điểm nào thì không ghi tệp và ĐỎ. `scripts/shadow-contrast.ts` in bảng ĐỐI CHỨNG trong calibrate (luật chọn bản chụp chốt trước: bản muộn nhất trước 03:00 ngày D, khung 05-07h).
+- **19/11/2026 vòng 2 - Xe máy đi Valhalla** (FOSSGIS, CORS mở, miễn phí, tối đa 1 yêu cầu/giây, phải ghi công OSM): giống họ ở chỗ dùng Valhalla cho xe máy, khác ở chỗ không có Google trả phí; hỏng thì về OSRM và giao diện ghi rõ "TUYẾN Ô TÔ". Km đường thật cho Kèo thơm bằng OSRM `table` (giống ý `performAutoScan`), một lần gọi cho cả thư viện.
+- **19/11/2026 vòng 2 - Sương mù theo mã thời tiết 45/48**: họ dùng mã này làm nhãn "Sương mù"; mình thêm làm cờ mức 2 khi tầm nhìn mô hình chưa đủ thấp để tự bật (`ROUTE_RULES_VERSION` route-1.1).
+
+## 11. So `route-weather.js` + `safetyRisk` của họ với Cung đường của mình (19/11/2026, vòng 2)
+Mình đã có mà họ không có (ĐÃ ĐỌC mã của họ): cao độ DEM dọc tuyến, đèo cao nhất, tổng leo, gió giật, lạnh/băng theo cao độ mặt đường, đi trong mây, tầm nhìn, mưa tích luỹ 24h/72h tại từng điểm, qua đèo lúc tối, tính ngược giờ đi.
+
+Cảnh báo sạt lở theo mưa tích: luật R24/R72 của mình (20 / 50 / 100 mm trong 24h, 150 mm trong 72h, chỉ áp khi cao độ >= 300 m) so với các ca ĐÃ ĐO ở mục 7:
+| Ca của họ | Họ | Mình |
+|---|---|---|
+| 24h 20 mm | CAUTION | mức 1 |
+| 24h 35, 75 mm | CAUTION | mức 1, mức 2 |
+| 24h 113, 175 mm | WARNING | mức 3 |
+| 24h 250 mm | DANGER | mức 3 |
+| 6 giờ x 10 mm (60) | WARNING | mức 2 |
+| 2 giờ x 40 mm (80) | WARNING | mức 2 |
+Mọi ca đã đo, mình báo bằng hoặc nặng hơn họ, nên một luật "mưa 6h" riêng không thêm được gì trên các ca này. Không chỉnh ngưỡng của mình theo bảng này (họ không phải sự thật).
+
+Họ có mà mình chưa có (đưa vào danh sách phương án, chưa làm):
+- **GloFAS lưu lượng sông** (`glofasRatio`, luôn null trong mọi lần đo): Open-Meteo có Flood API miễn phí, lưới ~5 km, chỉ thấy sông lớn; suối nhỏ gây lũ quét trên đường đèo không có trong lưới. Giá trị cho dân phượt: thấp tới vừa (cảnh báo ngập ngầm tràn ở tuyến ven sông lớn). Cần chọn điểm qua sông trên tuyến, chưa làm.
+- **Giông theo CAPE** (> 800 / > 1500 J/kg): thêm 1 biến vào lời gọi thời tiết tuyến. Giá trị vừa (giông chiều mùa hè). Nhỏ, nhưng là ngưỡng mới chưa có sự thật nên chờ kho chụp tuyến.
+- **`prolonged_rain`** (mưa kéo dài ~4 ngày): mình có R72 + ghi chú R24, gần tương đương.
 
 ## Đối chiếu thật 19/11 (rạng sáng 05-07h, 18 điểm, chưa có sự thật)
 - 11/18 điểm họ báo "không" + `cheTamNhin=true`; 10/11 điểm đó engine mình cũng FOG/DISSIPATING, 17/18 điểm mình không khuyên đi.

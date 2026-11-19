@@ -7,6 +7,7 @@
 # Hai việc, hai giờ (cron của GitHub tính theo UTC; giờ VN = UTC+7):
 #   ~20:00 VN snapshot-forecast.ts  → chụp app đã nói gì cho rạng sáng NGÀY MAI (trước khi biết sự thật)
 #             (lịch ĐẶT 15:37 VN; GitHub trả cron trễ 2,8-7 giờ nên thực tế nổ quanh 18:20-22:35 VN)
+#   cùng lịch tối skyradar-shadow.py → chụp phán quyết biển mây của skyradar.vn để ĐỐI CHỨNG (không là nhãn, phiếu gcc29)
 #   08:30 VN  verify_satellite.py   → nhãn thật từ Himawari cho rạng sáng HÔM NAY, rồi calibrate
 # KÊNH THỨ HAI (17/11/2026): máy anh chạy tools/snapshot-local.sh (systemd user timer cloudhunter-snapshot, 19:30 + 22:30 VN),
 # cùng ghi data/observations; ai chụp trước thì giữ. Giờ thực đo 12 bản GitHub: 22:00-00:00 VN, có hôm không nổ.
@@ -21,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       job:
-        description: 'snapshot | satellite'
+        description: 'snapshot | satellite | skyradar'
         required: false
         default: 'snapshot'
       date:
@@ -111,6 +112,13 @@ jobs:
             npx --no-install vite-node scripts/snapshot-week.ts "$T" && exit 0
           done
           echo "::warning::chụp xa ngày $T thất bại, bản chụp chính vẫn giữ"
+      - name: Chụp phán quyết CUNG ĐƯỜNG (7 tuyến cố định, phiếu gcc29)
+        # Phụ như bản chụp tuần: lỗi chỉ cảnh báo, không chặn bản chụp chính. Script tự thử lại khi Open-Meteo 429,
+        # đã có tệp thì không đè, thiếu tuyến thì thoát 3 (vẫn ghi phần lấy được). Cách chấm: docs/cung-duong-kiem-chung.md.
+        continue-on-error: true
+        run: |
+          D="${{ steps.target.outputs.date }}"
+          npx --no-install vite-node scripts/snapshot-routes.ts "$D" || echo "::warning::chụp cung đường $D thiếu/lỗi (xem log), bản chụp chính vẫn giữ"
       - name: Commit bản chụp
         run: |
           git config user.name  "cloudhunter-verify[bot]"
@@ -120,6 +128,41 @@ jobs:
           git commit -m "chụp dự báo ${{ steps.target.outputs.date }} [bot]"
           git pull --rebase origin main
           git push
+
+  skyradar:
+    # Chụp shadow skyradar.vn (anh Phong duyệt 19/11/2026, phiếu gcc29). Chỉ đọc, 18 điểm tuần tự, giãn 6 s.
+    # Job RIÊNG để lỗi ở đây không chạm bản chụp của mình. Đọc thiếu điểm thì vẫn commit phần đọc được rồi ĐỎ;
+    # không đọc được điểm nào thì không ghi tệp và ĐỎ. Calibrate in bảng ĐỐI CHỨNG (scripts/shadow-contrast.ts).
+    if: github.event.schedule == '37 8 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'skyradar')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Chụp phán quyết của skyradar
+        id: shot
+        run: |
+          set +e
+          python tools/skyradar-shadow.py
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          [ "$rc" -eq 0 ] || echo "::error::skyradar-shadow thoát mã $rc (3 = thiếu điểm, 1 = không đọc được gì)"
+          exit 0
+      - name: Commit bản chụp skyradar
+        run: |
+          git config user.name  "cloudhunter-verify[bot]"
+          git config user.email "cloudhunter-verify[bot]@users.noreply.github.com"
+          git add data/skyradar-shadow/
+          git diff --cached --quiet && echo "không có gì mới" && exit 0
+          git commit -m "chụp shadow skyradar $(TZ=Asia/Ho_Chi_Minh date +%F) [bot]"
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 20; done
+          exit 1
+      - name: Đỏ job nếu chụp lỗi
+        if: steps.shot.outputs.rc != '0'
+        run: exit 1
 
   satellite:
     if: github.event.schedule == '30 1 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'satellite')

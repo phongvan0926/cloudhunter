@@ -2,7 +2,7 @@
  * Thời tiết + độ khó dọc CUNG ĐƯỜNG tới điểm săn mây (19/11/2026, phiếu gcc29).
  *
  * Định hướng số 1 của dự án: người đi phượt cần biết cả đường đi, không chỉ điểm đến.
- * Ý tưởng học từ skyradar.vn (họ khoá sau gói Pro): lấy tuyến OSRM, chia điểm dọc đường, ước giờ
+ * Ý tưởng học từ skyradar.vn (họ khoá sau gói Pro): lấy tuyến (Valhalla xe máy / OSRM ô tô), chia điểm dọc đường, ước giờ
  * đi qua từng điểm, lấy dự báo ĐÚNG giờ đó. Họ chỉ xét mưa + mây. Bản này tự viết, thêm thứ dân
  * phượt đèo cần: cao độ từng điểm (DEM), đèo cao nhất, tổng leo dốc, tầm nhìn/đi trong mây, gió giật,
  * nhiệt độ ở cao độ mặt đường, mưa tích luỹ 24h/72h (trơn, sạt lở), và qua đèo lúc trời tối.
@@ -202,6 +202,12 @@ export type HazardKind = 'storm' | 'rain' | 'fog' | 'wind' | 'cold' | 'ice' | 'l
 export interface Hazard { kind: HazardKind; level: Level; text: string }
 
 /** Ngưỡng tham khảo, ghi nguồn. Đổi ngưỡng ở đây, UI đọc từ đây. */
+/**
+ * Phiên bản bộ luật độ khó cung đường. Đổi ngưỡng/luật thì tăng số, để bản chụp tuyến (scripts/snapshot-routes.ts)
+ * biết phán quyết nào do luật nào sinh ra. route-1.1 (19/11/2026): thêm mã thời tiết 45/48 = sương mù.
+ */
+export const ROUTE_RULES_VERSION = 'route-1.1';
+
 export const TH = {
   // Mưa theo giờ: nhẹ < 2,5 mm/h, vừa 2,5-7,6, to > 7,6 (thang AMS/WMO hay dùng). Lấy 0,5 / 3 / 10 mm/h.
   RAIN_LIGHT: 0.5, RAIN_MOD: 3, RAIN_HEAVY: 10,
@@ -238,6 +244,7 @@ export function assessPoint(wx: PointWx, elevM: number | null, vehicle: Vehicle 
   const v = wx.visibilityM;
   if (v !== null && v < TH.VIS_DENSE) out.push({ kind: 'fog', level: 3, text: `Sương mù dày, tầm nhìn ~${Math.round(v)} m` });
   else if (v !== null && v < TH.VIS_FOG) out.push({ kind: 'fog', level: 2, text: `Sương mù, tầm nhìn ~${Math.round(v)} m` });
+  else if (wx.wmo === 45 || wx.wmo === 48) out.push({ kind: 'fog', level: 2, text: `Mô hình báo sương mù${wx.wmo === 48 ? ' đóng băng' : ''} (mã thời tiết ${wx.wmo})` });
   else if (e >= TH.INCLOUD_MIN_ELEV && wx.rh !== null && wx.rh >= TH.INCLOUD_RH && wx.cloudLow !== null && wx.cloudLow >= TH.INCLOUD_LOW) {
     out.push({ kind: 'fog', level: 2, text: 'Có thể đi trong mây (ẩm ~100%, mây thấp kín), tầm nhìn có thể rất ngắn' });
   }
@@ -382,14 +389,35 @@ export function summarizeDay(om: any, date: string): DaySummary {
   return base;
 }
 
+// ---------------------------------------------------------------- rạng sáng theo giờ tại đích
+
+/**
+ * Chuỗi 04-09h tại chỗ đứng ở đích: số thô của mô hình + đúng các cờ `assessPoint` dọc đường đang dùng
+ * (sương/đi trong mây, mưa, gió, lạnh), bỏ cờ "đèo lúc tối" vì người đã đứng tại chỗ.
+ * KHÔNG phải điểm biển mây theo giờ: engine biển mây tính MỘT kết luận cho cả khung 04-09h
+ * (xem aggregateDayModel), không có số theo giờ, nên ở đây không tự chế ra số đó.
+ */
+export const DAWN_HOURS = [4, 5, 6, 7, 8, 9];
+export interface DawnHour { hour: number; wx: PointWx | null; hazards: Hazard[]; level: Level }
+export function dawnHours(om: any, date: string, elevM: number | null): DawnHour[] {
+  return DAWN_HOURS.map(hour => {
+    const wx = extractPointWx(om, `${date}T${String(hour).padStart(2, '0')}:00`);
+    const hazards = wx ? assessPoint(wx, elevM, 'motorbike').filter(h => h.kind !== 'dark') : [];
+    return { hour, wx, hazards, level: maxLevel(hazards) };
+  });
+}
+
 // ---------------------------------------------------------------- gọi mạng (không test đơn vị)
 
 const MEM = new Map<string, { ts: number; data: any }>();
+/** Chỉ dùng khi chạy script (Node): FOSSGIS đòi User-Agent nêu tên ứng dụng. Trình duyệt tự gửi UA + Referer. */
+let EXTRA_HEADERS: Record<string, string> | undefined;
+export function setFetchHeaders(h: Record<string, string>) { EXTRA_HEADERS = h; }
 async function getJson(url: string, ttlMs: number): Promise<any> {
   const hit = MEM.get(url);
   if (hit && Date.now() - hit.ts < ttlMs) return hit.data;
   let res: Response;
-  try { res = await fetch(url); } catch (e: any) { throw new Error(`Không gọi được ${new URL(url).hostname}: ${e?.message || 'lỗi mạng'}`); }
+  try { res = await (EXTRA_HEADERS ? fetch(url, { headers: EXTRA_HEADERS }) : fetch(url)); } catch (e: any) { throw new Error(`Không gọi được ${new URL(url).hostname}: ${e?.message || 'lỗi mạng'}`); }
   if (!res.ok) throw new Error(`HTTP ${res.status} từ ${new URL(url).hostname}`);
   const data = await res.json();
   if (data && !Array.isArray(data) && data.error) throw new Error(`${new URL(url).hostname}: ${data.reason || data.message || 'lỗi'}`);
@@ -408,15 +436,103 @@ export async function geocodeVN(q: string): Promise<GeoHit[]> {
   }));
 }
 
-export interface RouteGeom { coords: LatLon[]; cum: number[]; distanceKm: number; durationH: number }
+/** Giải mã polyline độ chính xác 6 chữ số (định dạng `shape` của Valhalla). */
+export function decodePolyline6(str: string): LatLon[] {
+  const out: LatLon[] = [];
+  let i = 0, lat = 0, lon = 0;
+  const next = () => {
+    let res = 0, shift = 0, b: number;
+    do { b = str.charCodeAt(i++) - 63; res |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+    return res & 1 ? ~(res >> 1) : res >> 1;
+  };
+  while (i < str.length) { lat += next(); lon += next(); out.push({ lat: lat / 1e6, lon: lon / 1e6 }); }
+  return out;
+}
+
+export type RouterId = 'valhalla-motorcycle' | 'osrm-car';
+export const ROUTER_LABEL: Record<RouterId, string> = {
+  'valhalla-motorcycle': 'tuyến xe máy (Valhalla)',
+  'osrm-car': 'tuyến ô tô (OSRM)',
+};
+export interface RouteGeom {
+  coords: LatLon[]; cum: number[]; distanceKm: number; durationH: number;
+  router: RouterId;
+  /** Có khi xe máy phải rơi về tuyến ô tô: lý do, để giao diện nói thẳng. */
+  fallbackNote?: string;
+  /** Tuyến xe máy có đoạn thu phí (thường là cao tốc/đường cao cấp): nhắc người đi xem biển cấm xe máy. */
+  cautionNote?: string;
+}
+
 /** Tuyến ô tô từ OSRM bản công khai (miễn phí, CORS mở). */
-export async function fetchRoute(a: LatLon, b: LatLon): Promise<RouteGeom> {
+export async function fetchOsrmCar(a: LatLon, b: LatLon): Promise<RouteGeom> {
   const url = `https://router.project-osrm.org/route/v1/driving/${a.lon.toFixed(5)},${a.lat.toFixed(5)};${b.lon.toFixed(5)},${b.lat.toFixed(5)}?overview=full&geometries=geojson`;
   const d = await getJson(url, 24 * 3600_000);
   const r = d?.routes?.[0];
   if (d?.code !== 'Ok' || !r) throw new Error(`OSRM không tìm được đường (${d?.code || 'không rõ'})`);
   const coords: LatLon[] = r.geometry.coordinates.map(([lon, lat]: [number, number]) => ({ lat, lon }));
-  return { coords, cum: cumulativeKm(coords), distanceKm: r.distance / 1000, durationH: r.duration / 3600 };
+  return { coords, cum: cumulativeKm(coords), distanceKm: r.distance / 1000, durationH: r.duration / 3600, router: 'osrm-car' };
+}
+
+/**
+ * Tuyến XE MÁY từ Valhalla của FOSSGIS (valhalla1.openstreetmap.de; CORS mở, đo 19/11/2026).
+ * Điều khoản FOSSGIS (ĐÃ ĐỌC 19/11/2026): tối đa 1 request/giây, ghi nguồn OSM + link sửa bản đồ,
+ * không dùng cho site lưu lượng lớn, không tải hàng loạt. App gọi 1 lần cho mỗi lần bấm, có cache 24h.
+ * use_highways 0.5 (mặc định): đo 19/11/2026 Hà Nội - Tà Xùa, use_highways 0 cho 425 km/13h (né cả quốc lộ trunk),
+ * 0.1 cho 320 km, 0.5 cho 224 km (has_highway=false, nhưng có đoạn thu phí CT.03). Cấm xe máy trên cao tốc dựa vào
+ * thẻ access của OSM; thẻ thiếu thì Valhalla vẫn có thể chọn, nên tuyến có thu phí thì giao diện nhắc xem biển.
+ */
+export const VALHALLA_URL = 'https://valhalla1.openstreetmap.de/route';
+export async function fetchValhallaMoto(a: LatLon, b: LatLon): Promise<RouteGeom> {
+  const q = {
+    locations: [{ lat: +a.lat.toFixed(5), lon: +a.lon.toFixed(5) }, { lat: +b.lat.toFixed(5), lon: +b.lon.toFixed(5) }],
+    costing: 'motorcycle', costing_options: { motorcycle: { use_highways: 0.5, use_tolls: 0 } },
+    units: 'kilometers', directions_type: 'none',
+  };
+  const d = await getJson(`${VALHALLA_URL}?json=${encodeURIComponent(JSON.stringify(q))}`, 24 * 3600_000);
+  const legs = d?.trip?.legs;
+  if (!legs?.length || d?.trip?.status !== 0) throw new Error(`Valhalla không tìm được đường (${d?.trip?.status_message || d?.error || 'không rõ'})`);
+  const coords = legs.flatMap((l: any) => decodePolyline6(l.shape));
+  const s = d.trip.summary;
+  return { coords, cum: cumulativeKm(coords), distanceKm: s.length, durationH: s.time / 3600, router: 'valhalla-motorcycle',
+    cautionNote: s.has_toll || s.has_highway ? 'Tuyến xe máy này có đoạn thu phí/cao tốc theo bản đồ OSM. Có đoạn cấm xe máy mà bản đồ chưa ghi; tới nơi theo biển báo.' : undefined };
+}
+
+/** Xe máy: Valhalla, hỏng thì OSRM ô tô kèm ghi chú. Ô tô: OSRM. */
+export async function fetchRoute(a: LatLon, b: LatLon, vehicle: Vehicle = 'car'): Promise<RouteGeom> {
+  if (vehicle === 'car') return fetchOsrmCar(a, b);
+  try { return await fetchValhallaMoto(a, b); }
+  catch (e: any) {
+    const g = await fetchOsrmCar(a, b);
+    return { ...g, fallbackNote: `Không lấy được tuyến xe máy (${e?.message || 'lỗi'}), đang dùng TUYẾN Ô TÔ: có thể đi qua cao tốc xe máy không được vào.` };
+  }
+}
+
+// ---------------------------------------------------------------- km đường thật tới các điểm (kèo thơm)
+
+export interface RoadDist { km: number; h: number }
+/** Đọc phản hồi OSRM `table` (1 nguồn -> n đích). Ô không có đường -> null, không bịa số chim bay. */
+export function parseOsrmTable(d: any, n: number): (RoadDist | null)[] {
+  if (d?.code !== 'Ok' || !Array.isArray(d.distances?.[0])) throw new Error(`OSRM table lỗi (${d?.code || 'không rõ'})`);
+  const dist = d.distances[0], dur = d.durations?.[0] || [];
+  return Array.from({ length: n }, (_, i) => {
+    const m = dist[i + 1];
+    return typeof m === 'number' && Number.isFinite(m) ? { km: m / 1000, h: (dur[i + 1] ?? NaN) / 3600 } : null;
+  });
+}
+export const ROAD_TABLE_MAX = 99;   // OSRM demo nhận tối đa 100 toạ độ (đo 19/11/2026: 100 điểm vẫn 200)
+/**
+ * Km đường ô tô (OSRM `table`) từ `origin` tới mọi đích, gom 1 lần gọi cho tới 99 đích. Toạ độ gốc làm tròn
+ * 0,01° (~1 km) để cache trúng nhiều hơn và không gửi vị trí chính xác của người dùng.
+ */
+export async function fetchRoadDistances(origin: LatLon, dests: LatLon[]): Promise<(RoadDist | null)[]> {
+  const o = `${origin.lon.toFixed(2)},${origin.lat.toFixed(2)}`;
+  const out: (RoadDist | null)[] = [];
+  for (let i = 0; i < dests.length; i += ROAD_TABLE_MAX) {
+    const part = dests.slice(i, i + ROAD_TABLE_MAX);
+    const url = `https://router.project-osrm.org/table/v1/driving/${o};${part.map(p => `${p.lon.toFixed(4)},${p.lat.toFixed(4)}`).join(';')}?sources=0&annotations=distance,duration`;
+    out.push(...parseOsrmTable(await getJson(url, 24 * 3600_000), part.length));
+  }
+  return out;
 }
 
 const f4 = (x: number) => x.toFixed(4);
@@ -444,7 +560,8 @@ export async function fetchRouteWeather(pts: { pos: LatLon; elev: number | null 
 export interface RoutePlan {
   from: LatLon; to: LatLon; vehicle: Vehicle; speedKmh: number; departMs: number;
   distanceKm: number; durationH: number;   // theo tốc độ trung bình đã chọn
-  osrmH: number;                           // giờ OSRM (hồ sơ ô tô), chỉ để tham khảo
+  routerH: number;                         // giờ do máy tìm đường ước, chỉ để tham khảo
+  router: RouterId; fallbackNote?: string; cautionNote?: string;
   coords: LatLon[];
   elevKms: number[]; elevs: (number | null)[];
   stats: ElevStats | null;
@@ -461,7 +578,7 @@ export interface RoutePlan {
 export async function planRoute(
   from: LatLon, to: LatLon, vehicle: Vehicle, speedKmh: number, depart: number | ((durationH: number) => number),
 ): Promise<RoutePlan> {
-  const geom = await fetchRoute(from, to);
+  const geom = await fetchRoute(from, to, vehicle);
   const total = geom.cum[geom.cum.length - 1];
   const durationH = geom.distanceKm / speedKmh;
   const departMs = typeof depart === 'function' ? depart(durationH) : depart;
@@ -489,7 +606,7 @@ export async function planRoute(
     return { ...b, etaMs: eta, hourKey, wx, hazards, level: maxLevel(hazards), isPeak: !!stats && b.km === stats.maxKm };
   });
   return {
-    from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, osrmH: geom.durationH,
+    from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, routerH: geom.durationH, router: geom.router, fallbackNote: geom.fallbackNote, cautionNote: geom.cautionNote,
     coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1],
   };
 }

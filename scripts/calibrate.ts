@@ -21,6 +21,7 @@ import { readdirSync, readFileSync, existsSync, writeFileSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { WORTH_GOING_SCORE, isWorthGoing } from '../services/cloudScoreEngine';
 import { fbUsable, FB_MIN_CONFIDENCE } from './fb-auto';
+import { loadShadowCaptures, contrastLines } from './shadow-contrast';
 
 const DIR = 'data/observations';
 
@@ -327,6 +328,13 @@ function main() {
       console.log(`        engine-2.4 — chỉ tin bảng này sau khi đủ ngày chụp bằng engine ≥2.4.`);
     }
   }
+
+  // ĐỐI CHỨNG skyradar.vn (phiếu gcc29, 19/11/2026): phán quyết của họ KHÔNG là nhãn, chỉ so bên nào đúng hơn
+  // trên cùng các cặp có sự thật. Luật ghép (bản chụp trước 03:00, khung 05-07h) chốt trong scripts/shadow-contrast.ts.
+  contrastLines(rows.map(r => ({ date: r.date, key: r.key, name: r.name, truth: r.truth, truthSrc: r.truthSrc,
+    truthDetail: r.truthDetail, status: r.status, oursSea: SEA_STATUS.has(r.status),
+    oursWorth: isWorthGoing({ status: r.status as any, agreement: r.agreement, deltaH: r.deltaH ?? null }) })),
+  loadShadowCaptures()).forEach(l => console.log(l));
 
   const misses = rows.filter(r => r.truth === 'SEA' && !SEA_STATUS.has(r.status));
   const alarms = rows.filter(r => r.truth === 'NO_SEA' && SEA_STATUS.has(r.status));

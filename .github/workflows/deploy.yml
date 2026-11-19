@@ -7,6 +7,7 @@ on:
     # Bot vòng kiểm chứng commit dữ liệu 2 lần/ngày vào data/observations — không cần build lại site.
     paths-ignore:
       - 'data/observations/**'
+      - 'data/skyradar-shadow/**'
 
 permissions:
   contents: write

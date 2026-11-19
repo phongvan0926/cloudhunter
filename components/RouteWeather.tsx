@@ -4,6 +4,7 @@ import { computeSunTimes, vnTodayStr, addDaysStr } from '../services/weatherServ
 import {
   planRoute, geocodeVN, DEFAULT_SPEED_KMH, SPEED_CHOICES, VEHICLE_LABEL, LEVEL_LABEL, TH,
   summarizeDay, type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
+  ROUTER_LABEL, dawnHours,
 } from '../services/routeService';
 
 interface Props {
@@ -235,11 +236,19 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
             ) : s.noDataCount < plan.samples.length && <p className="text-xs text-slate-200 mt-1">Không thấy mưa, sương mù, gió giật hay lạnh đáng kể ở các điểm đã lấy mẫu.</p>}
           </div>
 
+          {plan.fallbackNote && <p className="text-xs text-amber-100 bg-amber-950/40 border border-amber-500/40 rounded-xl p-2.5" data-testid="route-fallback">⚠️ {plan.fallbackNote}</p>}
+          {plan.cautionNote && <p className="text-xs text-amber-100/90 bg-amber-950/30 border border-amber-500/30 rounded-xl p-2.5" data-testid="route-caution">🚧 {plan.cautionNote}</p>}
+          <p className="text-[11px] text-slate-400 flex flex-wrap items-center gap-x-2" data-testid="route-router">
+            <span>Đang dùng: <b className="text-slate-200">{ROUTER_LABEL[plan.router]}</b> · bản đồ ©</span>
+            <a className="min-h-11 inline-flex items-center underline" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>
+            <a className="min-h-11 inline-flex items-center underline" href="https://openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">sửa bản đồ</a>
+          </p>
+
           {note && <p className="text-[11px] text-sky-200 bg-sky-950/30 border border-sky-600/30 rounded-xl p-2.5">{note}</p>}
 
           <div className="grid grid-cols-2 gap-2 text-xs">
             <Fact label="Quãng đường" value={`${Math.round(plan.distanceKm)} km`} />
-            <Fact label={`Thời gian (${plan.speedKmh} km/h TB)`} value={fmtH(plan.durationH)} sub={`OSRM ô tô: ${fmtH(plan.osrmH)}`} />
+            <Fact label={`Thời gian (${plan.speedKmh} km/h TB)`} value={fmtH(plan.durationH)} sub={`${ROUTER_LABEL[plan.router]} ước: ${fmtH(plan.routerH)}`} />
             <Fact label="Xuất phát" value={fmtVN(plan.departMs)} />
             <Fact label="Tới nơi (ước)" value={fmtVN(arriveMs)} />
             <Fact label="Điểm cao nhất" value={plan.stats ? `${plan.stats.maxElev} m` : 'không đo được'} sub={plan.stats ? `km ${Math.round(plan.stats.maxKm)}` : undefined} />
@@ -286,9 +295,10 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
           <details className="rounded-xl border border-slate-700 bg-slate-900/40">
             <summary className="min-h-11 flex items-center px-3 text-xs font-bold text-slate-200 cursor-pointer">Cách tính và giới hạn</summary>
             <div className="px-3 pb-3 text-[11px] text-slate-400 leading-relaxed space-y-1.5">
-              <p>Đường: OSRM (dữ liệu OpenStreetMap, hồ sơ ô tô). Cao độ: DEM Copernicus 90 m qua Open-Meteo, {plan.elevKms.length} điểm dọc tuyến. Dự báo: Open-Meteo (mô hình tốt nhất cho từng điểm), nhiệt độ hạ theo cao độ mặt đường.</p>
+              <p>Đường: xe máy dùng Valhalla (máy chủ FOSSGIS, hồ sơ xe máy, tránh cao tốc), hỏng thì rơi về OSRM hồ sơ ô tô và báo rõ; ô tô dùng OSRM. Cao độ: DEM Copernicus 90 m qua Open-Meteo, {plan.elevKms.length} điểm dọc tuyến. Dự báo: Open-Meteo (mô hình tốt nhất cho từng điểm), nhiệt độ hạ theo cao độ mặt đường.</p>
               <p>Giờ đi qua mỗi điểm = quãng đường / tốc độ trung bình bạn chọn, CHƯA tính dừng nghỉ. Đi chậm hơn thì giờ thực tế muộn hơn.</p>
               <p>Ngưỡng tham khảo: mưa {TH.RAIN_LIGHT}/{TH.RAIN_MOD}/{TH.RAIN_HEAVY} mm/h (nhẹ/vừa/to); sương mù tầm nhìn &lt; {TH.VIS_FOG} m, dày &lt; {TH.VIS_DENSE} m; đi trong mây khi ẩm ≥ {TH.INCLOUD_RH}% và mây thấp ≥ {TH.INCLOUD_LOW}% ở đoạn ≥ {TH.INCLOUD_MIN_ELEV} m; gió giật {TH.GUST_NOTE}/{TH.GUST_HARD}/{TH.GUST_DANGER} km/h (cấp 5/6/8); lạnh ≤ {TH.COLD_NOTE}°C, băng giá ≤ {TH.COLD_FROST}°C; mưa tích luỹ 24h {TH.R24_NOTE}/{TH.R24_HARD}/{TH.R24_DANGER} mm hoặc 72h ≥ {TH.R72_HARD} mm ở đoạn ≥ {TH.SLIDE_MIN_ELEV} m.</p>
+              <p>Dữ liệu bản đồ © <a className="underline" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors (ODbL) · <a className="underline" href="https://openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">báo lỗi / sửa bản đồ</a> · tìm đường: <a className="underline" href="https://www.fossgis.de/" target="_blank" rel="noopener noreferrer">FOSSGIS Valhalla</a>, <a className="underline" href="https://project-osrm.org/" target="_blank" rel="noopener noreferrer">OSRM</a>.</p>
               <p>Tầm nhìn của mô hình hay đánh giá cao hơn thực tế trong mây trên đèo, nên app thêm cờ "có thể đi trong mây". Đây là dự báo, không thay được thông báo đóng đường, sạt lở của địa phương.</p>
             </div>
           </details>
@@ -354,6 +364,8 @@ const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }
   const dates = [0, 1, 2].map(n => addDaysStr(arriveDate, n));
   const [date, setDate] = useState(arriveDate);
   const d = useMemo(() => summarizeDay(plan.destOm, date), [plan, date]);
+  const destElev = plan.elevs[plan.elevs.length - 1] ?? null;
+  const dh = useMemo(() => dawnHours(plan.destOm, date, destElev), [plan, date, destElev]);
   const dm = (x: string) => `${x.slice(8, 10)}/${x.slice(5, 7)}`;
   const headCls = d.headline === 'Nhiều mưa' ? 'text-orange-300' : d.headline === 'Có mưa' ? 'text-amber-300' : d.headline === 'Khô ráo' ? 'text-emerald-300' : 'text-slate-400';
   return (
@@ -384,6 +396,29 @@ const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }
                 </li>
               ))}
             </ul>
+            <div data-testid="dawn-hours">
+              <p className="text-slate-400 mb-1">Rạng sáng theo giờ tại chỗ đứng:</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[11px] font-mono">
+                  <thead><tr className="text-slate-500 text-left"><th className="pr-2 font-normal">giờ</th><th className="pr-2 font-normal">°C</th><th className="pr-2 font-normal">ẩm</th><th className="pr-2 font-normal">mây thấp</th><th className="pr-2 font-normal">tầm nhìn</th><th className="font-normal">ghi chú</th></tr></thead>
+                  <tbody>
+                    {dh.map(h => (
+                      <tr key={h.hour} className={h.level >= 2 ? 'text-orange-200' : h.level === 1 ? 'text-amber-100' : 'text-slate-200'}>
+                        <td className="pr-2">{h.hour}h</td>
+                        {h.wx ? <>
+                          <td className="pr-2">{h.wx.tempC ?? '?'}</td>
+                          <td className="pr-2">{h.wx.rh ?? '?'}%</td>
+                          <td className="pr-2">{h.wx.cloudLow ?? '?'}%</td>
+                          <td className="pr-2">{h.wx.visibilityM != null ? `${(h.wx.visibilityM / 1000).toFixed(1)}km` : '?'}</td>
+                          <td className="font-sans">{h.hazards.map(z => KIND_ICON[z.kind]).join(' ') || '-'}</td>
+                        </> : <td colSpan={5} className="text-slate-500 font-sans">chưa có dự báo</td>}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-[10px] text-slate-500 mt-1">Số thô của mô hình tại chỗ đứng (ẩm cao + mây thấp nhiều = có thể đang ở TRONG mây). Đây không phải điểm biển mây theo giờ: app chấm biển mây một lần cho cả khung 4-9h, bấm nút bên dưới để xem.</p>
+            </div>
             <ul className="space-y-1">
               {d.storm && <li>⛈️ Có giờ dông trong ngày</li>}
               {d.rainWindows.length > 0

@@ -79,6 +79,7 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/engine-2-8-x-va-diem-needsreview.md` - đọc khi động tới biên ΔH, `observerInCloud`, gió tại chỗ đứng, hindcast, hay thêm/sửa điểm trong thư viện.
 - `docs/rang-buoc-vat-ly.md` - đọc TRƯỚC khi sửa vật lý engine (nghịch nhiệt, mực áp suất, estimateCloudTop, BLH, gió theo zone, mùa, ensemble).
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
+- `docs/cung-duong-kiem-chung.md` - đọc khi đụng ngưỡng độ khó cung đường, bản chụp tuyến, hay có báo cáo chuyến đi thật.
 - `docs/skyradar-doi-chung.md` - đọc khi so với đối thủ skyradar.vn, hoặc chạy `tools/skyradar-shadow.py` (chụp phán quyết biển mây của họ để đối chứng; KHÔNG dùng làm nhãn sự thật).
 
 `services/routeService.ts` + `components/RouteWeather.tsx` (19/11/2026, phiếu gcc29, định hướng số 1): thời tiết + độ khó CUNG ĐƯỜNG.
@@ -86,6 +87,14 @@ OSRM công khai (tuyến) -> Elevation API (<= 100 điểm, 1 call) -> Open-Mete
 past_days=3 cho mưa 72h). Ngưỡng tham khảo gom ở `TH`, có nguồn; ô tô bỏ cảnh báo lạnh/gió cấp 5. Giờ đi qua theo tốc độ TB người
 dùng chọn, KHÔNG theo giờ OSRM (đo 19/11: Hà Nội - Tà Xùa OSRM báo 2h47 cho 203 km). Thiếu dự báo giờ đó -> điểm "chưa có dự báo",
 không bịa. `summarizeDay` = Tóm tắt ngày tại đích (dùng `destOm`, không gọi thêm API; mây theo buổi là TỔNG MÂY, không phải biển mây). Là tính năng UI: không tham gia điểm/trạng thái/đáng đi. Test: `tests/route.test.ts`.
+Vòng 2 (19/11/2026): xe máy -> Valhalla FOSSGIS (`fetchValhallaMoto`, use_highways 0.5: đo 0 cho tuyến vòng 425 km thay vì 224;
+điều khoản: ghi công OSM + link fixthemap luôn hiện, <= 1 yêu cầu/giây, script Node phải `setFetchHeaders` UA nêu tên app), lỗi thì OSRM
++ `fallbackNote` "TUYẾN Ô TÔ"; có thu phí -> `cautionNote`. `fetchRoadDistances` = OSRM table (<= 99 đích/lần, cache 24h) cho km đường
+trong TonightRanking. `dawnHours` = bảng 4-9h tại đích dùng luật cung đường, KHÔNG phải điểm biển mây theo giờ (engine chỉ có theo ngày,
+đừng bịa). Đổi luật `assessPoint`/`TH` thì tăng `ROUTE_RULES_VERSION`. `scripts/snapshot-routes.ts` chụp 7 tuyến cố định mỗi tối (bước phụ
+trong job snapshot) vào `data/observations/<D>-routes.json`; bộ tuyến chỉ THÊM không sửa; cách chấm: `docs/cung-duong-kiem-chung.md`.
+Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
+(mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
 
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
@@ -164,7 +173,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 186 test (engine + lịch sử + capWatch...)
+npm test       # vitest — 202 test (engine + lịch sử + capWatch + cung đường + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   haversineKm, cumulativeKm, pointAtKm, evenKms, elevationKms, weatherKms, elevationStats, etaMs, vnHourKey,
-  extractPointWx, assessPoint, maxLevel, summarizeRoute, summarizeDay, cloudText, TH, ELEV_MAX_POINTS,
+  extractPointWx, assessPoint, maxLevel, summarizeRoute, summarizeDay, cloudText, TH, ELEV_MAX_POINTS, decodePolyline6, fetchRoute, parseOsrmTable, dawnHours,
   type PointWx, type RouteSample,
 } from '../services/routeService';
 
@@ -245,5 +245,83 @@ describe('tóm tắt ngày tại điểm đến', () => {
     expect(cloudText(null)).toBe('không rõ');
     const s = summarizeDay(day({ c: () => null }), '2026-11-20');
     expect(s.parts[0].cloudText).toBe('không rõ');
+  });
+});
+
+describe('tìm đường xe máy (Valhalla) và dự phòng', () => {
+  it('decodePolyline6 giải đúng ví dụ chuẩn (độ chính xác 6 = ví dụ Google chia 10)', () => {
+    const pts = decodePolyline6('_p~iF~ps|U_ulLnnqC_mqNvxq`@');
+    expect(pts.map(p => [p.lat, p.lon])).toEqual([[3.85, -12.02], [4.07, -12.095], [4.3252, -12.6453]]);
+  });
+  const osrmOk = { code: 'Ok', routes: [{ distance: 10000, duration: 600, geometry: { coordinates: [[105, 21], [105.1, 21]] } }] };
+  const valOk = { trip: { status: 0, summary: { length: 12, time: 1800 }, legs: [{ shape: '_p~iF~ps|U_ulLnnqC' }] } };
+  const stub = (val: () => Response) => vi.stubGlobal('fetch', vi.fn(async (u: string) =>
+    String(u).includes('valhalla') ? val() : new Response(JSON.stringify(osrmOk))));
+  afterEach(() => vi.unstubAllGlobals());
+  it('xe máy dùng Valhalla khi được', async () => {
+    stub(() => new Response(JSON.stringify(valOk)));
+    const g = await fetchRoute({ lat: 21.001, lon: 105.001 }, { lat: 21.2, lon: 105.2 }, 'motorbike');
+    expect(g.router).toBe('valhalla-motorcycle');
+    expect(g.distanceKm).toBe(12);
+    expect(g.fallbackNote).toBeUndefined();
+  });
+  it('Valhalla hỏng thì rơi về OSRM và NÓI RÕ là tuyến ô tô', async () => {
+    stub(() => new Response('{}', { status: 503 }));
+    const g = await fetchRoute({ lat: 21.002, lon: 105.002 }, { lat: 21.2, lon: 105.2 }, 'motorbike');
+    expect(g.router).toBe('osrm-car');
+    expect(g.fallbackNote).toMatch(/TUYẾN Ô TÔ/);
+  });
+  it('tuyến xe máy có thu phí thì kèm lời nhắc xem biển cấm; không thu phí thì không', async () => {
+    stub(() => new Response(JSON.stringify({ trip: { ...valOk.trip, summary: { length: 12, time: 1800, has_toll: true } } })));
+    const g = await fetchRoute({ lat: 21.004, lon: 105.004 }, { lat: 21.2, lon: 105.2 }, 'motorbike');
+    expect(g.cautionNote).toMatch(/cấm xe máy/);
+    stub(() => new Response(JSON.stringify(valOk)));
+    expect((await fetchRoute({ lat: 21.005, lon: 105.005 }, { lat: 21.2, lon: 105.2 }, 'motorbike')).cautionNote).toBeUndefined();
+  });
+  it('gọi Valhalla với use_highways 0.5 (0 làm tuyến vòng gấp đôi, đo 19/11)', async () => {
+    stub(() => new Response(JSON.stringify(valOk)));
+    await fetchRoute({ lat: 21.006, lon: 105.006 }, { lat: 21.2, lon: 105.2 }, 'motorbike');
+    const u = decodeURIComponent(String((fetch as any).mock.calls[0][0]));
+    expect(u).toContain('"use_highways":0.5');
+  });
+  it('ô tô dùng OSRM, không gọi Valhalla', async () => {
+    stub(() => { throw new Error('không được gọi'); });
+    const g = await fetchRoute({ lat: 21.003, lon: 105.003 }, { lat: 21.2, lon: 105.2 }, 'car');
+    expect(g.router).toBe('osrm-car');
+  });
+});
+
+describe('km đường tới các điểm (OSRM table)', () => {
+  it('đọc hàng đầu, bỏ ô gốc, null khi không có đường', () => {
+    const d = { code: 'Ok', distances: [[0, 12000, null, 250500]], durations: [[0, 900, null, 18000]] };
+    expect(parseOsrmTable(d, 3)).toEqual([{ km: 12, h: 0.25 }, null, { km: 250.5, h: 5 }]);
+  });
+  it('phản hồi lỗi thì NÉM, không trả mảng rỗng', () => {
+    expect(() => parseOsrmTable({ code: 'TooBig' }, 2)).toThrow(/TooBig/);
+  });
+});
+
+describe('rạng sáng theo giờ tại đích', () => {
+  it('đủ 6 giờ 04-09, giờ thiếu dữ liệu ghi null, không có cờ đèo tối', () => {
+    const time = ['2026-11-20T04:00', '2026-11-20T05:00', '2026-11-20T06:00'];
+    const om = { hourly: { time, temperature_2m: [5, 6, 7], relative_humidity_2m: [99, 99, 80], precipitation: [0, 0, 0],
+      precipitation_probability: [0, 0, 0], weather_code: [45, 45, 1], visibility: [150, 150, 20000], wind_gusts_10m: [5, 5, 5],
+      cloud_cover_low: [100, 100, 10], cloud_cover: [100, 100, 10] }, daily: { time: ['2026-11-20'], sunrise: ['2026-11-20T06:15'], sunset: ['2026-11-20T17:20'] } };
+    const hs = dawnHours(om, '2026-11-20', 1800);
+    expect(hs.map(h => h.hour)).toEqual([4, 5, 6, 7, 8, 9]);
+    expect(hs[0].hazards.some(z => z.kind === 'fog')).toBe(true);
+    expect(hs.some(h => h.hazards.some(z => z.kind === 'dark'))).toBe(false);
+    expect(hs[3].wx).toBeNull();
+  });
+});
+
+describe('mã thời tiết sương mù (route-1.1)', () => {
+  const base: PointWx = { tempC: 15, rh: 90, precipMm: 0, precipProb: 0, wmo: 45, visibilityM: 8000, gustKmh: 5, cloudLow: 20, rain24h: 0, rain72h: 0, isDark: false };
+  it('wmo 45 dù tầm nhìn mô hình 8 km vẫn báo sương mù mức 2', () => {
+    const h = assessPoint(base, 500).find(x => x.kind === 'fog');
+    expect(h?.level).toBe(2);
+  });
+  it('tầm nhìn < 200 m vẫn thắng (mức 3), không bị cờ mã thời tiết đè', () => {
+    expect(assessPoint({ ...base, visibilityM: 100 }, 500).find(x => x.kind === 'fog')?.level).toBe(3);
   });
 });
