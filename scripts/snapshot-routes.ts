@@ -90,13 +90,9 @@ async function main(): Promise<number> {
         points: p.samples.map(s => ({ km: Math.round(s.km), elev: s.elev, ...slideRiskQD18(s.wx, s.elev) })).filter(x => x.status === 'LEVEL' || x.status === 'NO_PRIOR'),
         noDataCount: p.samples.filter(s => slideRiskQD18(s.wx, s.elev).status === 'NO_DATA').length,
       };
-      out.push({   // thứ tự khoá giữ như bản chụp cũ: id, from, to, toName, rồi phần gọn dùng chung
-        id: r.id, from: o.name, to: r.to, toName: d.name, vehicle: c.vehicle, speedKmh: c.speedKmh,
-        router: c.router, fallbackNote: c.fallbackNote, departVN: c.departVN, sunrise: sr,
-        distanceKm: c.distanceKm, durationH: c.durationH, maxElev: c.maxElev, cautionNote: c.cautionNote,
-        level: c.level, levelLabel: c.levelLabel, noDataCount: c.noDataCount, worst: c.worst, samples: c.samples,
-        ...extra,
-      });
+      // id, from, to, toName, sunrise rồi TOÀN BỘ phần gọn dùng chung (`...c`). Trước 21/11/2026 chỗ này chép từng trường bằng tay
+      // nên `endGapKm`/`endNote` thêm ở vòng 7 bị rơi khỏi bản chụp 20/11; nay trường mới của compactRoute tự vào bản chụp.
+      out.push({ id: r.id, from: o.name, to: r.to, toName: d.name, sunrise: sr, ...c, ...extra });
       console.log(`${r.id}: ${p.router} ${p.distanceKm.toFixed(0)} km, ${LEVEL_LABEL[p.summary.level]}, thiếu dự báo ${p.summary.noDataCount}/${p.samples.length}` +
         `, ổn định mưa D..D+5 ${extra.stability?.days.map((x: any) => x.rain.verdict[0] + x.rain.verdict[1]).join(' ') ?? 'LỖI'}, dông ${extra.storm?.worst ?? 'LỖI'}, sạt lở QĐ18 ${extra.slide.points.length} điểm`);
     } catch (e: any) {

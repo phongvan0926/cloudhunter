@@ -121,7 +121,7 @@ tệp cũ, bị bỏ qua), `routeClimate` trả `d100` (ngày >= 100 mm). `SLIDE
 (2) Tuyến chưa tới đích: `RouteGeom.endGapKm` = km chim bay điểm cuối tuyến -> đích; > `END_GAP_WARN_KM` 0,5 km (quy ước) thì `endNote` (data-testid
 `route-end-gap`) và ĐÍCH được thêm làm 1 toạ độ vào cùng lần gọi cao độ + dự báo, nên `RoutePlan.destOm`/`destElev` là TẠI ĐÍCH (Tóm tắt ngày, giờ
 rạng sáng, độ ổn định dùng `destElev`). Đổi `search_radius`/costing không cứu được (OSM không có đường). `scripts/check-route-ends.ts` in 8 tuyến cố
-định (độ cao qua Valhalla /height, KHÔNG Open-Meteo); đo 19/11: Pù Luông hở 2,32 km, Bạch Mã 2,26 km. Bản chụp ghi `endGapKm`, `endNote`.
+định (độ cao qua Valhalla /height, KHÔNG Open-Meteo); đo 19/11: Pù Luông hở 2,32 km, Bạch Mã 2,26 km. Bản chụp ghi `endGapKm`, `endNote`, `destElev` từ bản 21/11 (snapshot-routes nay lấy nguyên `...compactRoute`).
 (3) `scripts/count-calls.ts`: `countCallsAs('<script>')` ở đầu snapshot-forecast/-week/-routes, climate-monthly, regional-days, check-route-ends bọc
 `globalThis.fetch`, in khi thoát `[đếm gọi mạng] nguồn=<script>: <máy chủ> n lần (k hỏng) (~w lượt quy đổi)`; `w` là ước theo công thức Open-Meteo.
 Test: `tests/count-calls.test.ts`, `tests/route.test.ts` (mục vòng 7). Cách chấm: `docs/cung-duong-kiem-chung.md` mục 8-9.

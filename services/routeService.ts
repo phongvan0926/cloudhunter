@@ -692,7 +692,7 @@ export function compactRoute(p: RoutePlan) {
     departVN: new Date(p.departMs + 7 * 3600_000).toISOString().slice(0, 16),
     distanceKm: Math.round(p.distanceKm * 10) / 10, durationH: Math.round(p.durationH * 100) / 100,
     maxElev: p.stats?.maxElev ?? null, cautionNote: p.cautionNote ?? null,
-    endGapKm: Math.round(p.endGapKm * 100) / 100, endNote: p.endNote ?? null,
+    endGapKm: Math.round(p.endGapKm * 100) / 100, endNote: p.endNote ?? null, destElev: p.destElev,
     level: p.summary.level, levelLabel: LEVEL_LABEL[p.summary.level], noDataCount: p.summary.noDataCount,
     worst: p.summary.worst.map(w => ({ kind: w.kind, level: w.level, km: Math.round(w.km), text: w.text })),
     samples: p.samples.map(s => ({

@@ -166,4 +166,4 @@ và trước vòng 7 app im lặng coi là đủ: "Tóm tắt ngày tại đích
 - Cách xử lý: hở > `END_GAP_WARN_KM` (0,5 km, quy ước app) thì `RoutePlan.endNote` hiện khung "Tuyến CHƯA TỚI ĐÍCH ... X km", kèm độ
   cao điểm cuối tuyến và độ cao đích; ĐÍCH được thêm làm 1 toạ độ vào cùng lần gọi cao độ và dự báo (không thêm lần gọi), nên
   `destOm`/`destElev` là thời tiết và độ cao TẠI ĐÍCH. Mẫu dọc tuyến và mức độ khó vẫn chỉ tính trên đường xe.
-- Bản chụp ghi `endGapKm` + `endNote` cho từng tuyến. Không đổi `assessPoint` nên không đổi `ROUTE_RULES_VERSION`.
+- Bản chụp ghi `endGapKm`, `endNote`, `destElev` cho từng tuyến TỪ BẢN 21/11/2026. Bản 20/11 (`route-1.2`, chụp trên Actions 19/11 19:45) thiếu ba trường này do script chép trường bằng tay; không chép bù. Muốn biết hở của bản 20/11 thì so điểm mẫu cuối với toạ độ đích. Không đổi `assessPoint` nên không đổi `ROUTE_RULES_VERSION`.

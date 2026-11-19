@@ -436,6 +436,7 @@ describe('vòng 7: tuyến chưa tới đích (đích cuối đường mòn)', (
     expect(p.endNote).toMatch(/CHƯA TỚI ĐÍCH/);
     expect(compactRoute(p).endGapKm).toBeCloseTo(2.22, 1);
     expect(compactRoute(p).endNote).toMatch(/CHƯA TỚI ĐÍCH/);
+    expect(compactRoute(p).destElev).toBe(1700);
   });
   it('tới đích (hở <= 0,5 km): không thêm toạ độ, destOm là điểm cuối tuyến, không có lời báo', async () => {
     const calls = stubAll([105.1, 21.0195]);
