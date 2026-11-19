@@ -17,6 +17,10 @@ import { vnTodayStr, addDaysStr } from './services/weatherService';
 const AnalysisResult = React.lazy(() =>
   import('./components/AnalysisResult').then(m => ({ default: m.AnalysisResult }))
 );
+// Cung đường (19/11/2026, phiếu gcc29): chỉ tải khi người dùng mở.
+const RouteWeather = React.lazy(() =>
+  import('./components/RouteWeather').then(m => ({ default: m.RouteWeather }))
+);
 
 /**
  * Permalink: ?spot=Tà+Xùa&from=2026-08-20&to=2026-08-22&alt=1600 — chia sẻ đúng kết quả
@@ -51,6 +55,7 @@ const App: React.FC = () => {
   const [showTonight, setShowTonight] = useState(false);
   const [showWeek, setShowWeek] = useState(false);
   const [showSnaps, setShowSnaps] = useState(false);
+  const [showRoute, setShowRoute] = useState(false);
   const [verifyTarget, setVerifyTarget] = useState<CloudAnalysis | null>(null);
 
   // Mở app bằng link chia sẻ → chạy thẳng phân tích điểm đó
@@ -266,6 +271,37 @@ const App: React.FC = () => {
                       }, true);
                     }}
                   />
+                )}
+
+                <div className="max-w-xl mx-auto mb-4">
+                  <button
+                    onClick={() => setShowRoute(v => !v)}
+                    aria-expanded={showRoute}
+                    className={`w-full min-h-11 py-3.5 rounded-2xl font-bold text-sm transition-all border flex justify-center items-center gap-2 shadow-lg ${
+                      showRoute
+                        ? 'bg-orange-500/20 text-orange-300 border-orange-500/50'
+                        : 'bg-gradient-to-r from-orange-700/90 to-rose-700/90 text-white border-orange-400/50 hover:from-orange-600 hover:to-rose-600'
+                    }`}
+                  >
+                    <span>🛵</span>
+                    <span>{showRoute ? 'Ẩn cung đường' : 'Cung đường tới điểm săn mây - mưa, sương, gió, lạnh dọc đường'}</span>
+                  </button>
+                </div>
+                {showRoute && (
+                  <React.Suspense fallback={<p className="text-center text-cyan-300 text-sm py-4">Đang mở cung đường...</p>}>
+                    <RouteWeather
+                      onPickSpot={(name, elevation) => {
+                        setShowRoute(false);
+                        handleInputSubmit({
+                          locationName: name,
+                          startDate: vnTodayStr(),
+                          endDate: addDaysStr(vnTodayStr(), 2),
+                          observerAlt: elevation,
+                          model: undefined,
+                        }, true);
+                      }}
+                    />
+                  </React.Suspense>
                 )}
 
                 <div className="max-w-xl mx-auto mb-4">

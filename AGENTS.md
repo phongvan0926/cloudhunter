@@ -81,6 +81,12 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
 - `docs/skyradar-doi-chung.md` - đọc khi so với đối thủ skyradar.vn, hoặc chạy `tools/skyradar-shadow.py` (chụp phán quyết biển mây của họ để đối chứng; KHÔNG dùng làm nhãn sự thật).
 
+`services/routeService.ts` + `components/RouteWeather.tsx` (19/11/2026, phiếu gcc29, định hướng số 1): thời tiết + độ khó CUNG ĐƯỜNG.
+OSRM công khai (tuyến) -> Elevation API (<= 100 điểm, 1 call) -> Open-Meteo đa toạ độ có `elevation=` (1 call, ~16 điểm x 8 biến,
+past_days=3 cho mưa 72h). Ngưỡng tham khảo gom ở `TH`, có nguồn; ô tô bỏ cảnh báo lạnh/gió cấp 5. Giờ đi qua theo tốc độ TB người
+dùng chọn, KHÔNG theo giờ OSRM (đo 19/11: Hà Nội - Tà Xùa OSRM báo 2h47 cho 203 km). Thiếu dự báo giờ đó -> điểm "chưa có dự báo",
+không bịa. Là tính năng UI: không tham gia điểm/trạng thái/đáng đi. Test: `tests/route.test.ts`.
+
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
 Kênh chụp thứ hai (17/11/2026, phiếu gb369): `tools/snapshot-local.sh` + `~/.config/systemd/user/cloudhunter-snapshot.{service,timer}` chạy trên máy anh, dùng bản clone riêng (không đụng thư mục làm việc), commit "[máy nhà]" thẳng lên main. KHÔNG bao giờ `--force`. Bản 17/11 chụp lúc ~01:23 sáng 17/11 (lead ~3,5h; GitHub nổ trễ lúc ~01:50, sau máy nhà, chỉ ghi được bản tuần vì bản chính đã có), vẫn trước rạng sáng nhưng ngắn hơn bản thường.
@@ -158,7 +164,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 156 test (engine + lịch sử + capWatch...)
+npm test       # vitest — 181 test (engine + lịch sử + capWatch...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 
