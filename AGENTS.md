@@ -101,6 +101,7 @@ Vòng 4 (19/11/2026): KHÍ HẬU THEO THÁNG. `scripts/climate-monthly.ts` tính
 4 biến ngày, ~104 lượt quy đổi/vị trí) cho đích + mốc dọc 8 tuyến (`scripts/fixed-routes.ts`, dùng chung với snapshot-routes; mốc 40 km
 + điểm cao nhất) rồi các điểm thư viện -> `public/climate/monthly-v1.json`. Có `--budget` (mặc định 5.000/lần, chung IP với job chụp đêm),
 `--pace`, đệm thô ở `~/.cache/cloudhunter-climate`: chạy lại là nối tiếp; mục chưa lấy/lỗi ghi vào `missing` của tệp và in ra, mã thoát 3.
+Workflow `climate.yml` (vòng 5): chạy tiếp trên Actions (IP khác máy nhà), `--budget 6000 --pace 100`, không có đệm thô nên dùng lại vị trí từ tệp cũ khi `samePlace` (cùng toạ độ 1e-4°, cùng độ cao), mốc tuyến đọc `data/climate-route-points.json`; bot commit rồi `gh workflow run deploy.yml` (push bằng GITHUB_TOKEN không kích `on: push`); hết mục thiếu (trừ 'thiếu số mưa') thì tự `gh workflow disable`; không thêm được vị trí nào thì job ĐỎ.
 `services/climateService.ts`: `aggregateMonthly` (thiếu số không coi là 0), `seaSeason` (người đi > FB > vệ tinh, `SEA_MIN_N` 5 chốt trước),
 `routeClimate` (mỗi điểm mẫu lấy mốc gần nhất <= 30 km, chỉ số lấy nơi nặng nhất), ngưỡng `CTH` có nguồn (mưa/lạnh dùng lại `TH`; rét đậm/hại
 KTTV; "ẩm suốt ngày" RHmin >= 90 là chỉ báo ĐOÁN thay sương mù). UI: ngày đi > hôm nay + 6 thì khối khí hậu thay phán quyết dự báo.
@@ -190,7 +191,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 218 test (engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 220 test (engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

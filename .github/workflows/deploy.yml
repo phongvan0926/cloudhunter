@@ -8,6 +8,9 @@ on:
     paths-ignore:
       - 'data/observations/**'
       - 'data/skyradar-shadow/**'
+  # Bot khí hậu (climate.yml) đẩy bằng GITHUB_TOKEN, mà push bằng token đó KHÔNG kích workflow khác,
+  # nên bot gọi tay deploy qua workflow_dispatch sau khi commit public/climate/.
+  workflow_dispatch:
 
 permissions:
   contents: write
