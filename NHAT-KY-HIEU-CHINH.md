@@ -136,3 +136,9 @@ Không đạt một điều kiện thì KHÔNG gộp vào engine; ghi số và l
 Fansipan); bỏ sót theo vệ tinh (đổi lấy gì); tỉ lệ dựng mặt mây ở ngày vệ tinh CLEAR đỉnh >= 2.400m; sai số mặt mây
 so với vệ tinh khung sạch; số ngày hiệu dụng; phân bố khoảng cách và cao độ điểm thung lũng; MỌI ca đổi kết luận
 theo cả hai chiều. Replay là dữ liệu gần lead 0, chỉ so tương đối A với B là hợp lệ.
+
+**Sửa đổi trước khi có kết quả (19/11/2026, 10:50):** lần chạy đầu bị Open-Meteo trả 429 "Hourly API request limit"
+ngay ở lệnh DEM đầu tiên (hạn ngạch giờ đã hết từ trước, chưa lấy được số nào). Lưới 20 km cần ~270 điểm/đỉnh × 58 đỉnh,
+nên phần dò DEM chuyển sang OpenTopoData `srtm90m` (SRTM 90 m, cùng độ phân giải với DEM của Open-Meteo) để không
+ăn vào hạn ngạch dự báo. Luật chọn điểm (bán kính, bước lưới, bỏ <= 2 m, lấy thấp nhất) giữ nguyên. Dự báo A/B/O vẫn lấy
+từ Open-Meteo historical-forecast như đã ghi. Chưa xem dữ liệu dự báo nào khi sửa.
