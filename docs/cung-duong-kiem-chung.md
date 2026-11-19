@@ -73,3 +73,10 @@ quay đầu / có sạt). Tuyến người đi không thuộc bộ cố định 
 
 Chưa có script chấm: viết khi có báo cáo đầu tiên (đọc `data/observations/*-routes.json` và
 `data/observations/route-reports.json`), để định dạng báo cáo không bị đoán trước sai.
+
+## 5. Khí hậu theo tháng (19/11/2026, gcc29 vòng 4) - KHÔNG phải phán quyết, không chấm như mục 4
+Khối "Khí hậu tháng X dọc đường" (`services/climateService.ts`, tệp `public/climate/monthly-v1.json`) chỉ là số trung bình
+ERA5/ERA5-Land 2016-2025 tại các mốc, không có mức "Dễ đi / Khó đi" nên không có gì để chấm đúng sai theo từng chuyến.
+Kiểm được sau này: (a) so số ngày mưa >= 50 mm của ERA5 với trạm KTTV gần tuyến nếu có số công khai (dự kiến ERA5 thấp hơn,
+nên giao diện ghi "cận dưới"); (b) chỉ báo "ẩm suốt ngày" (RH thấp nhất >= 90%) so với báo cáo sương mù trong bài phượt
+có ngày, khi gom đủ >= 20 báo cáo. Chưa làm cả hai; đừng đổi ngưỡng `CTH` trước khi có phép so đó.

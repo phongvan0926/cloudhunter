@@ -48,7 +48,7 @@ Không chép mã của họ. Mọi thứ áp dụng vào CloudHunter đều tự
   - Như trên nhưng chỗ đứng RH 97 -> vẫn `co`, `tamNhin: thoang`. Vậy `cheTamNhin` KHÔNG bật chỉ vì RH 2 m cao; ĐOÁN dựa vào mây thấp / profile ở chỗ đứng.
   - Thung lũng RH 75 / mây 10 -> index 0,063, below 0,1, `khong`. Vậy `below` ~ mây thấp thung lũng / 100.
 - ĐÃ ĐO (đợt trước, 172 giờ-điểm): index >= ~0,45 -> co; 0,30-0,45 -> co_the.
-- Họ KHÔNG có (ĐÃ ĐỌC đầu vào): mặt cắt nghịch nhiệt / mực áp suất, mặt mây so với chỗ đứng, kiểm chứng bằng người đi. Chưa công bố độ chính xác.
+- ~~Họ KHÔNG có mặt cắt nghịch nhiệt / mực áp suất~~ - SAI, sửa ngày 19/11 (xem mục "Đọc lại bằng công cụ 19/11"): đầu vào CÓ mặt cắt 1000-700 hPa, BLH, mực đóng băng, và máy chủ có bộ `cloudSea` theo mặt cắt. Vẫn đúng: không kiểm chứng bằng người đi, chưa công bố độ chính xác.
 
 ## 7. Cảnh báo an toàn `safetyRisk` (ĐÃ ĐO trên Worker, Tà Xùa 1.817 m, mưa giả lập)
 | Mưa gửi lên | Mưa 24h | Kết quả |
@@ -106,3 +106,71 @@ Họ có mà mình chưa có (đưa vào danh sách phương án, chưa làm):
   người đi+FB giảm 25 -> 18 nhưng báo nhầm mọi nguồn tăng 419 -> 612 (trần 335), bootstrap theo ngày [-241, -143].
   Điểm "thấp nhất" phần lớn nằm ở rìa 20 km, có điểm là đồng bằng 3-11 m, nên cái bị bác là cách chọn điểm này, chưa phải
   ý tưởng. Số, phản biện và đề xuất đợt sau: `NHAT-KY-HIEU-CHINH.md` (mục "dự báo tại điểm thung lũng").
+
+## Đọc lại bằng công cụ 19/11 (phiếu gcc29 vòng 4, anh duyệt 19/11)
+
+Cách làm: tải 22 tệp `/js/*.min.js` công khai (giãn 2,5 giây/tệp), chạy `webcrack` rồi `@wakaru/cli`. Bản wakaru 1.17
+không còn lệnh con `all`, nên chạy theo từng tệp. Ghi 3 HAR khách chưa đăng nhập bằng Playwright, nhịp người (6-14 giây
+giữa thao tác), ở Tà Xùa, Đền Thượng Ba Vì và Ô Quy Hồ, tổng 5 lần `POST /api/assess`, không gặp 429/503. HAR đã xoá cookie
+và token. Không dùng reverse-api-engineer (lái LLM và gửi HAR ra dịch vụ ngoài), humanify, rea, uirip. Mã và HAR của họ
+để trong thư mục nghiên cứu đã gitignore, KHÔNG commit; ở đây chỉ ghi tên hàm/hằng và con số. Tuyến đường của họ khoá
+Pro (hộp mời mua), dừng ở đó.
+
+**Chuyển từ ĐOÁN/ghi sai sang ĐÃ ĐỌC/ĐÃ ĐO:**
+- Mặt cắt: hằng `PANEL_OM_HOURLY` trong `app.min.js` xin 27 biến mực áp suất (nhiệt, RH, gió, geopotential 1000-850 hPa,
+  700 hPa, RH 300/500/700), cộng `boundary_layer_height`, `freezing_level_height`, `lifted_index`, `convective_inhibition`,
+  độ ẩm đất 0-7/7-28 cm (ĐÃ ĐỌC, chính phiên chính kiểm lại). Ghi ở mục 6 trước đây là sai, đã sửa.
+- Máy chủ vẫn trả bộ dò biển mây CŨ theo mặt cắt, mỗi giờ: `cloudSea {dominant SEA/STREAM/TRAPPED/DEEP/NONE,
+  cloudBaseASL, cloudTopASL, margin, inversionStrength, confidence, curatedPoint}`, và `valleyFog` ("mây luồn", có hệ số
+  mùa 0,9 tháng 11). Giao diện mặc định hiện `sanMay` v3; bộ cũ chỉ hiện khi tắt bản mới. Có bảng điểm tuyển chọn
+  (`curatedPoint` = ta-xua, ba-vi, o-quy-ho) (ĐÃ ĐỌC + ĐÃ ĐO).
+- `sanMay` v3: `index` xấp xỉ `viewClear x below` (lệch <= 0,08 trên 30 giờ-điểm). Ngưỡng đo chặt hơn: co từ ~0,45
+  (0,449 ra co_the, 0,454 ra co), co_the từ ~0,30 (0,28 ra khong, 0,304 ra co_the). `viewClear` <= ~0,26 thì
+  `cheTamNhin` bật, reason `view_blocked`, ép kết luận về "khong" dù `below` 0,9+. Công thức `viewClear` ở máy chủ, VẪN
+  CHƯA đọc được (ĐÃ ĐO).
+- Điểm "thung lũng": dự báo xin tại toạ độ thung lũng với cao độ min(floor, base). Ba Vì họ chọn đồng bằng 10 m cách
+  4,3 km. Ở Tà Xùa, ô lưới ECMWF của "thung lũng" TRÙNG ô của chỗ đứng: mây thấp và RH y hệt (79/79, 88/88), chỉ nhiệt độ
+  khác do hạ cao độ; GFS cũng trùng mây thấp; chỉ ICON/JMA cho số khác. Tức là `below` của họ phần lớn là mây thấp của
+  chính ô chỗ đứng (ĐÃ ĐO trên HAR, 4 mô hình x 2 giờ, do agent nghiên cứu đo, phiên chính chưa đo lại). Đây là số đỡ cho
+  điều kiện "khác ô 0,1°" của đợt thung lũng v2 đã đăng ký trước, không phải lý do đổi luật đã đăng ký.
+- `/api/terrain` v2: Tà Xùa nay ra thung lũng 449 m, 17,3 km, 135° (bản đọc tay 482 m, 15 km, 146°): họ đã đổi thuật toán
+  hoặc nguồn DEM (terrarium z11). Trình duyệt cache 30 ngày.
+- `sun-raycast`: quạt 5 tia ±30° quanh phương vị mặt trời, 10-25 km, cộng 4 điểm 30/80/160/300 km. Chỉ cho burn score,
+  không dính biển mây (từ ĐOÁN sang ĐÃ ĐỌC).
+- GloFAS: tắt ngay ở trình duyệt (ô dữ liệu là `Promise.resolve(null)` trong `fetchWeatherData`), nên `glofasRatio` luôn
+  null, không phải do vùng (ĐÃ ĐỌC).
+- `safetyRisk`: 6 loại (`flash_flood`, `flash_flood_landslide`, `moderate_rain_mountain`, `heavy_rain`, `flood`,
+  `prolonged_rain`). Ca thật Ô Quy Hồ 19/11: 54 mm/24h, 35 mm/6h, ~119 mm nhiều ngày -> CAUTION `moderate_rain_mountain`
+  (ĐÃ ĐO). Ngưỡng WARNING/DANGER ở máy chủ, vẫn là ĐOÁN.
+- Mưa bỏ phiếu mô hình (`RAIN_MM`, `rainLevelOf`): >= 5 mm là mưa; 2-5 mm chỉ là "mưa" khi >= 3 mô hình ướt (>= 0,1 mm).
+  Mỗi giờ có `storm_models`, `storm_confirmed`. Nowcast `minutely_15` ghi đè 6 giờ đầu (tầm nhìn MIN, gió/CAPE MAX).
+  Có cảnh báo mưa đá `disasters.hail` từ máy chủ, không kích được ở 3 điểm (ĐÃ ĐỌC).
+- Quét kèo: 64 điểm (18 gắn `trek` "đi bộ đường dài"), khung giờ `[0, 23]`; gom ngày: một giờ "co" bất kỳ là cả ngày "co"
+  (ĐÃ ĐỌC). Điểm yếu: dễ báo có biển mây vì một giờ buổi chiều. Mình không học cái này.
+- Mỗi lần xem điểm có thể tốn 2 lần POST assess (~97 KB gzip) vì dự báo thung lũng về chậm hơn 150 ms (ĐÃ ĐỌC + ĐÃ ĐO).
+
+**Sơ đồ đầu vào/đầu ra (rút gọn, có kiểu):**
+```ts
+GET  /api/terrain?lat&lng -> { v:2, viewer:{elev,pinElev}, valley:{lat,lng,elev,distKm,azDeg},
+                               floor, base, top, relief, visibleFrac, coverage, reason: null|'low_relief' }
+POST /api/assess (gzip)   <- { weather: 4 mô hình (ecmwf_ifs025, jma, icon, gfs) hourly 266 khoá + minutely_15
+                                 + _prevRuns(cloud_cover_previous_day1/2) + _aqi,
+                               bortle, cloudSeaElevation (p75 cao độ 17 điểm trong 0,6 km),
+                               weatherValley?: { elevation, terrain, hourly: cloud_cover_low/RH/T theo mô hình } }
+                          -> { safetyRisk: {level CAUTION|WARNING|DANGER, type, stats{sum24h,max1h,maxSum6h,multiDaySum}} | null,
+                               disasters: {hail?}, hours[]: { cloud_low, humidity, vis_km, cape, precip_mm, storm_models,
+                                 cloudSea{...}, valleyFog{...}, sanMay?{index, viewClear, below, verdict{bienMay, cheTamNhin, tamNhin, reason}} },
+                               access: {tier guest|pro|vip, forecast_days} }
+```
+
+**Phát hiện đáng làm (đưa vào danh sách phương án; giá trị là đánh giá, chưa có số; không ý nào dùng phán quyết của họ làm nhãn):**
+1. Độ ổn định giữa các lần chạy (`cloud_cover_previous_day1/2`): báo "dự báo 3-5 ngày tới đang dao động" cho người tính
+   đi xa. Chỉ hiển thị, không đụng điểm. Mình chưa có. Giá trị cao, rẻ.
+2. Giông trên cung đường theo CAPE + số mô hình báo dông: mình chỉ dùng `weather_code >= 95` một nguồn. Ngưỡng mới chưa có
+   sự thật, chờ kho chụp tuyến.
+3. Mưa bỏ phiếu mô hình trên cung đường (giảm báo mưa giả).
+4. Nowcast 15 phút cho 6 giờ đầu khi sắp xuất phát (tính vào ngân sách Open-Meteo).
+5. Độ ẩm đất cho cảnh báo sạt lở: cần ngưỡng có nguồn, không tự đặt.
+6. Cờ "đi bộ đường dài" cho điểm thư viện (dữ liệu nhỏ, cần nguồn).
+7. Báo rõ "dự báo tải lúc HH:MM" khi mất mạng (kiểm PWA mình trước).
+8. Khối "mây luồn" riêng: đổi engine, phải qua Luật cổng; chỉ ghi phương án.

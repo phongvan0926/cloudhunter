@@ -18,33 +18,16 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { vnTodayStr, addDaysStr, computeSunTimes } from '../services/weatherService';
 import {
-  planRoute, compactRoute, setFetchHeaders, ROUTE_RULES_VERSION, DEFAULT_SPEED_KMH, LEVEL_LABEL, type LatLon, type Vehicle,
+  planRoute, compactRoute, setFetchHeaders, ROUTE_RULES_VERSION, DEFAULT_SPEED_KMH, LEVEL_LABEL, 
 } from '../services/routeService';
 
 const DATE = process.argv[2] || addDaysStr(vnTodayStr(), 1);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(DATE)) { console.error('LỖI: ngày phải dạng YYYY-MM-DD'); process.exit(1); }
 const OUT = `data/observations/${DATE}-routes.json`;
 
-/** Nơi xuất phát: trung tâm thành phố (xấp xỉ, node place=city của OSM). Chỉ là gốc tuyến, không phải điểm dự báo. */
-export const ORIGINS: Record<string, { name: string } & LatLon> = {
-  HN: { name: 'Hà Nội (Hồ Gươm)', lat: 21.0285, lon: 105.8542 },
-  YB: { name: 'Yên Bái (TP)', lat: 21.7229, lon: 104.9113 },
-  HUE: { name: 'Huế (TP)', lat: 16.4637, lon: 107.5909 },
-  // Thêm 19/11/2026 (gcc29 vòng 3): node OSM place=city "Sa Pa" (qua Photon), để ghép nhãn FB đèo Ô Quy Hồ.
-  SAPA: { name: 'Sa Pa (TT)', lat: 22.3334, lon: 103.8427 },
-};
-/** Bộ tuyến cố định: đổi bộ này thì các ngày trước và sau không còn so được với nhau, nên chỉ THÊM, đừng sửa. */
-export const ROUTES: { id: string; from: keyof typeof ORIGINS; to: string; vehicle: Vehicle }[] = [
-  { id: 'HN-TA_XUA-moto', from: 'HN', to: 'TA_XUA_SON_LA', vehicle: 'motorbike' },
-  { id: 'HN-PU_LUONG-moto', from: 'HN', to: 'PU_LUONG', vehicle: 'motorbike' },
-  { id: 'HN-HANG_KIA-moto', from: 'HN', to: 'HANG_KIA_PA_CO', vehicle: 'motorbike' },
-  { id: 'YB-PHINH_HO-moto', from: 'YB', to: 'PHINH_HO', vehicle: 'motorbike' },
-  { id: 'HN-BA_VI-moto', from: 'HN', to: 'BA_VI', vehicle: 'motorbike' },
-  { id: 'HN-SAPA-car', from: 'HN', to: 'SAPA_HAM_RONG', vehicle: 'car' },
-  { id: 'HUE-BACH_MA-car', from: 'HUE', to: 'BACH_MA', vehicle: 'car' },
-  // Thêm 19/11/2026: QL4D Sa Pa -> đèo Ô Quy Hồ, có nhãn FB hằng ngày (Ô Quy Hồ / Cầu Kính Rồng Mây) để chấm.
-  { id: 'SAPA-O_QUY_HO-moto', from: 'SAPA', to: 'DEO_O_QUY_HO', vehicle: 'motorbike' },
-];
+// ORIGINS/ROUTES tách ra fixed-routes.ts (19/11/2026, vòng 4) để script khí hậu dùng chung mà không chạy main ở đây.
+import { ORIGINS, ROUTES } from './fixed-routes';
+export { ORIGINS, ROUTES };
 const GAP_MS = 1500;   // FOSSGIS: tối đa 1 yêu cầu/giây; mỗi tuyến gọi Valhalla đúng 1 lần
 
 async function main(): Promise<number> {

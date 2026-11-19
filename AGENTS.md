@@ -96,7 +96,15 @@ trong job snapshot) vào `data/observations/<D>-routes.json`; bộ tuyến chỉ
 Vòng 3 (19/11/2026): `planRoute(..., onStep)` báo 3 bước cho thanh tiến độ; `getJson` trần `FETCH_TIMEOUT_MS` 30 s (AbortController),
 lỗi HTTP qua `httpErrorText` (429 nói rõ là giới hạn theo mạng). `compactRoute` = dạng gọn dùng chung cho bản chụp và tuyến người dùng
 (`saveUserRoute`/`loadUserRoutes`/`exportUserRoutesJson`, key `ch-user-routes-v1`, tối đa 50, làm tròn 0,01°, chỉ trong máy).
-Chân trang `footer-credits`: ghi công OSM/FOSSGIS/Open-Meteo + GitHub Issues (chưa có email liên hệ; không tự tạo).
+Chân trang `footer-credits`: ghi công OSM/FOSSGIS/Open-Meteo + GitHub Issues + email liên hệ (thêm 19/11 bởi phiếu g35fa, commit ca740b1).
+Vòng 4 (19/11/2026): KHÍ HẬU THEO THÁNG. `scripts/climate-monthly.ts` tính sẵn từ Open-Meteo archive-api (ERA5/ERA5-Land 2016-2025,
+4 biến ngày, ~104 lượt quy đổi/vị trí) cho đích + mốc dọc 8 tuyến (`scripts/fixed-routes.ts`, dùng chung với snapshot-routes; mốc 40 km
++ điểm cao nhất) rồi các điểm thư viện -> `public/climate/monthly-v1.json`. Có `--budget` (mặc định 5.000/lần, chung IP với job chụp đêm),
+`--pace`, đệm thô ở `~/.cache/cloudhunter-climate`: chạy lại là nối tiếp; mục chưa lấy/lỗi ghi vào `missing` của tệp và in ra, mã thoát 3.
+`services/climateService.ts`: `aggregateMonthly` (thiếu số không coi là 0), `seaSeason` (người đi > FB > vệ tinh, `SEA_MIN_N` 5 chốt trước),
+`routeClimate` (mỗi điểm mẫu lấy mốc gần nhất <= 30 km, chỉ số lấy nơi nặng nhất), ngưỡng `CTH` có nguồn (mưa/lạnh dùng lại `TH`; rét đậm/hại
+KTTV; "ẩm suốt ngày" RHmin >= 90 là chỉ báo ĐOÁN thay sương mù). UI: ngày đi > hôm nay + 6 thì khối khí hậu thay phán quyết dự báo.
+Không tham gia điểm/trạng thái/đáng đi; không đổi `ROUTE_RULES_VERSION`.
 Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng luật chữ, không LLM; tóm tắt số ở `docs/cung-duong-kiem-chung.md` mục 2.
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
@@ -182,7 +190,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 207 test (engine + lịch sử + capWatch + cung đường + đối chứng skyradar...)
+npm test       # vitest — 218 test (engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

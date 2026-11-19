@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { computeSunTimes, vnTodayStr, addDaysStr } from '../services/weatherService';
 import {
@@ -6,6 +6,7 @@ import {
   summarizeDay, type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
   ROUTER_LABEL, dawnHours, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_KEY, USER_ROUTES_MAX,
 } from '../services/routeService';
+import { loadClimate, routeClimate, spotClimate, monthSentence, seaSentence, CTH, type ClimateFile, type RouteClimateRow } from '../services/climateService';
 
 interface Props {
   /** Mở phân tích biển mây đầy đủ cho điểm đích (điểm thư viện). */
@@ -39,6 +40,10 @@ const SPOTS = Object.entries(MOUNTAIN_DB)
   .sort((a, b) => a.name.localeCompare(b.name, 'vi'));
 
 /** Giờ VN hiện tại (0-23), để biết "sáng mai" là hôm nay hay ngày mai khi tra lúc nửa đêm. */
+/** Dự báo dọc tuyến chỉ có 7 ngày (hôm nay + 6); ngày xa hơn thì app hiện khí hậu tháng thay vì dự báo. */
+const FORECAST_DAYS = 6;
+const CLIMATE_MAX_DAYS = 366;
+const vnDateOf = (ms: number) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(ms));
 const vnHourNow = () => Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', hourCycle: 'h23' }).format(new Date()));
 
 export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
@@ -55,6 +60,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [clim, setClim] = useState<ClimateFile | null | undefined>(undefined);
   const [savedCount, setSavedCount] = useState<number>(() => { try { return loadUserRoutes().length; } catch { return 0; } });
 
   const exportRoutes = () => {
@@ -137,6 +143,10 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
 
   const arriveMs = plan ? plan.departMs + plan.durationH * 3600_000 : 0;
   const s = plan?.summary;
+  // Ngày xuất phát ngoài tầm dự báo -> phán quyết bằng khí hậu tháng (chỉ tải tệp tĩnh khi đã có tuyến)
+  const far = !!plan && vnDateOf(plan.departMs) > addDaysStr(vnTodayStr(), FORECAST_DAYS);
+  const tripMonth = plan ? +vnDateOf(arriveMs).slice(5, 7) : 0;
+  useEffect(() => { if (plan && clim === undefined) loadClimate().then(setClim); }, [plan, clim]);
 
   return (
     <div className="max-w-xl mx-auto mt-4 bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl border border-slate-700 shadow-xl animate-fade-in-up">
@@ -218,12 +228,17 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
             ))}
           </div>
           {mode === 'custom' && (
+            <>
             <div className="mt-2 flex gap-2">
-              <input type="date" aria-label="Ngày xuất phát" value={customDate} min={vnTodayStr()} max={addDaysStr(vnTodayStr(), 6)} onChange={e => setCustomDate(e.target.value)}
+              <input type="date" aria-label="Ngày xuất phát" value={customDate} min={vnTodayStr()} max={addDaysStr(vnTodayStr(), CLIMATE_MAX_DAYS)} onChange={e => setCustomDate(e.target.value)}
                 className="flex-1 min-h-11 bg-slate-900/60 border border-slate-700 rounded-xl px-3 text-sm text-slate-100" />
               <input type="time" aria-label="Giờ xuất phát" value={customTime} onChange={e => setCustomTime(e.target.value)}
                 className="w-32 min-h-11 bg-slate-900/60 border border-slate-700 rounded-xl px-3 text-sm text-slate-100" />
             </div>
+            {customDate > addDaysStr(vnTodayStr(), FORECAST_DAYS) && (
+              <p className="mt-1 text-[11px] text-sky-200" data-testid="far-note">Ngày này quá {FORECAST_DAYS + 1} ngày dự báo: app sẽ cho biết tháng đó THƯỜNG thế nào dọc tuyến (khí hậu 10 năm), không phải dự báo.</p>
+            )}
+            </>
           )}
         </fieldset>
 
@@ -239,6 +254,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
       {/* --- Kết quả: phán quyết trước --- */}
       {plan && s && (
         <div className="mt-4 space-y-3" data-testid="route-result">
+          {far ? <RouteClimateBlock plan={plan} clim={clim} month={tripMonth} far /> : (
           <div className={`rounded-2xl border p-3 ${LEVEL_CLS[s.level]}`}>
             <p className="text-[11px] uppercase tracking-wider font-bold opacity-80">Thời tiết dọc đường</p>
             <p className="text-xl font-black" data-testid="route-level">{LEVEL_LABEL[s.level]}</p>
@@ -259,6 +275,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
               </ul>
             ) : s.noDataCount < plan.samples.length && <p className="text-xs text-slate-200 mt-1">Không thấy mưa, sương mù, gió giật hay lạnh đáng kể ở các điểm đã lấy mẫu.</p>}
           </div>
+          )}
 
           {plan.fallbackNote && <p className="text-xs text-amber-100 bg-amber-950/40 border border-amber-500/40 rounded-xl p-2.5" data-testid="route-fallback">⚠️ {plan.fallbackNote}</p>}
           {plan.cautionNote && <p className="text-xs text-amber-100/90 bg-amber-950/30 border border-amber-500/30 rounded-xl p-2.5" data-testid="route-caution">🚧 {plan.cautionNote}</p>}
@@ -282,7 +299,8 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
 
           <ElevationProfile plan={plan} />
 
-          <DayBrief plan={plan} destName={dest.name} arriveMs={arriveMs} />
+          <DayBrief plan={plan} destName={dest.name} destKey={destKey} arriveMs={arriveMs} clim={clim} />
+          {!far && <RouteClimateBlock plan={plan} clim={clim} month={tripMonth} far={false} />}
 
           <div className="flex flex-col gap-2">
             <button onClick={() => onPickSpot(dest.name, dest.elevation)}
@@ -396,7 +414,7 @@ const ElevationProfile: React.FC<{ plan: RoutePlan }> = ({ plan }) => {
 const PART_ICON: Record<string, string> = { 'quang': '☀️', 'ít mây': '🌤️', 'nhiều mây': '⛅', 'âm u': '☁️', 'không rõ': '❔' };
 
 /** Tóm tắt ngày tại điểm đến: dùng lại dự báo đã tải cho điểm đích (không gọi thêm API). */
-const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }> = ({ plan, destName, arriveMs }) => {
+const DayBrief: React.FC<{ plan: RoutePlan; destName: string; destKey: string; arriveMs: number; clim: ClimateFile | null | undefined }> = ({ plan, destName, destKey, arriveMs, clim }) => {
   const arriveDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(arriveMs));
   const dates = [0, 1, 2].map(n => addDaysStr(arriveDate, n));
   const [date, setDate] = useState(arriveDate);
@@ -421,6 +439,7 @@ const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }
             </button>
           ))}
         </div>
+        <ClimateLine clim={clim} destKey={destKey} to={plan.to} month={+date.slice(5, 7)} />
         {d.hours === 0 ? <p className="text-slate-400">Chưa có dự báo cho ngày này.</p> : (
           <>
             <p className="text-slate-400">{destName}{d.sunrise ? ` · mặt trời mọc ${d.sunrise}, lặn ${d.sunset}` : ''}</p>
@@ -468,6 +487,65 @@ const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }
           </>
         )}
       </div>
+    </details>
+  );
+};
+
+/** "Tháng X ở đây thường..." trong Tóm tắt ngày: số khí hậu tại đích (đúng điểm, hoặc mốc gần nhất ghi rõ là xấp xỉ). */
+const ClimateLine: React.FC<{ clim: ClimateFile | null | undefined; destKey: string; to: { lat: number; lon: number }; month: number }> = ({ clim, destKey, to, month }) => {
+  if (clim === undefined) return <p className="text-slate-500">Đang tải số khí hậu tháng...</p>;
+  if (clim === null) return <p className="text-slate-500">Không tải được số khí hậu tháng.</p>;
+  const sc = spotClimate(clim, destKey, to);
+  return (
+    <div className="rounded-lg bg-slate-900/60 border border-slate-700 p-2 space-y-1" data-testid="climate-line">
+      <p className="text-slate-200">{sc ? monthSentence(sc.loc.months[month - 1], month) : `Chưa có số khí hậu tháng ${month} gần điểm này (chưa tính hoặc không có mốc trong 30 km).`}</p>
+      {sc && !sc.exact && <p className="text-slate-500">Xấp xỉ: lấy theo mốc khí hậu cách {sc.km.toFixed(0)} km ({sc.loc.elev} m).</p>}
+      <p className="text-slate-300">{seaSentence(clim, destKey, month)}</p>
+      <p className="text-[10px] text-slate-500">Khí hậu: ERA5 {clim.years.from}-{clim.years.to} (Open-Meteo), trung bình theo năm, không phải dự báo. ERA5 làm mượt mưa lớn ở vùng núi nên số ngày mưa to là cận dưới.</p>
+    </div>
+  );
+};
+
+const ClimateRow: React.FC<{ r: RouteClimateRow | null; icon: string; fmt?: (v: number) => string }> = ({ r, icon, fmt }) => r === null ? null : (
+  <li className="flex gap-1.5">
+    <span aria-hidden>{icon}</span>
+    <span>{r.what}: <b className="text-slate-100">{fmt ? fmt(r.value) : r.value} {r.unit}</b> <span className="text-slate-400">- nặng nhất ở km {Math.round(r.km)}{r.elev != null ? `, ${Math.round(r.elev)}m` : ''}{r.locKm > 5 ? ` (mốc cách ${r.locKm.toFixed(0)} km)` : ''}</span></span>
+  </li>
+);
+
+/** Khí hậu tháng dọc tuyến: phán quyết chính khi ngày đi ngoài tầm dự báo; còn lại để thu gọn sau Tóm tắt ngày. */
+const RouteClimateBlock: React.FC<{ plan: RoutePlan; clim: ClimateFile | null | undefined; month: number; far: boolean }> = ({ plan, clim, month, far }) => {
+  const rc = useMemo(() => (clim ? routeClimate(clim, plan.samples, month) : null), [clim, plan, month]);
+  const nYears = clim ? clim.years.to - clim.years.from + 1 : 10;
+  const body = clim === undefined ? <p className="text-slate-400">Đang tải số khí hậu tháng...</p>
+    : clim === null || !rc ? <p className="text-rose-300">Không tải được số khí hậu tháng.</p>
+    : rc.matched === 0 ? <p className="text-slate-300">Tuyến này chưa có mốc khí hậu nào trong 30 km (app mới tính sẵn cho 8 tuyến mẫu và các điểm săn mây).</p>
+    : (
+      <>
+        <ul className="space-y-1">
+          <ClimateRow r={rc.rainMax} icon="🌧️" />
+          <ClimateRow r={rc.d50} icon="⛈️" />
+          <ClimateRow r={rc.r3} icon="⛰️" fmt={v => `${v}/${nYears}`} />
+          <ClimateRow r={rc.retDam} icon="🥶" />
+          <ClimateRow r={rc.frost} icon="🧊" />
+          <ClimateRow r={rc.humid} icon="🌫️" />
+          <ClimateRow r={rc.coldest} icon="🌡️" />
+        </ul>
+        <p className="text-[11px] text-slate-400">Theo {rc.matched}/{rc.total} điểm dọc tuyến có mốc khí hậu trong 30 km{rc.maxLocKm > 5 ? `; mốc xa nhất cách ${rc.maxLocKm.toFixed(0)} km nên là XẤP XỈ` : ''}. Số ngày là trung bình mỗi năm trong tháng {month}, {clim.years.from}-{clim.years.to}.</p>
+        <p className="text-[10px] text-slate-500">Nguồn ERA5/ERA5-Land qua Open-Meteo, hạ theo cao độ từng mốc. Ngưỡng: mưa to ≥ {CTH.R_HARD} mm/ngày, đợt 3 ngày ≥ {CTH.R3_SLIDE} mm (đất bão hoà, dễ sạt lở) theo thang mưa KTTV; rét đậm TB ngày ≤ {CTH.RET_DAM}°C (KTTV); đêm ≤ {CTH.FROST}°C có thể băng giá. "Ẩm suốt ngày" (độ ẩm thấp nhất ≥ {CTH.HUMID_ALLDAY}%) chỉ là chỉ báo thay cho sương mù, chưa kiểm với quan trắc. ERA5 làm mượt mưa lớn ở núi: số ngày mưa to là cận dưới.</p>
+      </>
+    );
+  if (far) return (
+    <div className="rounded-2xl border border-sky-500/50 bg-sky-950/30 p-3 text-xs text-slate-300 space-y-2" data-testid="route-climate">
+      <p className="text-[11px] uppercase tracking-wider font-bold text-sky-200">Khí hậu tháng {month} dọc đường</p>
+      <p className="text-sky-100">Ngày đi quá {FORECAST_DAYS + 1} ngày dự báo, nên đây là tháng {month} THƯỜNG thế nào, không phải dự báo cho hôm đó. Gần ngày đi hãy xem lại để có dự báo thật.</p>
+      {body}
+    </div>
+  );
+  return (
+    <details className="rounded-xl border border-slate-700 bg-slate-900/40" data-testid="route-climate">
+      <summary className="min-h-11 flex items-center px-3 text-xs font-bold text-slate-200 cursor-pointer">📅 Tháng {month} dọc tuyến này thường thế nào (khí hậu {nYears} năm)</summary>
+      <div className="px-3 pb-3 space-y-2 text-[11px] text-slate-300">{body}</div>
     </details>
   );
 };
