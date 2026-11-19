@@ -395,8 +395,8 @@ describe('vòng 7: tuyến chưa tới đích (đích cuối đường mòn)', (
     expect(endGapOf(c, { lat: 21.02, lon: 105.1 })).toBeCloseTo(2.22, 1);
     expect(endGapOf([], { lat: 21, lon: 105 })).toBe(Infinity);
     expect(endGapNote(0.5)).toBeUndefined();
-    expect(endGapNote(0.51)).toMatch(/CHƯA TỚI ĐÍCH.*0\.5 km/);
-    expect(endGapNote(2.32)).toMatch(/2\.3 km/);
+    expect(endGapNote(0.51)).toMatch(/CHƯA TỚI ĐÍCH.*0,5 km/);
+    expect(endGapNote(2.32)).toMatch(/2,3 km.*tại chính điểm đến/);
   });
   it('fetchRoute ghi endGapKm so với ĐÍCH người dùng chọn', async () => {
     const osrm = { code: 'Ok', routes: [{ distance: 10000, duration: 600, geometry: { coordinates: [[105, 21], [105.1, 21]] } }] };

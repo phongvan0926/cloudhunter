@@ -539,7 +539,7 @@ export function endGapOf(coords: LatLon[], dest: LatLon): number {
 }
 export function endGapNote(gapKm: number): string | undefined {
   if (!(gapKm > END_GAP_WARN_KM)) return undefined;
-  return `Tuyến CHƯA TỚI ĐÍCH: đường xe trên bản đồ dừng cách điểm đến ${gapKm.toFixed(1)} km chim bay (đoạn cuối là đường mòn, đường nội bộ hoặc bản đồ chưa có). Thời tiết và độ khó ở đây chỉ tính tới điểm cuối của tuyến; đoạn còn lại tự tìm hiểu.`;
+  return `Tuyến CHƯA TỚI ĐÍCH: đường xe trên bản đồ dừng cách điểm đến ${gapKm.toFixed(1).replace('.', ',')} km chim bay (đoạn cuối là đường mòn, đường nội bộ hoặc bản đồ chưa có). Độ khó dọc đường chỉ tính tới điểm cuối của tuyến, đoạn còn lại tự tìm hiểu; Tóm tắt ngày tại đích lấy dự báo tại chính điểm đến.`;
 }
 
 /** Xe máy: Valhalla, hỏng thì OSRM ô tô kèm ghi chú. Ô tô: OSRM. */
