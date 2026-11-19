@@ -413,12 +413,27 @@ const MEM = new Map<string, { ts: number; data: any }>();
 /** Chỉ dùng khi chạy script (Node): FOSSGIS đòi User-Agent nêu tên ứng dụng. Trình duyệt tự gửi UA + Referer. */
 let EXTRA_HEADERS: Record<string, string> | undefined;
 export function setFetchHeaders(h: Record<string, string>) { EXTRA_HEADERS = h; }
+/** Hạn chờ mỗi lần gọi mạng (phiếu gcc29 vòng 3: một lượt trên Pages từng quay > 90 s). Quá hạn thì báo lỗi rõ, không quay mãi. */
+export const FETCH_TIMEOUT_MS = 30_000;
+/** Lời báo lỗi HTTP dễ hiểu; 429 = dịch vụ miễn phí đang giới hạn lượt gọi (thường theo IP), không phải lỗi app. */
+export function httpErrorText(status: number, host: string): string {
+  if (status === 429) return `${host} đang giới hạn lượt gọi (HTTP 429). Dịch vụ miễn phí này đếm theo mạng của bạn; thử lại sau vài phút.`;
+  if (status >= 500) return `${host} đang lỗi (HTTP ${status}), thử lại sau.`;
+  return `HTTP ${status} từ ${host}`;
+}
 async function getJson(url: string, ttlMs: number): Promise<any> {
   const hit = MEM.get(url);
   if (hit && Date.now() - hit.ts < ttlMs) return hit.data;
+  const host = new URL(url).hostname;
+  const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = ctl ? setTimeout(() => ctl.abort(), FETCH_TIMEOUT_MS) : null;
   let res: Response;
-  try { res = await (EXTRA_HEADERS ? fetch(url, { headers: EXTRA_HEADERS }) : fetch(url)); } catch (e: any) { throw new Error(`Không gọi được ${new URL(url).hostname}: ${e?.message || 'lỗi mạng'}`); }
-  if (!res.ok) throw new Error(`HTTP ${res.status} từ ${new URL(url).hostname}`);
+  try { res = await fetch(url, { ...(EXTRA_HEADERS ? { headers: EXTRA_HEADERS } : {}), ...(ctl ? { signal: ctl.signal } : {}) }); }
+  catch (e: any) {
+    if (e?.name === 'AbortError') throw new Error(`${host} không trả lời sau ${FETCH_TIMEOUT_MS / 1000} giây`);
+    throw new Error(`Không gọi được ${host}: ${e?.message || 'lỗi mạng'}`);
+  } finally { if (timer) clearTimeout(timer); }
+  if (!res.ok) throw new Error(httpErrorText(res.status, host));
   const data = await res.json();
   if (data && !Array.isArray(data) && data.error) throw new Error(`${new URL(url).hostname}: ${data.reason || data.message || 'lỗi'}`);
   MEM.set(url, { ts: Date.now(), data });
@@ -577,13 +592,16 @@ export interface RoutePlan {
  */
 export async function planRoute(
   from: LatLon, to: LatLon, vehicle: Vehicle, speedKmh: number, depart: number | ((durationH: number) => number),
+  onStep?: (step: number, text: string) => void,
 ): Promise<RoutePlan> {
+  onStep?.(1, vehicle === 'motorbike' ? 'Tìm đường xe máy (Valhalla)' : 'Tìm đường ô tô (OSRM)');
   const geom = await fetchRoute(from, to, vehicle);
   const total = geom.cum[geom.cum.length - 1];
   const durationH = geom.distanceKm / speedKmh;
   const departMs = typeof depart === 'function' ? depart(durationH) : depart;
 
   const eKms = elevationKms(total);
+  onStep?.(2, 'Đo cao độ dọc tuyến (Open-Meteo)');
   const elevs = await fetchElevations(eKms.map(k => pointAtKm(geom.coords, geom.cum, k)));
   const stats = elevationStats(eKms, elevs.map(v => (v === null ? NaN : v)));
 
@@ -597,6 +615,7 @@ export async function planRoute(
   wKms.sort((a, b) => a - b);
 
   const base = wKms.map(km => ({ km, pos: pointAtKm(geom.coords, geom.cum, km), elev: elevAt(km) }));
+  onStep?.(3, 'Lấy dự báo dọc tuyến (Open-Meteo)');
   const oms = await fetchRouteWeather(base);
   const samples: RouteSample[] = base.map((b, i) => {
     const eta = etaMs(b.km, total, durationH, departMs);
@@ -609,4 +628,58 @@ export async function planRoute(
     from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, routerH: geom.durationH, router: geom.router, fallbackNote: geom.fallbackNote, cautionNote: geom.cautionNote,
     coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1],
   };
+}
+
+// ---------------------------------------------------------------- bản ghi gọn của một tuyến (bản chụp + tuyến người dùng)
+
+/**
+ * Bản ghi gọn một tuyến đã lập, CÙNG định dạng với `routes[]` trong `data/observations/<D>-routes.json`
+ * (scripts/snapshot-routes.ts), để tuyến người dùng tự lập chấm được bằng cùng cách (docs/cung-duong-kiem-chung.md).
+ * Đủ dữ liệu thô (`samples[].wx`) để chạy lại `assessPoint` khi đổi luật.
+ */
+export function compactRoute(p: RoutePlan) {
+  return {
+    vehicle: p.vehicle, speedKmh: p.speedKmh, router: p.router, fallbackNote: p.fallbackNote ?? null,
+    departVN: new Date(p.departMs + 7 * 3600_000).toISOString().slice(0, 16),
+    distanceKm: Math.round(p.distanceKm * 10) / 10, durationH: Math.round(p.durationH * 100) / 100,
+    maxElev: p.stats?.maxElev ?? null, cautionNote: p.cautionNote ?? null,
+    level: p.summary.level, levelLabel: LEVEL_LABEL[p.summary.level], noDataCount: p.summary.noDataCount,
+    worst: p.summary.worst.map(w => ({ kind: w.kind, level: w.level, km: Math.round(w.km), text: w.text })),
+    samples: p.samples.map(s => ({
+      km: Math.round(s.km), elev: s.elev, hour: s.hourKey, level: s.level,
+      wx: s.wx && { t: s.wx.tempC, rh: s.wx.rh, mm: s.wx.precipMm, pop: s.wx.precipProb, wmo: s.wx.wmo, vis: s.wx.visibilityM, gust: s.wx.gustKmh, r24: s.wx.rain24h, r72: s.wx.rain72h },
+      hz: s.hazards.map(h => `${h.kind}${h.level}`),
+    })),
+  };
+}
+
+// ---------------------------------------------------------------- tuyến người dùng tự lập (chỉ trên máy người dùng)
+
+export const USER_ROUTES_KEY = 'ch-user-routes-v1';
+export const USER_ROUTES_MAX = 50;
+/** Làm tròn toạ độ ~1 km: tuyến chỉ nằm trên máy người dùng, nhưng tệp xuất có thể được gửi đi nên không giữ vị trí chính xác. */
+const round2 = (x: number) => Math.round(x * 100) / 100;
+export function userRouteRecord(p: RoutePlan, fromName: string, toKey: string, savedAt = Date.now()) {
+  return {
+    savedAtVN: new Date(savedAt + 7 * 3600_000).toISOString().slice(0, 16), rulesVersion: ROUTE_RULES_VERSION,
+    fromName, from: { lat: round2(p.from.lat), lon: round2(p.from.lon) }, to: toKey, ...compactRoute(p),
+  };
+}
+export type UserRoute = ReturnType<typeof userRouteRecord>;
+export function loadUserRoutes(store: Pick<Storage, 'getItem'> = localStorage): UserRoute[] {
+  try { const v = JSON.parse(store.getItem(USER_ROUTES_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+/** Thêm tuyến mới nhất lên đầu, giữ tối đa USER_ROUTES_MAX. Ném lỗi nếu bộ nhớ đầy (người gọi tự bỏ qua). */
+export function saveUserRoute(p: RoutePlan, fromName: string, toKey: string, store: Pick<Storage, 'getItem' | 'setItem'> = localStorage, savedAt = Date.now()) {
+  const list = [userRouteRecord(p, fromName, toKey, savedAt), ...loadUserRoutes(store)].slice(0, USER_ROUTES_MAX);
+  store.setItem(USER_ROUTES_KEY, JSON.stringify(list));
+  return list.length;
+}
+/** Nội dung tệp xuất: kèm ghi chú cách dùng, để ai nhận tệp cũng hiểu đây là phán quyết TRƯỚC chuyến đi, không phải sự thật. */
+export function exportUserRoutesJson(list: UserRoute[], exportedAt = Date.now()) {
+  return JSON.stringify({
+    app: 'CloudHunter', kind: 'user-routes', exportedAtVN: new Date(exportedAt + 7 * 3600_000).toISOString().slice(0, 16),
+    note: 'Các tuyến bạn đã lập trong app và phán quyết độ khó app đưa ra TRƯỚC chuyến đi. Kèm báo cáo chuyến đi thật (mẫu trong docs/cung-duong-kiem-chung.md mục 3) thì chấm được luật độ khó.',
+    routes: list,
+  }, null, 1);
 }

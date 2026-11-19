@@ -18,7 +18,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { vnTodayStr, addDaysStr, computeSunTimes } from '../services/weatherService';
 import {
-  planRoute, setFetchHeaders, ROUTE_RULES_VERSION, DEFAULT_SPEED_KMH, LEVEL_LABEL, type LatLon, type Vehicle,
+  planRoute, compactRoute, setFetchHeaders, ROUTE_RULES_VERSION, DEFAULT_SPEED_KMH, LEVEL_LABEL, type LatLon, type Vehicle,
 } from '../services/routeService';
 
 const DATE = process.argv[2] || addDaysStr(vnTodayStr(), 1);
@@ -30,6 +30,8 @@ export const ORIGINS: Record<string, { name: string } & LatLon> = {
   HN: { name: 'Hà Nội (Hồ Gươm)', lat: 21.0285, lon: 105.8542 },
   YB: { name: 'Yên Bái (TP)', lat: 21.7229, lon: 104.9113 },
   HUE: { name: 'Huế (TP)', lat: 16.4637, lon: 107.5909 },
+  // Thêm 19/11/2026 (gcc29 vòng 3): node OSM place=city "Sa Pa" (qua Photon), để ghép nhãn FB đèo Ô Quy Hồ.
+  SAPA: { name: 'Sa Pa (TT)', lat: 22.3334, lon: 103.8427 },
 };
 /** Bộ tuyến cố định: đổi bộ này thì các ngày trước và sau không còn so được với nhau, nên chỉ THÊM, đừng sửa. */
 export const ROUTES: { id: string; from: keyof typeof ORIGINS; to: string; vehicle: Vehicle }[] = [
@@ -40,6 +42,8 @@ export const ROUTES: { id: string; from: keyof typeof ORIGINS; to: string; vehic
   { id: 'HN-BA_VI-moto', from: 'HN', to: 'BA_VI', vehicle: 'motorbike' },
   { id: 'HN-SAPA-car', from: 'HN', to: 'SAPA_HAM_RONG', vehicle: 'car' },
   { id: 'HUE-BACH_MA-car', from: 'HUE', to: 'BACH_MA', vehicle: 'car' },
+  // Thêm 19/11/2026: QL4D Sa Pa -> đèo Ô Quy Hồ, có nhãn FB hằng ngày (Ô Quy Hồ / Cầu Kính Rồng Mây) để chấm.
+  { id: 'SAPA-O_QUY_HO-moto', from: 'SAPA', to: 'DEO_O_QUY_HO', vehicle: 'motorbike' },
 ];
 const GAP_MS = 1500;   // FOSSGIS: tối đa 1 yêu cầu/giây; mỗi tuyến gọi Valhalla đúng 1 lần
 
@@ -60,19 +64,12 @@ async function main(): Promise<number> {
         try { p = await planRoute(o, { lat: d.lat, lon: d.lon }, r.vehicle, DEFAULT_SPEED_KMH[r.vehicle], h => arrive - h * 3600_000); break; }
         catch (e: any) { if (t >= 2 || !/429/.test(e.message)) throw e; console.warn(`${r.id}: ${e.message}, chờ 65 s`); await new Promise(res => setTimeout(res, 65_000)); }
       }
-      out.push({
-        id: r.id, from: o.name, to: r.to, toName: d.name, vehicle: r.vehicle, speedKmh: p.speedKmh,
-        router: p.router, fallbackNote: p.fallbackNote ?? null,
-        departVN: new Date(p.departMs + 7 * 3600_000).toISOString().slice(0, 16), sunrise: sr,
-        distanceKm: Math.round(p.distanceKm * 10) / 10, durationH: Math.round(p.durationH * 100) / 100,
-        maxElev: p.stats?.maxElev ?? null, cautionNote: p.cautionNote ?? null,
-        level: p.summary.level, levelLabel: LEVEL_LABEL[p.summary.level], noDataCount: p.summary.noDataCount,
-        worst: p.summary.worst.map(w => ({ kind: w.kind, level: w.level, km: Math.round(w.km), text: w.text })),
-        samples: p.samples.map(s => ({
-          km: Math.round(s.km), elev: s.elev, hour: s.hourKey, level: s.level,
-          wx: s.wx && { t: s.wx.tempC, rh: s.wx.rh, mm: s.wx.precipMm, pop: s.wx.precipProb, wmo: s.wx.wmo, vis: s.wx.visibilityM, gust: s.wx.gustKmh, r24: s.wx.rain24h, r72: s.wx.rain72h },
-          hz: s.hazards.map(h => `${h.kind}${h.level}`),
-        })),
+      const c = compactRoute(p);
+      out.push({   // thứ tự khoá giữ như bản chụp cũ: id, from, to, toName, rồi phần gọn dùng chung
+        id: r.id, from: o.name, to: r.to, toName: d.name, vehicle: c.vehicle, speedKmh: c.speedKmh,
+        router: c.router, fallbackNote: c.fallbackNote, departVN: c.departVN, sunrise: sr,
+        distanceKm: c.distanceKm, durationH: c.durationH, maxElev: c.maxElev, cautionNote: c.cautionNote,
+        level: c.level, levelLabel: c.levelLabel, noDataCount: c.noDataCount, worst: c.worst, samples: c.samples,
       });
       console.log(`${r.id}: ${p.router} ${p.distanceKm.toFixed(0)} km, ${LEVEL_LABEL[p.summary.level]}, thiếu dự báo ${p.summary.noDataCount}/${p.samples.length}`);
     } catch (e: any) {

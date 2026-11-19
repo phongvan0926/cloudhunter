@@ -367,6 +367,13 @@ const App: React.FC = () => {
         
         <footer className="mt-16 text-center text-slate-500 text-sm">
           <p>© 2026 CloudHunter AI. Dữ liệu mang tính chất tham khảo. Luôn kiểm tra thời tiết thực tế.</p>
+          {/* Ghi công + kênh liên hệ tối thiểu theo điều khoản FOSSGIS/OSM (phiếu gcc29 vòng 3; chưa có email liên hệ) */}
+          <p className="mt-2 flex flex-wrap justify-center gap-x-3" data-testid="footer-credits">
+            <span>Bản đồ, tìm đường: © <a className="min-h-11 inline-flex items-center underline" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors</span>
+            <a className="min-h-11 inline-flex items-center underline" href="https://www.fossgis.de/" target="_blank" rel="noopener noreferrer">FOSSGIS Valhalla</a>
+            <a className="min-h-11 inline-flex items-center underline" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Thời tiết: Open-Meteo</a>
+            <a className="min-h-11 inline-flex items-center underline" href="https://github.com/phongvan0926/cloudhunter/issues" target="_blank" rel="noopener noreferrer">Báo lỗi / liên hệ (GitHub Issues)</a>
+          </p>
         </footer>
       </div>
 

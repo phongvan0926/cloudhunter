@@ -4,7 +4,7 @@ import { computeSunTimes, vnTodayStr, addDaysStr } from '../services/weatherServ
 import {
   planRoute, geocodeVN, DEFAULT_SPEED_KMH, SPEED_CHOICES, VEHICLE_LABEL, LEVEL_LABEL, TH,
   summarizeDay, type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
-  ROUTER_LABEL, dawnHours,
+  ROUTER_LABEL, dawnHours, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_KEY, USER_ROUTES_MAX,
 } from '../services/routeService';
 
 interface Props {
@@ -55,6 +55,21 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [savedCount, setSavedCount] = useState<number>(() => { try { return loadUserRoutes().length; } catch { return 0; } });
+
+  const exportRoutes = () => {
+    const blob = new Blob([exportUserRoutesJson(loadUserRoutes())], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `cloudhunter-tuyen-da-lap-${vnTodayStr()}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  const clearRoutes = () => {
+    if (!window.confirm(`Xoá ${savedCount} tuyến đã lập khỏi máy này? Không lấy lại được.`)) return;
+    try { localStorage.removeItem(USER_ROUTES_KEY); } catch { /* bỏ qua */ }
+    setSavedCount(0);
+  };
 
   const dest = MOUNTAIN_DB[destKey];
 
@@ -80,7 +95,14 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
 
   const run = async () => {
     if (!from || !dest) return;
-    setError(null); setNote(null); setPlan(null); setBusy('Đang tìm đường, đo cao độ và lấy dự báo dọc tuyến...');
+    setError(null); setNote(null); setPlan(null);
+    // Tiến độ theo bước + số giây đã chờ (phiếu gcc29 vòng 3): mỗi lần gọi mạng có hạn 30 s (FETCH_TIMEOUT_MS),
+    // nên người dùng luôn thấy đang kẹt ở bước nào, không quay mãi.
+    const t0 = Date.now();
+    let step = 'Bước 1/3: Tìm đường';
+    const show = () => setBusy(`${step}... ${Math.round((Date.now() - t0) / 1000)} giây`);
+    show();
+    const tick = setInterval(show, 1000);
     try {
       const now = Date.now();
       let depart: number | ((h: number) => number);
@@ -104,11 +126,13 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
           return d;
         };
       }
-      const p = await planRoute({ lat: from.lat, lon: from.lon }, { lat: dest.lat, lon: dest.lon }, vehicle, speed, depart);
+      const p = await planRoute({ lat: from.lat, lon: from.lon }, { lat: dest.lat, lon: dest.lon }, vehicle, speed, depart,
+        (n, text) => { step = `Bước ${n}/3: ${text}`; show(); });
       setPlan(p); setNote(lateNote);
+      try { saveUserRoute(p, from.name, destKey); setSavedCount(loadUserRoutes().length); } catch { /* đầy bộ nhớ: bỏ qua, không chặn kết quả */ }
     } catch (e: any) {
-      setError(`Không lập được cung đường: ${e.message}`);
-    } finally { setBusy(null); }
+      setError(`Không lập được cung đường (${step.toLowerCase()}): ${e.message}`);
+    } finally { clearInterval(tick); setBusy(null); }
   };
 
   const arriveMs = plan ? plan.departMs + plan.durationH * 3600_000 : 0;
@@ -303,6 +327,19 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
             </div>
           </details>
         </div>
+      )}
+
+      {savedCount > 0 && (
+        <details className="mt-3 rounded-xl bg-slate-900/40 border border-slate-700" data-testid="user-routes">
+          <summary className="min-h-11 flex items-center px-3 text-xs font-bold text-slate-200 cursor-pointer">Tuyến bạn đã lập ({savedCount})</summary>
+          <div className="px-3 pb-3 text-[11px] text-slate-400 leading-relaxed space-y-2">
+            <p>App tự lưu {USER_ROUTES_MAX} tuyến gần nhất NGAY TRÊN MÁY NÀY (không gửi đi đâu), kèm phán quyết độ khó lúc lập. Đi xong, gửi tệp này cùng vài dòng tả đường thật (đoạn nào mưa, sương, trơn, sạt, lạnh) qua GitHub Issues để giúp chấm lại ngưỡng. Vị trí xuất phát đã làm tròn ~1 km.</p>
+            <div className="flex gap-2">
+              <button onClick={exportRoutes} aria-label="Tải tệp JSON các tuyến đã lập" className="min-h-11 flex-1 rounded-xl bg-slate-800 border border-slate-700 text-xs text-slate-200 hover:bg-slate-700">Tải JSON</button>
+              <button onClick={clearRoutes} aria-label="Xoá các tuyến đã lập khỏi máy này" className="min-h-11 px-3 rounded-xl bg-slate-800 border border-rose-800/60 text-xs text-rose-300 hover:bg-slate-700">Xoá</button>
+            </div>
+          </div>
+        </details>
       )}
     </div>
   );

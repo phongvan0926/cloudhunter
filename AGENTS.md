@@ -91,8 +91,13 @@ Vòng 2 (19/11/2026): xe máy -> Valhalla FOSSGIS (`fetchValhallaMoto`, use_high
 điều khoản: ghi công OSM + link fixthemap luôn hiện, <= 1 yêu cầu/giây, script Node phải `setFetchHeaders` UA nêu tên app), lỗi thì OSRM
 + `fallbackNote` "TUYẾN Ô TÔ"; có thu phí -> `cautionNote`. `fetchRoadDistances` = OSRM table (<= 99 đích/lần, cache 24h) cho km đường
 trong TonightRanking. `dawnHours` = bảng 4-9h tại đích dùng luật cung đường, KHÔNG phải điểm biển mây theo giờ (engine chỉ có theo ngày,
-đừng bịa). Đổi luật `assessPoint`/`TH` thì tăng `ROUTE_RULES_VERSION`. `scripts/snapshot-routes.ts` chụp 7 tuyến cố định mỗi tối (bước phụ
+đừng bịa). Đổi luật `assessPoint`/`TH` thì tăng `ROUTE_RULES_VERSION`. `scripts/snapshot-routes.ts` chụp 8 tuyến cố định (thứ 8 = Sa Pa - đèo Ô Quy Hồ, 19/11, để ghép nhãn FB) mỗi tối (bước phụ
 trong job snapshot) vào `data/observations/<D>-routes.json`; bộ tuyến chỉ THÊM không sửa; cách chấm: `docs/cung-duong-kiem-chung.md`.
+Vòng 3 (19/11/2026): `planRoute(..., onStep)` báo 3 bước cho thanh tiến độ; `getJson` trần `FETCH_TIMEOUT_MS` 30 s (AbortController),
+lỗi HTTP qua `httpErrorText` (429 nói rõ là giới hạn theo mạng). `compactRoute` = dạng gọn dùng chung cho bản chụp và tuyến người dùng
+(`saveUserRoute`/`loadUserRoutes`/`exportUserRoutesJson`, key `ch-user-routes-v1`, tối đa 50, làm tròn 0,01°, chỉ trong máy).
+Chân trang `footer-credits`: ghi công OSM/FOSSGIS/Open-Meteo + GitHub Issues (chưa có email liên hệ; không tự tạo).
+Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng luật chữ, không LLM; tóm tắt số ở `docs/cung-duong-kiem-chung.md` mục 2.
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
 
@@ -173,7 +178,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 202 test (engine + lịch sử + capWatch + cung đường + đối chứng skyradar...)
+npm test       # vitest — 207 test (engine + lịch sử + capWatch + cung đường + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

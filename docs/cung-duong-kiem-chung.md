@@ -9,8 +9,9 @@ gom sự thật và cách chấm khi đã đủ.
 
 `scripts/snapshot-routes.ts`, chạy mỗi tối trong job `snapshot` của `verify-loop.yml` (bước phụ,
 lỗi không chặn bản chụp chính), ghi `data/observations/<D>-routes.json`:
-- 7 tuyến cố định (Hà Nội - Tà Xùa / Pù Luông / Hang Kia / Ba Vì bằng xe máy, Yên Bái - Phình Hồ xe máy,
-  Hà Nội - Sa Pa và Huế - Bạch Mã ô tô). Bộ tuyến chỉ được THÊM, không sửa, để các ngày so được với nhau.
+- 8 tuyến cố định (Hà Nội - Tà Xùa / Pù Luông / Hang Kia / Ba Vì bằng xe máy, Yên Bái - Phình Hồ xe máy,
+  Hà Nội - Sa Pa và Huế - Bạch Mã ô tô; từ 19/11/2026 thêm Sa Pa - đèo Ô Quy Hồ xe máy, vì có nhãn Facebook
+  hằng ngày cho đoạn QL4D này). Bộ tuyến chỉ được THÊM, không sửa, để các ngày so được với nhau.
 - Giờ đi theo đúng luật nút "Tới nơi trước bình minh" của app: tới nơi = bình minh ước - 30 phút, tốc độ
   trung bình mặc định (xe máy 40, ô tô 50 km/h).
 - Mỗi tuyến: máy tìm đường đã dùng (`router`, có `fallbackNote` nếu xe máy phải về tuyến ô tô), km, giờ đi,
@@ -20,8 +21,10 @@ lỗi không chặn bản chụp chính), ghi `data/observations/<D>-routes.json
   hoặc chấm lại bằng `samples[].wx` đã lưu (dữ liệu thô đủ để chạy lại `assessPoint`).
 - Đã có tệp thì không đè. Không chụp bù ngày đã qua (Open-Meteo viết đè quá khứ).
 
-Mở rộng sau (chưa làm): ghi cả các tuyến người dùng tự lập trong app (localStorage, có nút xuất), để có
-tuyến thật mà người đi hay chọn.
+Tuyến người dùng tự lập (19/11/2026): mỗi lần lập tuyến thành công, app lưu bản gọn (cùng dạng bản chụp,
+`compactRoute`) vào localStorage `ch-user-routes-v1`, tối đa 50 tuyến mới nhất, toạ độ xuất phát làm tròn
+0,01 độ (~1 km). Khối "Tuyến bạn đã lập" có nút Tải JSON và Xoá. Chỉ nằm trên máy người dùng, app không
+gửi đi đâu; người dùng muốn góp thì tự gửi tệp JSON (kèm báo cáo chuyến đi theo mục 3).
 
 ## 2. Nguồn sự thật đề xuất (thứ bậc giống biển mây: người đi > Facebook > dữ liệu trạm)
 
@@ -30,7 +33,15 @@ tuyến thật mà người đi hay chọn.
 2. **Bài phượt trên Facebook**, dùng lại bộ thu FB sẵn có (cùng nhóm đang gắn nhãn biển mây). Bài review
    chuyến kiểu "đi Tà Xùa hôm qua, đèo mù đặc, đường trơn". Cần thêm bộ gắn nhãn riêng cho tuyến (ngày đi,
    đoạn đường, mưa/sương/trơn/sạt/lạnh, mức "đi bình thường / phải chậm / phải dừng / quay về"), cùng luật
-   độ tin chốt trước như `FB_MIN_CONFIDENCE`. Hạn chế: người ta hay đăng khi đường khó, ít khi đăng
+   độ tin chốt trước như `FB_MIN_CONFIDENCE`. **Đã có bản đầu (19/11/2026)** trong bộ thu FB (ngoài repo):
+   luật chữ cố định, không LLM, chỉ đọc bài đã thu; mỗi nhãn có `date`, `observedByVN` (giờ đăng), `segments`
+   (`place` thay cho km, `kinds`, `kindsAbsent`, `hard` 0-3 hoặc null khi bài không nói nặng nhẹ),
+   `confidence` (0.8 bài cập nhật theo mẫu, 0.6 chú thích thường hoặc nói chung cả khu Tà Xùa, 0.3 khi ngày
+   trong chữ khác ngày đăng), dùng được khi >= 0.6. Chạy thử trên 242 bài: 77 nhãn dùng được trên 53 cặp
+   (nguồn, ngày), gần hết là đoạn Ô Quy Hồ / Cầu Kính Rồng Mây; fog có 6 / vắng 61, rain có 4 / vắng 67;
+   chưa bài nào nói trơn hay sạt (0 nhãn `hard >= 2`). Lưu ý khi chấm: giờ đăng thường 7-15h, còn bản chụp
+   tuyến là giờ đi trước bình minh, nên luật "giờ lệch <= 3 giờ" ở mục 4 loại phần lớn cặp; nhãn FB dùng
+   được nhất cho chấm `wx` theo giờ đăng, không cho mức chung của chuyến đi đêm. Hạn chế: người ta hay đăng khi đường khó, ít khi đăng
    "đường bình thường", nên mẫu âm tính hiếm; nhóm hỏi đường ("ai vừa đi Tà Xùa đường thế nào") cho mẫu
    âm tính tốt hơn.
 3. **Tin sạt lở / cấm đường** của báo địa phương, thông báo của Sở GTVT, Cổng TTĐT tỉnh: chỉ xác nhận ca

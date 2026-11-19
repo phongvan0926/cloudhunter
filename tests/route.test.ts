@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   haversineKm, cumulativeKm, pointAtKm, evenKms, elevationKms, weatherKms, elevationStats, etaMs, vnHourKey,
   extractPointWx, assessPoint, maxLevel, summarizeRoute, summarizeDay, cloudText, TH, ELEV_MAX_POINTS, decodePolyline6, fetchRoute, parseOsrmTable, dawnHours,
+  httpErrorText, FETCH_TIMEOUT_MS, compactRoute, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_MAX, ROUTE_RULES_VERSION,
   type PointWx, type RouteSample,
 } from '../services/routeService';
 
@@ -323,5 +324,50 @@ describe('mã thời tiết sương mù (route-1.1)', () => {
   });
   it('tầm nhìn < 200 m vẫn thắng (mức 3), không bị cờ mã thời tiết đè', () => {
     expect(assessPoint({ ...base, visibilityM: 100 }, 500).find(x => x.kind === 'fog')?.level).toBe(3);
+  });
+});
+
+describe('vòng 3: hạn chờ, lời báo 429, tuyến người dùng tự lập', () => {
+  afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
+  it('429 nói rõ là dịch vụ đang giới hạn lượt, không chỉ "HTTP 429"', () => {
+    expect(httpErrorText(429, 'api.open-meteo.com')).toMatch(/giới hạn lượt gọi.*thử lại sau vài phút/);
+    expect(httpErrorText(503, 'x')).toMatch(/đang lỗi/);
+  });
+  it('máy chủ treo thì báo lỗi sau FETCH_TIMEOUT_MS, không quay mãi', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('fetch', vi.fn((_u: string, init?: RequestInit) => new Promise((_res, rej) => {
+      init?.signal?.addEventListener('abort', () => rej(Object.assign(new Error('aborted'), { name: 'AbortError' })));
+    })));
+    const p = fetchRoute({ lat: 21.011, lon: 105.011 }, { lat: 21.2, lon: 105.2 }, 'car');
+    const caught = p.catch(e => e);
+    await vi.advanceTimersByTimeAsync(FETCH_TIMEOUT_MS + 10);
+    expect(String((await caught).message)).toMatch(/không trả lời sau 30 giây/);
+  });
+  const plan = {
+    from: { lat: 21.028512, lon: 105.854234 }, to: { lat: 21.3, lon: 104.5 }, vehicle: 'motorbike', speedKmh: 40,
+    departMs: Date.parse('2026-11-22T00:30:00+07:00'), distanceKm: 203.44, durationH: 5.0861, routerH: 4, router: 'valhalla-motorcycle',
+    coords: [], elevKms: [], elevs: [], stats: { maxElev: 1800 },
+    samples: [{ km: 10.4, elev: 20, hourKey: '2026-11-22T01:00', level: 2, wx: w({ visibilityM: 300 }), hazards: [{ kind: 'fog', level: 2, text: 'sương' }] }],
+    summary: { level: 2, worst: [{ kind: 'fog', level: 2, km: 10.4, text: 'sương' }], noDataCount: 0 },
+  } as any;
+  it('compactRoute cùng định dạng bản chụp tuyến (giờ VN, làm tròn, có wx thô và cờ hz)', () => {
+    const c = compactRoute(plan);
+    expect(c.departVN).toBe('2026-11-22T00:30');
+    expect(c.distanceKm).toBe(203.4);
+    expect(c.samples[0]).toMatchObject({ km: 10, hour: '2026-11-22T01:00', hz: ['fog2'], wx: { vis: 300 } });
+  });
+  it('lưu tuyến: mới nhất lên đầu, tối đa USER_ROUTES_MAX, toạ độ xuất phát làm tròn ~1 km', () => {
+    const m = new Map<string, string>();
+    const store = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => { m.set(k, v); } };
+    for (let i = 0; i < USER_ROUTES_MAX + 3; i++) saveUserRoute(plan, `Nơi ${i}`, 'TA_XUA_SON_LA', store, Date.parse('2026-11-19T03:00:00Z') + i * 60_000);
+    const list = loadUserRoutes(store);
+    expect(list).toHaveLength(USER_ROUTES_MAX);
+    expect(list[0].fromName).toBe(`Nơi ${USER_ROUTES_MAX + 2}`);
+    expect(list[0].from).toEqual({ lat: 21.03, lon: 105.85 });
+    expect(list[0].rulesVersion).toBe(ROUTE_RULES_VERSION);
+    expect(JSON.parse(exportUserRoutesJson(list)).routes).toHaveLength(USER_ROUTES_MAX);
+  });
+  it('dữ liệu hỏng trong localStorage thì trả rỗng, không vỡ app', () => {
+    expect(loadUserRoutes({ getItem: () => '{hỏng' })).toEqual([]);
   });
 });
