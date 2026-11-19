@@ -938,5 +938,16 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong chuyển bài Facebook (Lò Minh Tươi, nhóm Hali TH - Nét Đẹp Bản Làng, đăng ~7h trước lúc 14:58, 'cập nhật ngày 17/11/2026'): biển mây dày phủ thung lũng, các dải núi nhô lên; anh xác nhận là Chiềng Công. Giờ chụp không rõ, ánh sáng thấp nên ghi DAWN theo quy ước. Ngày thứ hai liên tiếp có biển mây tại điểm này (16/11 cũng có). Dự báo app (bản chụp 01:23 17/11): STATIC 30, đồng thuận 67%, ΔH +302m, ĐÁNG ĐI = đúng (GFS STATIC 30, ICON STATIC 59, UKMO CLEAR 26)."
+  },
+  {
+    "id": "2026-11-19-ta-xua",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "spotKey": "TA_XUA_SON_LA",
+    "date": "2026-11-19",
+    "reportedAt": "2026-11-20T00:20:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (phiếu g9214, 20/11): Tà Xùa 19/11 có biển mây từ sáng đến tận giữa trưa; hôm trước 18/11 gió mùa về, mưa diện rộng, nhiệt độ giảm nhiều; anh nói đã có ngày tương tự trước đó. Chữ, không ảnh/giờ cụ thể, ghi DAWN theo quy ước. Dự báo app (bản chụp 18/11 19:30 VN): FOG 78, đồng thuận 100% (cả ba mô hình FOG), mặt mây 1.570m, ΔH +230m, KHÔNG khuyên đi = BỎ SÓT. Vệ tinh 19/11: BLOCKED_ABOVE (mây cao 7,7-11 km, emiss 0,3-0,8), không chấm được."
   }
 ]
