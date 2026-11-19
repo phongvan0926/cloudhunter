@@ -6,6 +6,7 @@ import {
   summarizeDay, type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
   ROUTER_LABEL, dawnHours, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_KEY, USER_ROUTES_MAX,
 } from '../services/routeService';
+import { fetchStability, assessStability, STAB_LABEL, STH, RUN_LABEL, STABILITY_MODEL_LABEL, type DayStability, type StabVerdict, type Indicator } from '../services/stabilityService';
 import { loadClimate, routeClimate, spotClimate, monthSentence, seaSentence, CTH, type ClimateFile, type RouteClimateRow } from '../services/climateService';
 
 interface Props {
@@ -285,6 +286,8 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
             <a className="min-h-11 inline-flex items-center underline" href="https://openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">sửa bản đồ</a>
           </p>
 
+          <p className="text-[11px] text-slate-400" data-testid="route-fetched">🕒 Dự báo tải lúc <b className="text-slate-200">{fmtHM(plan.fetchedAt)}</b> giờ VN, ngày {fmtVN(plan.fetchedAt).split(' ').pop()} (Open-Meteo, lưu tạm 30 phút; lập lại sau đó sẽ tải mới).</p>
+
           {note && <p className="text-[11px] text-sky-200 bg-sky-950/30 border border-sky-600/30 rounded-xl p-2.5">{note}</p>}
 
           <div className="grid grid-cols-2 gap-2 text-xs">
@@ -299,7 +302,9 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
 
           <ElevationProfile plan={plan} />
 
+          <p className="text-[11px] text-slate-400" data-testid="fetched-at">Dự báo tải lúc {fmtVN(plan.fetchedAt)} (Open-Meteo cập nhật vài lần mỗi ngày; để quá nửa ngày thì nên bấm xem lại).</p>
           <DayBrief plan={plan} destName={dest.name} destKey={destKey} arriveMs={arriveMs} clim={clim} />
+          {!far && <ForecastStability plan={plan} arriveMs={arriveMs} />}
           {!far && <RouteClimateBlock plan={plan} clim={clim} month={tripMonth} far={false} />}
 
           <div className="flex flex-col gap-2">
@@ -412,6 +417,80 @@ const ElevationProfile: React.FC<{ plan: RoutePlan }> = ({ plan }) => {
 };
 
 const PART_ICON: Record<string, string> = { 'quang': '☀️', 'ít mây': '🌤️', 'nhiều mây': '⛅', 'âm u': '☁️', 'không rõ': '❔' };
+
+const fmtHM = (ms: number) => new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(ms));
+const STAB_CLS: Record<StabVerdict, string> = {
+  STABLE: 'text-emerald-300', SLIGHT: 'text-amber-300', SHIFTING: 'text-orange-300', NO_DATA: 'text-slate-500',
+};
+const StabCell: React.FC<{ ind: Indicator }> = ({ ind }) => (
+  <td className="py-1.5 pr-2 align-top">
+    <span className={`font-bold ${STAB_CLS[ind.verdict]}`}>{STAB_LABEL[ind.verdict]}</span>
+    {ind.usable > 0 && <span className="block text-slate-500">{ind.changed}/{ind.usable} mô hình đổi lớp</span>}
+  </td>
+);
+
+/**
+ * Độ ổn định dự báo tại đích (phiếu gcc29 vòng 5): so lần chạy mới nhất với lần chạy cũ hơn ~1 và ~2 ngày của 4 mô hình.
+ * Chỉ tải khi người dùng mở khối (1 lần gọi Previous Runs API, đệm 60 phút). Không tham gia điểm/trạng thái/đáng đi.
+ */
+const ForecastStability: React.FC<{ plan: RoutePlan; arriveMs: number }> = ({ plan, arriveMs }) => {
+  const [res, setRes] = useState<{ days: DayStability[]; fetchedAt: number; missingModels: string[] } | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const arriveDate = vnDateOf(arriveMs);
+  const today = vnTodayStr();
+  const dates = Array.from({ length: FORECAST_DAYS + 1 }, (_, i) => addDaysStr(today, i));
+  const dm = (x: string) => `${x.slice(8, 10)}/${x.slice(5, 7)}`;
+  useEffect(() => { setRes(null); setErr(null); }, [plan]);
+  const load = () => {
+    if (res || loading) return;
+    setLoading(true); setErr(null);
+    fetchStability(plan.to.lat, plan.to.lon, plan.elevs[plan.elevs.length - 1] ?? null)
+      .then(({ om, fetchedAt, missingModels }) => setRes({ days: assessStability(om, dates, fetchedAt), fetchedAt, missingModels }))
+      .catch(e => setErr(`Không tải được các lần chạy cũ: ${e.message}`))
+      .finally(() => setLoading(false));
+  };
+  const arr = res?.days.find(d => d.date === arriveDate);
+  const fmtV = (v: number | null, unit: string) => (v === null ? '-' : `${String(v).replace('.', ',')}${unit}`);
+  return (
+    <details className="rounded-xl border border-slate-700 bg-slate-900/40" data-testid="forecast-stability"
+      onToggle={e => { if ((e.currentTarget as HTMLDetailsElement).open) load(); }}>
+      <summary className="min-h-11 flex items-center px-3 text-xs font-bold text-slate-200 cursor-pointer">🔁 Dự báo tại đích có đang đổi không? (so 3 lần chạy)</summary>
+      <div className="px-3 pb-3 space-y-2 text-[11px] text-slate-300">
+        {loading && <p className="text-cyan-300" role="status">Đang tải các lần chạy cũ (Open-Meteo Previous Runs)...</p>}
+        {err && <p className="text-rose-300" role="alert">{err}</p>}
+        {res && (
+          <>
+            {res.missingModels.length > 0 && <p className="text-amber-200">⚠️ Không tải được {res.missingModels.map(m => STABILITY_MODEL_LABEL[m]).join(', ')}; bảng dưới chỉ tính các mô hình còn lại.</p>}
+            <table className="w-full text-left" data-testid="stability-table">
+              <thead><tr className="text-slate-400"><th className="py-1 pr-2 font-normal">Ngày</th><th className="py-1 pr-2 font-normal">Mưa cả ngày</th><th className="py-1 font-normal">Tổng mây 5-7h</th></tr></thead>
+              <tbody>
+                {res.days.map(d => (
+                  <tr key={d.date} className={`border-t border-slate-800 ${d.date === arriveDate ? 'bg-cyan-500/10' : ''}`}>
+                    <td className="py-1.5 pr-2 align-top text-slate-200">{dm(d.date)}{d.date === arriveDate && <span className="block text-cyan-300">ngày đến</span>}</td>
+                    <StabCell ind={d.rain} />
+                    <StabCell ind={d.dawnCloud} />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {arr && (arr.rain.usable > 0 || arr.dawnCloud.usable > 0) && (
+              <div data-testid="stability-models">
+                <p className="text-slate-400">Ngày đến {dm(arriveDate)}, từng mô hình ({RUN_LABEL.join(' / ')}):</p>
+                <ul className="mt-1 space-y-0.5">
+                  {arr.rain.models.map((m, i) => (
+                    <li key={m.model}><b className="text-slate-200">{STABILITY_MODEL_LABEL[m.model]}</b>: mưa {m.values.map(v => fmtV(v, ' mm')).join(' / ')}; mây 5-7h {arr.dawnCloud.models[i].values.map(v => fmtV(v, '%')).join(' / ')}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-[11px] text-slate-500">Cách tính: với mỗi mô hình (ECMWF, GFS, ICON, UKMO) lấy lần chạy mới nhất và lần chạy cũ hơn khoảng 1 ngày, 2 ngày cho CÙNG giờ đó, xếp vào lớp. Mưa: dưới {STH.WET_DAY_MM} mm là khô (ngưỡng "ngày có mưa" WMO/ETCCDI), {STH.RAIN_EDGES[1]} và {STH.RAIN_EDGES[2]} mm theo thang mưa KTTV. Mây: tổng mây (không phải biển mây) theo okta WMO, ≤ 2 okta quang, ≥ 6 okta gần kín. Luật gộp là QUY ƯỚC CỦA APP: không mô hình nào đổi lớp thì ổn định; từ nửa số mô hình trở lên đổi lớp thì đang dao động; còn lại hơi dao động. Giá trị sát ranh giới lớp đổi chút ít cũng tính là đổi lớp. Ngày càng xa càng ít lần chạy cũ để so (Open-Meteo chỉ giữ tới 7 ngày trước giờ dự báo). Đang dao động nghĩa là nên chờ xem thêm trước khi chốt đi. Tải lúc {fmtHM(res.fetchedAt)} giờ VN.</p>
+          </>
+        )}
+      </div>
+    </details>
+  );
+};
 
 /** Tóm tắt ngày tại điểm đến: dùng lại dự báo đã tải cho điểm đích (không gọi thêm API). */
 const DayBrief: React.FC<{ plan: RoutePlan; destName: string; destKey: string; arriveMs: number; clim: ClimateFile | null | undefined }> = ({ plan, destName, destKey, arriveMs, clim }) => {

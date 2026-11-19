@@ -106,6 +106,7 @@ Workflow `climate.yml` (vòng 5): chạy tiếp trên Actions (IP khác máy nh�
 `routeClimate` (mỗi điểm mẫu lấy mốc gần nhất <= 30 km, chỉ số lấy nơi nặng nhất), ngưỡng `CTH` có nguồn (mưa/lạnh dùng lại `TH`; rét đậm/hại
 KTTV; "ẩm suốt ngày" RHmin >= 90 là chỉ báo ĐOÁN thay sương mù). UI: ngày đi > hôm nay + 6 thì khối khí hậu thay phán quyết dự báo.
 Không tham gia điểm/trạng thái/đáng đi; không đổi `ROUTE_RULES_VERSION`.
+Vòng 5 (19/11/2026): ĐỘ ỔN ĐỊNH DỰ BÁO. `services/stabilityService.ts` (Open-Meteo Previous Runs, 1 call/điểm đích, đệm 60 phút, chỉ tải khi người dùng mở khối `ForecastStability` trong RouteWeather, data-testid `forecast-stability`): so 3 lần chạy (mới nhất, cũ hơn ~1 và ~2 ngày) x 4 mô hình về mưa cả ngày và tổng mây 05-07h. BẪY ĐÃ ĐO: `<var>_previous_dayN` = N x 24h TRƯỚC GIỜ HIỆU LỰC nên cột N nhỏ hơn số ngày còn lại chỉ chép lần chạy mới nhất (đo 19/11 ECMWF Tà Xùa 22/11 06h: day0..3 = 30, day4 = 51, day5 = 56); phải chọn N = L+k (`prevColumn`). `cloud_cover_low/mid` toàn null ở endpoint này nên KHÔNG dùng mây thấp; `api.open-meteo.com` cũng trả null cho previous_day. Ranh giới lớp có nguồn, luật gộp là quy ước chốt trước (xem đầu tệp). Là UI: không tham gia điểm/trạng thái/đáng đi. `RoutePlan.fetchedAt` = lúc tải thật dự báo dọc tuyến (hiện "Dự báo tải lúc"). Gói gộp 4 mô hình từng HTTP 500 sau 32 s (đo 19/11 15:11, gọi lại 1,4 s) -> `fetchStability` gọi riêng từng mô hình rồi `mergePerModel` (gọi riêng thì khoá KHÔNG có hậu tố mô hình), thiếu mô hình nào thì hiện cảnh báo. Test: `tests/stability.test.ts`.
 Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng luật chữ, không LLM; tóm tắt số ở `docs/cung-duong-kiem-chung.md` mục 2.
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
@@ -191,7 +192,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 220 test (engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 228 test (engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

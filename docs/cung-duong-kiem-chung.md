@@ -80,3 +80,24 @@ ERA5/ERA5-Land 2016-2025 tại các mốc, không có mức "Dễ đi / Khó đi
 Kiểm được sau này: (a) so số ngày mưa >= 50 mm của ERA5 với trạm KTTV gần tuyến nếu có số công khai (dự kiến ERA5 thấp hơn,
 nên giao diện ghi "cận dưới"); (b) chỉ báo "ẩm suốt ngày" (RH thấp nhất >= 90%) so với báo cáo sương mù trong bài phượt
 có ngày, khi gom đủ >= 20 báo cáo. Chưa làm cả hai; đừng đổi ngưỡng `CTH` trước khi có phép so đó.
+
+## 6. Độ ổn định dự báo tại đích (19/11/2026, gcc29 vòng 5) - chỉ hiển thị, không chấm như mục 4
+
+Mục đích: người tính đi xa 3-5 ngày tới biết dự báo cho ngày đó còn đang đổi hay đã yên. Code `services/stabilityService.ts`,
+khối `ForecastStability` trong RouteWeather (thu gọn, chỉ gọi mạng khi mở). Không tham gia điểm, trạng thái hay luật đáng đi.
+
+- Nguồn: Open-Meteo Previous Runs (`previous-runs-api.open-meteo.com`), 4 mô hình ECMWF IFS, GFS, ICON, UKMO.
+  `<biến>_previous_dayN` = giá trị dự báo N x 24 giờ TRƯỚC GIỜ HIỆU LỰC (tài liệu Open-Meteo). Đo 19/11 14h, ECMWF
+  Tà Xùa 22/11 06h: day0..day3 = 30, 30, 30, 30, day4 = 51, day5 = 56. Cột có N nhỏ hơn số ngày còn lại chỉ chép lần
+  chạy mới nhất. Vì vậy với giờ còn L ngày (trần, tối thiểu 0) thì lần chạy "cũ hơn ~1 ngày" = cột L+1, "~2 ngày" = L+2,
+  tối đa day7. Test đột biến: đọc nhầm cột day1/day2 thì 2 test đỏ.
+- Không dùng được (đo 19/11): `cloud_cover_low/mid` toàn null ở endpoint này; `api.open-meteo.com` trả null cho previous_day.
+- Lớp, có nguồn: mưa cả ngày < 1 mm khô (WMO/ETCCDI), 1-20, 20-50, >= 50 mm (`TH.R24_NOTE/R24_HARD`, thang KTTV);
+  tổng mây trung bình 05-07h <= 25% (<= 2 okta), 25-75%, >= 75% (>= 6 okta), okta theo WMO.
+- Luật gộp, QUY ƯỚC CỦA APP (không có nguồn ngoài, chốt trước khi xem số, không chỉnh theo kết quả): mô hình cần >= 2 lần
+  chạy có số; không mô hình nào đổi lớp = "ổn định"; số đổi lớp >= một nửa số mô hình tính được = "đang dao động"; còn lại
+  "hơi dao động"; không mô hình nào tính được = "chưa đủ lần chạy". Điểm yếu đã biết: giá trị sát ranh lớp (vd mây 27% với 25%)
+  đổi chút ít cũng tính là đổi lớp.
+- Kiểm chứng sau này (chưa làm, cần dữ liệu): bản chụp tuyến hằng tối có thể ghi thêm phán quyết ổn định cho đích, rồi so với
+  sai số thật của dự báo D+3..D+5 (dự báo mới nhất so với quan trắc/ERA5 khi có). Chỉ khi đó mới biết "đang dao động" có đi
+  kèm sai số lớn hơn không.

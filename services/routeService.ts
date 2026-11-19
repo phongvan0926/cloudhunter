@@ -421,7 +421,9 @@ export function httpErrorText(status: number, host: string): string {
   if (status >= 500) return `${host} đang lỗi (HTTP ${status}), thử lại sau.`;
   return `HTTP ${status} từ ${host}`;
 }
-async function getJson(url: string, ttlMs: number): Promise<any> {
+/** Lúc tải thật của một URL đang nằm trong đệm (ms), để hiện "dự báo tải lúc HH:MM". */
+export function fetchedAtOf(url: string): number | null { return MEM.get(url)?.ts ?? null; }
+export async function getJson(url: string, ttlMs: number): Promise<any> {
   const hit = MEM.get(url);
   if (hit && Date.now() - hit.ts < ttlMs) return hit.data;
   const host = new URL(url).hostname;
@@ -562,13 +564,15 @@ export async function fetchElevations(pts: LatLon[]): Promise<(number | null)[]>
  * Một lần gọi Open-Meteo cho mọi điểm (đa toạ độ), có `elevation=` để nhiệt độ được hạ theo cao độ
  * mặt đường thật. past_days=3 để tính mưa tích luỹ 72h. Ngân sách: ~N điểm x 8 biến / 10 ≈ 1-2 call/điểm.
  */
-export async function fetchRouteWeather(pts: { pos: LatLon; elev: number | null }[]): Promise<any[]> {
+export function routeWeatherUrl(pts: { pos: LatLon; elev: number | null }[]): string {
   const lat = pts.map(p => f4(p.pos.lat)).join(',');
   const lon = pts.map(p => f4(p.pos.lon)).join(',');
   const elevParam = pts.every(p => p.elev !== null) ? `&elevation=${pts.map(p => Math.round(p.elev as number)).join(',')}` : '';
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}${elevParam}` +
+  return `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}${elevParam}` +
     `&hourly=${ROUTE_HOURLY_VARS.join(',')}&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh&past_days=3&forecast_days=7`;
-  const d = await getJson(url, 30 * 60_000);
+}
+export async function fetchRouteWeather(pts: { pos: LatLon; elev: number | null }[]): Promise<any[]> {
+  const d = await getJson(routeWeatherUrl(pts), 30 * 60_000);
   return Array.isArray(d) ? d : [d];
 }
 
@@ -584,6 +588,8 @@ export interface RoutePlan {
   summary: RouteSummary;
   /** Phản hồi Open-Meteo thô tại điểm đích (10 ngày theo giờ) để tóm tắt ngày, không gọi thêm API. */
   destOm: any;
+  /** Lúc tải dự báo dọc tuyến thật (ms; lấy từ đệm 30 phút thì là lúc tải lần đầu), để hiện "dự báo tải lúc HH:MM". */
+  fetchedAt: number;
 }
 
 /**
@@ -617,6 +623,7 @@ export async function planRoute(
   const base = wKms.map(km => ({ km, pos: pointAtKm(geom.coords, geom.cum, km), elev: elevAt(km) }));
   onStep?.(3, 'Lấy dự báo dọc tuyến (Open-Meteo)');
   const oms = await fetchRouteWeather(base);
+  const fetchedAt = fetchedAtOf(routeWeatherUrl(base)) ?? Date.now();
   const samples: RouteSample[] = base.map((b, i) => {
     const eta = etaMs(b.km, total, durationH, departMs);
     const hourKey = vnHourKey(eta);
@@ -626,7 +633,7 @@ export async function planRoute(
   });
   return {
     from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, routerH: geom.durationH, router: geom.router, fallbackNote: geom.fallbackNote, cautionNote: geom.cautionNote,
-    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1],
+    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1], fetchedAt,
   };
 }
 
