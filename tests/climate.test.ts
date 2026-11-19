@@ -21,7 +21,7 @@ describe('khí hậu theo tháng - gộp số', () => {
     expect(j.years).toBe(2);
     expect(j.rainMm).toBe(80);                // (160 + 0) / 2
     expect(j.d20).toBe(1.5); expect(j.d50).toBe(1); expect(j.d100).toBe(0);
-    expect(j.r3Years).toBe(1);                // chỉ năm 2016
+    expect(j.r3Years).toBeUndefined();        // bỏ chỉ số đợt 3 ngày (mốc 150 mm không nguồn, vòng 7)
     expect(j.retDam).toBe(10); expect(j.retHai).toBe(0);
     expect(j.frost).toBe(5); expect(j.humid).toBe(3);
     expect(months[5].years).toBe(0); expect(months[5].rainMm).toBeNull();   // tháng không có số -> null, không phải 0
@@ -34,10 +34,11 @@ describe('khí hậu theo tháng - gộp số', () => {
     expect(months[0].years).toBe(1);
     expect(months[0].rainMm).toBe(160);
   });
-  it('đợt 3 ngày cần đủ 3 ngày có số (ngày thiếu không ghép)', () => {
+  it('ngày mưa >= 100 mm (mức thấp nhất QĐ 18 xét cấp sạt lở) đếm đúng biên', () => {
     const { time, p, tm, tn, rh } = janYears();
-    p[9] = 100; p[10] = null; p[11] = 60;   // 100 + ? + 60: nếu coi thiếu là 0 thì thành 160 >= 150 (sai)
-    expect(aggregateMonthly(time, p, tm, tn, rh).months[0].r3Years).toBe(0);
+    p[9] = 100; p[10] = 99.9;   // năm 2016: một ngày đúng 100 tính, 99,9 không tính; năm 2017: 0
+    expect(aggregateMonthly(time, p, tm, tn, rh).months[0].d100).toBe(0.5);
+    expect(CTH.R_DANGER).toBe(100);
   });
 });
 
@@ -53,14 +54,14 @@ describe('mùa biển mây từ nhãn', () => {
   });
 });
 
-const M = (o: Partial<MonthStat>): MonthStat => ({ years: 10, rainMm: 100, d20: 1, d50: 0, d100: 0, r3Years: 0, retDam: 0, retHai: 0, frost: 0, humid: 0, tMean: 20, tMin: 16, ...o });
+const M = (o: Partial<MonthStat>): MonthStat => ({ years: 10, rainMm: 100, d20: 1, d50: 0, d100: 0, retDam: 0, retHai: 0, frost: 0, humid: 0, tMean: 20, tMin: 16, ...o });
 function file(): ClimateFile {
   const months = (o: Partial<MonthStat>) => Array.from({ length: 12 }, () => M(o));
   return {
     version: 'x', generatedAt: '', source: '', years: { from: 2016, to: 2025 }, thresholds: CTH, spots: { A: 'sp:A' }, routes: {}, missing: [],
     locations: {
       'sp:A': { id: 'sp:A', lat: 21.5, lon: 104.5, elev: 1800, kind: 'spot', label: 'A', months: months({ retDam: 20, frost: 4, tMin: 6 }) },
-      'rt:1': { id: 'rt:1', lat: 21.0, lon: 105.8, elev: 20, kind: 'route', label: 'r', months: months({ d50: 2, rainMm: 300 }) },
+      'rt:1': { id: 'rt:1', lat: 21.0, lon: 105.8, elev: 20, kind: 'route', label: 'r', months: months({ d50: 2, d100: 0.4, rainMm: 300 }) },
     },
     sea: { note: '', minN: 5, dateRange: null, bySpot: { A: Array.from({ length: 12 }, (_, i) => ({ n: i === 9 ? 12 : 2, sea: i === 9 ? 5 : 1, bySrc: {} })) } },
   };
@@ -78,6 +79,7 @@ describe('tra cứu dọc tuyến', () => {
     expect(rc.d50?.km).toBe(0); expect(rc.d50?.value).toBe(2);
     expect(rc.retDam?.km).toBe(200); expect(rc.frost?.value).toBe(4);
     expect(rc.coldest?.value).toBe(6);
+    expect(rc.d100?.km).toBe(0); expect(rc.d100?.value).toBe(0.4); expect(rc.d100?.what).toContain('QĐ 18');
     expect(nearestLoc(c, { lat: 20.0, lon: 103.0 })).toBeNull();
   });
   it('câu tháng và câu mùa biển mây nói thẳng khi mẫu nhỏ', () => {

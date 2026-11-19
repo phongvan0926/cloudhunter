@@ -16,9 +16,10 @@ export const CLIMATE_YEARS = { from: 2016, to: 2025 } as const;
 export const CLIMATE_DAILY_VARS = ['precipitation_sum', 'temperature_2m_mean', 'temperature_2m_min', 'relative_humidity_2m_min'] as const;
 
 export const CTH = {
-  // Mưa ngày: dùng lại thang mưa 24h vùng núi của TH (Trung tâm Dự báo KTTV quốc gia): >= 20 đáng để ý,
-  // 50-100 mưa to, > 100 mưa rất to. Đợt 3 ngày >= 150 mm = đất bão hoà, nguy cơ sạt lở (TH.R72_HARD).
-  R_NOTE: TH.R24_NOTE, R_HARD: TH.R24_HARD, R_DANGER: TH.R24_DANGER, R3_SLIDE: TH.R72_HARD,
+  // Mưa ngày: dùng lại TH. Mưa to > 50 mm, mưa rất to > 100 mm (QĐ 18/2021/QĐ-TTg Điều 3 khoản 17); 100 mm cũng là mức
+  // mưa 24h thấp nhất QĐ 18 Điều 46 xếp cấp rủi ro sạt lở, lũ quét. >= 20 mm chỉ là ranh lớp, chưa có nguồn riêng.
+  // Bỏ chỉ số 'đợt 3 ngày >= 150 mm' (19/11/2026, gcc29 vòng 7): mốc đó không có nguồn. Tệp cũ còn trường r3Years, app bỏ qua.
+  R_NOTE: TH.R24_NOTE, R_HARD: TH.R24_HARD, R_DANGER: TH.R24_DANGER,
   // Rét đậm: nhiệt độ trung bình ngày <= 15°C; rét hại: <= 13°C (định nghĩa Trung tâm Dự báo KTTV quốc gia dùng
   // trong bản tin không khí lạnh; vùng núi cao thì gần như cả mùa đông dưới ngưỡng, nên đọc kèm nhiệt độ đêm).
   RET_DAM: 15, RET_HAI: 13,
@@ -32,12 +33,12 @@ export const CTH = {
   MIN_DAYS: 25,
 };
 
-/** Một tháng (trung bình theo năm). Số ngày là số ngày/tháng trung bình; r3Years là số NĂM có ít nhất một đợt 3 ngày >= 150 mm. */
+/** Một tháng (trung bình theo năm). Số ngày là số ngày/tháng trung bình; r3Years chỉ còn trong tệp cũ (không nguồn, không hiển thị). */
 export interface MonthStat {
   years: number;          // số năm đủ dữ liệu cho tháng này
   rainMm: number | null;  // tổng mưa tháng trung bình
   d20: number | null; d50: number | null; d100: number | null;
-  r3Years: number | null;
+  r3Years?: number | null;   // chỉ tệp cũ
   retDam: number | null; retHai: number | null; frost: number | null;
   humid: number | null;
   tMean: number | null; tMin: number | null;   // trung bình tháng của Tmean ngày, của Tmin ngày
@@ -51,21 +52,19 @@ const ok = (v: unknown): v is number => typeof v === 'number' && Number.isFinite
  * thì bỏ cả năm-tháng đó (không coi thiếu là 0). Trả kèm số ngày thiếu để báo.
  */
 export function aggregateMonthly(time: string[], precip: (number | null)[], tmean: (number | null)[], tmin: (number | null)[], rhmin: (number | null)[]) {
-  type Acc = { n: number; rain: number; d20: number; d50: number; d100: number; r3: boolean; retDam: number; retHai: number; frost: number; humid: number; tm: number[]; tn: number[]; nT: number; nRh: number };
+  type Acc = { n: number; rain: number; d20: number; d50: number; d100: number; retDam: number; retHai: number; frost: number; humid: number; tm: number[]; tn: number[]; nT: number; nRh: number };
   const ym = new Map<string, Acc>();
   let missingDays = 0;
   for (let i = 0; i < time.length; i++) {
     const key = time[i].slice(0, 7);
     let a = ym.get(key);
-    if (!a) { a = { n: 0, rain: 0, d20: 0, d50: 0, d100: 0, r3: false, retDam: 0, retHai: 0, frost: 0, humid: 0, tm: [], tn: [], nT: 0, nRh: 0 }; ym.set(key, a); }
+    if (!a) { a = { n: 0, rain: 0, d20: 0, d50: 0, d100: 0, retDam: 0, retHai: 0, frost: 0, humid: 0, tm: [], tn: [], nT: 0, nRh: 0 }; ym.set(key, a); }
     const p = precip[i];
     if (!ok(p)) { missingDays++; continue; }
     a.n++; a.rain += p;
     if (p >= CTH.R_NOTE) a.d20++;
     if (p >= CTH.R_HARD) a.d50++;
     if (p >= CTH.R_DANGER) a.d100++;
-    // đợt 3 ngày kết thúc hôm nay (cả 3 ngày phải có số), tính cho tháng của ngày kết thúc
-    if (i >= 2 && ok(precip[i - 1]) && ok(precip[i - 2]) && p + precip[i - 1]! + precip[i - 2]! >= CTH.R3_SLIDE) a.r3 = true;
     const t = tmean[i], tn = tmin[i], rh = rhmin[i];
     if (ok(t)) { a.tm.push(t); a.nT++; if (t <= CTH.RET_DAM) a.retDam++; if (t <= CTH.RET_HAI) a.retHai++; }
     if (ok(tn)) { a.tn.push(tn); if (tn <= CTH.FROST) a.frost++; }
@@ -84,7 +83,6 @@ export function aggregateMonthly(time: string[], precip: (number | null)[], tmea
       years: n,
       rainMm: n ? Math.round(accs.reduce((s, a) => s + a.rain, 0) / n) : null,
       d20: mean(a => a.d20), d50: mean(a => a.d50), d100: mean(a => a.d100),
-      r3Years: n ? accs.filter(a => a.r3).length : null,
       retDam: mean(a => a.retDam, hasT), retHai: mean(a => a.retHai, hasT),
       frost: mean(a => a.frost, a => a.tn.length >= CTH.MIN_DAYS),
       humid: mean(a => a.humid, hasRh),
@@ -164,7 +162,7 @@ export function spotClimate(c: ClimateFile, key: string, p: LatLon): { loc: Clim
 export interface RouteClimateRow { what: string; value: number; unit: string; km: number; elev: number | null; locKm: number }
 export interface RouteClimate {
   month: number; matched: number; total: number; maxLocKm: number;
-  rainMax: RouteClimateRow | null; d50: RouteClimateRow | null; r3: RouteClimateRow | null;
+  rainMax: RouteClimateRow | null; d50: RouteClimateRow | null; d100: RouteClimateRow | null;
   retDam: RouteClimateRow | null; frost: RouteClimateRow | null; humid: RouteClimateRow | null;
   coldest: RouteClimateRow | null;
 }
@@ -187,7 +185,7 @@ export function routeClimate(c: ClimateFile, samples: { km: number; pos: LatLon;
     month, matched: hits.length, total: samples.length, maxLocKm: hits.reduce((m, x) => Math.max(m, x.n!.km), 0),
     rainMax: pick(m => m.rainMm, 'Mưa cả tháng', 'mm'),
     d50: pick(m => m.d50, `Ngày mưa to >= ${CTH.R_HARD} mm`, 'ngày'),
-    r3: pick(m => m.r3Years, `Năm có đợt 3 ngày >= ${CTH.R3_SLIDE} mm`, 'năm'),
+    d100: pick(m => m.d100, `Ngày mưa >= ${CTH.R_DANGER} mm (mức QĐ 18 bắt đầu xếp cấp sạt lở)`, 'ngày'),
     retDam: pick(m => m.retDam, `Ngày rét đậm (TB ngày <= ${CTH.RET_DAM}°C)`, 'ngày'),
     frost: pick(m => m.frost, `Đêm <= ${CTH.FROST}°C (có thể băng giá)`, 'ngày'),
     humid: pick(m => m.humid, `Ngày ẩm suốt ngày (thấp nhất >= ${CTH.HUMID_ALLDAY}%)`, 'ngày'),

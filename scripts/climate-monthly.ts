@@ -21,6 +21,8 @@
  * Mốc dọc tuyến: cách đều 40 km + điểm cao nhất (profile cao độ Open-Meteo Elevation). Gộp mốc cùng ô 0,1° và lệch cao
  * độ < 150 m (ERA5-Land lưới 0,1°).
  */
+import { countCallsAs } from './count-calls';
+countCallsAs('climate-monthly');   // log 1 dòng lượt gọi theo máy chủ khi kết thúc (vòng 7)
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
 import { MOUNTAIN_DB } from '../constants/mountains';

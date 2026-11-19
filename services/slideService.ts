@@ -20,10 +20,13 @@
  *
  * QUY ƯỚC CỦA APP (văn bản không định nghĩa): "một ngày có mưa trước đó" = khối 24 giờ có tổng >= 1 mm (ngưỡng ngày
  * có mưa của WMO/ETCCDI, cùng ngưỡng STH.WET_DAY_MM của stabilityService). Đếm các khối liền nhau ngay trước khối 24h.
- * QUY ƯỚC CỦA APP: chỉ xét điểm cao >= TH.SLIDE_MIN_ELEV (300 m, cùng cổng với cờ sạt lở cũ trong assessPoint), vì văn bản
+ * QUY ƯỚC CỦA APP: chỉ xét điểm cao >= SLIDE_MIN_ELEV (300 m, cùng cổng với cờ sạt lở trong assessPoint), vì văn bản
  * áp cho "vùng có nguy cơ" mà app không có bản đồ; đo 19/11/2026: không có cổng này thì đồng bằng Huế (3-12 m) cũng bị xếp cấp.
  */
-import { TH, type PointWx } from './routeService';
+import type { PointWx } from './routeService';   // chỉ kiểu: routeService nhập ngược slideRiskQD18 cho assessPoint
+
+/** QUY ƯỚC CỦA APP (không có nguồn văn bản): chỉ xét điểm >= 300 m. routeService dùng lại qua TH.SLIDE_MIN_ELEV. */
+export const SLIDE_MIN_ELEV = 300;
 
 export const SLIDE_SOURCE = 'QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII';
 export const SLIDE_SOURCE_URL = 'https://vupc.mae.gov.vn/Data/files/18_2021_QD-TTg.doc';
@@ -76,7 +79,7 @@ function range(kvs: number[], rc: number): [number, number] | null {
 /** Áp Điều 46 cho một điểm. Thuần, test được. */
 export function slideRiskQD18(wx: Pick<PointWx, 'rain24h' | 'rainPrior'> | null, elevM: number | null = null): SlideRisk {
   const base = { r24: wx?.rain24h ?? null, wetDays: 0, wetExact: true, kv12: null, kv34: null };
-  if (elevM !== null && elevM < TH.SLIDE_MIN_ELEV) return { ...base, status: 'LOWLAND' };
+  if (elevM !== null && elevM < SLIDE_MIN_ELEV) return { ...base, status: 'LOWLAND' };
   if (!wx || wx.rain24h === null) return { ...base, status: 'NO_DATA' };
   const rc = slideRainClass(wx.rain24h);
   const wd = wetDaysBefore(wx.rainPrior);

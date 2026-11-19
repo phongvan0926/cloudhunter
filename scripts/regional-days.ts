@@ -10,6 +10,8 @@
  *
  * Chạy: npx vite-node scripts/regional-days.ts [ngày-bắt-đầu]
  */
+import { countCallsAs } from './count-calls';
+countCallsAs('regional-days');   // log 1 dòng lượt gọi theo máy chủ khi kết thúc (vòng 7)
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { vnTodayStr } from '../services/weatherService';
 

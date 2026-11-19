@@ -281,6 +281,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
           )}
 
           {plan.fallbackNote && <p className="text-xs text-amber-100 bg-amber-950/40 border border-amber-500/40 rounded-xl p-2.5" data-testid="route-fallback">⚠️ {plan.fallbackNote}</p>}
+          {plan.endNote && <p className="text-xs text-amber-100 bg-amber-950/40 border border-amber-500/40 rounded-xl p-2.5" data-testid="route-end-gap">📍 {plan.endNote}{plan.destElev !== null && plan.elevs[plan.elevs.length - 1] != null ? ` Điểm cuối tuyến cao khoảng ${Math.round(plan.elevs[plan.elevs.length - 1] as number)} m, điểm đến khoảng ${Math.round(plan.destElev)} m (DEM).` : ''}</p>}
           {plan.cautionNote && <p className="text-xs text-amber-100/90 bg-amber-950/30 border border-amber-500/30 rounded-xl p-2.5" data-testid="route-caution">🚧 {plan.cautionNote}</p>}
           <p className="text-[11px] text-slate-400 flex flex-wrap items-center gap-x-2" data-testid="route-router">
             <span>Đang dùng: <b className="text-slate-200">{ROUTER_LABEL[plan.router]}</b> · bản đồ ©</span>
@@ -347,7 +348,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
             <div className="px-3 pb-3 text-[11px] text-slate-400 leading-relaxed space-y-1.5">
               <p>Đường: xe máy dùng Valhalla (máy chủ FOSSGIS, hồ sơ xe máy, tránh cao tốc), hỏng thì rơi về OSRM hồ sơ ô tô và báo rõ; ô tô dùng OSRM. Cao độ: DEM Copernicus 90 m qua Open-Meteo, {plan.elevKms.length} điểm dọc tuyến. Dự báo: Open-Meteo (mô hình tốt nhất cho từng điểm), nhiệt độ hạ theo cao độ mặt đường.</p>
               <p>Giờ đi qua mỗi điểm = quãng đường / tốc độ trung bình bạn chọn, CHƯA tính dừng nghỉ. Đi chậm hơn thì giờ thực tế muộn hơn.</p>
-              <p>Ngưỡng tham khảo: mưa {TH.RAIN_LIGHT}/{TH.RAIN_MOD}/{TH.RAIN_HEAVY} mm/h (nhẹ/vừa/to); sương mù tầm nhìn &lt; {TH.VIS_FOG} m, dày &lt; {TH.VIS_DENSE} m; đi trong mây khi ẩm ≥ {TH.INCLOUD_RH}% và mây thấp ≥ {TH.INCLOUD_LOW}% ở đoạn ≥ {TH.INCLOUD_MIN_ELEV} m; gió giật {TH.GUST_NOTE}/{TH.GUST_HARD}/{TH.GUST_DANGER} km/h (cấp 5/6/8); lạnh ≤ {TH.COLD_NOTE}°C, băng giá ≤ {TH.COLD_FROST}°C; mưa tích luỹ 24h {TH.R24_NOTE}/{TH.R24_HARD}/{TH.R24_DANGER} mm hoặc 72h ≥ {TH.R72_HARD} mm ở đoạn ≥ {TH.SLIDE_MIN_ELEV} m.</p>
+              <p>Ngưỡng tham khảo: mưa {TH.RAIN_LIGHT}/{TH.RAIN_MOD}/{TH.RAIN_HEAVY} mm/h (nhẹ/vừa/to); sương mù tầm nhìn &lt; {TH.VIS_FOG} m, dày &lt; {TH.VIS_DENSE} m; đi trong mây khi ẩm ≥ {TH.INCLOUD_RH}% và mây thấp ≥ {TH.INCLOUD_LOW}% ở đoạn ≥ {TH.INCLOUD_MIN_ELEV} m; gió giật {TH.GUST_NOTE}/{TH.GUST_HARD}/{TH.GUST_DANGER} km/h (cấp 5/6/8); lạnh ≤ {TH.COLD_NOTE}°C, băng giá ≤ {TH.COLD_FROST}°C; ở đoạn ≥ {TH.SLIDE_MIN_ELEV} m: mưa to &gt; {TH.R24_HARD} mm/24h (trơn), sạt lở, lũ quét theo Điều 46 Quyết định 18/2021 (từ {TH.R24_DANGER} mm/24h kèm mưa những ngày trước; đủ điều kiện thì Nguy hiểm, chưa đủ ngày mưa trước thì Khó đi, cách ánh xạ là quy ước của app).</p>
               <p>Dữ liệu bản đồ © <a className="underline" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors (ODbL) · <a className="underline" href="https://openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">báo lỗi / sửa bản đồ</a> · tìm đường: <a className="underline" href="https://www.fossgis.de/" target="_blank" rel="noopener noreferrer">FOSSGIS Valhalla</a>, <a className="underline" href="https://project-osrm.org/" target="_blank" rel="noopener noreferrer">OSRM</a>.</p>
               <p>Tầm nhìn của mô hình hay đánh giá cao hơn thực tế trong mây trên đèo, nên app thêm cờ "có thể đi trong mây". Đây là dự báo, không thay được thông báo đóng đường, sạt lở của địa phương.</p>
             </div>
@@ -448,7 +449,7 @@ const ForecastStability: React.FC<{ plan: RoutePlan; arriveMs: number }> = ({ pl
   const load = () => {
     if (res || loading) return;
     setLoading(true); setErr(null);
-    fetchStability(plan.to.lat, plan.to.lon, plan.elevs[plan.elevs.length - 1] ?? null)
+    fetchStability(plan.to.lat, plan.to.lon, plan.destElev)
       .then(({ om, fetchedAt, missingModels }) => setRes({ days: assessStability(om, dates, fetchedAt), fetchedAt, missingModels }))
       .catch(e => setErr(`Không tải được các lần chạy cũ: ${e.message}`))
       .finally(() => setLoading(false));
@@ -580,7 +581,7 @@ const DayBrief: React.FC<{ plan: RoutePlan; destName: string; destKey: string; a
   const dates = [0, 1, 2].map(n => addDaysStr(arriveDate, n));
   const [date, setDate] = useState(arriveDate);
   const d = useMemo(() => summarizeDay(plan.destOm, date), [plan, date]);
-  const destElev = plan.elevs[plan.elevs.length - 1] ?? null;
+  const destElev = plan.destElev;
   const dh = useMemo(() => dawnHours(plan.destOm, date, destElev), [plan, date, destElev]);
   const dm = (x: string) => `${x.slice(8, 10)}/${x.slice(5, 7)}`;
   const headCls = d.headline === 'Nhiều mưa' ? 'text-orange-300' : d.headline === 'Có mưa' ? 'text-amber-300' : d.headline === 'Khô ráo' ? 'text-emerald-300' : 'text-slate-400';
@@ -686,14 +687,14 @@ const RouteClimateBlock: React.FC<{ plan: RoutePlan; clim: ClimateFile | null | 
         <ul className="space-y-1">
           <ClimateRow r={rc.rainMax} icon="🌧️" />
           <ClimateRow r={rc.d50} icon="⛈️" />
-          <ClimateRow r={rc.r3} icon="⛰️" fmt={v => `${v}/${nYears}`} />
+          <ClimateRow r={rc.d100} icon="⛰️" />
           <ClimateRow r={rc.retDam} icon="🥶" />
           <ClimateRow r={rc.frost} icon="🧊" />
           <ClimateRow r={rc.humid} icon="🌫️" />
           <ClimateRow r={rc.coldest} icon="🌡️" />
         </ul>
         <p className="text-[11px] text-slate-400">Theo {rc.matched}/{rc.total} điểm dọc tuyến có mốc khí hậu trong 30 km{rc.maxLocKm > 5 ? `; mốc xa nhất cách ${rc.maxLocKm.toFixed(0)} km nên là XẤP XỈ` : ''}. Số ngày là trung bình mỗi năm trong tháng {month}, {clim.years.from}-{clim.years.to}.</p>
-        <p className="text-[10px] text-slate-500">Nguồn ERA5/ERA5-Land qua Open-Meteo, hạ theo cao độ từng mốc. Ngưỡng: mưa to ≥ {CTH.R_HARD} mm/ngày, đợt 3 ngày ≥ {CTH.R3_SLIDE} mm (đất bão hoà, dễ sạt lở) theo thang mưa KTTV; rét đậm TB ngày ≤ {CTH.RET_DAM}°C (KTTV); đêm ≤ {CTH.FROST}°C có thể băng giá. "Ẩm suốt ngày" (độ ẩm thấp nhất ≥ {CTH.HUMID_ALLDAY}%) chỉ là chỉ báo thay cho sương mù, chưa kiểm với quan trắc. ERA5 làm mượt mưa lớn ở núi: số ngày mưa to là cận dưới.</p>
+        <p className="text-[10px] text-slate-500">Nguồn ERA5/ERA5-Land qua Open-Meteo, hạ theo cao độ từng mốc. Ngưỡng: mưa to ≥ {CTH.R_HARD} mm/ngày, mưa ≥ {CTH.R_DANGER} mm/ngày là mức thấp nhất Quyết định 18/2021 xét cấp rủi ro sạt lở, lũ quét (còn cần mưa những ngày trước); rét đậm TB ngày ≤ {CTH.RET_DAM}°C (KTTV); đêm ≤ {CTH.FROST}°C có thể băng giá. "Ẩm suốt ngày" (độ ẩm thấp nhất ≥ {CTH.HUMID_ALLDAY}%) chỉ là chỉ báo thay cho sương mù, chưa kiểm với quan trắc. ERA5 làm mượt mưa lớn ở núi: số ngày mưa to là cận dưới.</p>
       </>
     );
   if (far) return (

@@ -114,6 +114,17 @@ QUY ƯỚC chốt trước, đổi thì tăng `STORM_RULES_VERSION`. `services/s
 lời văn), báo khoảng cấp KV1-2/KV3-4 vì không có bản đồ vùng nguy cơ; ngày mưa >= 1 mm và cổng >= 300 m là quy ước app. `PointWx.rainPrior` = 3 khối 24h
 trước `rain24h` (không đổi `assessPoint`, không đổi `ROUTE_RULES_VERSION`). Bản chụp tuyến ghi thêm `stability` (ngày đích D..D+5 kèm `leadDays`), `storm`,
 `slide`; phần phụ lỗi -> `<phần>Error` + mã thoát 3. Cách chấm chốt trước: `docs/cung-duong-kiem-chung.md` mục 6-8. Test: `tests/storm-slide.test.ts`.
+Vòng 7 (19/11/2026): (1) `ROUTE_RULES_VERSION` = `route-1.2`: cờ `landslide` trong `assessPoint` dùng CHÍNH `slideRiskQD18` (một nguồn với khối
+chi tiết): LEVEL -> landslide 3, NO_PRIOR -> landslide 2, 50-100 mm/24h -> rain 1 (50 mm = "mưa to", QĐ 18 Điều 3 khoản 17); ánh xạ mức là quy ước.
+Mốc 72h >= 150 mm và `TH.R72_HARD` đã BỎ (không nguồn); `rain72h` chỉ là dữ liệu thô. Khí hậu tháng bỏ "đợt 3 ngày >= 150 mm" (`r3Years` chỉ còn trong
+tệp cũ, bị bỏ qua), `routeClimate` trả `d100` (ngày >= 100 mm). `SLIDE_MIN_ELEV` export từ slideService (routeService import, không vòng ngược).
+(2) Tuyến chưa tới đích: `RouteGeom.endGapKm` = km chim bay điểm cuối tuyến -> đích; > `END_GAP_WARN_KM` 0,5 km (quy ước) thì `endNote` (data-testid
+`route-end-gap`) và ĐÍCH được thêm làm 1 toạ độ vào cùng lần gọi cao độ + dự báo, nên `RoutePlan.destOm`/`destElev` là TẠI ĐÍCH (Tóm tắt ngày, giờ
+rạng sáng, độ ổn định dùng `destElev`). Đổi `search_radius`/costing không cứu được (OSM không có đường). `scripts/check-route-ends.ts` in 8 tuyến cố
+định (độ cao qua Valhalla /height, KHÔNG Open-Meteo); đo 19/11: Pù Luông hở 2,32 km, Bạch Mã 2,26 km. Bản chụp ghi `endGapKm`, `endNote`.
+(3) `scripts/count-calls.ts`: `countCallsAs('<script>')` ở đầu snapshot-forecast/-week/-routes, climate-monthly, regional-days, check-route-ends bọc
+`globalThis.fetch`, in khi thoát `[đếm gọi mạng] nguồn=<script>: <máy chủ> n lần (k hỏng) (~w lượt quy đổi)`; `w` là ước theo công thức Open-Meteo.
+Test: `tests/count-calls.test.ts`, `tests/route.test.ts` (mục vòng 7). Cách chấm: `docs/cung-duong-kiem-chung.md` mục 8-9.
 Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng luật chữ, không LLM; tóm tắt số ở `docs/cung-duong-kiem-chung.md` mục 2.
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
@@ -199,7 +210,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 251 test (dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 257 test (tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

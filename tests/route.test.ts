@@ -3,6 +3,7 @@ import {
   haversineKm, cumulativeKm, pointAtKm, evenKms, elevationKms, weatherKms, elevationStats, etaMs, vnHourKey,
   extractPointWx, assessPoint, maxLevel, summarizeRoute, summarizeDay, cloudText, TH, ELEV_MAX_POINTS, decodePolyline6, fetchRoute, parseOsrmTable, dawnHours,
   httpErrorText, FETCH_TIMEOUT_MS, compactRoute, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_MAX, ROUTE_RULES_VERSION,
+  endGapOf, endGapNote, END_GAP_WARN_KM, planRoute,
   type PointWx, type RouteSample,
 } from '../services/routeService';
 
@@ -152,13 +153,26 @@ describe('mức độ khó tại một điểm', () => {
     expect(kinds(w({ tempC: 9 }))).toContain('cold1');
     expect(kinds(w({ tempC: 11 }))).toEqual([]);
   });
-  it('mưa tích luỹ chỉ cảnh báo sạt lở ở vùng đồi núi', () => {
-    expect(kinds(w({ rain24h: 120 }), 900)).toContain('landslide3');
-    expect(kinds(w({ rain24h: 60 }), 900)).toContain('landslide2');
-    expect(kinds(w({ rain24h: 10, rain72h: 160 }), 900)).toContain('landslide2');
-    expect(kinds(w({ rain24h: 25 }), 900)).toContain('landslide1');
-    expect(kinds(w({ rain24h: 120 }), 50)).toEqual([]);
+  it('cờ sạt lở theo QĐ 18/2021 Điều 46 (route-1.2), chỉ ở đoạn >= 300 m', () => {
+    expect(ROUTE_RULES_VERSION).toBe('route-1.2');
+    // 100-200 mm cần mưa 1-2 ngày trước
+    expect(kinds(w({ rain24h: 120, rainPrior: [5, 0, 0] }), 900)).toContain('landslide3');
+    expect(kinds(w({ rain24h: 100, rainPrior: [5, 5, 0] }), 900)).toContain('landslide3');
+    expect(kinds(w({ rain24h: 120, rainPrior: [0, 0, 0] }), 900)).toContain('landslide2');      // chưa đủ ngày mưa trước
+    expect(kinds(w({ rain24h: 120, rainPrior: [5, 5, 5] }), 900)).toContain('landslide2');      // 3 ngày: không thuộc ô 100-200
+    // trên 200 mm cần mưa trên 2 ngày trước
+    expect(kinds(w({ rain24h: 250, rainPrior: [5, 5, 5] }), 900)).toContain('landslide3');
+    expect(kinds(w({ rain24h: 250, rainPrior: [5, 5, 0] }), 900)).toContain('landslide2');
+    // dưới 100 mm: QĐ 18 không xếp cấp; > 50 mm là mưa to (khoản 17) -> cờ mưa mức 1, không phải sạt lở
+    expect(kinds(w({ rain24h: 99.9, rainPrior: [5, 5, 5] }), 900)).toEqual(['rain1']);
+    expect(kinds(w({ rain24h: 50, rainPrior: [5, 5, 5] }), 900)).toEqual([]);
+    expect(kinds(w({ rain24h: 25 }), 900)).toEqual([]);                                         // mốc 20 mm cũ đã bỏ
+    expect(kinds(w({ rain24h: 10, rain72h: 160 }), 900)).toEqual([]);                           // mốc 72h cũ đã bỏ
+    expect(kinds(w({ rain24h: 120, rainPrior: [5, 0, 0] }), 299)).toEqual([]);                  // dưới 300 m
+    expect(kinds(w({ rain24h: 120, rainPrior: [5, 0, 0] }), 300)).toContain('landslide3');
     expect(kinds(w({ rain24h: null, rain72h: null }), 900)).toEqual([]);
+    const t = assessPoint(w({ rain24h: 120, rainPrior: [5, 0, 0] }), 900).find(h => h.kind === 'landslide')!.text;
+    expect(t).toContain('QĐ 18/2021'); expect(t).toContain('cấp 1-3');
   });
   it('ô tô bỏ cảnh báo nhẹ chỉ hợp xe máy (lạnh, gió cấp 5), giữ cảnh báo nặng', () => {
     expect(assessPoint(w({ tempC: 9 }), 1500, 'car')).toEqual([]);
@@ -369,5 +383,69 @@ describe('vòng 3: hạn chờ, lời báo 429, tuyến người dùng tự lậ
   });
   it('dữ liệu hỏng trong localStorage thì trả rỗng, không vỡ app', () => {
     expect(loadUserRoutes({ getItem: () => '{hỏng' })).toEqual([]);
+  });
+});
+
+describe('vòng 7: tuyến chưa tới đích (đích cuối đường mòn)', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  it('khoảng hở điểm cuối và lời báo theo ngưỡng END_GAP_WARN_KM', () => {
+    expect(END_GAP_WARN_KM).toBe(0.5);
+    const c = [{ lat: 21, lon: 105 }, { lat: 21, lon: 105.1 }];
+    expect(endGapOf(c, { lat: 21, lon: 105.1 })).toBeCloseTo(0, 6);
+    expect(endGapOf(c, { lat: 21.02, lon: 105.1 })).toBeCloseTo(2.22, 1);
+    expect(endGapOf([], { lat: 21, lon: 105 })).toBe(Infinity);
+    expect(endGapNote(0.5)).toBeUndefined();
+    expect(endGapNote(0.51)).toMatch(/CHƯA TỚI ĐÍCH.*0\.5 km/);
+    expect(endGapNote(2.32)).toMatch(/2\.3 km/);
+  });
+  it('fetchRoute ghi endGapKm so với ĐÍCH người dùng chọn', async () => {
+    const osrm = { code: 'Ok', routes: [{ distance: 10000, duration: 600, geometry: { coordinates: [[105, 21], [105.1, 21]] } }] };
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(osrm))));
+    const g = await fetchRoute({ lat: 21.0071, lon: 105.0071 }, { lat: 21.02, lon: 105.1 }, 'car');
+    expect(g.endGapKm).toBeCloseTo(2.22, 1);
+  });
+  // Giả lập toàn bộ mạng (không gọi dịch vụ thật): OSRM dừng ở (21, 105.1), đích ở (21.02, 105.1).
+  function stubAll(routeEnd: [number, number]) {
+    const calls: string[] = [];
+    const osrm = { code: 'Ok', routes: [{ distance: 11000, duration: 900, geometry: { coordinates: [[105, 21], routeEnd] } }] };
+    vi.stubGlobal('fetch', vi.fn(async (u: string) => {
+      const url = String(u); calls.push(url);
+      const q = new URL(url).searchParams;
+      const lats = (q.get('latitude') || '').split(',');
+      if (url.includes('project-osrm')) return new Response(JSON.stringify(osrm));
+      if (url.includes('/v1/elevation')) return new Response(JSON.stringify({ elevation: lats.map((la, i) => (+la === 21.02 ? 1700 : 500 + i)) }));
+      // dự báo: đánh dấu từng toạ độ bằng nhiệt độ = 100 x vĩ độ, để biết destOm lấy ở đâu
+      const one = (la: string) => ({ latitude: +la, hourly: { time: ['2026-11-20T05:00'], temperature_2m: [+la * 100] }, daily: { time: [], sunrise: [], sunset: [] } });
+      return new Response(JSON.stringify(lats.length > 1 ? lats.map(one) : one(lats[0])));
+    }));
+    return calls;
+  }
+  it('hở > 0,5 km: thêm ĐÍCH vào CÙNG lần gọi cao độ và dự báo, destOm/destElev lấy tại đích, mẫu tuyến không gồm đích', async () => {
+    const calls = stubAll([105.1, 21]);
+    const p = await planRoute({ lat: 21.0072, lon: 105.0072 }, { lat: 21.02, lon: 105.1 }, 'car', 40, Date.parse('2026-11-20T04:00:00+07:00'));
+    const elevCalls = calls.filter(c => c.includes('/v1/elevation')), wxCalls = calls.filter(c => c.includes('/v1/forecast'));
+    expect(elevCalls.length).toBe(1); expect(wxCalls.length).toBe(1);
+    const eLats = new URL(elevCalls[0]).searchParams.get('latitude')!.split(',');
+    expect(eLats.length).toBeLessThanOrEqual(ELEV_MAX_POINTS);
+    expect(eLats[eLats.length - 1]).toBe('21.0200');
+    expect(p.elevs.length).toBe(eLats.length - 1);
+    expect(p.destElev).toBe(1700);
+    expect(new URL(wxCalls[0]).searchParams.get('latitude')!.split(',').pop()).toBe('21.0200');
+    expect(p.destOm.latitude).toBe(21.02);
+    expect(p.samples.every(s => s.pos.lat === 21)).toBe(true);
+    expect(p.endNote).toMatch(/CHƯA TỚI ĐÍCH/);
+    expect(compactRoute(p).endGapKm).toBeCloseTo(2.22, 1);
+    expect(compactRoute(p).endNote).toMatch(/CHƯA TỚI ĐÍCH/);
+  });
+  it('tới đích (hở <= 0,5 km): không thêm toạ độ, destOm là điểm cuối tuyến, không có lời báo', async () => {
+    const calls = stubAll([105.1, 21.0195]);
+    const p = await planRoute({ lat: 21.0073, lon: 105.0073 }, { lat: 21.02, lon: 105.1 }, 'car', 40, Date.parse('2026-11-20T04:00:00+07:00'));
+    const eLats = new URL(calls.find(c => c.includes('/v1/elevation'))!).searchParams.get('latitude')!.split(',');
+    expect(eLats).not.toContain('21.0200');
+    expect(p.elevs.length).toBe(eLats.length);
+    expect(p.destElev).toBe(p.elevs[p.elevs.length - 1]);
+    expect(p.destOm.latitude).toBe(p.samples[p.samples.length - 1].pos.lat);
+    expect(p.endNote).toBeUndefined();
+    expect(compactRoute(p).endNote).toBeNull();
   });
 });

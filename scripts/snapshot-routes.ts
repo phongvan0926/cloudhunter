@@ -21,6 +21,8 @@
  * - `slide`: cấp rủi ro lũ quét/sạt lở theo QĐ 18/2021 tại từng điểm (services/slideService.ts), chỉ ghi điểm đạt >= 100 mm/24h.
  * Phần phụ hỏng thì ghi `<phần>Error` và mã thoát 3, không bỏ tuyến (phán quyết độ khó chính vẫn là bằng chứng).
  */
+import { countCallsAs } from './count-calls';
+countCallsAs('snapshot-routes');   // log 1 dòng lượt gọi theo máy chủ khi kết thúc (vòng 7)
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { vnTodayStr, addDaysStr, computeSunTimes } from '../services/weatherService';
@@ -69,7 +71,7 @@ async function main(): Promise<number> {
       const c = compactRoute(p);
       const extra: any = {};
       try {
-        const st = await retry429(`${r.id} độ ổn định`, () => fetchStability(d.lat, d.lon, p.elevs[p.elevs.length - 1] ?? null));
+        const st = await retry429(`${r.id} độ ổn định`, () => fetchStability(d.lat, d.lon, p.destElev));
         // Ghi mọi ngày đích D..D+5 (cùng 1 lần gọi): bản chụp tối trước D chỉ có tầm ~1 ngày tới D, còn khối này nhắm tầm 3-5 ngày.
         const dates = Array.from({ length: STAB_DAYS }, (_, k) => addDaysStr(DATE, k));
         const pack = (ind: { verdict: string; usable: number; changed: number; models: { values: (number | null)[] }[] }) =>

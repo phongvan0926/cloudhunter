@@ -5,12 +5,13 @@
  * Ý tưởng học từ skyradar.vn (họ khoá sau gói Pro): lấy tuyến (Valhalla xe máy / OSRM ô tô), chia điểm dọc đường, ước giờ
  * đi qua từng điểm, lấy dự báo ĐÚNG giờ đó. Họ chỉ xét mưa + mây. Bản này tự viết, thêm thứ dân
  * phượt đèo cần: cao độ từng điểm (DEM), đèo cao nhất, tổng leo dốc, tầm nhìn/đi trong mây, gió giật,
- * nhiệt độ ở cao độ mặt đường, mưa tích luỹ 24h/72h (trơn, sạt lở), và qua đèo lúc trời tối.
+ * nhiệt độ ở cao độ mặt đường, mưa 24h và số ngày mưa trước đó (trơn; sạt lở theo QĐ 18/2021), và qua đèo lúc trời tối.
  *
  * Triết lý giữ nguyên: mọi con số do code tính; thiếu dữ liệu thì nói thiếu (noData), không bịa.
  * Ngưỡng dưới đây là ngưỡng THAM KHẢO cho người đi đường (nguồn ghi cạnh từng hằng số), không
  * phải engine biển mây và không đụng điểm/trạng thái/đáng đi.
  */
+import { slideRiskQD18, fmtRange, SLIDE_MIN_ELEV } from './slideService';
 
 export interface LatLon { lat: number; lon: number }
 
@@ -65,9 +66,9 @@ export function evenKms(total: number, step: number, minGap = 0): number[] {
 
 /** Profile cao độ: tối đa 100 điểm (giới hạn 1 lần gọi Elevation API), bước >= 1 km. */
 export const ELEV_MAX_POINTS = 100;
-export function elevationKms(total: number): number[] {
-  const step = Math.max(1, total / (ELEV_MAX_POINTS - 1));
-  return evenKms(total, step, step * 0.3).slice(0, ELEV_MAX_POINTS);
+export function elevationKms(total: number, maxPoints = ELEV_MAX_POINTS): number[] {
+  const step = Math.max(1, total / (maxPoints - 1));
+  return evenKms(total, step, step * 0.3).slice(0, maxPoints);
 }
 
 /**
@@ -208,8 +209,10 @@ export interface Hazard { kind: HazardKind; level: Level; text: string }
 /**
  * Phiên bản bộ luật độ khó cung đường. Đổi ngưỡng/luật thì tăng số, để bản chụp tuyến (scripts/snapshot-routes.ts)
  * biết phán quyết nào do luật nào sinh ra. route-1.1 (19/11/2026): thêm mã thời tiết 45/48 = sương mù.
+ * route-1.2 (19/11/2026, gcc29 vòng 7): cờ sạt lở theo QĐ 18/2021 (một nguồn với slideService), bỏ mốc 72h >= 150 mm
+ * (không nguồn) và mốc 20 mm (không nguồn); mưa to 50-100 mm/24h thành cờ 'rain' mức 1 (định nghĩa QĐ 18 Điều 3 khoản 17).
  */
-export const ROUTE_RULES_VERSION = 'route-1.1';
+export const ROUTE_RULES_VERSION = 'route-1.2';
 
 export const TH = {
   // Mưa theo giờ: nhẹ < 2,5 mm/h, vừa 2,5-7,6, to > 7,6 (thang AMS/WMO hay dùng). Lấy 0,5 / 3 / 10 mm/h.
@@ -224,9 +227,10 @@ export const TH = {
   GUST_NOTE: 29, GUST_HARD: 39, GUST_DANGER: 62,
   // Lạnh khi đi xe: <= 10°C cần đồ ấm; <= 3°C có thể có băng giá vùng núi cao; <= 0°C kèm ẩm/mưa = mặt đường đóng băng.
   COLD_NOTE: 10, COLD_FROST: 3, COLD_ICE: 0,
-  // Mưa tích luỹ 24h ở vùng đồi núi (>= 300 m): mưa to 50-100 mm/24h, rất to > 100 mm/24h
-  // (thang mưa của Trung tâm Dự báo KTTV quốc gia). Đất bão hoà sau 72h >= 150 mm.
-  SLIDE_MIN_ELEV: 300, R24_NOTE: 20, R24_HARD: 50, R24_DANGER: 100, R72_HARD: 150,
+  // Mưa 24h: mưa to trên 50 đến 100 mm, mưa rất to trên 100 mm (QĐ 18/2021/QĐ-TTg Điều 3 khoản 17). Cờ sạt lở KHÔNG dùng
+  // trực tiếp hai mốc này mà theo Điều 46 + Bảng 6 (slideRiskQD18). R24_NOTE 20 chỉ còn là ranh lớp so sánh của khối độ
+  // ổn định và khí hậu tháng (chưa có nguồn riêng), không sinh cờ nào. SLIDE_MIN_ELEV 300 m là quy ước của app.
+  SLIDE_MIN_ELEV, R24_NOTE: 20, R24_HARD: 50, R24_DANGER: 100,
   // Đi đèo lúc tối: điểm >= 600 m.
   DARK_MIN_ELEV: 600,
 };
@@ -263,12 +267,17 @@ export function assessPoint(wx: PointWx, elevM: number | null, vehicle: Vehicle 
   else if (t !== null && t <= TH.COLD_FROST) out.push({ kind: 'ice', level: 2, text: `${t}°C: có thể có băng giá` });
   else if (bike && t !== null && t <= TH.COLD_NOTE) out.push({ kind: 'cold', level: 1, text: `Lạnh ${t}°C, cần áo ấm, găng tay` });
 
-  if (e >= TH.SLIDE_MIN_ELEV) {
-    const r24 = wx.rain24h, r72 = wx.rain72h;
-    if (r24 !== null && r24 >= TH.R24_DANGER) out.push({ kind: 'landslide', level: 3, text: `Mưa ${r24} mm trong 24h: nguy cơ sạt lở, lũ quét` });
-    else if ((r24 !== null && r24 >= TH.R24_HARD) || (r72 !== null && r72 >= TH.R72_HARD)) {
-      out.push({ kind: 'landslide', level: 2, text: `Mưa nhiều (24h: ${r24 ?? '?'} mm, 72h: ${r72 ?? '?'} mm): đường đèo dễ sạt, đất đá` });
-    } else if (r24 !== null && r24 >= TH.R24_NOTE) out.push({ kind: 'landslide', level: 1, text: `Đã mưa ${r24} mm trong 24h: đường đất lầy, trơn` });
+  // Sạt lở, lũ quét: QĐ 18/2021 Điều 46 + Bảng 6 qua slideRiskQD18 (cùng luật khối 'Dông và sạt lở'). Ánh xạ sang mức
+  // của app là QUY ƯỚC: văn bản xếp cấp (LEVEL) -> 3; mưa rất to >= 100 mm nhưng chưa đủ điều kiện ngày mưa trước
+  // (NO_PRIOR) -> 2; mưa to (> 50 mm, QĐ 18 khoản 17) -> cờ mưa mức 1. Dưới SLIDE_MIN_ELEV: không xét (LOWLAND).
+  const sr = slideRiskQD18(wx, e);
+  const wetTxt = `${sr.wetDays}${sr.wetExact ? '' : '+'} ngày mưa trước đó`;
+  if (sr.status === 'LEVEL') {
+    out.push({ kind: 'landslide', level: 3, text: `Mưa ${sr.r24} mm/24h sau ${wetTxt}: QĐ 18/2021 xếp rủi ro sạt lở, lũ quét ${fmtRange(sr.kv12)} ở miền núi phía Bắc` });
+  } else if (sr.status === 'NO_PRIOR') {
+    out.push({ kind: 'landslide', level: 2, text: `Mưa rất to ${sr.r24} mm/24h (${wetTxt}, chưa đủ điều kiện để QĐ 18 xếp cấp): đề phòng sạt lở, đá lăn` });
+  } else if (sr.status === 'BELOW' && sr.r24 !== null && sr.r24 > TH.R24_HARD) {
+    out.push({ kind: 'rain', level: 1, text: `Đã mưa to ${sr.r24} mm trong 24h: đường đèo trơn` });
   }
 
   if (wx.isDark && e >= TH.DARK_MIN_ELEV) out.push({ kind: 'dark', level: 1, text: 'Qua đoạn núi lúc trời tối' });
@@ -481,6 +490,8 @@ export interface RouteGeom {
   fallbackNote?: string;
   /** Tuyến xe máy có đoạn thu phí (thường là cao tốc/đường cao cấp): nhắc người đi xem biển cấm xe máy. */
   cautionNote?: string;
+  /** Km chim bay từ điểm cuối tuyến tới đích (vòng 7). > END_GAP_WARN_KM = tuyến chưa tới đích. */
+  endGapKm: number;
 }
 
 /** Tuyến ô tô từ OSRM bản công khai (miễn phí, CORS mở). */
@@ -490,7 +501,7 @@ export async function fetchOsrmCar(a: LatLon, b: LatLon): Promise<RouteGeom> {
   const r = d?.routes?.[0];
   if (d?.code !== 'Ok' || !r) throw new Error(`OSRM không tìm được đường (${d?.code || 'không rõ'})`);
   const coords: LatLon[] = r.geometry.coordinates.map(([lon, lat]: [number, number]) => ({ lat, lon }));
-  return { coords, cum: cumulativeKm(coords), distanceKm: r.distance / 1000, durationH: r.duration / 3600, router: 'osrm-car' };
+  return { coords, cum: cumulativeKm(coords), distanceKm: r.distance / 1000, durationH: r.duration / 3600, router: 'osrm-car', endGapKm: endGapOf(coords, b) };
 }
 
 /**
@@ -513,8 +524,22 @@ export async function fetchValhallaMoto(a: LatLon, b: LatLon): Promise<RouteGeom
   if (!legs?.length || d?.trip?.status !== 0) throw new Error(`Valhalla không tìm được đường (${d?.trip?.status_message || d?.error || 'không rõ'})`);
   const coords = legs.flatMap((l: any) => decodePolyline6(l.shape));
   const s = d.trip.summary;
-  return { coords, cum: cumulativeKm(coords), distanceKm: s.length, durationH: s.time / 3600, router: 'valhalla-motorcycle',
+  return { coords, cum: cumulativeKm(coords), distanceKm: s.length, durationH: s.time / 3600, router: 'valhalla-motorcycle', endGapKm: endGapOf(coords, b),
     cautionNote: s.has_toll || s.has_highway ? 'Tuyến xe máy này có đoạn thu phí/cao tốc theo bản đồ OSM. Có đoạn cấm xe máy mà bản đồ chưa ghi; tới nơi theo biển báo.' : undefined };
+}
+
+/**
+ * Khoảng hở điểm cuối (phiếu gcc29 vòng 7): km chim bay từ điểm cuối tuyến tới đích. Máy tìm đường bám đích vào
+ * đoạn đường gần nhất nó cho đi; đích là đỉnh/điểm ngắm cuối đường mòn thì tuyến dừng sớm (đo 19/11/2026: OSRM
+ * Huế - Bạch Mã dừng cách đỉnh 2,25 km). Hở > END_GAP_WARN_KM thì giao diện và bản chụp nói rõ "chưa tới đích".
+ */
+export const END_GAP_WARN_KM = 0.5;   // quy ước app: dưới mức này coi là bãi đỗ/điểm xuống xe sát đích
+export function endGapOf(coords: LatLon[], dest: LatLon): number {
+  return coords.length ? haversineKm(coords[coords.length - 1], dest) : Infinity;
+}
+export function endGapNote(gapKm: number): string | undefined {
+  if (!(gapKm > END_GAP_WARN_KM)) return undefined;
+  return `Tuyến CHƯA TỚI ĐÍCH: đường xe trên bản đồ dừng cách điểm đến ${gapKm.toFixed(1)} km chim bay (đoạn cuối là đường mòn, đường nội bộ hoặc bản đồ chưa có). Thời tiết và độ khó ở đây chỉ tính tới điểm cuối của tuyến; đoạn còn lại tự tìm hiểu.`;
 }
 
 /** Xe máy: Valhalla, hỏng thì OSRM ô tô kèm ghi chú. Ô tô: OSRM. */
@@ -591,6 +616,14 @@ export interface RoutePlan {
   summary: RouteSummary;
   /** Phản hồi Open-Meteo thô tại điểm đích (10 ngày theo giờ) để tóm tắt ngày, không gọi thêm API. */
   destOm: any;
+  /**
+   * Vòng 7: tuyến chưa tới đích (hở > END_GAP_WARN_KM) thì `destOm`/`destElev` lấy TẠI ĐÍCH (thêm 1 toạ độ vào cùng lần gọi
+   * cao độ và dự báo, không thêm lần gọi), không phải tại điểm cuối tuyến. Trước đây "Tóm tắt ngày tại đích" của Pù Luông
+   * là thời tiết ở 543 m cuối đường xe thay vì đỉnh 1.700 m.
+   */
+  destElev: number | null;
+  endGapKm: number;
+  endNote?: string;
   /** Lúc tải dự báo dọc tuyến thật (ms; lấy từ đệm 30 phút thì là lúc tải lần đầu), để hiện "dự báo tải lúc HH:MM". */
   fetchedAt: number;
 }
@@ -609,9 +642,12 @@ export async function planRoute(
   const durationH = geom.distanceKm / speedKmh;
   const departMs = typeof depart === 'function' ? depart(durationH) : depart;
 
-  const eKms = elevationKms(total);
+  const gapped = geom.endGapKm > END_GAP_WARN_KM;
+  const eKms = elevationKms(total, gapped ? ELEV_MAX_POINTS - 1 : ELEV_MAX_POINTS);
   onStep?.(2, 'Đo cao độ dọc tuyến (Open-Meteo)');
-  const elevs = await fetchElevations(eKms.map(k => pointAtKm(geom.coords, geom.cum, k)));
+  const elevAll = await fetchElevations([...eKms.map(k => pointAtKm(geom.coords, geom.cum, k)), ...(gapped ? [to] : [])]);
+  const elevs = elevAll.slice(0, eKms.length);
+  const destElev = gapped ? (elevAll[eKms.length] ?? null) : (elevs[elevs.length - 1] ?? null);
   const stats = elevationStats(eKms, elevs.map(v => (v === null ? NaN : v)));
 
   const elevAt = (km: number): number | null => {
@@ -625,8 +661,10 @@ export async function planRoute(
 
   const base = wKms.map(km => ({ km, pos: pointAtKm(geom.coords, geom.cum, km), elev: elevAt(km) }));
   onStep?.(3, 'Lấy dự báo dọc tuyến (Open-Meteo)');
-  const oms = await fetchRouteWeather(base);
-  const fetchedAt = fetchedAtOf(routeWeatherUrl(base)) ?? Date.now();
+  const wxPts = gapped ? [...base, { pos: to, elev: destElev }] : base;
+  const omsAll = await fetchRouteWeather(wxPts);
+  const oms = omsAll.slice(0, base.length);
+  const fetchedAt = fetchedAtOf(routeWeatherUrl(wxPts)) ?? Date.now();
   const samples: RouteSample[] = base.map((b, i) => {
     const eta = etaMs(b.km, total, durationH, departMs);
     const hourKey = vnHourKey(eta);
@@ -636,7 +674,8 @@ export async function planRoute(
   });
   return {
     from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, routerH: geom.durationH, router: geom.router, fallbackNote: geom.fallbackNote, cautionNote: geom.cautionNote,
-    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1], fetchedAt,
+    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: omsAll[omsAll.length - 1], fetchedAt,
+    destElev, endGapKm: geom.endGapKm, endNote: endGapNote(geom.endGapKm),
   };
 }
 
@@ -653,6 +692,7 @@ export function compactRoute(p: RoutePlan) {
     departVN: new Date(p.departMs + 7 * 3600_000).toISOString().slice(0, 16),
     distanceKm: Math.round(p.distanceKm * 10) / 10, durationH: Math.round(p.durationH * 100) / 100,
     maxElev: p.stats?.maxElev ?? null, cautionNote: p.cautionNote ?? null,
+    endGapKm: Math.round(p.endGapKm * 100) / 100, endNote: p.endNote ?? null,
     level: p.summary.level, levelLabel: LEVEL_LABEL[p.summary.level], noDataCount: p.summary.noDataCount,
     worst: p.summary.worst.map(w => ({ kind: w.kind, level: w.level, km: Math.round(w.km), text: w.text })),
     samples: p.samples.map(s => ({

@@ -133,7 +133,8 @@ Code `services/stormService.ts`, khối `StormSlide` (data-testid `route-storm`)
 ## 8. Sạt lở, lũ quét theo QĐ 18/2021 (19/11/2026, gcc29 vòng 6) - chỉ hiển thị + ghi bản chụp
 
 Code `services/slideService.ts`, phần `route-slide` trong khối `StormSlide`. Không gọi mạng thêm (dùng mưa dọc tuyến đã tải,
-thêm `PointWx.rainPrior` = 3 khối 24h liền trước khối `rain24h`). Không đổi `assessPoint` (cờ `landslide` cũ giữ nguyên).
+thêm `PointWx.rainPrior` = 3 khối 24h liền trước khối `rain24h`). Từ vòng 7 (`route-1.2`) cờ `landslide` trong `assessPoint` cũng
+dùng chính hàm này, nên khối chi tiết và mức độ khó của tuyến không còn nói hai luật khác nhau.
 
 - Nguồn: Quyết định 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII, bản gốc https://vupc.mae.gov.vn/Data/files/18_2021_QD-TTg.doc.
   Đã đối chiếu từng ô Bảng 6 với lời văn Điều 46 (19/11/2026), khớp hết. Văn bản tháng 5/2026 vẫn viện dẫn; chưa thấy văn bản
@@ -142,9 +143,27 @@ thêm `PointWx.rainPrior` = 3 khối 24h liền trước khối `rain24h`). Khô
 - App không có bản đồ vùng nguy cơ, không tra tỉnh, nên chỉ báo KHOẢNG cấp cho nhóm KV1-2 và KV3-4. Quy ước app: ngày có mưa
   >= 1 mm/24h; chỉ xét điểm >= 300 m (`TH.SLIDE_MIN_ELEV`). Cổng độ cao này thêm SAU khi chạy thử 19/11 thấy đồng bằng Huế 3-12 m
   bị xếp cấp; là cổng phạm vi (văn bản nói "vùng có nguy cơ"), không phải chỉnh ngưỡng mưa.
-- Ghi chú về cờ `landslide` cũ trong `assessPoint`: mốc 50 và 100 mm/24h là thang mưa KTTV (mưa to, rất to), CHƯA phải ngưỡng
-  sạt lở có văn bản; mốc 72h >= 150 mm chưa có nguồn. Chưa sửa vòng này (sửa thì đổi `ROUTE_RULES_VERSION`).
+- Cờ trong `assessPoint` từ `route-1.2` (vòng 7, 19/11/2026; trước đó: 50/100 mm/24h và 72h >= 150 mm không nguồn):
+  QĐ 18 xếp cấp (`LEVEL`) -> `landslide` mức 3; mưa >= 100 mm/24h mà chưa đủ điều kiện ngày mưa trước (`NO_PRIOR`) -> `landslide`
+  mức 2; 50-100 mm/24h -> `rain` mức 1 "đường đèo trơn" (50 mm = "mưa to" theo QĐ 18 Điều 3 khoản 17, không phải ngưỡng sạt lở).
+  Ánh xạ trạng thái văn bản sang mức 1-3 của app là QUY ƯỚC. Mốc 72h đã BỎ (không nguồn); `rain72h` chỉ còn là dữ liệu thô trong
+  bản chụp. Khí hậu tháng cũng bỏ chỉ số "đợt 3 ngày >= 150 mm", thay bằng số ngày >= 100 mm (`d100`). Bản chụp `route-1.1` trở về
+  trước chấm lại được bằng `samples[].wx` (`r24`, `rp`); bản chụp chưa có `rp` thì `rainPrior` = không rõ, luật coi là "có thể".
 - Bản chụp: `slide.points` (chỉ điểm LEVEL hoặc NO_PRIOR) + `slide.noDataCount`.
 - CÁCH CHẤM, CHỐT TRƯỚC: sự thật = tin sạt lở/tắc đường trên đúng quốc lộ/tỉnh lộ của tuyến (báo địa phương, bài FB), trong
   24h quanh giờ đi. Mùa mưa miền Bắc 5-9, miền Trung 9-12: dự kiến chấm 31/12/2026 cho tuyến Huế - Bạch Mã, 31/10/2027 cho tuyến
   miền Bắc. Dưới 5 sự kiện thì chỉ liệt kê, không tính tỉ lệ.
+
+## 9. Tuyến chưa tới đích (19/11/2026, gcc29 vòng 7)
+
+Máy tìm đường bám đích vào đoạn đường gần nhất mà nó cho đi. Đích là đỉnh núi hay điểm ngắm ở cuối đường mòn thì tuyến dừng sớm,
+và trước vòng 7 app im lặng coi là đủ: "Tóm tắt ngày tại đích" và độ ổn định dự báo lấy ở điểm cuối đường xe.
+- Đo 19/11/2026 bằng `scripts/check-route-ends.ts` (chỉ OSRM/Valhalla, độ cao từ Valhalla /height, không gọi Open-Meteo): 2/8 tuyến
+  cố định chưa tới đích: Hà Nội - Pù Luông (Valhalla xe máy) dừng cách đích 2,32 km, điểm cuối 543 m so với điểm khai báo 1.700 m;
+  Huế - Bạch Mã (OSRM ô tô) dừng cách 2,26 km, 1.110 m so với 1.448 m. Sáu tuyến kia hở <= 0,48 km, lệch độ cao <= 195 m.
+- Đã thử: tăng `search_radius` 5 km (không đổi), Valhalla `auto`/`motorcycle`/`pedestrian`: Bạch Mã cùng lắm còn hở 1,54 km (đi bộ),
+  Pù Luông không có đường nào trên OSM. Không sửa được ở bước bám đích vì bản đồ không có đường.
+- Cách xử lý: hở > `END_GAP_WARN_KM` (0,5 km, quy ước app) thì `RoutePlan.endNote` hiện khung "Tuyến CHƯA TỚI ĐÍCH ... X km", kèm độ
+  cao điểm cuối tuyến và độ cao đích; ĐÍCH được thêm làm 1 toạ độ vào cùng lần gọi cao độ và dự báo (không thêm lần gọi), nên
+  `destOm`/`destElev` là thời tiết và độ cao TẠI ĐÍCH. Mẫu dọc tuyến và mức độ khó vẫn chỉ tính trên đường xe.
+- Bản chụp ghi `endGapKm` + `endNote` cho từng tuyến. Không đổi `assessPoint` nên không đổi `ROUTE_RULES_VERSION`.

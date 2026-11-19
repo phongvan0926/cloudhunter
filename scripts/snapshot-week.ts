@@ -16,6 +16,8 @@ if (typeof (globalThis as any).localStorage === 'undefined') {
     removeItem: (k: string) => { mem.delete(k); },
   };
 }
+import { countCallsAs } from './count-calls';
+countCallsAs('snapshot-week');   // log 1 dòng lượt gọi theo máy chủ khi kết thúc (vòng 7)
 import { seedValleyCache, dumpValleyCache } from './valley-seed';
 import { mkdirSync, writeFileSync, existsSync } from 'fs';
 import { rankSpotsForWeek } from '../services/rankingService';
