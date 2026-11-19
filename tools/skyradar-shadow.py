@@ -7,7 +7,7 @@ Mục đích: khi có nhãn vệ tinh/người đi của ngày D, calibrate.ts i
 xem scripts/shadow-contrast.ts và docs/skyradar-doi-chung.md.
 
 Dùng:  python tools/skyradar-shadow.py [KEY ...]   (không KEY = bộ mặc định; trên máy anh: pw-python)
-Ra:    data/skyradar-shadow/<YYYY-MM-DDTHHMM giờ VN lúc chụp>.json (đã có bản trong 6 giờ qua thì không chụp lại)
+Ra:    data/skyradar-shadow/<YYYY-MM-DDTHHMM giờ VN lúc chụp>.json (đã có bản trong 6 giờ qua thì không chụp lại, trừ SHADOW_FORCE=1)
        {"chup_luc": ISO+07:00, "nguon": ..., "diem": {key: [{t, bienMay, cheTamNhin, tamNhin, index, viewClear, below, spread}]}}
        t là giờ địa phương VN của skyradar; chỉ giữ giờ GIU_GIO (rạng sáng) để kho không phình.
 Mã thoát: 0 đủ điểm | 3 thiếu điểm (vẫn ghi phần đọc được, job phải ĐỎ) | 1 không đọc được điểm nào (KHÔNG ghi tệp).
@@ -42,7 +42,8 @@ def main() -> int:
     now = datetime.datetime.now(VN)
     out_dir = pathlib.Path(os.environ.get('SHADOW_OUT_DIR') or ROOT / 'data/skyradar-shadow')  # biến môi trường: chạy thử
     dest = out_dir / f'{now:%Y-%m-%dT%H%M}.json'
-    for f in out_dir.glob('*.json') if out_dir.exists() else []:
+    force = os.environ.get('SHADOW_FORCE') == '1'   # chạy tay (workflow_dispatch): người bấm muốn chụp ngay
+    for f in out_dir.glob('*.json') if out_dir.exists() and not force else []:
         at = datetime.datetime.fromisoformat(json.loads(f.read_text())['chup_luc'])
         if now - at < datetime.timedelta(hours=6):
             print('đã có bản chụp trong 6 giờ qua, không chụp lại:', f.name)

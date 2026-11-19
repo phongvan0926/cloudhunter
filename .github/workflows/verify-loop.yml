@@ -144,6 +144,9 @@ jobs:
       - run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Chụp phán quyết của skyradar
         id: shot
+        env:
+          # Chạy tay = người bấm muốn chụp ngay, bỏ qua luật "đã có bản trong 6 giờ" (cron vẫn giữ luật đó).
+          SHADOW_FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: |
           set +e
           python tools/skyradar-shadow.py
