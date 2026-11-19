@@ -182,3 +182,47 @@ Công bố: trước lượt đầy đủ đã chạy thử script chấm trên 
    kiểm cơ chế trên đầu vào (RH 2 m, mây thấp, BLH ngày quang) TRƯỚC khi chấm điểm; bán kính 5/10/20 km đăng ký trước;
    bootstrap theo đợt thời tiết; thu thêm nhãn âm người đi; kiểm công suất (72 nhãn không phân biệt nổi chênh 7 ca);
    xác nhận ngoài mẫu từ 20/11 bằng dự báo thật.
+
+## Đợt "thung lũng v2: điểm nhìn thấy từ đỉnh" (đăng ký 19/11/2026, phiếu gcc29 vòng 4) - VIẾT TRƯỚC, CHẤM NGOÀI MẪU
+
+Viết và commit TRƯỚC khi có dữ liệu chấm. Nối từ đợt "dự báo tại điểm thung lũng" ở trên (bị bác bằng số). Luật chọn điểm
+mới theo phản biện độc lập của đợt đó. **Chỉ chấm trên các ngày 20/11/2026 trở đi** (ngoài mẫu: chưa ai nhìn ngày nào
+trong đó). KHÔNG chấm lại trên 69 ngày 23/8-18/11 đã nhìn. Ngày chấm dự kiến: **20/12/2026**, khi có đủ 30 ngày
+(20/11-19/12). Không gộp vào engine nếu không đạt, kể cả khi đạt một phần.
+
+**Luật chọn điểm (chốt trước, tính bằng `scripts/valley-v2-points.ts`, kết quả commit ở `data/valley-v2-points.json`
+TRƯỚC khi có ngày chấm nào):**
+- Lưới DEM SRTM 90 m (OpenTopoData `srtm90m`) bước 0,005° (~550 m), trong vành 3-8 km quanh toạ độ điểm thư viện.
+- Ứng viên hợp lệ khi: DEM >= 50 m; thấp hơn mắt người đứng 300-1.500 m (mắt = max(cao độ thư viện, DEM tại toạ độ) + 2 m);
+  NHÌN THẤY từ chỗ đứng (đường ngắm thẳng, lấy mẫu mỗi ~250 m bằng nội suy song tuyến trên lưới, không mẫu nào cao hơn
+  đường ngắm; bỏ qua cong Trái Đất, ~4 m ở 8 km); nằm ở ô 0,1° khác ô chứa chỗ đứng (xấp xỉ "khác ô" của ICON/UKMO ~10 km;
+  GFS 0,25° có thể vẫn chung ô, ghi nhận là giới hạn).
+- "Cùng lưu vực" chỉ được XẤP XỈ bằng điều kiện nhìn thấy (đường ngắm không vướng sống núi). Không có phân lưu vực thật.
+- Mỗi góc phần tư (B, Đ, N, T, tâm theo hướng chính, 90°) lấy ứng viên THẤP NHẤT; hoà thì gần hơn. Điểm thư viện cần
+  ít nhất 2 góc có ứng viên, thiếu thì loại khỏi đợt (ghi tên, không thay luật).
+- Không chỉnh bán kính, bước lưới, ngưỡng cao độ, luật chọn sau khi đã ghi tệp điểm.
+
+**Hai nhánh, cùng một mẻ** (historical-forecast Open-Meteo, gfs_seamless/icon_seamless/ukmo_seamless như đợt trước;
+replay gần lead 0 nên chỉ so tương đối):
+- A (hiện tại): như đợt trước.
+- C: khối thung lũng = TRUNG BÌNH từng giờ, từng biến của dự báo tại 2-4 điểm v2 (mỗi điểm `elevation=` DEM của nó);
+  giờ nào thiếu quá nửa số điểm thì giờ đó null. `ctx.valleyElevation` = trung bình DEM các điểm.
+- Chỗ đứng O dùng chung. Engine, ngưỡng, `isWorthGoing` giữ nguyên.
+
+**Bước 0, kiểm cơ chế (chấm TRƯỚC điểm số; trượt thì DỪNG, không chấm bước sau):** trên các điểm-ngày vệ tinh CLEAR,
+giờ 05-07 VN: trung vị của (A - C) mây tầng thấp > 0 VÀ trung vị (A - C) RH 2 m > 0 (tức C khô hơn A ở ngày quang,
+đúng cơ chế giả thuyết). In cả BLH để tham khảo, không làm cổng.
+
+**Mẫu:** mọi (điểm × ngày) 20/11-19/12 có sự thật: người đi, Facebook (`fbUsable`, DAWN), vệ tinh (bỏ BLOCKED_ABOVE,
+NO_DATA). Thứ bậc: người đi > Facebook > vệ tinh.
+
+**Điều kiện ĐẠT (tất cả):**
+1. Bỏ sót người đi + Facebook: C <= A.
+2. Báo nhầm "đáng đi" mọi nguồn: C <= 0,8 × A.
+3. Bootstrap theo KHỐI 5 ngày liên tiếp (xấp xỉ đợt thời tiết; 2.000 lần): khoảng 90% của (nhầm A - nhầm C) hẳn trên 0.
+4. Balanced accuracy người đi + Facebook: C >= A.
+**Kiểm công suất:** nếu người đi + Facebook có < 20 hàng hoặc < 5 hàng "có", điều kiện 1 và 4 KHÔNG chấm được ->
+kết luận "CHƯA ĐỦ MẪU", không gộp, kéo dài thêm 30 ngày với đúng luật này (ghi ngày kéo dài vào đây).
+Nhóm chính chia trước: >= 2.400m / < 2.400m. Không thêm nhóm sau khi thấy kết quả.
+
+**Báo cáo kèm (không phải cổng):** như đợt trước, cộng phân bố khoảng cách/cao độ/số góc của điểm v2, và mọi ca đổi.
