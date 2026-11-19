@@ -129,6 +129,13 @@ Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng lu�
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
 
+Mượn module nhánh agy (19/11/2026, phiếu g95c6, đăng ký trước + kết quả trong `NHAT-KY-HIEU-CHINH.md`): (1) luật độ khó cung đường
+`routeDifficulty.ts` KHÔNG mượn, route-1.2 giữ nguyên (đi trong mây kiểu LCL thêm 6 báo nhầm sương; gió lùa xe máy chưa đủ nhãn; mưa giờ 1/4/10 mm
+không xác suất qua cổng trên chuỗi gần phân tích nhưng phản biện chặn vì đổi ba thứ một lúc và tập chấm thiên vị chống nhánh xác suất; hai biến thể
+con chấm lại trên bản chụp tuyến có lead từ 21/11). Công cụ: `scripts/score-agy-route.ts`. (2) `services/astroService.ts` chuyển suncalc ->
+astronomy-engine (cách gọi suncalc cũ cho trăng lặn lệch trung vị 52 phút, 48/48 điểm-ngày so USNO; astronomy-engine <= 1 phút); AnalysisResult
+tải lười mô-đun này. Test đối chiếu USNO trong `tests/engine.test.ts`. Không gộp khung 8 mực vệ tinh (phương án B, anh không chọn).
+
 Đợt "dự báo tại điểm thung lũng" (19/11/2026, ý b skyradar): luật "điểm DEM thấp nhất trong 20 km" ĐÃ BỊ BÁC (báo nhầm 419 -> 612,
 bootstrap ngày [-241, -143]); đừng thử lại cùng luật chọn điểm. Đợt sau nếu làm thì theo đề xuất phản biện trong `NHAT-KY-HIEU-CHINH.md`
 (vùng nhìn thấy, cùng lưu vực, 3-8 km, khác ô mô hình, kiểm cơ chế đầu vào trước). Công cụ: `scripts/replay-valley.ts`, `scripts/ab-valley.ts`.
@@ -210,7 +217,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 257 test (tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 261 test (thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

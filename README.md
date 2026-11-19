@@ -96,7 +96,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 - 📊 **Biểu đồ mây theo độ cao × thời gian** (kiểu meteoblue): mỗi tầng áp suất một
   hàng với độ cao geopotential thật + vạch vị trí bạn đứng — nhìn 1 giây biết mây nằm
   dưới chân (biển mây) hay trùm đầu (mù).
-- 🌙 **Trăng cho nhiếp ảnh đêm** (tính cục bộ bằng suncalc): pha, độ sáng, giờ lặn/mọc,
+- 🌙 **Trăng cho nhiếp ảnh đêm** (tính cục bộ bằng astronomy-engine, khớp USNO trong 1 phút; tải lười): pha, độ sáng, giờ lặn/mọc,
   cửa sổ Milky Way hoặc "biển mây dưới trăng" cho từng rạng sáng.
 - 🌧️ **Radar mưa RainViewer** quanh điểm (composite có 10 trạm radar VN): "mưa phùn tối
   nay có tan trước sáng không?" — quy luật vàng của biển mây.
@@ -145,7 +145,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 257 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
+npm test         # 261 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

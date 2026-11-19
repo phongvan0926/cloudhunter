@@ -1,8 +1,14 @@
 /**
- * astroService — thiên văn cho nhiếp ảnh đêm/bình minh, tính HOÀN TOÀN cục bộ (suncalc).
+ * astroService — thiên văn cho nhiếp ảnh đêm/bình minh, tính HOÀN TOÀN cục bộ (astronomy-engine, MIT).
  * Không gọi mạng, deterministic → test được. Mọi giờ hiển thị theo Asia/Ho_Chi_Minh.
+ *
+ * Đổi từ suncalc sang astronomy-engine 19/11/2026 (phiếu g95c6, đăng ký trước trong NHAT-KY-HIEU-CHINH.md): so với USNO
+ * (48 điểm-ngày, 4 điểm x ngày 5 mỗi tháng 12/2026-11/2027), cách gọi suncalc cũ cho giờ trăng lặn lệch trung vị 52 phút
+ * (48/48 lần, vì getMoonTimes tìm trong cửa sổ 24h theo nửa đêm UTC/múi giờ máy nên ra sự kiện của ngày khác), trăng mọc lệch
+ * > 3 phút 16/48 lần (tới 63 phút); astronomy-engine lệch <= 1 phút mọi sự kiện. Mọi sự kiện tìm trong đúng ngày lịch VN.
+ * Tệp này được AnalysisResult tải lười (import động) (chunk riêng 25,7 KB gzip).
  */
-import * as SunCalc from 'suncalc';
+import { Body, Equator, Horizon, Illumination, MoonPhase, Observer, SearchAltitude, SearchRiseSet, type AstroTime } from 'astronomy-engine';
 
 export interface MoonInfo {
   illumination: number;        // 0-100 % đĩa trăng được chiếu sáng
@@ -25,6 +31,13 @@ function fmtVN(d: Date | null | undefined): string | null {
   }).format(d);
 }
 
+/** Sự kiện trong đúng ngày lịch VN [00:00, 24:00), không thì null. */
+function inVnDay(t: AstroTime | null, dayStartMs: number): Date | null {
+  if (!t) return null;
+  const ms = t.date.getTime();
+  return ms >= dayStartMs && ms < dayStartMs + 86_400_000 ? t.date : null;
+}
+
 function phaseName(phase: number): { label: string; emoji: string } {
   // phase 0=trăng non, 0.25=thượng huyền, 0.5=trăng tròn, 0.75=hạ huyền
   if (phase < 0.03 || phase > 0.97) return { label: 'Trăng non', emoji: '🌑' };
@@ -44,10 +57,17 @@ function phaseName(phase: number): { label: string; emoji: string } {
 export function moonInfoForDawn(dateStr: string, lat: number, lon: number): MoonInfo {
   // 05:00 VN = 22:00 UTC hôm trước
   const dawnRef = new Date(`${dateStr}T05:00:00+07:00`);
-  const illum = SunCalc.getMoonIllumination(dawnRef);
-  const pos = SunCalc.getMoonPosition(dawnRef, lat, lon);
-  const times = SunCalc.getMoonTimes(dawnRef, lat, lon); // rise/set trong ngày (giờ địa phương máy — chỉ dùng để hiển thị HH:MM VN)
-  const sun = SunCalc.getTimes(dawnRef, lat, lon);
+  const dayStart = new Date(`${dateStr}T00:00:00+07:00`);
+  const dayStartMs = dayStart.getTime();
+  const obs = new Observer(lat, lon, 0);
+  const illum = { fraction: Illumination(Body.Moon, dawnRef).phase_fraction, phase: (((MoonPhase(dawnRef) % 360) + 360) % 360) / 360 };
+  const eq = Equator(Body.Moon, dawnRef, obs, true, true);
+  const pos = { altitude: Horizon(dawnRef, obs, eq.ra, eq.dec, 'normal').altitude };
+  const times = {
+    rise: inVnDay(SearchRiseSet(Body.Moon, obs, +1, dayStart, 1), dayStartMs),
+    set: inVnDay(SearchRiseSet(Body.Moon, obs, -1, dayStart, 1), dayStartMs),
+  };
+  const sun = { nightEnd: inVnDay(SearchAltitude(Body.Sun, obs, +1, dayStart, 1, -18), dayStartMs) };
 
   const illumination = Math.round(illum.fraction * 100);
   const { label, emoji } = phaseName(illum.phase);

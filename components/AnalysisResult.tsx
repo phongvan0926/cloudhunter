@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CloudAnalysis, TerrainAnalysis, TerrainPoint, DailyForecast } from '../types';
 import { formatModelDisplayName } from '../services/modelDiscoveryService';
 import { SatellitePanel } from './SatellitePanel';
 import { RadarPanel } from './RadarPanel';
 import { CloudLayerChart } from './CloudLayerChart';
-import { moonInfoForDawn } from '../services/astroService';
 import { FieldReportPanel } from './FieldReportPanel';
 import { CAP_WATCH_TEXT } from '../services/capWatch';
 
@@ -254,6 +253,13 @@ const TerrainVisualizer: React.FC<{
 
 export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset }) => {
   const [selectedWaypoint, setSelectedWaypoint] = useState<TerrainPoint | null>(null);
+  // Thiên văn (astronomy-engine, chunk riêng 25,7 KB gzip) tải lười: dòng trăng hiện khi mô-đun về (phiếu g95c6)
+  const [astro, setAstro] = useState<typeof import('../services/astroService') | null>(null);
+  useEffect(() => {
+    let alive = true;
+    import('../services/astroService').then(m => { if (alive) setAstro(m); }).catch(() => { /* thiếu dòng trăng, không hỏng trang */ });
+    return () => { alive = false; };
+  }, []);
   const [filterGoldenOnly, setFilterGoldenOnly] = useState<boolean>(false);
   // Đánh dấu ngày lưu vào localStorage — trước đây mất sạch khi tải lại trang
   const BOOKMARK_KEY = 'cloudhunter_bookmarks_v1';
@@ -760,11 +766,11 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
             dynamicBoundaryNote = { text: deltaText, color: deltaColor };
           }
 
-          // Trăng cho rạng sáng ngày này — tính cục bộ (suncalc), chỉ khi có tọa độ thật
+          // Trăng cho rạng sáng ngày này — tính cục bộ (astronomy-engine, tải lười), chỉ khi có tọa độ thật
           const moonLat = result.weather_data_source?.lat;
           const moonLon = result.weather_data_source?.lon;
-          const moon = day.status_code !== 'UNKNOWN' && typeof moonLat === 'number' && typeof moonLon === 'number'
-            ? moonInfoForDawn(day.date, moonLat, moonLon)
+          const moon = astro && day.status_code !== 'UNKNOWN' && typeof moonLat === 'number' && typeof moonLon === 'number'
+            ? astro.moonInfoForDawn(day.date, moonLat, moonLon)
             : null;
 
           const isBookmarked = bookmarkedDates.includes(day.date);

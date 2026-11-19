@@ -285,3 +285,54 @@ và TZ=UTC; cổng tính theo lần TZ VN, lần UTC chỉ báo cáo.
 |lệch| trăng mọc/lặn > 1 phút, HOẶC có sự kiện lệch > 3 phút, HOẶC thiếu/sai ngày sự kiện USNO có. (1) trượt hoặc
 (2) không xảy ra -> không giữ, không thêm phụ thuộc. Giữ thì đo thêm cỡ gói (gz) và tải lười nếu > 30 KB.
 Độ rọi trăng: chỉ báo cáo, không làm cổng.
+
+### Kết quả đợt "mượn module của nhánh agy" (19/11/2026, chấm sau commit đăng ký d7e5c56)
+
+**Vòng 1 - luật cung đường: KHÔNG GIỮ gì, route-1.2 giữ nguyên.** `npx vite-node scripts/score-agy-route.ts <nhan-duong.json>`, 77 nhãn,
+308 giờ, 0 giờ thiếu số, tầm nhìn và xác suất mưa không null giờ nào. Ngưỡng >= 1 (chính):
+
+| Loại (CÓ/KHÔNG) | route-1.2 trúng/sót/nhầm | biến thể trúng/sót/nhầm | cổng |
+|---|---|---|---|
+| Sương 6/61 - D1 đi trong mây LCL | 5 / 1 / 29 | 5 / 1 / 35 | trượt (a-b): +6 báo nhầm, không bớt sót |
+| Mưa 4/67 - D2 mưa giờ 1/4/10, bỏ xác suất | 3 / 1 / 16 | 3 / 1 / 6 | qua (a)-(d) |
+| Lạnh 3/0 - D3 gió lùa xe máy | 1 / 2 / - | 2 / 1 / - | CHƯA ĐỦ MẪU (0 nhãn KHÔNG) |
+
+Ngưỡng >= 2: mưa như nhau (0/4/2); sương D1 5/1/28 so 5/1/29. Ca đổi D1 (đều báo nhầm mới, sự thật KHÔNG sương): Ô Quy Hồ 06/11 12:10, 15:34,
+08/11 13:35, 15/11 08:17, 08:33; Tà Xùa 05/10 08:30 (mức 3). Ca đổi D2 (đều bớt báo nhầm, sự thật KHÔNG mưa): Ô Quy Hồ 17/10 12:31, 13:15,
+02/11 12:14, 03/11 08:01, 04/11 12:26, 13:12, 14:20, 05/11 15:43, 08/11 13:35; Tà Xùa 30/10 15:28. D2 không thêm ca sót nào. Ca D3 bắt thêm: Tà Xùa 06/10 09:30.
+
+**Phản biện độc lập (agent chuyên gia khí tượng vùng núi, một lần) cho D2, từng ý và cách xử lý:**
+1. [chặn] D2 đổi ba thứ cùng lúc. -> Đã tách: 6/10 ca bớt nhầm là do bỏ nhánh xác suất (02-05/11, mưa mô hình 0-0,3 mm, xác suất 70-98%),
+   4/10 do mưa 0,5-0,9 mm/h (17/10 x2, 08/11, 30/10). 3 ca trúng 12/11 có 1,1-2 mm/h, vẫn trúng với mốc 1 mm. Việc tách làm SAU khi thấy số,
+   nên không dùng làm lý do giữ phần nào.
+2. [nên xử lý] Chuỗi gần phân tích thiên vị chống nhánh xác suất (ở lead 1-2 ngày, xác suất tổ hợp giữ độ bất định mà mm/h tất định làm mượt).
+   -> Đồng ý; 6/10 lợi ích đến đúng từ phần mà phép chấm thiên vị. Không bỏ nhánh xác suất.
+3. [ghi chú] 0,1-0,9 mm/h trên đèo hay là mưa phùn giả do nâng địa hình; nâng mốc lên 1 mm hợp lý về khí tượng. -> Ghi nhận, nhưng chỉ có 4 ca
+   và việc chọn phần này là sau khi thấy số; chuyển thành biến thể đăng ký trước cho tập sau.
+4. [nên xử lý] Mức 2 từ 3 lên 4 mm/h không có số nào ủng hộ (hoà), 3 gần ranh AMS/WMO 2,5 hơn. -> Giữ 3.
+5. [nên xử lý] "Nắng đẹp" lúc đăng 12-15h chỉ là sự thật trung bình cho cửa sổ 4 giờ; mưa rào đèo rất cục bộ, nên một phần "báo nhầm" có thể đúng.
+   -> Ghi vào cách chấm tập sau: cửa sổ 2 giờ, bản chụp tuyến có lead.
+6. [chặn với câu "không tăng bỏ sót"] 4 ca CÓ, 3 cùng ngày 12/11, nên n hiệu dụng ~2: "không thấy tăng", không phải bằng chứng. -> Đúng; ưu tiên
+   dân phượt là bỏ sót tệ hơn báo nhầm, nên với bằng chứng mỏng như vậy không hạ độ nhạy cảnh báo.
+7. [ghi chú] `TH.RAIN_LIGHT` còn dùng ở Tóm tắt ngày và khối dông. -> Không đổi gì nên không phát sinh hai ngưỡng.
+Kết luận vòng 1: không giữ D1, D2, D3. **Đăng ký trước cho tập sau** (bản chụp tuyến `*-routes.json` từ 21/11/2026 có `samples[].wx` theo lead,
+ghép nhãn FB đường cùng ngày, cửa sổ [giờ đăng - 2h, giờ đăng], cùng cổng (a)-(d)): D2a = mốc mức 1 lên 1 mm/h, giữ xác suất >= 70% và mức 2 = 3 mm;
+D2b = giữ 0,5 mm, bỏ nhánh xác suất. Chấm khi mưa có >= 10 nhãn CÓ hoặc tới 20/12/2026, cái nào trước. D3 chờ có nhãn "không lạnh"
+(bộ thu FB hiện chưa gắn `kindsAbsent: cold`).
+
+**Vòng 2 - thiên văn: GIỮ, `astroService` chuyển sang astronomy-engine 2.1.19.** Chuẩn USNO `rstt/oneday`, 48 điểm-ngày (TA_XUA_SON_LA,
+DEO_O_QUY_HO, BACH_MA, LANG_BIANG x ngày 5 mỗi tháng 12/2026-11/2027), độ cao 0. |lệch| phút:
+
+| Sự kiện | astronomy-engine trung vị / max | suncalc như app gọi (TZ VN) trung vị / max / số lần > 3 phút |
+|---|---|---|
+| Mặt trời mọc | 1 / 1 | 1 / 2 / 0 (nhưng là của NGÀY HÔM TRƯỚC: mốc 05:00 VN = 22:00 UTC hôm trước) |
+| Mặt trời lặn | 1 / 1 | 1 / 1 / 0 (ngày hôm trước) |
+| Đầu chạng vạng -6° | 0 / 1 | 1 / 2 / 0 (ngày hôm trước) |
+| Trăng mọc | 0 / 1 | 1 / 63 / 16 |
+| Trăng lặn | 1 / 1 | 52 / 67 / 48 (48/48 ra trăng lặn của ngày hôm trước) |
+
+TZ=UTC cho suncalc ra y hệt. Cổng (1) đạt (mọi sự kiện <= 1 phút), cổng (2) đạt (trăng lặn trung vị 52 > 1, có lệch > 3). Thử gọi suncalc kiểu
+khác (mốc trưa VN; nửa đêm UTC) vẫn ra sự kiện ngày khác, vì `getMoonTimes` tìm trong cửa sổ 24h theo nửa đêm UTC hoặc múi giờ máy. Độ rọi trăng
+không làm cổng. Cỡ gói đo sau build: chunk `astroService` 58,5 KB, gzip 25,7 KB (dưới mốc 30 KB gz đã đăng ký, nên tải lười không bắt buộc), vẫn để
+`AnalysisResult` import động cho gói chính không đổi (dòng trăng hiện khi mô-đun về). Bỏ phụ thuộc suncalc. Kiểm đột biến: 3 ca USNO trong `tests/engine.test.ts` trượt cả 3 trên bản suncalc cũ, qua trên bản mới.
+Không mượn phần khác của `ephemeris.ts` (đường độ cao 24h, chạng vạng hàng hải): app chưa có chỗ dùng.

@@ -606,6 +606,25 @@ describe('astroService — trăng cho nhiếp ảnh (tính cục bộ, determini
   });
 });
 
+describe('astroService — đối chiếu USNO (phiếu g95c6)', () => {
+  // Số chuẩn từ USNO API rstt/oneday (tz=7, độ cao 0), lấy 19/11/2026. Bản suncalc cũ cho trăng lặn 13:54 ở ca đầu (lệch 36 phút).
+  const m = (s: string | null) => (s === null ? NaN : +s.slice(0, 2) * 60 + +s.slice(3, 5));
+  it.each([
+    ['2026-12-05', 21.2764, 104.4239, '02:58', '14:30'],
+    ['2027-06-05', 12.0473, 108.4406, '05:25', '18:49'],
+    ['2027-09-05', 22.355, 103.774, '10:12', '21:21'],
+  ])('%s (%f, %f): trăng mọc %s, lặn %s, lệch <= 1 phút', async (d, lat, lon, rise, set) => {
+    const { moonInfoForDawn } = await import('../services/astroService');
+    const r = moonInfoForDawn(d, lat, lon);
+    expect(Math.abs(m(r.moonrise) - m(rise))).toBeLessThanOrEqual(1);
+    expect(Math.abs(m(r.moonset) - m(set))).toBeLessThanOrEqual(1);
+  });
+  it('bình minh thiên văn nằm trong đúng ngày VN (không lấy ngày hôm trước)', async () => {
+    const { moonInfoForDawn } = await import('../services/astroService');
+    expect(moonInfoForDawn('2026-12-05', 21.2764, 104.4239).astroDawn).toBe('05:06');
+  });
+});
+
 describe('vnTodayStr / addDaysStr — ngày theo giờ Việt Nam', () => {
   it('vnTodayStr trả đúng ngày hiện tại ở Asia/Ho_Chi_Minh (không phải UTC)', () => {
     expect(vnTodayStr()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
