@@ -101,6 +101,10 @@ Nhãn Facebook cho cung đường do bộ thu FB (ngoài repo) gắn bằng lu�
 Shadow skyradar: job `skyradar` (cùng cron snapshot) chạy `tools/skyradar-shadow.py` -> `data/skyradar-shadow/<YYYY-MM-DDTHHMM>.json`
 (mã thoát 0/3/1, thiếu thì job ĐỎ); `scripts/shadow-contrast.ts` in bảng đối chứng trong calibrate, luật chọn bản chụp chốt trước, không chỉnh.
 
+Đợt "dự báo tại điểm thung lũng" (19/11/2026, ý b skyradar): luật "điểm DEM thấp nhất trong 20 km" ĐÃ BỊ BÁC (báo nhầm 419 -> 612,
+bootstrap ngày [-241, -143]); đừng thử lại cùng luật chọn điểm. Đợt sau nếu làm thì theo đề xuất phản biện trong `NHAT-KY-HIEU-CHINH.md`
+(vùng nhìn thấy, cùng lưu vực, 3-8 km, khác ô mô hình, kiểm cơ chế đầu vào trước). Công cụ: `scripts/replay-valley.ts`, `scripts/ab-valley.ts`.
+
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
 Kênh chụp thứ hai (17/11/2026, phiếu gb369): `tools/snapshot-local.sh` + `~/.config/systemd/user/cloudhunter-snapshot.{service,timer}` chạy trên máy anh, dùng bản clone riêng (không đụng thư mục làm việc), commit "[máy nhà]" thẳng lên main. KHÔNG bao giờ `--force`. Bản 17/11 chụp lúc ~01:23 sáng 17/11 (lead ~3,5h; GitHub nổ trễ lúc ~01:50, sau máy nhà, chỉ ghi được bản tuần vì bản chính đã có), vẫn trước rạng sáng nhưng ngắn hơn bản thường.

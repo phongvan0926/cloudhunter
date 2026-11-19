@@ -101,3 +101,8 @@ Họ có mà mình chưa có (đưa vào danh sách phương án, chưa làm):
 ## Đối chiếu thật 19/11 (rạng sáng 05-07h, 18 điểm, chưa có sự thật)
 - 11/18 điểm họ báo "không" + `cheTamNhin=true`; 10/11 điểm đó engine mình cũng FOG/DISSIPATING, 17/18 điểm mình không khuyên đi.
 - Họ báo CÓ ở 5 điểm mình xếp FOG với ΔH âm (Đèo Thung Khe, Ba Vì, Tam Đảo, Lang Biang, Bạch Mã): đúng loại điểm thấp hay báo nhầm. Chờ nhãn vệ tinh 19/11.
+- **19/11/2026 vòng 3 - Dự báo TẠI điểm thung lũng (ý b): ĐÃ THỬ, KHÔNG ĐẠT, KHÔNG gộp.** Chọn điểm thấp nhất DEM trong
+  20 km rồi xin dự báo tại đó (`scripts/replay-valley.ts` + `scripts/ab-valley.ts`, 69 ngày, 1.954 điểm-ngày): bỏ sót
+  người đi+FB giảm 25 -> 18 nhưng báo nhầm mọi nguồn tăng 419 -> 612 (trần 335), bootstrap theo ngày [-241, -143].
+  Điểm "thấp nhất" phần lớn nằm ở rìa 20 km, có điểm là đồng bằng 3-11 m, nên cái bị bác là cách chọn điểm này, chưa phải
+  ý tưởng. Số, phản biện và đề xuất đợt sau: `NHAT-KY-HIEU-CHINH.md` (mục "dự báo tại điểm thung lũng").

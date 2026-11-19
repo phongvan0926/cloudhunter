@@ -142,3 +142,43 @@ ngay ở lệnh DEM đầu tiên (hạn ngạch giờ đã hết từ trước, 
 nên phần dò DEM chuyển sang OpenTopoData `srtm90m` (SRTM 90 m, cùng độ phân giải với DEM của Open-Meteo) để không
 ăn vào hạn ngạch dự báo. Luật chọn điểm (bán kính, bước lưới, bỏ <= 2 m, lấy thấp nhất) giữ nguyên. Dự báo A/B/O vẫn lấy
 từ Open-Meteo historical-forecast như đã ghi. Chưa xem dữ liệu dự báo nào khi sửa.
+
+**KẾT QUẢ (19/11/2026, 12:40): KHÔNG ĐẠT, engine giữ nguyên, không đổi `ENGINE_VERSION`.**
+Chạy `scripts/replay-valley.ts` (69 ngày 23/8-18/11, 58 điểm, 1.954 điểm-ngày có dữ liệu cả hai nhánh) rồi
+`scripts/ab-valley.ts`. Trúng/trượt dùng đúng `isWorthGoing` của engine, không dùng điểm số.
+
+| Nguồn | n | A đúng/sót/nhầm/đúng-không, BA | B đúng/sót/nhầm/đúng-không, BA |
+|---|---|---|---|
+| người đi | 49 | 25/13/3/8, 0,693 | 28/10/3/8, 0,732 |
+| Facebook | 23 | 1/12/0/10, 0,538 | 5/8/0/10, 0,692 |
+| vệ tinh | 1.882 | 78/116/416/1.272, 0,578 | 82/112/609/1.079, 0,531 |
+
+Bốn điều kiện: (1) sót người đi+FB A 25, B 18: đạt. (2) báo nhầm mọi nguồn A 419, B 612, trần 335: TRƯỢT.
+(3) bootstrap theo ngày, khoảng 90% của (nhầm A - nhầm B) = [-241, -143]: TRƯỢT. (4) BA người đi+FB 0,683 -> 0,752: đạt.
+Kèm: tổng lời khuyên đi A 523 (đúng 104), B 727 (đúng 115); ngày có báo nhầm A 51, B 58. Nhóm < 2.400m nhầm 211 -> 406.
+Sai số mặt mây (vệ tinh - app) ngày SEA khung sạch: >= 2.400m trung vị +624 -> +990 m; < 2.400m -162 -> +122 m.
+Ngày CLEAR đỉnh >= 2.400m dựng mặt mây 83% -> 78%. Điểm thung lũng: khoảng cách trung vị 18,8 km, 24/58 ở rìa đĩa
+(>= 19 km), 5 điểm <= 20 m (Ba Vì 8, Bạch Mã 4, Tam Đảo 7, Bà Đen 3, Bình Liêu 11). Ca đổi kết luận: người đi+FB 17 ca
+(11 bắt thêm, 4 sót thêm, 1 nhầm thêm, 1 bớt nhầm; danh sách in đủ bởi ab-valley); vệ tinh 278 nhầm thêm, 85 bớt nhầm,
+12 sót thêm, 16 bắt thêm. Cơ chế thấy được: B dựng mặt mây thấp hẳn (từ ~2.000 m xuống 500-900 m) nên mặt mây nằm dưới
+đỉnh và thành "biển mây" -> nói "đi" nhiều hơn; NGƯỢC với giả thuyết H-TL (ô thung lũng khô hơn -> ít nhầm).
+Công bố: trước lượt đầy đủ đã chạy thử script chấm trên 16 ngày đầu (167 hàng) để kiểm script; không đổi luật sau đó.
+
+**Phản biện độc lập (agent đóng vai chuyên gia khí tượng vùng núi, nhận giả thuyết + số + ca đổi, không nhận kết luận):**
+1. Luật "thấp nhất trong 20 km" sai về vật lý: điểm do biên đĩa quyết định, rơi vào đồng bằng/ven biển hoặc ô mô hình
+   khác hẳn (GFS ~25 km, ICON/UKMO ~10 km), tức đưa vào "khí hậu ô đồng bằng lân cận". -> Nhận. Ghi là cái bị bác là
+   CÁCH HIỆN THỰC này, chưa phải ý "dự báo tại thung lũng thật".
+2. Phần lời trên người đi+FB là hệ quả của việc nói "có" nhiều hơn trên nguồn chọn lọc dương (FB 0 báo nhầm cả hai
+   nhánh; người đi 38 có / 11 không); Fansipan 18-20/10 là một đợt thời tiết đếm ba lần; riêng Tà Xùa BA còn giảm. -> Nhận;
+   không dùng nhóm con để cứu.
+3. Nghi định nghĩa "trúng" theo trạng thái (Fansipan B 30 vẫn trúng). -> Đã kiểm: dùng `isWorthGoing` (SEA + đồng thuận
+   + ΔH > 100 m), điểm số không quyết định lời khuyên. Không sai.
+4. Vệ tinh có thể sót biển mây hẹp dưới đỉnh, nhưng sai số đó chung cho A và B; nhầm gần gấp đôi ở < 2.400m và CI theo
+   ngày quá xa 0 nên không đổ cho nhãn được. -> Nhận.
+5. FAIL đúng; không có gì làm phép thử mất hiệu lực. Nhánh A cũng không trung tính (`elevation=` chỉ chỉnh nhiệt theo
+   gradient). -> Ghi lại.
+6. Đề xuất đợt sau (CHƯA làm, chỉ ghi để đăng ký trước nếu anh muốn): điểm thung lũng trong vùng nhìn thấy từ đỉnh,
+   cùng lưu vực, 3-8 km, thấp hơn đỉnh 300-1.500 m, loại DEM < 50 m, bắt buộc khác ô mô hình, trung bình 3-4 điểm;
+   kiểm cơ chế trên đầu vào (RH 2 m, mây thấp, BLH ngày quang) TRƯỚC khi chấm điểm; bán kính 5/10/20 km đăng ký trước;
+   bootstrap theo đợt thời tiết; thu thêm nhãn âm người đi; kiểm công suất (72 nhãn không phân biệt nổi chênh 7 ca);
+   xác nhận ngoài mẫu từ 20/11 bằng dự báo thật.
