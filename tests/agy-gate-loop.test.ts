@@ -111,7 +111,7 @@ describe('sức khoẻ phép đo: rỗng/hụt là LỖI ĐO, không phải 0', 
       const fp = `${d}/flag.json`; const txt = JSON.stringify(flag0(), null, 2) + '\n'; writeFileSync(fp, txt);
       writeFileSync(`${d}/log.md`, '');
       const r = spawnSync('npx', ['--no-install', 'vite-node', 'scripts/agy-gate-loop.ts', '--dir', `${d}/obs`, '--flag', fp, '--out', d, '--log', `${d}/log.md`, '--hom-nay', '2026-11-22', '--khong-bao'], { encoding: 'utf-8', env: { ...process.env, VITEST: '' } });
-      expect(r.status).toBe(1); expect(r.stderr).toMatch(/LỖI ĐO/);
+      expect(r.status).toBe(1); expect(r.stderr).toMatch(/LỖI ĐO/); expect(r.stdout).not.toMatch(/Điểm-ngày/);   // không rò báo cáo của công cụ chấm
       expect(readFileSync(fp, 'utf-8')).toBe(txt); expect(readFileSync(`${d}/log.md`, 'utf-8')).toBe('');
     } finally { rmSync(d, { recursive: true, force: true }); }
   }, 60000);

@@ -185,4 +185,4 @@ function main() {
     console.log(`Báo thêm: số điểm khác nhau ${new Set(v.map(r => r.key)).size}; số mô hình hợp lệ TB ${(v.reduce((s, r) => s + (r.nMod ?? 0), 0) / Math.max(1, v.length)).toFixed(2)}; nhánh sương tầm nhìn: TẮT 100% (bản chụp không có visibility)`);
   }
 }
-if (!process.env.VITEST) main();
+if (!process.env.VITEST && !process.env.AGY_GATE_LIB) main();   // không chạy khi bị import làm thư viện (vòng g2448)

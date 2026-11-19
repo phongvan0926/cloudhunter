@@ -7,6 +7,7 @@
  * Thoát 0 = đo xong (kể cả "chưa đủ mẫu"); 1 = LỖI ĐO (báo đỏ, KHÔNG đổi cờ, không ghi 0); 3 = lỗi đọc/ghi.
  * Báo tin: biến môi trường BAO_CHUNG = đường dẫn bao_chung.py (đặt trong unit systemd, không ghi vào kho công khai).
  */
+import './agy-lib-mode';
 import { readFileSync, writeFileSync, appendFileSync, existsSync, readdirSync } from 'fs';
 import { spawnSync } from 'child_process';
 import { buildRows, evaluateEngine, isReady, count, lossFA, lossTP, type Row } from './score-agy-gate';
