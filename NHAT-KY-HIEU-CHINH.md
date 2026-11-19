@@ -398,3 +398,30 @@ agent phản biện, anh duyệt, đổi `ENGINE_VERSION`), không tự bật.
 **Hạn chế đã biết (ghi trước):** vệ tinh Himawari mù sương mỏng thung lũng và mây cao che (nhãn VT "không có biển mây" có thể sai); cổng có thể "đúng vì lý do sai" khi hai thuật toán cùng thiên về
 ẩm đáy; nhánh sương (`biMuTaiDinh`) của agy yếu đi vì thiếu tầm nhìn/gió 10 m, tức cổng yếu đúng ở chỗ nó đáng giá nhất; chỉ còn 3 mô hình nên `fCo >= 0,45` nghĩa là cần 2/3 mô hình đồng thuận; bản chụp xếp hạng có lead
 ngắn (~3-12 giờ); hai kênh chụp (GitHub / máy nhà) chạy cùng mã nên không thành biến.
+
+## 19/11/2026 (phiếu g2448, bổ sung gd355) - Vòng TỰ ĐO / TỰ BẬT CỜ / TỰ LÙI cho cổng bóng agy (đăng ký trước, chưa có số nào)
+
+Anh Phong muốn phép đo tự chạy, tự so, không chờ người (lời Tổng quản chuyển, phiếu g2448). Phần dưới SỬA luật "chấm MỘT lần, không tự bật" của mục gd355 ở trên, đăng ký TRƯỚC khi có bản chụp nào mang cột `agyGate`
+(0 điểm-ngày có cột lúc viết). Tiêu chí K1-K6, X = 25, quy tắc thiếu dữ liệu, bootstrap, luật gán nhãn: GIỮ NGUYÊN, không chạm. Chỉ đổi QUY TRÌNH:
+
+**Phạm vi "tự điều chỉnh":** chỉ là bật/tắt MỘT cờ `data/agy-gate-flag.json` (`enabled`, mặc định false). Không dò ngưỡng, không đổi tiêu chí, không sửa code engine. Cờ bật: kết quả hiển thị
+`worthGoing = worthGoingBase && agyGate.ketLuan != 'khong'` (chỉ HẠ, không bao giờ nâng; `chua_co_du_lieu`/lỗi/null = không chặn). Bản chụp luôn ghi `worthGoingBase` (quyết định CloudHunter chưa qua cổng) để chấm tiếp.
+
+**Bảng đối chiếu hằng đêm (chỉ thông tin):** mỗi đêm ghi `data/agy-gate-doichieu.json` + `.md`: n từng tập, số ngày, đếm thô CloudHunter. Số phụ thuộc cổng (lossFA/lossTP/F1/recall hai bên, khoảng tin cậy)
+CHỈ in khi tập đủ ĐIỀU KIỆN CHẤM của đăng ký (FIELD >= 30 điểm-ngày mới VÀ >= 10 ca CÓ, hoặc 20/12/2026); chưa đủ thì ghi "chưa đủ mẫu", không in số, không kết luận. Bảng không phải lần chấm.
+
+**Lượt quyết định (tối đa 3):** L0 = đêm đầu tiên đủ điều kiện chấm; L1 = L0 + 14 ngày; L2 = L0 + 28 ngày (nhớ trong tệp cờ, mỗi lượt chấm đúng một lần, cùng mã, cùng ngưỡng). Tại một lượt, trên tập của `ENGINE_VERSION` mới nhất:
+- mọi K đều DAT (và thiếu dữ liệu cổng <= 10%) => BẬT cờ.
+- có K nào TRUOT => KHÔNG GIỮ, cờ giữ tắt, KHÓA vĩnh viễn (không còn lượt).
+- còn K CHUA_DU => chờ lượt sau; hết L2 vẫn chưa đủ => `het_luot_chua_du`, cờ tắt, bóng chạy tiếp, người quyết.
+Ba lượt là ba lần nhìn: khả năng đạt do may tăng nhẹ, ghi trước ở đây, không hạ ngưỡng bù.
+
+**Tự lùi (sau khi bật), chấm trên CA MỚI từ ngày bật (so `worthGoingBase` với cổng), mỗi đêm:** TẮT cờ và KHÓA (chỉ người bật lại) nếu có một trong:
+(R1) >= 2 điểm-ngày FIELD có biển mây mà cổng loại; (R2) >= 1 điểm-ngày NGƯỜI ĐI TẬN NƠI có biển mây mà cổng loại (cùng tinh thần K5); (R3) FIELD mới có >= 8 ca CÓ và `lossTP` FIELD > `lossFA` FIELD (cùng tinh thần K6).
+Ngược lại giữ bật. Không có luật "tự bật lại" sau khi lùi (chống nhấp nháy).
+
+**Phép đo hỏng:** tập rỗng khi đáng lẽ có (bản chụp từ 21/11 không có cột `agyGate`, hoặc > 10% điểm-ngày của bản chụp mới nhất ghi `error`, đọc tệp lỗi, ngày bản chụp mới nhất cũ > 3 ngày) là LỖI ĐO: thoát mã khác 0,
+báo đỏ qua bao_chung, KHÔNG đổi cờ, KHÔNG ghi 0. Mọi lần đổi cờ: commit + một dòng vào tệp này + tin báo một lần + `gh workflow run deploy.yml`.
+
+**Phản biện độc lập cho phần sửa quy trình:** một agent (xem mục kết quả bên dưới khi có).
+**Không dùng LLM** trong vòng này; 0 lượt Open-Meteo thêm (chỉ đọc kho). D2a/D2b `routeDifficulty` KHÔNG vào vòng tự bật này (cần gọi Open-Meteo historical và nhãn đường, ngày chấm 20/12 hoặc >= 10 CÓ); chỉ đếm nhãn ghi vào bảng nếu có sẵn.
