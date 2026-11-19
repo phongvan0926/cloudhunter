@@ -74,6 +74,7 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/engine-2-8-x-va-diem-needsreview.md` - đọc khi động tới biên ΔH, `observerInCloud`, gió tại chỗ đứng, hindcast, hay thêm/sửa điểm trong thư viện.
 - `docs/rang-buoc-vat-ly.md` - đọc TRƯỚC khi sửa vật lý engine (nghịch nhiệt, mực áp suất, estimateCloudTop, BLH, gió theo zone, mùa, ensemble).
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
+- `docs/skyradar-doi-chung.md` - đọc khi so với đối thủ skyradar.vn, hoặc chạy `tools/skyradar-shadow.py` (chụp phán quyết biển mây của họ để đối chứng; KHÔNG dùng làm nhãn sự thật).
 
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
