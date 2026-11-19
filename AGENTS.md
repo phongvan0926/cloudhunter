@@ -136,6 +136,11 @@ con chấm lại trên bản chụp tuyến có lead từ 21/11). Công cụ: `s
 astronomy-engine (cách gọi suncalc cũ cho trăng lặn lệch trung vị 52 phút, 48/48 điểm-ngày so USNO; astronomy-engine <= 1 phút); AnalysisResult
 tải lười mô-đun này. Test đối chiếu USNO trong `tests/engine.test.ts`. Không gộp khung 8 mực vệ tinh (phương án B, anh không chọn).
 
+Cổng BÓNG khung 8 mực của agy (19/11/2026, phiếu gd355; đăng ký trước 3788b79 trong `NHAT-KY-HIEU-CHINH.md`: giả thuyết, cổng G = đáng đi VÀ agy != khong, tiêu chí K1-K6, X=25, quy tắc thiếu dữ liệu): `services/agyCloudSea.ts` = bản chép NGUYÊN VĂN `cloudSea.ts` v1.0
+của agy (không sửa); `services/agyGate.ts` đưa dữ liệu bản chụp xếp hạng (GFS+ICON+UKMO, 7 mực, KHÔNG thêm lượt gọi API) vào đó; kết quả ghi thành cột `agyGate` của MỖI điểm trong `data/observations/<D>-forecast.json` mới (`{ver, ketLuan, xacSuat, doDongThuan, soMoHinh, soGio, gioTot}` hoặc `{ver, error}`).
+Là BÓNG: không tham gia điểm/trạng thái/đáng đi/thứ hạng (test `tests/agy-gate.test.ts` so kết quả xếp hạng có và không có cổng, đột biến đã bắt được). Không vá bản chụp cũ, không chụp bù. Chấm MỘT lần khi FIELD >= 30 điểm-ngày mới hoặc 20/12/2026 bằng `scripts/score-agy-gate.ts`
+(trước ngày chấm chỉ in đếm; xem sớm phải `--xem-trung-gian` và bị ghi `data/agy-gate-runs.log`). Đạt hết tiêu chí cũng chỉ là đủ điều kiện ĐỀ XUẤT bật: bật vào kết quả thật là sửa lớn (Luật cổng + anh duyệt + đổi `ENGINE_VERSION`). Không đổi cổng/ngưỡng theo kết quả.
+
 Đợt "dự báo tại điểm thung lũng" (19/11/2026, ý b skyradar): luật "điểm DEM thấp nhất trong 20 km" ĐÃ BỊ BÁC (báo nhầm 419 -> 612,
 bootstrap ngày [-241, -143]); đừng thử lại cùng luật chọn điểm. Đợt sau nếu làm thì theo đề xuất phản biện trong `NHAT-KY-HIEU-CHINH.md`
 (vùng nhìn thấy, cùng lưu vực, 3-8 km, khác ô mô hình, kiểm cơ chế đầu vào trước). Công cụ: `scripts/replay-valley.ts`, `scripts/ab-valley.ts`.
@@ -217,7 +222,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 261 test (thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 273 test (thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 

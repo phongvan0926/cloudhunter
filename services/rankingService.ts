@@ -14,6 +14,7 @@
  *  - Điểm nào thiếu dữ liệu thì bị loại khỏi bảng, không chèn số mặc định.
  */
 import { capWatchOf, type CapWatch } from './capWatch';
+import { agyGateColumn, type AgyGateColumn } from './agyGate';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { NORTHWEST_PEAKS } from '../constants';
 import {
@@ -43,6 +44,7 @@ export interface SpotRank {
   cloudTop: number | null;   // trung vị mặt mây trong nhóm kết luận thắng (m ASL)
   deltaH: number | null;     // elevation − cloudTop; >0 = đứng trên mặt mây
   worthGoing: boolean;       // engine-2.8: xem isWorthGoing — KHÔNG suy từ score
+  agyGate?: AgyGateColumn;   // cột BÓNG phiếu gd355: chỉ ghi vào bản chụp, KHÔNG ảnh hưởng điểm/đáng đi/thứ hạng
   capWatch?: CapWatch;       // cờ theo dõi 'giống 14/11' - không ảnh hưởng điểm; optional vì cache cũ
   /**
    * Kết quả TỪNG mô hình, để về sau chấm được mô hình nào đúng trên các ngày đã kiểm chứng.
@@ -190,7 +192,7 @@ function readRankArchive(): RankArchiveEntry[] {
 export function archiveRanking(targetDate: string, results: SpotRank[]): void {
   const entry: RankArchiveEntry = {
     targetDate, savedAt: new Date().toISOString(), engine: ENGINE_VERSION,
-    results: results.map(({ perModel, ...r }) => r as SpotRank),
+    results: results.map(({ perModel, agyGate, ...r }) => r as SpotRank),
   };
   let next = mergeRankArchive(readRankArchive(), entry);
   // Hết chỗ localStorage thì bỏ dần bản cũ nhất, không làm hỏng việc xếp hạng.
@@ -206,7 +208,8 @@ export function listRankArchive(): RankArchiveEntry[] {
 
 export async function rankSpotsForDawn(
   targetDate: string,
-  onProgress?: (msg: string) => void
+  onProgress?: (msg: string) => void,
+  opts?: { shadow?: boolean },   // gd355: chỉ script chụp bản chụp bật; app (trình duyệt) không tính cổng bóng
 ): Promise<SpotRank[]> {
   if (RANK_CACHE && RANK_CACHE.targetDate === targetDate && Date.now() - RANK_CACHE.ts < RANK_CACHE_TTL_MS) {
     return RANK_CACHE.results;
@@ -272,6 +275,7 @@ export async function rankSpotsForDawn(
       cloudTop: c.cloudTop, deltaH,
       worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
       capWatch: capWatchOf(aggs),
+      agyGate: opts?.shadow ? agyGateColumn(block, RANK_MODELS, targetDate, { observerAlt: mt.elevation, valleyElev: Math.round(valleys[key]) }) : undefined,
       perModel: per.map(x => ({ model: x.model, score: x.score, status: x.status, cloudTop: x.cloudTop })),
     });
   });

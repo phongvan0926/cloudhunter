@@ -43,7 +43,7 @@ if (existsSync(path) && !FORCE) {
 }
 
 console.log(`   nạp ${seedValleyCache()} đáy thung lũng từ data/valley-dem-seed.json`);
-rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
+rankSpotsForDawn(DATE, m => console.log('   ' + m), { shadow: true }).then(rows => {
   mkdirSync('data/observations', { recursive: true });
   writeFileSync(path, JSON.stringify({
     date: DATE,
@@ -54,6 +54,7 @@ rankSpotsForDawn(DATE, m => console.log('   ' + m)).then(rows => {
       agreement: r.agreement, observerAlt: r.elevation, valleyElevation: r.valleyElev,
       cloudTop: r.cloudTop, deltaH: r.deltaH, worthGoing: r.worthGoing, capWatch: r.capWatch,
       perModel: r.perModel,
+      agyGate: r.agyGate,   // cột BÓNG (gd355): chưa tham gia gì, chấm sau theo NHAT-KY-HIEU-CHINH.md
     })),
   }, null, 2) + '\n');
   console.log(`✅ ${rows.length} điểm → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`);
