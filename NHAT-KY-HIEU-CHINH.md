@@ -92,3 +92,47 @@ FOGGED_IN  259     24            49%                 3%
 - **H5 BỊ BÁC:** `cloud_mid_dawn` trung vị gần 0 ở mọi nhóm, Spearman với sai số = -0,10 (n=348). Cloud_mid không giải thích khe mù, bỏ hướng này.
 - Quan sát phụ (không phải giả thuyết đã đăng ký, chỉ ghi lại): sai số (vệ tinh - app) lớn hơn khi mặt mây chỉ từ RH (768m, n=239) so với có mây trực tiếp (537m, n=109). Cả hai đều còn xa 0, nên cũng không cứu được.
 - Hai hướng rẻ nhất của agent đều không ra gì, nên bước đáng làm tiếp là hiệu chuẩn chính vệ tinh bằng ảnh có dấu giờ (việc 1), vì phần lớn khoảng cách 650m có thể nằm ở phía vệ tinh. Cần ảnh từ anh hoặc từ bộ thu: ca có giờ 05:30-07:00 và nhìn thấy địa hình nhô khỏi biển mây.
+
+## Đợt "dự báo tại điểm thung lũng" (19/11/2026, phiếu gcc29 vòng 3) - GIẢ THUYẾT VIẾT TRƯỚC KHI ĐO
+
+Viết và commit TRƯỚC khi lấy dữ liệu hay chạy phép đo nào của đợt này (bước a luật cổng). Đây là ý (b) trong
+`docs/skyradar-doi-chung.md` (anh đã duyệt): tìm điểm thung lũng THẬT bằng DEM trong bán kính 20 km rồi xin dự báo
+TẠI toạ độ đó. Không thêm biến thể nào sau khi đã thấy kết quả.
+
+**Vấn đề đã đo, nối với đợt trước:**
+- Luật "đáng đi" khuyên đi 181 điểm-ngày, đúng 9 (5%); 16/17 ca báo nhầm vệ tinh thấy QUANG (CLEAR)
+  (`docs/kiem-chung-ngoai-mau-va-ve-tinh.md`). Ở đỉnh >= 2.400m ngày vệ tinh quang, engine vẫn dựng mặt mây 79-81%.
+- Đợt 30/10 đã bác hai hướng sửa trong `estimateCloudTop` (nội suy, ngưỡng RH 90) và H4/H5.
+- Còn một hướng chưa thử, nằm ở ĐẦU VÀO chứ không ở công thức: hôm nay "thung lũng" của engine là dự báo tại
+  toạ độ ĐỈNH, chỉ hạ `elevation=` xuống cao độ đáy (đáy = min DEM 5 điểm trong ~3,3 km, hoặc mặt cắt preset).
+  Ô lưới mô hình chứa đỉnh là ô núi: ẩm/mây thấp của nó có thể là ẩm sườn núi, không phải đáy thung lũng, nên
+  cổng `cloud_low_dawn < 15 && !valleySaturation && !rootedLowLayer` hay mở sai ở ngày quang.
+
+**Điểm thung lũng (chốt trước):** lưới DEM (Open-Meteo Elevation, cùng nguồn app) bước 0,02° vĩ và 0,02° kinh,
+trong đĩa bán kính 20 km quanh toạ độ đỉnh; bỏ điểm DEM <= 2 m (biển, đầm); lấy điểm THẤP NHẤT, hoà thì lấy điểm gần
+đỉnh hơn. Không chỉnh bán kính, bước lưới hay luật chọn sau khi thấy kết quả.
+
+**Hai nhánh, cùng một mẻ dữ liệu** (historical-forecast Open-Meteo, mô hình gfs_seamless, icon_seamless,
+ukmo_seamless như đợt 30/10; hai nhánh xin xen kẽ trong cùng một lần chạy `scripts/replay-valley.ts`):
+- A (hiện tại): toạ độ đỉnh, `elevation=` đáy thung lũng như `valleyElevationsForAll` (đúng như bản chụp).
+- B (ý b): toạ độ điểm thung lũng, `elevation=` cao độ DEM điểm đó; `ctx.valleyElevation` = cao độ đó.
+- Điểm quan sát (chỗ đứng): toạ độ đỉnh, `elevation=` cao độ đỉnh, `OBSERVER_VARS`; DÙNG CHUNG cho cả hai nhánh.
+  (Khác `replay-raw.ts` cũ: bản đó lấy luôn khối thung lũng làm chỗ đứng.)
+- Engine, ngưỡng, `isWorthGoing` giữ nguyên; chỉ đầu vào thung lũng đổi.
+
+**Mẫu:** mọi (điểm × ngày) có sự thật VÀ có bản chụp: người đi, Facebook (`fbUsable`, giờ DAWN), vệ tinh
+(bỏ BLOCKED_ABOVE, NO_DATA). Thứ bậc trùng: người đi > Facebook > vệ tinh. Ước tính ~71 ngày, ~60 điểm.
+
+**Giả thuyết H-TL:** nhánh B giảm báo nhầm "đáng đi" vì ô lưới thung lũng khô hơn ô đỉnh ở ngày quang.
+
+**Điều kiện ĐẠT (tất cả):**
+1. Bỏ sót trên người đi + Facebook: B <= A (cứng, luật cổng c).
+2. Báo nhầm "đáng đi" mọi nguồn: B <= 0,8 × A.
+3. Bootstrap theo NGÀY (2.000 lần lấy lại ngày): khoảng 90% của (báo nhầm A - báo nhầm B) nằm hẳn trên 0.
+4. Balanced accuracy trên người đi + Facebook: B >= A.
+Không đạt một điều kiện thì KHÔNG gộp vào engine; ghi số và lý do.
+
+**Báo cáo kèm (không phải cổng):** bảng đúng/sót/nhầm theo nguồn và theo nhóm (>= 2.400m, < 2.400m, Ba Vì, Tà Xùa,
+Fansipan); bỏ sót theo vệ tinh (đổi lấy gì); tỉ lệ dựng mặt mây ở ngày vệ tinh CLEAR đỉnh >= 2.400m; sai số mặt mây
+so với vệ tinh khung sạch; số ngày hiệu dụng; phân bố khoảng cách và cao độ điểm thung lũng; MỌI ca đổi kết luận
+theo cả hai chiều. Replay là dữ liệu gần lead 0, chỉ so tương đối A với B là hợp lệ.
