@@ -226,3 +226,8 @@ kết luận "CHƯA ĐỦ MẪU", không gộp, kéo dài thêm 30 ngày với �
 Nhóm chính chia trước: >= 2.400m / < 2.400m. Không thêm nhóm sau khi thấy kết quả.
 
 **Báo cáo kèm (không phải cổng):** như đợt trước, cộng phân bố khoảng cách/cao độ/số góc của điểm v2, và mọi ca đổi.
+
+**Tệp điểm đã ghi 19/11/2026 13:05 (trước mọi ngày chấm):** `data/valley-v2-points.json`, chạy một lượt đủ 58/58 điểm thư viện,
+không thiếu DEM. 45/58 điểm có >= 2 góc. 13 điểm bị loại theo luật (không thay luật): SAPA_HAM_RONG, DEO_KHAU_PHA,
+DOI_MAM_XOI, DEO_O_QUY_HO, DEO_PHA_DIN, DEO_MA_PI_LENG, BA_DEN, MANG_DEN, CAU_DAT, LINH_QUY_PHAP_AN, TA_NANG, KEO_LOM, DON_DEN.
+Lúc chấm 20/12, các điểm này không có nhánh C và nằm ngoài mẫu so sánh A/C (ghi số hàng bị bỏ vì lý do này).
