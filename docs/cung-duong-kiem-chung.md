@@ -167,3 +167,8 @@ và trước vòng 7 app im lặng coi là đủ: "Tóm tắt ngày tại đích
   cao điểm cuối tuyến và độ cao đích; ĐÍCH được thêm làm 1 toạ độ vào cùng lần gọi cao độ và dự báo (không thêm lần gọi), nên
   `destOm`/`destElev` là thời tiết và độ cao TẠI ĐÍCH. Mẫu dọc tuyến và mức độ khó vẫn chỉ tính trên đường xe.
 - Bản chụp ghi `endGapKm`, `endNote`, `destElev` cho từng tuyến TỪ BẢN 21/11/2026. Bản 20/11 (`route-1.2`, chụp trên Actions 19/11 19:45) thiếu ba trường này do script chép trường bằng tay; không chép bù. Muốn biết hở của bản 20/11 thì so điểm mẫu cuối với toạ độ đích. Không đổi `assessPoint` nên không đổi `ROUTE_RULES_VERSION`.
+
+## 10. Biến thể mưa theo giờ D2a/D2b chờ chấm (19/11/2026, phiếu g95c6) - đăng ký trước
+Từ đợt mượn luật nhánh agy (chi tiết và số trong `NHAT-KY-HIEU-CHINH.md`): chấm trên bản chụp tuyến từ 21/11/2026 (`samples[].wx` có lead),
+ghép nhãn FB đường cùng ngày, cửa sổ [giờ đăng - 2h, giờ đăng], cổng (a)-(d) như đợt đó. D2a = mức 1 từ 1 mm/h (giữ xác suất >= 70%, mức 2 = 3 mm);
+D2b = giữ 0,5 mm, bỏ nhánh xác suất. Chấm khi mưa có >= 10 nhãn CÓ hoặc tới 20/12/2026. route-1.2 giữ nguyên tới lúc đó.
