@@ -231,3 +231,57 @@ Nhóm chính chia trước: >= 2.400m / < 2.400m. Không thêm nhóm sau khi th�
 không thiếu DEM. 45/58 điểm có >= 2 góc. 13 điểm bị loại theo luật (không thay luật): SAPA_HAM_RONG, DEO_KHAU_PHA,
 DOI_MAM_XOI, DEO_O_QUY_HO, DEO_PHA_DIN, DEO_MA_PI_LENG, BA_DEN, MANG_DEN, CAU_DAT, LINH_QUY_PHAP_AN, TA_NANG, KEO_LOM, DON_DEN.
 Lúc chấm 20/12, các điểm này không có nhánh C và nằm ngoài mẫu so sánh A/C (ghi số hàng bị bỏ vì lý do này).
+
+## Đợt "mượn module của nhánh agy" (đăng ký 19/11/2026, phiếu g95c6) - VIẾT TRƯỚC KHI TẢI SỐ
+
+Anh Phong chọn A (19/11 20:00, câu #qa3cf): giữ engine CloudHunter, chỉ mượn `routeDifficulty.ts` và `ephemeris.ts`
+của nhánh agy (`vn-skycast`), mỗi module một vòng, đăng ký trước, chấm trên tập chưa thấy rồi mới giữ. Không gộp
+khung 8 mực vệ tinh. Cả hai vòng KHÔNG đụng điểm/trạng thái/đáng đi của engine biển mây.
+
+### Vòng 1: luật độ khó cung đường của agy (`evaluateRouteDifficulty`)
+
+**Đối chiếu trước (đọc code, chưa có số):** agy có 7 nhóm (mưa giờ, mưa 24h, mưa 72h, sương/tầm nhìn, đi trong mây,
+gió giật, lạnh theo cao độ, đèo lúc tối). CloudHunter route-1.2 đã có đủ các nhóm này (cộng dông, sạt lở QĐ 18), nên
+không mượn nguyên module (trùng chức năng, hai luật song song làm người dùng thấy hai mức khác nhau). Chỉ chấm các
+CHỖ KHÁC thành từng biến thể, mỗi biến thể thay đúng một nhóm trong `assessPoint`, phần còn lại giữ route-1.2:
+- **D1 đi trong mây:** luật agy (cao >= 500 m; LCL = 125 x (T - Td) <= 250 m, RH >= 90, mây thấp >= 60 -> mức 1;
+  LCL <= 125, RH >= 95, mây thấp >= 75 -> mức 2; thêm tầm nhìn < 300 m hoặc (>= 1.200 m và trời tối) -> mức 3)
+  thay nhánh INCLOUD của app (>= 800 m, RH >= 97, mây thấp >= 90 -> mức 2). Td tính từ T và RH bằng công thức Magnus
+  (app không xin `dew_point_2m`). Tầm nhìn: agy 1000/500/200 m thay 1000/200 m.
+- **D2 mưa theo giờ:** agy 1 / 4 / 10 mm/h, không có nhánh xác suất mưa; thay 0,5 / 3 / 10 mm/h + xác suất >= 70%.
+- **D3 lạnh xe máy theo gió lùa (wind chill NWS, gió = max(gió 10 m, tốc độ xe 40 km/h)):** cảm nhận <= 12 / 8 / 3 °C
+  (hoặc không khí <= 2) -> mức 1 / 2 / 3; ô tô 6 / 3 / 1 °C. Thay nhóm lạnh/băng của app.
+- Không chấm, không mượn: gió giật (không có nhãn gió nào), đèo lúc tối có leo thang (không có nhãn), mưa 72h
+  70/120/200 mm (app đã bỏ mốc 72h vì không có nguồn; nguồn agy ghi "VIGMR/Caine 1980" nhưng Caine là đường cường độ -
+  thời gian, không cho ra ba mốc này), điểm rủi ro 0-100 (trọng số tự đặt, không nguồn).
+
+**Tập chấm (chưa luật nào được chỉnh theo nó):** 77 nhãn đường Facebook dùng được (độ tin >= 0,6) trong
+`/srv/data/cloudhunter-mxh/nhan-duong.nhap.json` (28/9-18/11/2026, bộ thu FB, luật chữ, không LLM). Ngưỡng route-1.2
+lấy từ tài liệu; nhánh INCLOUD của app nghĩ ra từ số đo Tà Xùa 19/11 06h, ngày đó KHÔNG có trong tập. Nơi: "Cầu Kính
+Rồng Mây" và "Đèo Ô Quy Hồ" -> toạ độ DEO_O_QUY_HO (22,3550, 103,7740, 2.035 m); "Tà Xùa cả khu" -> TA_XUA_SON_LA
+(21,2764, 104,4239), cao 1.770 m (DEM đường xe). Thời tiết: Open-Meteo historical-forecast (`best_match`, cùng biến
+`ROUTE_HOURLY_VARS`, `elevation=` như trên). Giới hạn đã biết: đây là chuỗi dự báo gần giờ phân tích, không phải dự báo
+có lead như người dùng thấy, nên chỉ kiểm LUẬT, không kiểm tài dự báo.
+
+**Phép đo:** mỗi đoạn nhãn, mỗi loại k thuộc {fog, rain, cold}: sự thật CÓ nếu k trong `kinds`, KHÔNG nếu k trong
+`kindsAbsent`, còn lại bỏ. Luật "báo" k = mức cao nhất của cờ loại k (fog = fog; rain = rain, storm, landslide;
+cold = cold, ice) trong 4 giờ [giờ đăng - 3h, giờ đăng] >= 1 (chính, vì tập có 0 nhãn `hard >= 2`); in thêm >= 2.
+Giờ thiếu số thì không báo, và đếm số giờ thiếu.
+
+**Cổng giữ (mỗi biến thể so route-1.2, cùng mẻ):** (a) bỏ sót mới <= cũ; (b) báo nhầm tăng thêm <= số bỏ sót giảm;
+(c) phải tốt hơn hẳn ở ít nhất một trong hai; (d) đủ mẫu: >= 3 nhãn CÓ và >= 10 nhãn KHÔNG cho loại đó, thiếu thì
+"CHƯA ĐỦ MẪU" = không giữ. Hoà = không giữ (ít luật hơn). Giữ thì tăng `ROUTE_RULES_VERSION` và gọi agent phản biện
+trước khi commit. Tập tiếp theo (kiểm lại, không phải cổng lần này): nhãn FB và bản chụp tuyến từ 21/11/2026.
+
+### Vòng 2: thiên văn agy (`ephemeris.ts`, astronomy-engine 2.1.19) so với `services/astroService.ts` (suncalc 2.0.1)
+
+**Giả thuyết:** suncalc lệch đáng kể ở giờ trăng mọc/lặn (thuật toán gần đúng, và `getMoonTimes` lấy nửa đêm theo
+múi giờ CỦA MÁY), astronomy-engine thì không. Thay suncalc chỉ khi điều đó đúng.
+**Mẫu chuẩn độc lập:** USNO API `rstt/oneday` (tz=7, độ cao 0 cho cả ba bên), 4 điểm TA_XUA_SON_LA, DEO_O_QUY_HO,
+BACH_MA, LANG_BIANG x ngày 5 mỗi tháng 12/2026-11/2027 = 48 điểm-ngày, chưa ai dùng để kiểm. Sự kiện: mặt trời mọc,
+lặn, đầu chạng vạng sáng (-6°), trăng mọc, trăng lặn. suncalc chạy hai lần: TZ=Asia/Ho_Chi_Minh (máy người dùng VN)
+và TZ=UTC; cổng tính theo lần TZ VN, lần UTC chỉ báo cáo.
+**Cổng giữ:** (1) astronomy-engine mọi sự kiện |lệch| <= 1 phút (USNO làm tròn phút); VÀ (2) suncalc TZ VN có trung vị
+|lệch| trăng mọc/lặn > 1 phút, HOẶC có sự kiện lệch > 3 phút, HOẶC thiếu/sai ngày sự kiện USNO có. (1) trượt hoặc
+(2) không xảy ra -> không giữ, không thêm phụ thuộc. Giữ thì đo thêm cỡ gói (gz) và tải lười nếu > 30 KB.
+Độ rọi trăng: chỉ báo cáo, không làm cổng.
