@@ -7,6 +7,8 @@ import {
   ROUTER_LABEL, dawnHours, saveUserRoute, loadUserRoutes, exportUserRoutesJson, USER_ROUTES_KEY, USER_ROUTES_MAX,
 } from '../services/routeService';
 import { fetchStability, assessStability, STAB_LABEL, STH, RUN_LABEL, STABILITY_MODEL_LABEL, type DayStability, type StabVerdict, type Indicator } from '../services/stabilityService';
+import { fetchRouteStorm, stormSegments, worstStorm, capeClass, STORM_LABEL, STORM_MODEL_LABEL, STH_STORM, type PointStorm, type StormLevel } from '../services/stormService';
+import { slideRiskQD18, fmtRange, SLIDE_SOURCE, SLIDE_SOURCE_URL, SLIDE_RAIN_EDGES, SLIDE_WET_DAY_MM } from '../services/slideService';
 import { loadClimate, routeClimate, spotClimate, monthSentence, seaSentence, CTH, type ClimateFile, type RouteClimateRow } from '../services/climateService';
 
 interface Props {
@@ -305,6 +307,7 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
           <p className="text-[11px] text-slate-400" data-testid="fetched-at">Dự báo tải lúc {fmtVN(plan.fetchedAt)} (Open-Meteo cập nhật vài lần mỗi ngày; để quá nửa ngày thì nên bấm xem lại).</p>
           <DayBrief plan={plan} destName={dest.name} destKey={destKey} arriveMs={arriveMs} clim={clim} />
           {!far && <ForecastStability plan={plan} arriveMs={arriveMs} />}
+          {!far && <StormSlide plan={plan} />}
           {!far && <RouteClimateBlock plan={plan} clim={clim} month={tripMonth} far={false} />}
 
           <div className="flex flex-col gap-2">
@@ -487,6 +490,85 @@ const ForecastStability: React.FC<{ plan: RoutePlan; arriveMs: number }> = ({ pl
             <p className="text-[11px] text-slate-500">Cách tính: với mỗi mô hình (ECMWF, GFS, ICON, UKMO) lấy lần chạy mới nhất và lần chạy cũ hơn khoảng 1 ngày, 2 ngày cho CÙNG giờ đó, xếp vào lớp. Mưa: dưới {STH.WET_DAY_MM} mm là khô (ngưỡng "ngày có mưa" WMO/ETCCDI), {STH.RAIN_EDGES[1]} và {STH.RAIN_EDGES[2]} mm theo thang mưa KTTV. Mây: tổng mây (không phải biển mây) theo okta WMO, ≤ 2 okta quang, ≥ 6 okta gần kín. Luật gộp là QUY ƯỚC CỦA APP: không mô hình nào đổi lớp thì ổn định; từ nửa số mô hình trở lên đổi lớp thì đang dao động; còn lại hơi dao động. Giá trị sát ranh giới lớp đổi chút ít cũng tính là đổi lớp. Ngày càng xa càng ít lần chạy cũ để so (Open-Meteo chỉ giữ tới 7 ngày trước giờ dự báo). Đang dao động nghĩa là nên chờ xem thêm trước khi chốt đi. Tải lúc {fmtHM(res.fetchedAt)} giờ VN.</p>
           </>
         )}
+      </div>
+    </details>
+  );
+};
+
+const STORM_CLS: Record<StormLevel, string> = {
+  NO_DATA: 'text-slate-400', NONE: 'text-emerald-300', LOW: 'text-amber-200', MED: 'text-orange-300', HIGH: 'text-rose-300',
+};
+const hm = (k: string) => k.slice(11, 16);
+
+/**
+ * Dông + sạt lở dọc tuyến (phiếu gcc29 vòng 6). Dông: 4 mô hình, chỉ tải khi mở khối (1 lần gọi, đệm 30 phút).
+ * Sạt lở: tính từ mưa dọc tuyến đã tải (không gọi thêm), theo QĐ 18/2021. Không tham gia điểm/trạng thái/đáng đi.
+ */
+const StormSlide: React.FC<{ plan: RoutePlan }> = ({ plan }) => {
+  const [res, setRes] = useState<{ points: PointStorm[]; fetchedAt: number; missingModels: string[] } | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => { setRes(null); setErr(null); }, [plan]);
+  const load = () => {
+    if (res || loading) return;
+    setLoading(true); setErr(null);
+    fetchRouteStorm(plan.samples).then(setRes).catch(e => setErr(`Không tải được dữ liệu dông: ${e.message}`)).finally(() => setLoading(false));
+  };
+  const slides = useMemo(() => plan.samples.map(s => ({ s, r: slideRiskQD18(s.wx, s.elev) })), [plan]);
+  const hit = slides.filter(x => x.r.status === 'LEVEL');
+  const nearly = slides.filter(x => x.r.status === 'NO_PRIOR');
+  const checked = slides.filter(x => x.r.status !== 'LOWLAND' && x.r.status !== 'NO_DATA').length;
+  const segs = res ? stormSegments(res.points) : [];
+  const worst = res ? worstStorm(res.points) : null;
+  return (
+    <details className="rounded-xl border border-slate-700 bg-slate-900/40" data-testid="route-storm"
+      onToggle={e => { if ((e.currentTarget as HTMLDetailsElement).open) load(); }}>
+      <summary className="min-h-11 flex items-center px-3 text-xs font-bold text-slate-200 cursor-pointer">⛈️ Dông và sạt lở dọc đường (4 mô hình, QĐ 18/2021)</summary>
+      <div className="px-3 pb-3 space-y-3 text-[11px] text-slate-300">
+        <section>
+          <h4 className="font-bold text-slate-200">Dông theo đoạn đường</h4>
+          {loading && <p className="text-cyan-300" role="status">Đang tải CAPE và mã thời tiết của 4 mô hình...</p>}
+          {err && <p className="text-rose-300" role="alert">{err}</p>}
+          {res && (
+            <>
+              {res.missingModels.length > 0 && <p className="text-amber-200">⚠️ Không tải được {res.missingModels.map(m => STORM_MODEL_LABEL[m]).join(', ')}; chỉ tính các mô hình còn lại.</p>}
+              <p className="mt-1">Nặng nhất cả tuyến: <b className={STORM_CLS[worst!]}>{STORM_LABEL[worst!]}</b></p>
+              <ul className="mt-1 space-y-1" data-testid="storm-segments">
+                {segs.map((g, i) => (
+                  <li key={i} className="border-t border-slate-800 pt-1">
+                    <span className="text-slate-200">km {Math.round(g.fromKm)}{g.toKm !== g.fromKm ? `-${Math.round(g.toKm)}` : ''}</span>
+                    <span className="text-slate-500"> (qua lúc {hm(g.fromHour)}{g.toHour !== g.fromHour ? `-${hm(g.toHour)}` : ''})</span>:{' '}
+                    <b className={STORM_CLS[g.level]}>{STORM_LABEL[g.level]}</b>
+                    {g.level !== 'NO_DATA' && <span className="text-slate-400">; {g.maxThunder} mô hình báo dông; CAPE cao nhất {g.capeMax ?? '-'} J/kg{g.capeMax !== null ? ` (${capeClass(g.capeMax)})` : ''}</span>}
+                  </li>
+                ))}
+              </ul>
+              <details className="mt-1">
+                <summary className="min-h-11 flex items-center cursor-pointer text-slate-400">Từng điểm, từng mô hình</summary>
+                <ul className="space-y-0.5" data-testid="storm-points">
+                  {res.points.map((p, i) => (
+                    <li key={i}>km {Math.round(p.km)} {hm(p.hourKey)}: {p.models.map(m => `${STORM_MODEL_LABEL[m.model]} ${m.capeMax ?? '-'} J/kg${m.thunder ? ' ⚡' : ''}, mưa ${m.rainMax === null ? '-' : String(m.rainMax).replace('.', ',')} mm/h`).join('; ')}</li>
+                  ))}
+                </ul>
+              </details>
+              <p className="text-slate-500 mt-1">Cách tính: lấy giờ đi qua mỗi điểm cộng trừ {STH_STORM.WINDOW_H} giờ. Mỗi mô hình (ECMWF, GFS, ICON, UKMO) cho CAPE (năng lượng đối lưu), mã thời tiết 95-99 (WMO: dông, dông mưa đá) và mưa giờ. Thang CAPE theo NWS/SPC (Mỹ): dưới {STH_STORM.CAPE_EDGES[0]} J/kg yếu, {STH_STORM.CAPE_EDGES[0]}-{STH_STORM.CAPE_EDGES[1]} vừa, {STH_STORM.CAPE_EDGES[1]}-{STH_STORM.CAPE_EDGES[2]} mạnh; chính NWS ghi CAPE không phải con số quyết định, CAPE thấp vẫn có thể có dông. Luật gộp là QUY ƯỚC CỦA APP, chốt trước: từ 2 mô hình và từ nửa số mô hình trở lên báo dông thì nguy cơ cao; 1 mô hình báo dông, hoặc nửa số mô hình có CAPE từ {STH_STORM.CAPE_EDGES[0]} kèm mưa, thì có thể có dông; chỉ thấy CAPE từ {STH_STORM.CAPE_EDGES[0]} thì khí quyển bất ổn. Dông mùa hè ở núi thường nổ chiều tối và rất cục bộ, mô hình lưới 9-25 km khó bắt đúng chỗ. Tải lúc {fmtHM(res.fetchedAt)} giờ VN.</p>
+            </>
+          )}
+        </section>
+        <section data-testid="route-slide">
+          <h4 className="font-bold text-slate-200">Sạt lở, lũ quét theo quy định nhà nước</h4>
+          {hit.length > 0 ? (
+            <ul className="mt-1 space-y-1">
+              {hit.map(({ s, r }, i) => (
+                <li key={i} className="text-rose-200">km {Math.round(s.km)} ({s.elev ?? '?'} m, qua lúc {hm(s.hourKey)}): mưa {String(r.r24).replace('.', ',')} mm/24h, trước đó mưa {r.wetDays}{r.wetExact ? '' : '+'} ngày. Theo {SLIDE_SOURCE}: tỉnh khu vực 1-2 {fmtRange(r.kv12)}, khu vực 3-4 {fmtRange(r.kv34)} (tuỳ vùng nguy cơ của từng sườn).</li>
+              ))}
+            </ul>
+          ) : checked === 0
+            ? <p className="mt-1">Không có điểm mẫu nào từ 300 m trở lên có số mưa để xét (tuyến thấp, hoặc thiếu dự báo).</p>
+            : <p className="mt-1">Trong {checked} điểm từ 300 m trở lên có số mưa, không điểm nào tới mức được xếp cấp rủi ro (từ {SLIDE_RAIN_EDGES[0]} mm/24h kèm mưa những ngày trước).</p>}
+          {nearly.length > 0 && <p className="text-amber-200 mt-1">⚠️ {nearly.length} điểm mưa từ {SLIDE_RAIN_EDGES[0]} mm/24h nhưng chưa đủ điều kiện mưa trước đó, nên văn bản chưa xếp cấp; mưa lớn như vậy vẫn nguy hiểm trên đường đèo.</p>}
+          <p className="text-slate-500 mt-1">Cách tính: áp Điều 46 và Bảng 6 của <a className="underline" href={SLIDE_SOURCE_URL} target="_blank" rel="noreferrer">Quyết định 18/2021/QĐ-TTg</a>. Mưa 24 giờ tính tới giờ đi qua (có cả giờ đã qua, là số phân tích của mô hình chứ không phải đo trạm); 100-200 mm cần mưa 1-2 ngày trước, trên 200 mm cần mưa trên 2 ngày. App không có bản đồ vùng nguy cơ nên chỉ báo khoảng cấp. Quy ước của app: một ngày có mưa là từ {SLIDE_WET_DAY_MM} mm/24h (WMO), chỉ xét điểm từ 300 m trở lên. Khu vực 1: Lai Châu, Sơn La, Điện Biên, Hoà Bình, Lào Cai, Yên Bái, Hà Giang; khu vực 2: Tuyên Quang, Bắc Kạn, Lạng Sơn, Cao Bằng, Thanh Hoá, Nghệ An, Quảng Ngãi (tên tỉnh trước sáp nhập 2025). Đây không phải cảnh báo chính thức; theo dõi tin của cơ quan khí tượng thuỷ văn.</p>
+        </section>
       </div>
     </details>
   );

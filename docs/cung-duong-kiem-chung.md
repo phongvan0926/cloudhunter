@@ -98,6 +98,53 @@ khối `ForecastStability` trong RouteWeather (thu gọn, chỉ gọi mạng khi
   chạy có số; không mô hình nào đổi lớp = "ổn định"; số đổi lớp >= một nửa số mô hình tính được = "đang dao động"; còn lại
   "hơi dao động"; không mô hình nào tính được = "chưa đủ lần chạy". Điểm yếu đã biết: giá trị sát ranh lớp (vd mây 27% với 25%)
   đổi chút ít cũng tính là đổi lớp.
-- Kiểm chứng sau này (chưa làm, cần dữ liệu): bản chụp tuyến hằng tối có thể ghi thêm phán quyết ổn định cho đích, rồi so với
-  sai số thật của dự báo D+3..D+5 (dự báo mới nhất so với quan trắc/ERA5 khi có). Chỉ khi đó mới biết "đang dao động" có đi
-  kèm sai số lớn hơn không.
+- Ghi vào bản chụp (từ vòng 6, 19/11/2026): mỗi tuyến cố định có `stability.days[]` cho các ngày đích D..D+5, kèm `leadDays`
+  (số ngày còn lại tới 06h ngày đó, như `leadDaysOf`) và số từng mô hình x 3 lần chạy. Lý do ghi cả 6 ngày: bản chụp tối trước
+  D chỉ có tầm ~1 ngày tới D, còn khối này nhắm tầm 3-5 ngày.
+- CÁCH CHẤM, CHỐT TRƯỚC (19/11/2026, trước khi có bản chụp nào):
+  a. Đơn vị: (tuyến, ngày đích X, mô hình) với phán quyết ghi ở lead L = 3..5.
+  b. "Dự báo còn đổi tiếp" = lớp mưa cả ngày của lần chạy mới nhất lúc L khác lớp mưa của lần chạy mới nhất trong bản chụp có
+     lead 0-1 cho cùng X (cùng mô hình). Đây là sự thật YẾU (dự báo sau so dự báo trước); khi có ERA5/trạm cho X thì chấm thêm
+     lớp mưa thật, ERA5 trễ ~5 ngày.
+  c. So tỉ lệ (b) giữa phán quyết "đang dao động" và "ổn định". Khối có ích nếu tỉ lệ ở "đang dao động" cao hơn rõ, khoảng tin
+     cậy bootstrap theo NGÀY (không theo tuyến, vì 8 tuyến cùng ngày không độc lập) không chứa 0.
+  d. Không chỉnh ranh lớp hay luật gộp theo kết quả; muốn đổi thì đổi luật rồi chấm lại toàn bộ.
+  Ngày chấm: xem lần đầu 18/12/2026 (4 tuần, ~28 ngày đích có lead 3-5), chấm chính 01/01/2027 (6 tuần).
+
+## 7. Dông dọc tuyến (19/11/2026, gcc29 vòng 6) - chỉ hiển thị + ghi bản chụp
+
+Code `services/stormService.ts`, khối `StormSlide` (data-testid `route-storm`) trong RouteWeather, thu gọn, chỉ gọi mạng khi mở
+(1 lần gọi Open-Meteo forecast cho mọi điểm mẫu, 4 mô hình ECMWF IFS / GFS / ICON / UKMO, biến `cape`, `weather_code`,
+`precipitation`; đo 19/11: JMA không có cape). Không tham gia điểm, trạng thái, đáng đi, KHÔNG đổi `assessPoint`.
+
+- Ngưỡng có nguồn: CAPE < 1000 J/kg yếu, 1000-2500 vừa, 2500-4000 mạnh, > 4000 cực mạnh: NWS
+  https://www.weather.gov/ilx/swop-severetopics-CAPE và bảng tham số SPC (bản lưu
+  https://webarchive.library.unt.edu/eot2008/20080916110558/http://www.spc.noaa.gov/sfctest/help/sfcoa.html). NWS tự ghi đây
+  là thang trượt, không có "số ma thuật". Mã 95-99 = dông (WMO 4677). Mưa giờ dùng `TH.RAIN_LIGHT`.
+- Luật gộp, QUY ƯỚC CỦA APP, chốt 19/11/2026 trước khi nhìn số tuyến nào (`STORM_RULES_VERSION` storm-1.0): cửa sổ giờ đi qua
+  +- 1 giờ; HIGH = >= 2 mô hình báo 95-99 và >= nửa số mô hình dùng được; MED = >= 1 mô hình báo dông, hoặc >= nửa số mô hình
+  CAPE >= 1000 kèm >= 1 mô hình mưa >= 0,5 mm/h; LOW = >= 1 mô hình CAPE >= 1000; NONE còn lại; NO_DATA không mô hình nào có số.
+- Bản chụp: `storm` (đoạn + từng điểm: số mô hình báo dông, CAPE và mưa từng mô hình).
+- CÁCH CHẤM, CHỐT TRƯỚC: sự thật = bài FB / người đi nói có dông, sét, mưa đá trên tuyến đó trong khung giờ đi (bộ thu FB gắn
+  nhãn bằng luật chữ như mục 2; thêm từ khoá dông/sét/mưa đá). Chấm bảng 2x2 theo (tuyến, ngày): app MED/HIGH vs có báo dông.
+  Ngày không có bài nào nói về thời tiết tuyến thì KHÔNG tính là "không dông". Tháng 11-3 ở miền Bắc ít dông, nên ngày chấm sớm
+  nhất là sau mùa dông đầu tiên (dự kiến 30/06/2027), hoặc sớm hơn nếu gom được >= 10 ngày có nhãn dông.
+
+## 8. Sạt lở, lũ quét theo QĐ 18/2021 (19/11/2026, gcc29 vòng 6) - chỉ hiển thị + ghi bản chụp
+
+Code `services/slideService.ts`, phần `route-slide` trong khối `StormSlide`. Không gọi mạng thêm (dùng mưa dọc tuyến đã tải,
+thêm `PointWx.rainPrior` = 3 khối 24h liền trước khối `rain24h`). Không đổi `assessPoint` (cờ `landslide` cũ giữ nguyên).
+
+- Nguồn: Quyết định 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII, bản gốc https://vupc.mae.gov.vn/Data/files/18_2021_QD-TTg.doc.
+  Đã đối chiếu từng ô Bảng 6 với lời văn Điều 46 (19/11/2026), khớp hết. Văn bản tháng 5/2026 vẫn viện dẫn; chưa thấy văn bản
+  thay thế. Luật: mưa 24h 100-200 mm kèm mưa 1-2 ngày trước, hoặc > 200 mm kèm mưa > 2 ngày trước; cấp 1-3 tuỳ khu vực (theo
+  tỉnh, tên trước sáp nhập 2025) và vùng nguy cơ (bản đồ phân vùng). Dưới 100 mm văn bản không xếp cấp.
+- App không có bản đồ vùng nguy cơ, không tra tỉnh, nên chỉ báo KHOẢNG cấp cho nhóm KV1-2 và KV3-4. Quy ước app: ngày có mưa
+  >= 1 mm/24h; chỉ xét điểm >= 300 m (`TH.SLIDE_MIN_ELEV`). Cổng độ cao này thêm SAU khi chạy thử 19/11 thấy đồng bằng Huế 3-12 m
+  bị xếp cấp; là cổng phạm vi (văn bản nói "vùng có nguy cơ"), không phải chỉnh ngưỡng mưa.
+- Ghi chú về cờ `landslide` cũ trong `assessPoint`: mốc 50 và 100 mm/24h là thang mưa KTTV (mưa to, rất to), CHƯA phải ngưỡng
+  sạt lở có văn bản; mốc 72h >= 150 mm chưa có nguồn. Chưa sửa vòng này (sửa thì đổi `ROUTE_RULES_VERSION`).
+- Bản chụp: `slide.points` (chỉ điểm LEVEL hoặc NO_PRIOR) + `slide.noDataCount`.
+- CÁCH CHẤM, CHỐT TRƯỚC: sự thật = tin sạt lở/tắc đường trên đúng quốc lộ/tỉnh lộ của tuyến (báo địa phương, bài FB), trong
+  24h quanh giờ đi. Mùa mưa miền Bắc 5-9, miền Trung 9-12: dự kiến chấm 31/12/2026 cho tuyến Huế - Bạch Mã, 31/10/2027 cho tuyến
+  miền Bắc. Dưới 5 sự kiện thì chỉ liệt kê, không tính tỉ lệ.

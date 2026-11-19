@@ -140,6 +140,8 @@ export interface PointWx {
   cloudLow: number | null;
   rain24h: number | null;        // tổng 24h TRƯỚC (gồm) giờ đi qua; null nếu thiếu số liệu
   rain72h: number | null;
+  /** Mưa của 3 khối 24h liền TRƯỚC khối rain24h (khối 1 = 24-48h trước giờ đi qua...); null = thiếu số. Dùng cho sạt lở QĐ 18/2021. */
+  rainPrior?: (number | null)[];
   isDark: boolean | null;        // trước bình minh / sau hoàng hôn
 }
 
@@ -178,6 +180,7 @@ export function extractPointWx(om: any, hourKey: string): PointWx | null {
     cloudLow: num(h.cloud_cover_low?.[i]),
     rain24h: windowSum(h.precipitation, i, 24),
     rain72h: windowSum(h.precipitation, i, 72),
+    rainPrior: [1, 2, 3].map(b => windowSum(h.precipitation, i - 24 * b, 24)),
     isDark: null,
   };
   const d = om?.daily;
@@ -654,7 +657,7 @@ export function compactRoute(p: RoutePlan) {
     worst: p.summary.worst.map(w => ({ kind: w.kind, level: w.level, km: Math.round(w.km), text: w.text })),
     samples: p.samples.map(s => ({
       km: Math.round(s.km), elev: s.elev, hour: s.hourKey, level: s.level,
-      wx: s.wx && { t: s.wx.tempC, rh: s.wx.rh, mm: s.wx.precipMm, pop: s.wx.precipProb, wmo: s.wx.wmo, vis: s.wx.visibilityM, gust: s.wx.gustKmh, r24: s.wx.rain24h, r72: s.wx.rain72h },
+      wx: s.wx && { t: s.wx.tempC, rh: s.wx.rh, mm: s.wx.precipMm, pop: s.wx.precipProb, wmo: s.wx.wmo, vis: s.wx.visibilityM, gust: s.wx.gustKmh, r24: s.wx.rain24h, r72: s.wx.rain72h, rp: s.wx.rainPrior ?? null },
       hz: s.hazards.map(h => `${h.kind}${h.level}`),
     })),
   };
