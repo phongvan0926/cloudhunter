@@ -697,7 +697,7 @@ export function scoreOneModel(
   model: WeatherModelId, m: DayModelData, ctx: DayContext, dateStr: string,
   // Chỉ dùng cho script đo: truyền Infinity để chấm lại bằng luật TRƯỚC engine-2.8.4 trên
   // cùng một mẻ dữ liệu (hai lần fetch không so được — Open-Meteo viết đè quá khứ).
-  opts?: { observerFogMaxDeltaH?: number; cloudTop?: CloudTopOpts }
+  opts?: { observerFogMaxDeltaH?: number; observerFogRelaxLowCloud?: number; cloudTop?: CloudTopOpts }
 ): ModelDayScore {
   const reasons: string[] = [];
   const inv = computeInversion(m, ctx.valleyElevation);
@@ -883,6 +883,10 @@ export function scoreOneModel(
   // Trước khi kết luận "đứng trên biển mây": mô hình có báo mây NGAY tại cao độ này không?
   else if (deltaH !== null && deltaH > -250
            && deltaH <= (opts?.observerFogMaxDeltaH ?? OBSERVER_FOG_MAX_DELTA_H)
+           // Tham số THỬ NGHIỆM (g9214, chỉ cho scripts/study-observer-lowcloud.ts; mặc định tắt = engine-2.8.3):
+           // nới cổng khi mô hình báo mây tầng thấp dày thật và mặt mây nằm dưới chân hơn biên đáng đi.
+           && !(opts?.observerFogRelaxLowCloud !== undefined && deltaH > WORTH_GOING_DELTA_H
+                && m.cloud_low_dawn >= opts.observerFogRelaxLowCloud)
            && observerInCloud(m, ctx)) status = 'FOG';
   else if (deltaH !== null && deltaH > 250) status = wind.level === 'Low' ? 'STATIC' : 'FLOWING';
   else if (deltaH !== null && deltaH >= -250) status = wind.level === 'Low' ? 'FLUCTUATING' : 'ROLLING';
