@@ -425,3 +425,15 @@ báo đỏ qua bao_chung, KHÔNG đổi cờ, KHÔNG ghi 0. Mọi lần đổi c
 
 **Phản biện độc lập cho phần sửa quy trình:** một agent (xem mục kết quả bên dưới khi có).
 **Không dùng LLM** trong vòng này; 0 lượt Open-Meteo thêm (chỉ đọc kho). D2a/D2b `routeDifficulty` KHÔNG vào vòng tự bật này (cần gọi Open-Meteo historical và nhãn đường, ngày chấm 20/12 hoặc >= 10 CÓ); chỉ đếm nhãn ghi vào bảng nếu có sẵn.
+
+**Sửa đăng ký sau phản biện độc lập (g2448, vẫn trước khi có số nào và trước khi commit code vòng tự động).** Agent phản biện (đọc đăng ký + score-agy-gate.ts, không được đưa kết luận mong muốn) nêu 5 ý chặn + 6 ý khác. Xử lý:
+1. [chặn] K3 và K6 khi mẫu 0/NaN: lỗi viết (NaN so sánh cho DAT/TRUOT bừa, TRUOT lại khoá vĩnh viễn). Sửa: K3 = CHUA_DU khi VT có < 8 báo đúng (TP); K6 = CHUA_DU khi FIELD có < 8 TP hoặc lossTP/lossFA là NaN. Ngưỡng và hướng so sánh giữ nguyên; chỉ thêm cổng mẫu tối thiểu 8 (bằng K4/K5).
+2. [chặn] Chấm sau khi bật cờ: mọi phép chấm đọc `worthGoingBase ?? worthGoing` (quyết định TRƯỚC cổng), kèm test đột biến cho cờ bật.
+3. [chặn] "Đủ điều kiện chấm" là MỘT hằng dùng chung (công cụ chấm, bảng đêm, vòng tự động): FIELD >= 30 điểm-ngày mới VÀ >= 10 ca CÓ trong FIELD, hoặc hôm nay >= 20/12/2026.
+4. [chặn] Thiếu cột: trong bản chụp đã có cột, điểm không có `agyGate` tính là lỗi (vào mẫu số của ngưỡng 10%); ngưỡng 10% tính trên 7 bản chụp mới nhất có cột, không chỉ bản mới nhất.
+5. [chặn] Lỗi đo KHÔNG tiêu lượt: lượt chỉ tính khi đã chấm xong và đã ghi + đọc lại tệp cờ; lỗi đo thì hoãn sang đêm sau.
+6. Ba lần nhìn dùng dữ liệu cộng dồn nên không độc lập: BẬT cần mọi K = DAT ở HAI lượt liên tiếp (L0&L1 hoặc L1&L2), bật tại lượt thứ hai. Tức bật sớm nhất ~14 ngày sau ngày đủ mẫu. Ngưỡng không đổi.
+7-8. R1 đếm số NGÀY khác nhau (>= 2 ngày khác nhau mất ca CÓ FIELD, vì một ngày diện rộng không được tự kích R1); thêm trần "không quá 25% ca bị mất thuộc một điểm" chỉ để báo. Giám sát tự lùi chỉ trong 60 ngày sau khi bật (sau đó coi là đã qua kiểm, vẫn chấm và ghi, không tự lùi nữa). Ghi rõ: tự lùi là HÀNH VI DỰ KIẾN, không phải bằng chứng cổng sai (công suất thấp, lùi nhầm có thể xảy ra); không bật lại tự động.
+9. Mốc "ca mới": mỗi bản chụp ghi `worthGoingBase` khi cờ bật; tập sau bật = bản chụp có `worthGoingBase`. Nhãn đến muộn thì lần chấm đêm sau tự gồm.
+10. Chống rò số: tệp cờ chỉ ghi trạng thái, ngày, lượt (không số); bảng đêm không in số phụ thuộc cổng, kể cả "thiếu dữ liệu cổng", khi chưa đủ điều kiện chấm; `--xem-trung-gian` bị từ chối khi vòng tự động đang chạy (`auto`). Cột `agyGate` từng điểm vẫn nằm công khai trong kho: không che được, ghi nhận là hạn chế.
+11. `ENGINE_VERSION` đổi giữa chừng: quyết định chỉ trên MỘT phiên bản (của bản chụp mới nhất); đổi phiên bản thì đặt lại bộ đếm lượt về L0 và ghi vào tệp cờ.
