@@ -88,6 +88,28 @@ describe('agyGate - không đổi kết quả hiển thị', () => {
     }));
     vi.resetModules();
   });
+  it('cờ cổng (g2448): chỉ HẠ worthGoing khi cổng nói khong; tắt thì y hệt; base luôn giữ', async () => {
+    const { gatedWorth } = await import('../services/agyGateFlag');
+    const g = (k: string) => ({ ver: 'v', ketLuan: k } as any);
+    expect(gatedWorth(true, g('khong'), true)).toBe(false);
+    for (const k of ['co', 'co_the', 'chua_co_du_lieu']) expect(gatedWorth(true, g(k), true)).toBe(true);
+    expect(gatedWorth(true, { ver: 'v', error: 'x' } as any, true)).toBe(true);     // lỗi = không chặn
+    expect(gatedWorth(true, undefined, true)).toBe(true);
+    expect(gatedWorth(false, g('co'), true)).toBe(false);                            // không bao giờ NÂNG
+    expect(gatedWorth(true, g('khong'), false)).toBe(true);                          // cờ tắt = không đổi
+    vi.resetModules();
+    const on = await (await import('../services/rankingService')).rankSpotsForDawn(DATE, undefined, { gateEnabled: true });
+    localStorage.removeItem('ch-rank-cache-v1');
+    vi.resetModules();   // bộ đệm xếp hạng theo ngày, không theo cờ
+    const off = await (await import('../services/rankingService')).rankSpotsForDawn(DATE, undefined, { gateEnabled: false });
+    expect(on.length).toBe(off.length);
+    for (const r of on) {
+      const o = off.find(x => x.key === r.key)!;
+      expect(r.worthGoingBase).toBe(o.worthGoing);                                   // base = quyết định khi cờ tắt
+      expect(r.worthGoing).toBe(o.worthGoing && !(r.agyGate && 'ketLuan' in r.agyGate && r.agyGate.ketLuan === 'khong'));
+      expect(o.worthGoingBase).toBeUndefined();
+    }
+  });
   it('không bật shadow thì app không tính cổng (cột trống)', async () => {
     const real = await import('../services/rankingService');
     const a = await real.rankSpotsForDawn(DATE);

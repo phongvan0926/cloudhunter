@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "locked": false,
+  "auto": true,
+  "engine": null,
+  "state": "bong",
+  "since": null,
+  "looks": [],
+  "note": "Cờ cổng bóng agy (gd355/g2448). Chỉ scripts/agy-gate-loop.ts hoặc người sửa. enabled=true: worthGoing hiển thị = worthGoingBase && agyGate != khong. Xem NHAT-KY-HIEU-CHINH.md."
+}

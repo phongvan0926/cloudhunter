@@ -14,6 +14,7 @@
  *  - Điểm nào thiếu dữ liệu thì bị loại khỏi bảng, không chèn số mặc định.
  */
 import { capWatchOf, type CapWatch } from './capWatch';
+import { AGY_GATE_ENABLED, gatedWorth } from './agyGateFlag';
 import { agyGateColumn, type AgyGateColumn } from './agyGate';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { NORTHWEST_PEAKS } from '../constants';
@@ -43,7 +44,8 @@ export interface SpotRank {
   agreement: number;    // % các mô hình xếp hạng đồng thuận trạng thái
   cloudTop: number | null;   // trung vị mặt mây trong nhóm kết luận thắng (m ASL)
   deltaH: number | null;     // elevation − cloudTop; >0 = đứng trên mặt mây
-  worthGoing: boolean;       // engine-2.8: xem isWorthGoing — KHÔNG suy từ score
+  worthGoing: boolean;       // engine-2.8: xem isWorthGoing — KHÔNG suy từ score. Cờ cổng agy bật (g2448): đã qua cổng
+  worthGoingBase?: boolean;  // quyết định CloudHunter TRƯỚC cổng agy (chỉ có khi cờ bật; để chấm tiếp)
   agyGate?: AgyGateColumn;   // cột BÓNG phiếu gd355: chỉ ghi vào bản chụp, KHÔNG ảnh hưởng điểm/đáng đi/thứ hạng
   capWatch?: CapWatch;       // cờ theo dõi 'giống 14/11' - không ảnh hưởng điểm; optional vì cache cũ
   /**
@@ -155,7 +157,7 @@ function loadRankCache(targetDate: string): SpotRank[] | null {
     const raw = localStorage.getItem(RANK_LS_KEY);
     if (!raw) return null;
     const c = JSON.parse(raw);
-    if (c.targetDate !== targetDate || c.engine !== ENGINE_VERSION) return null;
+    if (c.targetDate !== targetDate || c.engine !== ENGINE_VERSION || (c.gate === true) !== AGY_GATE_ENABLED) return null;   // cờ cổng agy đổi thì bộ đệm cũ hết hiệu lực
     if (Date.now() - c.ts >= RANK_CACHE_TTL_MS) return null;
     return Array.isArray(c.results) && c.results.length ? c.results : null;
   } catch { return null; }
@@ -164,7 +166,7 @@ function loadRankCache(targetDate: string): SpotRank[] | null {
 function saveRankCache(targetDate: string, results: SpotRank[]): void {
   try {
     localStorage.setItem(RANK_LS_KEY, JSON.stringify({
-      targetDate, engine: ENGINE_VERSION, ts: Date.now(), results,
+      targetDate, engine: ENGINE_VERSION, gate: AGY_GATE_ENABLED, ts: Date.now(), results,
     }));
   } catch { /* hết quota / chế độ riêng tư → bỏ qua, chỉ mất tiện lợi */ }
 }
@@ -209,7 +211,7 @@ export function listRankArchive(): RankArchiveEntry[] {
 export async function rankSpotsForDawn(
   targetDate: string,
   onProgress?: (msg: string) => void,
-  opts?: { shadow?: boolean },   // gd355: chỉ script chụp bản chụp bật; app (trình duyệt) không tính cổng bóng
+  opts?: { shadow?: boolean; gateEnabled?: boolean },   // gd355: chỉ script chụp bản chụp bật; app (trình duyệt) không tính cổng bóng
 ): Promise<SpotRank[]> {
   if (RANK_CACHE && RANK_CACHE.targetDate === targetDate && Date.now() - RANK_CACHE.ts < RANK_CACHE_TTL_MS) {
     return RANK_CACHE.results;
@@ -268,14 +270,18 @@ export async function rankSpotsForDawn(
     if (per.length === 0) return;
     const c = combineModels(per);
     const deltaH = c.cloudTop !== null ? mt.elevation - c.cloudTop : null;
+    const gateOn = opts?.gateEnabled ?? AGY_GATE_ENABLED;
+    const baseWorth = isWorthGoing({ status: c.status, agreement: c.agreement, deltaH });
+    const gate = (opts?.shadow || gateOn) ? agyGateColumn(block, RANK_MODELS, targetDate, { observerAlt: mt.elevation, valleyElev: Math.round(valleys[key]) }) : undefined;
     results.push({
       key, name: mt.name, lat: mt.lat, lon: mt.lon, elevation: mt.elevation,
       valleyElev: Math.round(valleys[key]), zone: mt.zone,
       score: c.score, status: c.status, agreement: c.agreement,
       cloudTop: c.cloudTop, deltaH,
-      worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
+      worthGoing: gatedWorth(baseWorth, gate, gateOn),
+      worthGoingBase: gateOn ? baseWorth : undefined,
       capWatch: capWatchOf(aggs),
-      agyGate: opts?.shadow ? agyGateColumn(block, RANK_MODELS, targetDate, { observerAlt: mt.elevation, valleyElev: Math.round(valleys[key]) }) : undefined,
+      agyGate: gate,
       perModel: per.map(x => ({ model: x.model, score: x.score, status: x.status, cloudTop: x.cloudTop })),
     });
   });

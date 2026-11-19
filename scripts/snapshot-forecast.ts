@@ -52,7 +52,7 @@ rankSpotsForDawn(DATE, m => console.log('   ' + m), { shadow: true }).then(rows 
     spots: rows.map(r => ({
       key: r.key, name: r.name, score: r.score, status: r.status,
       agreement: r.agreement, observerAlt: r.elevation, valleyElevation: r.valleyElev,
-      cloudTop: r.cloudTop, deltaH: r.deltaH, worthGoing: r.worthGoing, capWatch: r.capWatch,
+      cloudTop: r.cloudTop, deltaH: r.deltaH, worthGoing: r.worthGoing, worthGoingBase: r.worthGoingBase, capWatch: r.capWatch,
       perModel: r.perModel,
       agyGate: r.agyGate,   // cột BÓNG (gd355): chưa tham gia gì, chấm sau theo NHAT-KY-HIEU-CHINH.md
     })),

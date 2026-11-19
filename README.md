@@ -146,7 +146,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 273 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
+npm test         # 284 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)
@@ -241,3 +241,5 @@ Dự báo chỉ mang tính tham khảo — luôn quan sát thời tiết thực 
 **Dấu hiệu D "đêm quang đầu tiên sau đợt mưa"** (14/11/2026, `scripts/post-rain-clearing-study.py`, dòng D trong `calibrate.ts`): >= 3/4 cụm vùng có đêm quang trên cao sau >= 2/3 ngày mưa/âm u và khô trên cao (rh700 <= 40). Chốt trước khi chấm, mới bật 2/86 ngày (22/09 chưa có ai đi, 14/11 có biển mây 6 nơi); chỉ theo dõi, chưa vào app.
 
 **Xem lại lịch sử:** "Lần tra gần đây" giữ 10 lần phân tích (trước là 5); bảng "Đêm nay đi đâu săn mây?" tự lưu một bản mỗi ngày rạng sáng, 14 ngày gần nhất, mở lại trong mục "🗂️ Bảng đã lưu" (không gọi API, không tính lại). Hết chỗ localStorage thì tự bỏ bản cũ nhất. Lưu trên máy người dùng, không đồng bộ giữa máy.
+
+- **Vòng đối chiếu cổng agy tự động (g2448)**: timer đêm đo, ghi `data/agy-gate-doichieu.md`, bật/tắt cờ `data/agy-gate-flag.json` theo tiêu chí đăng ký trước (xem AGENTS.md).

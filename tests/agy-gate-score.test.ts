@@ -5,7 +5,7 @@ import { join } from 'path';
 import { count, clopperUpper, blockBootstrap, buildRows } from '../scripts/score-agy-gate';
 
 const R = (date: string, sea: boolean, worth: boolean, gate: string | null, src: any = 'vệ tinh') =>
-  ({ date, key: 'K', src, sea, worth, gate, nMod: 3, engine: 'e' });
+  ({ date, key: 'K', src, sea, worth, gate, nMod: 3, engine: 'e', post: false });
 
 describe('score-agy-gate - công cụ chấm cổng bóng (dữ liệu tổng hợp)', () => {
   it('đếm: cổng chỉ chặn, không bao giờ thêm báo đúng/nhầm; thiếu dữ liệu/lỗi KHÔNG chặn', () => {
