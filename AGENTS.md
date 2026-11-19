@@ -16,6 +16,11 @@ maintain **CloudHunter AI** — app dự báo biển mây cho núi cao Việt Na
 
 ## 📌 Triết lý bắt buộc
 
+0. **ĐỊNH HƯỚNG SỐ 1 CỦA DỰ ÁN (anh Phong chốt 19/11/2026, phiếu gcc29).** Lời anh, nguyên văn:
+   *"định hướng đây là app cho dân du lịch, phượt muốn check các điều kiện thời tiết đặc biệt là biển
+   mây và độ khó về mặt thời tiết, khí hậu của cung đường đi => CÁI NÀY QUAN TRỌNG NÊN HÃY GHI NHỚ VÀ
+   ƯU TIÊN HÀNG ĐẦU TRONG DỰ ÁN"*. Nghĩa là: mọi việc được xếp hạng theo giá trị cho người đi phượt
+   (biển mây ở điểm đến + thời tiết/độ khó của CẢ cung đường đi tới đó). Ba triết lý dưới vẫn giữ nguyên.
 1. **Con số = code, tư vấn = AI.** Điểm số, trạng thái, LCL, mặt mây, ΔH, FSI, VRII... đều
    tính trong engine TypeScript thuần (test được, tái lập được). Gemini CHỈ viết lời bình
    từ kết quả engine và bị cấm sửa/bịa số (xem `NARRATIVE_SYSTEM` trong geminiService).
