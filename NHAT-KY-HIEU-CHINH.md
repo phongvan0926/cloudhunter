@@ -336,3 +336,65 @@ khác (mốc trưa VN; nửa đêm UTC) vẫn ra sự kiện ngày khác, vì `g
 không làm cổng. Cỡ gói đo sau build: chunk `astroService` 58,5 KB, gzip 25,7 KB (dưới mốc 30 KB gz đã đăng ký, nên tải lười không bắt buộc), vẫn để
 `AnalysisResult` import động cho gói chính không đổi (dòng trăng hiện khi mô-đun về). Bỏ phụ thuộc suncalc. Kiểm đột biến: 3 ca USNO trong `tests/engine.test.ts` trượt cả 3 trên bản suncalc cũ, qua trên bản mới.
 Không mượn phần khác của `ephemeris.ts` (đường độ cao 24h, chạng vạng hàng hải): app chưa có chỗ dùng.
+
+## 19/11/2026 (phiếu gd355) - Khung 8 mực áp suất của agy làm CỔNG CHỐNG BÁO NHẦM, chạy BÓNG (đăng ký trước, chưa chạy gì)
+
+Anh Phong chốt (19/11, sau bảng so sánh hai nhánh): giữ engine CloudHunter; thử `cloudSea.ts` của nhánh agy CHỈ như cổng chặn báo nhầm; chạy bóng, không đổi
+kết quả hiển thị; chấm trên điểm-ngày chưa thấy. Mục này viết TRƯỚC khi có bất kỳ số nào của cổng trên dữ liệu CloudHunter (commit đăng ký đứng trước commit code).
+
+**Điều đã biết (nguồn: bảng so sánh của Tổng quản, số của agy, chưa tự đo lại):** vệ tinh nghiêm ngặt n=1791, agy báo nhầm 245 / CloudHunter 433; accuracy 82,0% / 72,9%.
+Accuracy cao hơn phần lớn do agy báo "có" ít hơn; recall field của agy 20,6% so 64,7%. Nên không có cơ sở tin cổng giữ được ca đúng - đó chính là điều cần chấm.
+
+**Giả thuyết H1.** Khi engine CloudHunter báo "đáng đi" mà thuật toán agy (cửa sổ rạng sáng 04-07h) kết luận `khong`, ca đó nghiêng về BÁO NHẦM nhiều hơn ca còn lại.
+Nói cách khác: cổng "đáng đi VÀ agy != khong" loại được tỷ lệ báo nhầm vệ tinh lớn hơn rõ rệt so với tỷ lệ ca đúng (cả vệ tinh lẫn người đi) mà nó loại theo.
+H0: cổng chỉ làm mỏng ngẫu nhiên (loại ca đúng và ca nhầm cùng tỷ lệ). Cổng chỉ có chiều CHẶN (veto): không bao giờ thêm báo đúng, không bao giờ thêm báo nhầm.
+
+**Cổng chốt (một biến thể duy nhất, không chọn lại sau khi thấy số):** `G = worthGoing(CloudHunter) VÀ agy.ketLuan != 'khong'` (agy `co` hoặc `co_the` thì giữ). Mọi biến thể khác
+(chỉ giữ khi agy `co`; ngưỡng xác suất; theo giờ) nếu có in ra chỉ là THÃM DÒ, không đủ điều kiện để giữ.
+
+**Cách tính cổng (bóng):** chép NGUYÊN VĂN thuật toán `evaluateCloudSeaDawn` v1.0 của agy (cùng hằng số, cùng trọng số) vào `services/agyCloudSea.ts`; một bộ chuyển đổi
+đưa dữ liệu CloudHunter vào, KHÔNG gọi thêm API (ngân sách Open-Meteo, quy tắc dev 11). Lệch so với agy, ghi thẳng ra đây vì làm đổi ý nghĩa của phép thử:
+1. Mô hình: bản chụp xếp hạng dùng GFS + ICON + UKMO (không có ECMWF/JMA như agy). Trọng số theo bảng của agy: gfs 0,20, icon 0,25, ukmo 0,20 (UKMO không có trong bảng agy, rơi về mặc định 0,20 của chính code agy).
+2. Mực áp suất: CloudHunter có 975/950/925/900/850/800/700 hPa (7 mực), agy 1000/950/925/900/850/800/700/600 (8 mực). Không có 1000 và 600 hPa.
+3. Gió: chỉ có gió ở 925/850/700 hPa; không có gió 10 m, gió giật, tầm nhìn. Nhánh tầm nhìn trong `biMuTaiDinh` và nhánh gió 10 m/giật không bao giờ chạy; gió cổng lấy từ nội suy mực.
+4. Điểm đặt dự báo: lấy `elevation=` đáy thung lũng như engine CloudHunter, nên nhiệt/ẩm 2 m là tại đáy; `modelElevationM` không có (nhánh dùng nó tắt).
+5. `valleyElevationM` = đáy DEM của CloudHunter (đủ cho mọi điểm xét), không phải ước tính tạm của agy.
+Vì 1-4, đây là "thuật toán agy trên đầu vào CloudHunter", KHÔNG phải bản chạy y nguyên của agy; kết luận của vòng này chỉ áp cho dạng đó. Số của agy (82%/245) không được dùng làm bằng chứng.
+
+**Cột bóng:** mỗi điểm trong `data/observations/<D>-forecast.json` (bản chụp mới) có thêm `agyGate` = `{ ver, ketLuan, xacSuat, doDongThuan, soMoHinh, gioTot }` hoặc
+`{ ver, error }` (lỗi thì ghi lỗi, không bỏ trống im lặng). Bản chụp cũ không được vá. Hiển thị, điểm, trạng thái, `worthGoing`, thứ hạng KHÔNG đổi (test so trước/sau).
+
+**Tập chấm (chưa thấy):** chỉ điểm-ngày thuộc bản chụp CÓ cột `agyGate` (tức từ bản chụp đầu tiên sau commit code, không ngày nào trước đó, không chụp bù); nhãn theo đúng
+luật `calibrate.ts` hiện tại (vệ tinh bỏ BLOCKED_ABOVE/NO_DATA; nhãn người đi > Facebook > vệ tinh cho cùng điểm-ngày). Ba tập: VT = điểm-ngày mà nhãn cuối là vệ tinh; FIELD = nhãn người đi + Facebook dùng được (độ tin >= 0,6).
+Không dùng ca nào để nghĩ ra cổng (cổng chốt trước khi có số nào trên dữ liệu này).
+
+**Khi chấm:** khi FIELD có >= 30 điểm-ngày mới, hoặc ngày 20/12/2026, cái nào TRƯỚC. Công cụ chấm viết trước khi có dữ liệu (`scripts/score-agy-gate.ts`), in cả bảng đếm thô.
+
+**Phản biện độc lập (1 lần, trước khi commit đăng ký) và cách đã xử lý:** 4 ý [chặn] và 7 ý khác, đều đã đưa vào phần dưới: (1) ca `chua_co_du_lieu`/lỗi chuyển đổi = KHÔNG chặn, báo riêng;
+(2) K3 viết lại thành hiệu hai tỷ lệ loại có cận bootstrap; (3) K1-K3 trên VT bắt buộc kèm số FIELD, ngược hướng thì không giữ; (4) tương quan ngày: bootstrap theo KHỐI 3 ngày + số ngày độc lập;
+(5) K4/K5 là điều kiện LOẠI, kèm cận trên 95% của tỷ lệ mất; (6) công suất: không hạ ngưỡng; (7) in tỷ lệ nhánh sương bị tắt + số mô hình hợp lệ; (8) chấm MỘT lần, ghi mọi lần chạy, đóng băng `calibrate.ts`,
+bộ chuyển đổi chỉ test bằng dữ liệu tổng hợp; (9) cắt/phân tầng theo `ENGINE_VERSION`; (10)-(11) trần theo điểm.
+
+**Quy tắc xử lý (đóng băng tại commit đăng ký):**
+- Cửa sổ rạng sáng = bốn giờ 04, 05, 06, 07 theo giờ VN của ngày D (`Asia/Bangkok` trong dữ liệu). Giờ nào thiếu mô hình/mực thì agy tự bỏ giờ đó (code agy); không có giờ hợp lệ nào = `chua_co_du_lieu`.
+- `chua_co_du_lieu` hoặc lỗi bộ chuyển đổi: G GIỮ nguyên quyết định CloudHunter (không chặn). Đếm riêng theo từng tập; nếu > 10% điểm-ngày của tập thì kết quả tập đó chỉ là "chưa đủ".
+- Chỉ xét ca CloudHunter đã báo đáng đi (`worthGoing`) tại bản chụp, cùng một `ENGINE_VERSION`; đổi phiên bản giữa chừng thì cắt tập theo phiên bản, mỗi phần chấm riêng.
+- Mã bộ chuyển đổi chỉ được thử bằng dữ liệu tổng hợp trong `tests/`, KHÔNG dùng nhãn/ca cũ để gỡ lỗi nó. Hằng số của agy (52, 55/35, 0,45...) do nhánh agy chỉnh trên dữ liệu có thể chứa các ca cũ: "chưa thấy" chỉ đúng với điểm-ngày mới.
+- Đóng băng `scripts/calibrate.ts` (luật gán nhãn) tại commit đăng ký; đổi luật gán nhãn giữa chừng thì tập chấm vẫn dùng bản đóng băng.
+
+**Tiêu chí GIỮ (tất cả phải đạt; X = 25 và các con số dưới do em đặt trước khi chạy, không chỉnh theo kết quả; thiếu mẫu thì CHỜ, không hạ ngưỡng):**
+Ký hiệu trên tập VT: FA = ca CloudHunter báo đáng đi mà vệ tinh "không biển mây"; TP = báo đáng đi mà vệ tinh "có". `lossFA` = tỷ lệ FA bị G loại, `lossTP` = tỷ lệ TP bị G loại.
+- K1. `lossFA` >= X = 25%, với điều kiện CloudHunter có >= 40 FA trên >= 15 ngày khác nhau, không ngày nào chiếm > 20% số FA, không điểm nào chiếm > 25%; không đủ thì "chưa đủ mẫu", không kết luận.
+- K2. Bootstrap theo KHỐI 3 ngày liên tiếp (rút lại các khối có thay thế, 2000 lần, hạt giống 19112026): phân vị 5% của `lossFA` > 0 VÀ phân vị 5% của (`lossFA` - `lossTP`) > 0. Điều thứ hai là phép thử "hơn làm mỏng ngẫu nhiên" (thay cho K3 bản đầu).
+- K3. `lossTP` <= `lossFA` - 15 điểm phần trăm (với K1 sát 25% thì `lossTP` <= 10%), và F1 vệ tinh của G >= F1 vệ tinh của CloudHunter.
+- K4. FIELD (người đi + Facebook dùng được): G KHÔNG mất báo đúng nào so với CloudHunter và F1 FIELD của G >= của CloudHunter. FIELD cần >= 8 ca CÓ biển mây; ít hơn thì K4 "chưa kiểm được" = chưa đủ để giữ. Đây là điều kiện LOẠI, không phải bằng chứng giữ: báo kèm cận trên 95% (Clopper-Pearson) của tỷ lệ mất (0 mất / 8 ca vẫn cho phép mất tới ~31%).
+- K5. Riêng người đi tận nơi: >= 8 ca CÓ mới được tính, không mất ca nào; ít hơn thì ghi "chưa kiểm được". Một ca mất là đủ để không giữ.
+- K6. K1-K3 trên VT chỉ chứng minh khớp với vệ tinh, không chứng minh đúng thực địa: bắt buộc in cùng số (`lossFA`, `lossTP` theo định nghĩa tương ứng) trên FIELD; nếu FIELD đi NGƯỢC hướng VT (loại TP nhiều hơn FA) thì không giữ.
+Báo thêm (không phải tiêu chí): số điểm khác nhau và số ngày trong từng tập; tỷ lệ CloudHunter nhầm nền; tỷ lệ giờ-điểm bị tắt nhánh sương (không có tầm nhìn) và số mô hình hợp lệ trung bình; biến thể thăm dò (chỉ giữ khi agy `co`) nếu muốn xem độ nhạy.
+**Chấm MỘT lần** vào ngày chấm (FIELD >= 30 điểm-ngày mới, hoặc 20/12/2026, cái nào TRƯỚC); cấm xem số trung gian, mọi lần chạy `score-agy-gate.ts` đều ghi ngày giờ vào tệp này. Nếu đến 20/12 còn thiếu mẫu cho K1/K4 thì ghi "chưa đủ mẫu", để bóng chạy tiếp, chấm lại với cùng ngưỡng.
+Không đạt một tiêu chí = KHÔNG giữ (bỏ cột bóng hoặc chạy tiếp, ghi kết quả). Đạt hết = chỉ ĐỦ ĐIỀU KIỆN ĐỀ XUẤT bật; bật vào kết quả thật là sửa lớn: theo Luật cổng (chấm lại trên toàn kho,
+agent phản biện, anh duyệt, đổi `ENGINE_VERSION`), không tự bật.
+
+**Hạn chế đã biết (ghi trước):** vệ tinh Himawari mù sương mỏng thung lũng và mây cao che (nhãn VT "không có biển mây" có thể sai); cổng có thể "đúng vì lý do sai" khi hai thuật toán cùng thiên về
+ẩm đáy; nhánh sương (`biMuTaiDinh`) của agy yếu đi vì thiếu tầm nhìn/gió 10 m, tức cổng yếu đúng ở chỗ nó đáng giá nhất; chỉ còn 3 mô hình nên `fCo >= 0,45` nghĩa là cần 2/3 mô hình đồng thuận; bản chụp xếp hạng có lead
+ngắn (~3-12 giờ); hai kênh chụp (GitHub / máy nhà) chạy cùng mã nên không thành biến.
