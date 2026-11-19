@@ -3,7 +3,7 @@ import { MOUNTAIN_DB } from '../constants/mountains';
 import { computeSunTimes, vnTodayStr, addDaysStr } from '../services/weatherService';
 import {
   planRoute, geocodeVN, DEFAULT_SPEED_KMH, SPEED_CHOICES, VEHICLE_LABEL, LEVEL_LABEL, TH,
-  type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
+  summarizeDay, type RoutePlan, type Vehicle, type Level, type GeoHit, type HazardKind,
 } from '../services/routeService';
 
 interface Props {
@@ -249,6 +249,8 @@ export const RouteWeather: React.FC<Props> = ({ onPickSpot }) => {
 
           <ElevationProfile plan={plan} />
 
+          <DayBrief plan={plan} destName={dest.name} arriveMs={arriveMs} />
+
           <div className="flex flex-col gap-2">
             <button onClick={() => onPickSpot(dest.name, dest.elevation)}
               className="min-h-11 rounded-xl bg-cyan-700/80 hover:bg-cyan-600 text-white text-sm font-bold border border-cyan-400/50">
@@ -341,5 +343,59 @@ const ElevationProfile: React.FC<{ plan: RoutePlan }> = ({ plan }) => {
         <span>○ chưa có dự báo</span>
       </figcaption>
     </figure>
+  );
+};
+
+const PART_ICON: Record<string, string> = { 'quang': '☀️', 'ít mây': '🌤️', 'nhiều mây': '⛅', 'âm u': '☁️', 'không rõ': '❔' };
+
+/** Tóm tắt ngày tại điểm đến: dùng lại dự báo đã tải cho điểm đích (không gọi thêm API). */
+const DayBrief: React.FC<{ plan: RoutePlan; destName: string; arriveMs: number }> = ({ plan, destName, arriveMs }) => {
+  const arriveDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(arriveMs));
+  const dates = [0, 1, 2].map(n => addDaysStr(arriveDate, n));
+  const [date, setDate] = useState(arriveDate);
+  const d = useMemo(() => summarizeDay(plan.destOm, date), [plan, date]);
+  const dm = (x: string) => `${x.slice(8, 10)}/${x.slice(5, 7)}`;
+  const headCls = d.headline === 'Nhiều mưa' ? 'text-orange-300' : d.headline === 'Có mưa' ? 'text-amber-300' : d.headline === 'Khô ráo' ? 'text-emerald-300' : 'text-slate-400';
+  return (
+    <details className="rounded-xl border border-slate-700 bg-slate-900/40" data-testid="day-brief">
+      <summary className="min-h-11 flex flex-wrap items-center gap-x-1.5 px-3 py-2 text-xs font-bold text-slate-200 cursor-pointer">
+        <span>📋 Tóm tắt ngày tại đích, {dm(date)}:</span>
+        <span className={headCls}>{d.headline}</span>
+        {d.tempMin !== null && <span className="text-slate-400 font-normal">{d.tempMin}° - {d.tempMax}°C</span>}
+      </summary>
+      <div className="px-3 pb-3 space-y-2 text-[11px] text-slate-300">
+        <div className="flex gap-2" role="group" aria-label="Chọn ngày">
+          {dates.map(x => (
+            <button key={x} onClick={() => setDate(x)} aria-pressed={date === x}
+              className={`min-h-11 px-3 rounded-xl border text-xs ${date === x ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>
+              {x === arriveDate ? `Ngày đến nơi (${dm(x)})` : dm(x)}
+            </button>
+          ))}
+        </div>
+        {d.hours === 0 ? <p className="text-slate-400">Chưa có dự báo cho ngày này.</p> : (
+          <>
+            <p className="text-slate-400">{destName}{d.sunrise ? ` · mặt trời mọc ${d.sunrise}, lặn ${d.sunset}` : ''}</p>
+            <ul className="grid grid-cols-2 gap-1.5">
+              {d.parts.map(p => (
+                <li key={p.label} className="rounded-lg bg-slate-900/60 border border-slate-700 p-2">
+                  <span className="block text-slate-400">{p.label} ({p.from}-{p.to}h)</span>
+                  <span className="text-slate-100 font-bold">{PART_ICON[p.cloudText]} {p.cloudText}{p.cloud !== null ? ` ${p.cloud}%` : ''}</span>
+                  {p.rainMm !== null && p.rainMm > 0 && <span className="block text-sky-300">mưa {p.rainMm} mm</span>}
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-1">
+              {d.storm && <li>⛈️ Có giờ dông trong ngày</li>}
+              {d.rainWindows.length > 0
+                ? <li>🌧️ Mưa: {d.rainWindows.map(r => `${r.from}-${r.to}h (${r.mm} mm)`).join(', ')}</li>
+                : <li>🌂 Không có giờ mưa từ {TH.RAIN_LIGHT} mm trở lên</li>}
+              {d.maxGust && d.maxGust.kmh >= TH.GUST_NOTE && <li>💨 Gió giật mạnh nhất {d.maxGust.kmh} km/h lúc {d.maxGust.hour}h</li>}
+              {d.minVis && d.minVis.m < 3000 && <li>🌫️ Tầm nhìn kém nhất ~{d.minVis.m} m lúc {d.minVis.hour}h</li>}
+            </ul>
+            <p className="text-[10px] text-slate-500">Mây theo buổi là tổng mây của mô hình tại điểm đích, KHÔNG phải dự báo biển mây; xem biển mây bằng nút bên dưới.</p>
+          </>
+        )}
+      </div>
+    </details>
   );
 };

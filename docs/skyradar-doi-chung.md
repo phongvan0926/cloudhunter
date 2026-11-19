@@ -74,6 +74,7 @@ Lấy các điểm gợi ý + điểm yêu thích trong bán kính (khách 100 k
 
 ## 10. Đã áp dụng vào CloudHunter
 - **19/11/2026 - Cung đường tới điểm săn mây** (`services/routeService.ts`, `components/RouteWeather.tsx`). Học ý lấy mẫu dọc tuyến + giờ đi qua; tự viết và làm hơn ở chỗ dân phượt cần: cao độ DEM, đèo cao nhất, tổng leo dốc, sương mù / đi trong mây, gió giật, lạnh và băng giá ở cao độ mặt đường, mưa tích luỹ 24h/72h (ngưỡng thang mưa KTTV quốc gia), qua đèo lúc tối, tính ngược giờ đi để tới trước bình minh. Đường dùng OSRM miễn phí (không Google). Giờ đi theo tốc độ TB người dùng chọn vì OSRM quá lạc quan (Hà Nội - Tà Xùa 203 km báo 2h47).
+- **19/11/2026 - Tóm tắt ngày tại đích** (`summarizeDay`): học khung của họ (mây theo buổi, khung giờ mưa, gió, tầm nhìn), bỏ phần burn score/thiên văn; buổi sáng tính từ 5h cho người săn mây.
 - Chụp shadow (`tools/skyradar-shadow.py`, `data/skyradar-shadow/`): đối chứng, không là nhãn.
 
 ## Đối chiếu thật 19/11 (rạng sáng 05-07h, 18 điểm, chưa có sự thật)

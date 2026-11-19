@@ -145,7 +145,7 @@ export interface PointWx {
 
 export const ROUTE_HOURLY_VARS = [
   'temperature_2m', 'relative_humidity_2m', 'precipitation', 'precipitation_probability',
-  'weather_code', 'visibility', 'wind_gusts_10m', 'cloud_cover_low',
+  'weather_code', 'visibility', 'wind_gusts_10m', 'cloud_cover_low', 'cloud_cover',
 ] as const;
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -312,6 +312,76 @@ export function summarizeRoute(samples: RouteSample[]): RouteSummary {
   };
 }
 
+// ---------------------------------------------------------------- tóm tắt một ngày tại điểm đến
+
+export interface DayPart { label: string; from: number; to: number; cloud: number | null; cloudText: string; rainMm: number | null }
+export interface RainWindow { from: number; to: number; mm: number }
+export interface DaySummary {
+  date: string;
+  headline: 'Nhiều mưa' | 'Có mưa' | 'Khô ráo' | 'Chưa có dữ liệu';
+  hours: number;                       // số giờ có dữ liệu
+  tempMin: number | null; tempMax: number | null;
+  parts: DayPart[];
+  rainWindows: RainWindow[];
+  maxGust: { kmh: number; hour: number } | null;
+  minVis: { m: number; hour: number } | null;
+  storm: boolean;
+  sunrise: string | null; sunset: string | null;
+}
+/** Các buổi (giờ VN, [from, to)). Sáng bắt đầu 5h vì người săn mây có mặt từ trước bình minh. */
+export const DAY_PARTS = [
+  { label: 'Sáng sớm', from: 5, to: 9 }, { label: 'Trưa', from: 9, to: 15 },
+  { label: 'Chiều', from: 15, to: 19 }, { label: 'Tối', from: 19, to: 24 },
+];
+/** Nhãn mây theo tổng mây trung bình: < 20 quang, < 45 ít mây, < 70 nhiều mây, còn lại âm u. */
+export function cloudText(c: number | null): string {
+  if (c === null) return 'không rõ';
+  return c < 20 ? 'quang' : c < 45 ? 'ít mây' : c < 70 ? 'nhiều mây' : 'âm u';
+}
+/** Ngưỡng "Nhiều mưa": > 6 giờ có mưa từ RAIN_LIGHT trở lên. */
+export const RAINY_DAY_HOURS = 6;
+
+export function summarizeDay(om: any, date: string): DaySummary {
+  const h = om?.hourly;
+  const idx: number[] = [];
+  if (h && Array.isArray(h.time)) h.time.forEach((t: string, i: number) => { if (t.startsWith(date)) idx.push(i); });
+  const val = (k: string, i: number) => num(h?.[k]?.[i]);
+  const hourOf = (i: number) => Number(String(h.time[i]).slice(11, 13));
+  const have = idx.filter(i => val('temperature_2m', i) !== null || val('precipitation', i) !== null);
+  const d = om?.daily; const di = d && Array.isArray(d.time) ? d.time.indexOf(date) : -1;
+  const base: DaySummary = {
+    date, headline: 'Chưa có dữ liệu', hours: have.length, tempMin: null, tempMax: null, parts: [], rainWindows: [],
+    maxGust: null, minVis: null, storm: false,
+    sunrise: di >= 0 ? (d.sunrise?.[di] ?? '').slice(11, 16) || null : null,
+    sunset: di >= 0 ? (d.sunset?.[di] ?? '').slice(11, 16) || null : null,
+  };
+  if (have.length === 0) return base;
+  const temps = have.map(i => val('temperature_2m', i)).filter((x): x is number => x !== null);
+  base.tempMin = temps.length ? Math.min(...temps) : null;
+  base.tempMax = temps.length ? Math.max(...temps) : null;
+  base.parts = DAY_PARTS.map(p => {
+    const ii = have.filter(i => hourOf(i) >= p.from && hourOf(i) < p.to);
+    const cs = ii.map(i => val('cloud_cover', i)).filter((x): x is number => x !== null);
+    const rs = ii.map(i => val('precipitation', i)).filter((x): x is number => x !== null);
+    const cloud = cs.length ? Math.round(cs.reduce((a, b) => a + b, 0) / cs.length) : null;
+    return { ...p, cloud, cloudText: cloudText(cloud), rainMm: rs.length ? Math.round(rs.reduce((a, b) => a + b, 0) * 10) / 10 : null };
+  });
+  let rainHours = 0; let cur: RainWindow | null = null;
+  for (const i of have) {
+    const p = val('precipitation', i); const hr = hourOf(i);
+    if (p !== null && p >= TH.RAIN_LIGHT) {
+      rainHours++;
+      if (cur && cur.to === hr) { cur.to = hr + 1; cur.mm += p; } else { cur = { from: hr, to: hr + 1, mm: p }; base.rainWindows.push(cur); }
+    } else cur = null;
+    const g = val('wind_gusts_10m', i); if (g !== null && (!base.maxGust || g > base.maxGust.kmh)) base.maxGust = { kmh: Math.round(g), hour: hr };
+    const v = val('visibility', i); if (v !== null && (!base.minVis || v < base.minVis.m)) base.minVis = { m: Math.round(v), hour: hr };
+    const w = val('weather_code', i); if (w !== null && w >= 95) base.storm = true;
+  }
+  base.rainWindows.forEach(r => { r.mm = Math.round(r.mm * 10) / 10; });
+  base.headline = rainHours > RAINY_DAY_HOURS ? 'Nhiều mưa' : rainHours > 0 ? 'Có mưa' : 'Khô ráo';
+  return base;
+}
+
 // ---------------------------------------------------------------- gọi mạng (không test đơn vị)
 
 const MEM = new Map<string, { ts: number; data: any }>();
@@ -380,6 +450,8 @@ export interface RoutePlan {
   stats: ElevStats | null;
   samples: RouteSample[];
   summary: RouteSummary;
+  /** Phản hồi Open-Meteo thô tại điểm đích (10 ngày theo giờ) để tóm tắt ngày, không gọi thêm API. */
+  destOm: any;
 }
 
 /**
@@ -418,6 +490,6 @@ export async function planRoute(
   });
   return {
     from, to, vehicle, speedKmh, departMs, distanceKm: geom.distanceKm, durationH, osrmH: geom.durationH,
-    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples),
+    coords: geom.coords, elevKms: eKms, elevs, stats, samples, summary: summarizeRoute(samples), destOm: oms[oms.length - 1],
   };
 }

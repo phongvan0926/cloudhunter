@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   haversineKm, cumulativeKm, pointAtKm, evenKms, elevationKms, weatherKms, elevationStats, etaMs, vnHourKey,
-  extractPointWx, assessPoint, maxLevel, summarizeRoute, TH, ELEV_MAX_POINTS,
+  extractPointWx, assessPoint, maxLevel, summarizeRoute, summarizeDay, cloudText, TH, ELEV_MAX_POINTS,
   type PointWx, type RouteSample,
 } from '../services/routeService';
 
@@ -193,5 +193,57 @@ describe('tổng hợp tuyến', () => {
     const s = summarizeRoute([mk(0, null), mk(10, null)]);
     expect(s.noDataCount).toBe(2);
     expect(s.tempRange).toBeNull();
+  });
+});
+
+describe('tóm tắt ngày tại điểm đến', () => {
+  const day = (over: Record<string, (h: number) => number | null>) => {
+    const time: string[] = [];
+    for (const d of ['2026-11-20', '2026-11-21']) for (let h = 0; h < 24; h++) time.push(`${d}T${String(h).padStart(2, '0')}:00`);
+    const hr = (i: number) => i % 24;
+    const f = (k: string, def: (h: number) => number | null) => time.map((_, i) => (over[k] ?? def)(hr(i)));
+    return {
+      hourly: {
+        time,
+        temperature_2m: f('t', h => 8 + h / 2), precipitation: f('p', () => 0), cloud_cover: f('c', () => 10),
+        wind_gusts_10m: f('g', h => (h === 14 ? 40 : 10)), visibility: f('v', h => (h === 6 ? 300 : 20000)),
+        weather_code: f('w', () => 1),
+      },
+      daily: { time: ['2026-11-20', '2026-11-21'], sunrise: ['2026-11-20T06:15', '2026-11-21T06:16'], sunset: ['2026-11-20T17:20', '2026-11-21T17:20'] },
+    };
+  };
+  it('ngày khô: khô ráo, nhiệt min/max, giờ gió mạnh nhất, giờ tầm nhìn kém nhất, giờ mặt trời', () => {
+    const s = summarizeDay(day({}), '2026-11-20');
+    expect(s.headline).toBe('Khô ráo');
+    expect(s.hours).toBe(24);
+    expect([s.tempMin, s.tempMax]).toEqual([8, 19.5]);
+    expect(s.maxGust).toEqual({ kmh: 40, hour: 14 });
+    expect(s.minVis).toEqual({ m: 300, hour: 6 });
+    expect(s.sunrise).toBe('06:15');
+    expect(s.parts.map(p => p.cloudText)).toEqual(['quang', 'quang', 'quang', 'quang']);
+  });
+  it('gom khung mưa liền nhau và đếm "Nhiều mưa" khi > 6 giờ', () => {
+    const s = summarizeDay(day({ p: h => (h >= 13 && h < 16 ? 2 : h >= 20 ? 1 : 0) }), '2026-11-20');
+    expect(s.rainWindows).toEqual([{ from: 13, to: 16, mm: 6 }, { from: 20, to: 24, mm: 4 }]);
+    expect(s.headline).toBe('Nhiều mưa');
+    const s2 = summarizeDay(day({ p: h => (h === 7 ? 1 : 0) }), '2026-11-20');
+    expect(s2.headline).toBe('Có mưa');
+  });
+  it('mây theo buổi và dông', () => {
+    const s = summarizeDay(day({ c: h => (h < 9 ? 100 : 30), w: h => (h === 16 ? 95 : 1) }), '2026-11-20');
+    expect(s.parts[0]).toMatchObject({ label: 'Sáng sớm', cloud: 100, cloudText: 'âm u' });
+    expect(s.parts[1].cloudText).toBe('ít mây');
+    expect(s.storm).toBe(true);
+  });
+  it('ngày không có trong dữ liệu -> Chưa có dữ liệu, không bịa', () => {
+    const s = summarizeDay(day({}), '2026-12-01');
+    expect(s.headline).toBe('Chưa có dữ liệu');
+    expect(s.tempMin).toBeNull();
+    expect(summarizeDay({}, '2026-11-20').hours).toBe(0);
+  });
+  it('mây thiếu thì "không rõ", không coi là quang', () => {
+    expect(cloudText(null)).toBe('không rõ');
+    const s = summarizeDay(day({ c: () => null }), '2026-11-20');
+    expect(s.parts[0].cloudText).toBe('không rõ');
   });
 });
