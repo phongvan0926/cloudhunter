@@ -66,14 +66,25 @@ async function main() {
   for (const [di, [date, rs]] of [...byDate.entries()].entries()) {
     if (di > 0) await new Promise(r => setTimeout(r, 3000));
     const prev = addDaysStr(date, -1);
-    const spots = rs.map(r => ({ r, mt: (MOUNTAIN_DB as any)[r.key] })).filter(x => x.mt);
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${spots.map(x => x.mt.lat.toFixed(4)).join(',')}`
-      + `&longitude=${spots.map(x => x.mt.lon.toFixed(4)).join(',')}`
-      + `&elevation=${spots.map(x => Math.round(x.r.snap.valleyElevation)).join(',')}`
-      + `&hourly=${HOURLY_VARS.join(',')}&models=${MODELS.join(',')}&start_date=${prev}&end_date=${date}&timezone=Asia%2FBangkok`;
-    const res = await fetch(url);
-    if (!res.ok) { console.error(`❌ HTTP ${res.status} ${date} - LỖI ĐO, không kết luận`); process.exit(1); }
-    const arr: any = await res.json(); const list = Array.isArray(arr) ? arr : [arr];
+    const spots0 = rs.map(r => ({ r, mt: (MOUNTAIN_DB as any)[r.key] })).filter(x => x.mt);
+    const list: any[] = [];
+    for (let c = 0; c < spots0.length; c += 6) {            // lô nhỏ: lô lớn bị trả 200 rỗng (đo 20/11)
+      const part = spots0.slice(c, c + 6);
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${part.map(x => x.mt.lat.toFixed(4)).join(',')}`
+        + `&longitude=${part.map(x => x.mt.lon.toFixed(4)).join(',')}`
+        + `&elevation=${part.map(x => Math.round(x.r.snap.valleyElevation)).join(',')}`
+        + `&hourly=${HOURLY_VARS.join(',')}&models=${MODELS.join(',')}&start_date=${prev}&end_date=${date}&timezone=Asia%2FBangkok`;
+      let arr: any = null;
+      for (let t = 1; t <= 4 && arr === null; t++) {
+        const res = await fetch(url); const txt = await res.text();
+        try { if (res.ok && txt) arr = JSON.parse(txt); } catch { /* thử lại */ }
+        if (arr === null) { console.error(`  thử ${t}/4 ${date}: HTTP ${res.status}, ${txt.length} byte - đợi 30s`); await new Promise(r => setTimeout(r, 30_000)); }
+      }
+      if (arr === null) { console.error(`❌ ${date} không tải được sau 4 lần - LỖI ĐO, không kết luận`); process.exit(1); }
+      list.push(...(Array.isArray(arr) ? arr : [arr]));
+      await new Promise(r => setTimeout(r, 2000));
+    }
+    const spots = spots0;
     spots.forEach((x, i) => {
       const loc = list[i]; if (!loc?.hourly) return;
       const block = makeHourlyBlock(loc.hourly);
