@@ -1,4 +1,4 @@
-# Đối chiếu cổng bóng agy (tự sinh 2026-11-19)
+# Đối chiếu cổng bóng agy (tự sinh 2026-11-20)
 
 - Hành động đêm nay: **chua_du_mau**; điều kiện chấm: chưa đủ
 - Vệ tinh: {"n":0,"ngay":0,"baoDung":0,"botSot":0,"baoNham":0,"dungKhong":0}
