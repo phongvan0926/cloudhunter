@@ -259,3 +259,6 @@ TA_XUA_SON_LA BELOW tin 0,75 (1 bài 08:21 "Lại mây nữa", không ảnh gi�
 
 ### Nhãn FB 18/11/2026 (phiếu g2750)
 FANSIPAN BELOW nhưng tin 0,5 (<0,6) nên calibrate KHÔNG chấm: 3 bài (08:51, 09:17, 10:06) đều "có biển mây", ảnh sớm nhất 08:19, không có ảnh rạng sáng. App (bản chụp 18/11): DISSIPATING 8, đồng thuận 100%, ΔH +918m, không đáng đi. Nếu tính thì là bỏ sót, cùng kiểu đỉnh cao DISSIPATING sau đêm quang (VIỆC 3 ý 2, chưa đổi engine). Nguồn Facebook vẫn 23 cặp. Engine không đổi.
+
+### Nhãn FB 20/11/2026 (phiếu gdeb0)
+FANSIPAN KHONG_RO tin 0,5, cần người xem: bài sớm nhất 08:51 (ảnh 08:36) "trời mù" = ABOVE (trong mây), sau đó 10:00 và 10:37 nói BELOW "chỉ thiếu nắng"; không có ảnh rạng sáng, hai kênh bất đồng theo giờ nên không chấm (calibrate bỏ qua, đúng luật độ tin). App (bản chụp 20/11): RAIN 18, đồng thuận 100%, ΔH -39m, không đáng đi (khớp bài 'trời mù' lúc sớm). Nhập kho `fb-auto-reports.json`, nguồn Facebook chấm được vẫn 24 cặp. Engine không đổi.

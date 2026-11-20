@@ -1299,6 +1299,41 @@
   ]
  },
  {
+  "id": "2026-11-20-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-20",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:36",
+  "confidence": 0.5,
+  "needsReview": true,
+  "firstPostAt": "2026-11-20T08:51:58+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-20T08:51:58+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời mù nhiệt độ 9 độ",
+    "stamps": [
+     "08:36 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-11-20T10:00:58+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời hiện tại trên đỉnh Fansipan và Cầu Kính Rồng Mây: chỉ thiếu mỗi nắng thôi",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-11-20T10:37:06+07:00",
+    "seaLevel": "BELOW",
+    "text": "Cầu Kính và Fan có biển mây",
+    "stamps": []
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
