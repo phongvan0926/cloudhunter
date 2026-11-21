@@ -262,3 +262,8 @@ FANSIPAN BELOW nhưng tin 0,5 (<0,6) nên calibrate KHÔNG chấm: 3 bài (08:51
 
 ### Nhãn FB 20/11/2026 (phiếu gdeb0)
 FANSIPAN KHONG_RO tin 0,5, cần người xem: bài sớm nhất 08:51 (ảnh 08:36) "trời mù" = ABOVE (trong mây), sau đó 10:00 và 10:37 nói BELOW "chỉ thiếu nắng"; không có ảnh rạng sáng, hai kênh bất đồng theo giờ nên không chấm (calibrate bỏ qua, đúng luật độ tin). App (bản chụp 20/11): RAIN 18, đồng thuận 100%, ΔH -39m, không đáng đi (khớp bài 'trời mù' lúc sớm). Nhập kho `fb-auto-reports.json`, nguồn Facebook chấm được vẫn 24 cặp. Engine không đổi.
+
+### Nhãn FB 21/11/2026 (phiếu g3690)
+- Fansipan 21/11: ABOVE, tin 0,95 (ảnh 07:17-07:18 "sương mù", 4 độ). Đủ điều kiện chấm, vào calibrate: app RAIN 46, đồng thuận 100%, ΔH -39m, không đáng đi, thật không có biển mây dưới chân: KHỚP.
+- Tà Xùa 21/11: BELOW, tin 0,5, cần người xem (một bài 08:15 "chỗ nào cũng biển mây", không giờ ảnh, không ảnh rạng sáng): calibrate không chấm. App báo DISSIPATING 68, đồng thuận 33%, không đáng đi; cổng bóng agy cũng "khong" (24%). Nếu sau này người xác nhận BELOW lúc rạng sáng thì đây là ca BỎ SÓT cần ghi nhận; hiện chưa đủ bằng chứng. Engine không đổi (không chỉnh ngưỡng theo ca đơn lẻ).
+- Hiệu chuẩn: 25 cặp FB (trước 24), khớp có/không ở bảng đối chiếu người-FB 14/17.
