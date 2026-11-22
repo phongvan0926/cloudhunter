@@ -1365,6 +1365,37 @@
   ]
  },
  {
+  "id": "2026-11-22-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-22",
+  "source": "FB_AUTO",
+  "seaLevel": "ABOVE",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:53",
+  "confidence": 0.95,
+  "firstPostAt": "2026-11-22T08:31:05+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-22T08:31:05+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời sương mù, mưa nhỏ, gió to nhiệt độ 3 độ",
+    "stamps": [
+     "07:53 ABOVE",
+     "07:54 ABOVE"
+    ]
+   },
+   {
+    "postedAt": "2026-11-22T09:20:25+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời sương mù, mưa nhỏ, gió to nhiệt độ 3 độ",
+    "stamps": [
+     "08:49 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",

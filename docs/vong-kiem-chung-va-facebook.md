@@ -267,3 +267,6 @@ FANSIPAN KHONG_RO tin 0,5, cần người xem: bài sớm nhất 08:51 (ảnh 08
 - Fansipan 21/11: ABOVE, tin 0,95 (ảnh 07:17-07:18 "sương mù", 4 độ). Đủ điều kiện chấm, vào calibrate: app RAIN 46, đồng thuận 100%, ΔH -39m, không đáng đi, thật không có biển mây dưới chân: KHỚP.
 - Tà Xùa 21/11: BELOW, tin 0,5, cần người xem (một bài 08:15 "chỗ nào cũng biển mây", không giờ ảnh, không ảnh rạng sáng): calibrate không chấm. App báo DISSIPATING 68, đồng thuận 33%, không đáng đi; cổng bóng agy cũng "khong" (24%). Nếu sau này người xác nhận BELOW lúc rạng sáng thì đây là ca BỎ SÓT cần ghi nhận; hiện chưa đủ bằng chứng. Engine không đổi (không chỉnh ngưỡng theo ca đơn lẻ).
 - Hiệu chuẩn: 25 cặp FB (trước 24), khớp có/không ở bảng đối chiếu người-FB 14/17.
+
+### Nhãn FB 22/11/2026 (phiếu g56ca)
+- Fansipan 22/11: ABOVE, tin 0,95 (ảnh 07:53 "sương mù, mưa nhỏ, gió to", 3 độ). Chấm được. App: DISSIPATING 49, đồng thuận 100%, ΔH -29m, không đáng đi: KHỚP (thật không có biển mây dưới chân). FB thành 26 cặp. Engine không đổi.
