@@ -1,24 +1,24 @@
 {
  "moiNhat": {
-  "ngay": "2026-11-21",
+  "ngay": "2026-11-22",
   "engine": "engine-2.8.3",
   "hanhDong": "chua_du_mau",
   "duDieuKienCham": false,
   "vt": {
-   "n": 0,
-   "ngay": 0,
-   "baoDung": 0,
-   "botSot": 0,
-   "baoNham": 0,
-   "dungKhong": 0
-  },
-  "field": {
-   "n": 1,
+   "n": 9,
    "ngay": 1,
    "baoDung": 0,
    "botSot": 0,
+   "baoNham": 2,
+   "dungKhong": 7
+  },
+  "field": {
+   "n": 2,
+   "ngay": 2,
+   "baoDung": 0,
+   "botSot": 0,
    "baoNham": 0,
-   "dungKhong": 1
+   "dungKhong": 2
   },
   "nguoiDi": {
    "n": 0,
@@ -28,7 +28,7 @@
    "baoNham": 0,
    "dungKhong": 0
   },
-  "ghiChu": "chưa đủ mẫu: FIELD 1/30 điểm-ngày và 0/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
+  "ghiChu": "chưa đủ mẫu: FIELD 2/30 điểm-ngày và 0/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
  },
  "lichSu": [
   {
@@ -123,6 +123,37 @@
     "dungKhong": 0
    },
    "ghiChu": "chưa đủ mẫu: FIELD 1/30 điểm-ngày và 0/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
+  },
+  {
+   "ngay": "2026-11-22",
+   "engine": "engine-2.8.3",
+   "hanhDong": "chua_du_mau",
+   "duDieuKienCham": false,
+   "vt": {
+    "n": 9,
+    "ngay": 1,
+    "baoDung": 0,
+    "botSot": 0,
+    "baoNham": 2,
+    "dungKhong": 7
+   },
+   "field": {
+    "n": 2,
+    "ngay": 2,
+    "baoDung": 0,
+    "botSot": 0,
+    "baoNham": 0,
+    "dungKhong": 2
+   },
+   "nguoiDi": {
+    "n": 0,
+    "ngay": 0,
+    "baoDung": 0,
+    "botSot": 0,
+    "baoNham": 0,
+    "dungKhong": 0
+   },
+   "ghiChu": "chưa đủ mẫu: FIELD 2/30 điểm-ngày và 0/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
   }
  ]
 }
