@@ -997,5 +997,17 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong báo (phiếu g0721, 23/11) kèm ảnh chụp màn hình video FB 'Pha luông 23/11/2026' (đăng khoảng 13h, ảnh có nắng thấp rạng sáng): biển mây phủ các thung lũng, đỉnh núi nhô lên, trời quang phía trên. Bản video, không thấy dấu giờ: ghi DAWN theo ánh nắng thấp và quy ước giờ báo trước 9h. Dự báo app (bản chụp 23/11): FOG 62, đồng thuận 67%, mặt mây 2210m trên chỗ đứng 1880m (ΔH -330), ĐÁNG ĐI = sai = BỎ SÓT. Cùng ngày dải Pù Luông - Pha Luông - Pa Phách - Hang Kia: Pù Luông STATIC 80 đáng đi, Pa Phách STATIC 74 đáng đi (đúng), Pha Luông FOG 62 không (bỏ sót), Hang Kia DISSIPATING 52 không (chưa có nhãn người; anh nói có biển mây đẹp 7-8h). Không đổi engine theo một ca; ca FOG-bỏ sót thứ 3 trong 3 ngày (Sa Pa, Tà Xùa, Pha Luông 23/11)."
+  },
+  {
+    "id": "2026-11-23-kim-bon",
+    "locationName": "Đỉnh Kim Bon (Đồi gió và cỏ)",
+    "spotKey": "KIM_BON",
+    "date": "2026-11-23",
+    "reportedAt": "2026-11-23T16:00:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh (phiếu g39c3, 23/11): sáng 23/11 Kim Bon, biển mây dày phủ thung lũng bên dưới, lều và xe cắm trại trên sườn cỏ, các dải núi đá nhô lên phía xa. Giờ chụp KHÔNG có EXIF; ước từ ảnh: mặt trời ló sau dải mây tầng cao ở hướng ĐĐN, cao khoảng 3-7 độ so với đường núi xa (ước mắt, sai số vài độ) => thiên văn (astronomy-engine, 21.121N 104.6127E, độ cao 1100m) ứng với khoảng 06:30-06:50, ước ~06:40 ngày 23/11 (mặt trời mọc ~06:18). Dự báo app (bản chụp 23/11): DISSIPATING 74, đồng thuận 33% (GFS STATIC, ICON FOG, UKMO DISSIPATING mặt mây 2212m), ΔH -1112, ĐÁNG ĐI = sai = BỎ SÓT. Không đổi engine theo một ca (Luật cổng); gom vào ca FOG/lệch mô hình bỏ sót 23/11."
   }
 ]
