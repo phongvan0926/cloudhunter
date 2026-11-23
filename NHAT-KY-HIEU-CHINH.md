@@ -463,3 +463,6 @@ Video FB + lời anh: biển mây dưới Pha Luông sáng 23/11. Bản chụp: 
 
 ## 23/11/2026 - lịch đợt FOG chốt trước (phiếu g36d5), chưa sửa gì
 Người đi: 22/56 bỏ sót, 11 trong đó app báo FOG. Đợt sửa cổng FOG mở khi >= 15 ca FOG-bỏ sót (người đi/FB) hoặc 15/12/2026; theo đủ Luật cổng. Chi tiết `docs/tong-hop-ca-va-hoc-tu-du-lieu.md`.
+
+## 23/11/2026 - ảnh Ngũ Chỉ Sơn (phiếu gc42d), chỉ ghi nhận, KHÔNG thêm nhãn, engine không đổi
+Anh báo + ảnh FB (đăng ~11h): chân/sườn Ngũ Chỉ Sơn, biển mây trắng phủ thung lũng bên dưới, trời xanh, mây ở mức thấp hơn người chụp. Anh nói "khu vực chân núi", điểm đứng KHÔNG phải đỉnh (thư viện NGU_CHI_SON ở chóp 2858m) và không rõ cao độ, nên không ghép vào điểm nào (cùng cách xử lý Best View trước khi có plus code). Bản chụp 23/11: NGU_CHI_SON DISSIPATING 50, mặt mây 2201m (cả 3 mô hình), không đáng đi; Fansipan cùng khu DISSIPATING 51, mặt mây 2202m. Mô hình đặt mặt mây ~2200m ở cả Sa Pa lẫn Ngũ Chỉ Sơn, trong khi ảnh thật có biển mây dưới người đứng ở sườn: nhất quán với chuỗi ca Sa Pa/Tà Xùa/Pha Luông 23/11 (mặt mây mô hình quá cao so với thực tế), nhưng không có cao độ điểm đứng nên không đếm vào 15 ca của đợt FOG. Muốn đếm: cần plus code/tên điểm đứng.
