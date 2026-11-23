@@ -949,5 +949,17 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong báo (phiếu g9214, 20/11): Tà Xùa 19/11 có biển mây từ sáng đến tận giữa trưa; hôm trước 18/11 gió mùa về, mưa diện rộng, nhiệt độ giảm nhiều; anh nói đã có ngày tương tự trước đó. Chữ, không ảnh/giờ cụ thể, ghi DAWN theo quy ước. Dự báo app (bản chụp 18/11 19:30 VN): FOG 78, đồng thuận 100% (cả ba mô hình FOG), mặt mây 1.570m, ΔH +230m, KHÔNG khuyên đi = BỎ SÓT. Vệ tinh 19/11: BLOCKED_ABOVE (mây cao 7,7-11 km, emiss 0,3-0,8), không chấm được."
+  },
+  {
+    "id": "2026-11-23-pa-phach",
+    "locationName": "Đỉnh Pa Phách (Mộc Châu, Sơn La)",
+    "spotKey": "PA_PHACH",
+    "date": "2026-11-23",
+    "reportedAt": "2026-11-23T12:43:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "MORNING",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (phiếu g0f36, 23/11): 8h sáng nay đỉnh Pa Phách nắng đẹp, mây rất dày, thời tiết cực đẹp. Chữ, không ảnh Pa Phách; giờ 8h nên ghi MORNING. Dự báo app (bản chụp 23/11): STATIC 74, đồng thuận 67%, ΔH +360m, ĐÁNG ĐI = đúng (GFS STATIC 74, ICON STATIC 74, UKMO DISSIPATING 52); cổng bóng agy co_the 42%. Kèm ảnh bài FB Thịnh Sa Pa (Lito Travel) best view 8h00 23/11: biển mây phủ thung lũng nhìn từ trên cao, trời nắng; anh nói là nhìn xuống thung lũng Mường Hoa cạnh Fansipan, nhưng không rõ điểm đứng (không phải đỉnh Fansipan) nên KHÔNG gắn vào điểm thư viện nào, chỉ ghi tham khảo: FANSIPAN 23/11 app DISSIPATING 51, không đáng đi (khác điểm đứng, không chấm)."
   }
 ]

@@ -270,3 +270,7 @@ FANSIPAN KHONG_RO tin 0,5, cần người xem: bài sớm nhất 08:51 (ảnh 08
 
 ### Nhãn FB 22/11/2026 (phiếu g56ca)
 - Fansipan 22/11: ABOVE, tin 0,95 (ảnh 07:53 "sương mù, mưa nhỏ, gió to", 3 độ). Chấm được. App: DISSIPATING 49, đồng thuận 100%, ΔH -29m, không đáng đi: KHỚP (thật không có biển mây dưới chân). FB thành 26 cặp. Engine không đổi.
+
+### Báo cáo người đi 23/11/2026 (phiếu g0f36)
+- Pa Phách 23/11 (anh Phong, chữ): 8h nắng đẹp, mây rất dày = BELOW THICK, MORNING. App: STATIC 74, đồng thuận 67%, ΔH +360m, đáng đi: ĐÚNG. Thêm vào `field-reports.json` (id `2026-11-23-pa-phach`).
+- Ảnh bài FB Thịnh Sa Pa 8h00: biển mây nhìn xuống thung lũng Mường Hoa (cạnh Fansipan). Điểm đứng không rõ nên không gắn điểm thư viện, không chấm; FANSIPAN (đỉnh) 23/11 app DISSIPATING 51 không đáng đi, là điểm khác. Chưa có điểm "Mường Hoa" trong thư viện; muốn thêm phải có toạ độ xác minh (quy tắc 8). Engine không đổi.
