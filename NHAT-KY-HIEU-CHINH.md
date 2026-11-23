@@ -457,3 +457,6 @@ Nhập dữ liệu: điểm thư viện mới từ plus code anh gửi (DEM 1469
 
 ## 23/11/2026 - nhãn người đi Tà Xùa (phiếu g7dd1), tinh chỉnh nhỏ, engine KHÔNG đổi
 Anh báo + ảnh FB 6h00 23/11: biển mây dưới chân Tà Xùa. Bản chụp 23/11: FOG 72, mặt mây 1629m < điểm đứng 1800m, không đáng đi = BỎ SÓT (agy cũng 'không'). Thêm `2026-11-23-ta-xua` vào field-reports. Cùng kiểu ca Sa Pa 23/11 và Tà Xùa 21/11: gom thêm ca người đi trước khi xét cổng FOG theo Luật cổng.
+
+## 23/11/2026 - nhãn người đi Pha Luông (phiếu g0721), tinh chỉnh nhỏ, engine KHÔNG đổi
+Video FB + lời anh: biển mây dưới Pha Luông sáng 23/11. Bản chụp: FOG 62, mặt mây 2210m > chỗ đứng 1880m, không đáng đi = BỎ SÓT. Ngày 23/11 đã có 3 ca FOG-bỏ sót có nhãn người (Sa Pa, Tà Xùa, Pha Luông) cùng một vùng khí tượng diện rộng; đây là lý do ưu tiên đo cổng FOG trên toàn kho khi đủ ca, KHÔNG sửa theo 3 ca này. Vệ tinh Himawari 23/11 chưa có (job chạy ~15:40 VN).

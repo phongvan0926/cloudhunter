@@ -985,5 +985,17 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong báo (phiếu g7dd1, 23/11) kèm ảnh bài FB nhóm review Tà Xùa: 6h00 ngày 23/11 tại trung tâm check-in Tà Xùa, biển mây phủ kín thung lũng bên dưới, ráng cam chân trời, mây tầng cao xám phía trên (ảnh bài đăng cách đó ~7 giờ). Dự báo app (bản chụp 23/11): FOG 72, đồng thuận 67%, mặt mây 1629m, điểm đứng 1800m (ΔH +171), ĐÁNG ĐI = sai (không đáng đi) = BỎ SÓT. Cổng bóng agy: khong 8% (cũng bỏ sót). Cùng kiểu với ca Sa Pa 23/11 và Tà Xùa 21/11: mô hình báo FOG/mây thấp mà người đi thấy biển mây dưới chân. Không đổi engine theo một ca (Luật cổng); gom thêm ca người đi."
+  },
+  {
+    "id": "2026-11-23-pha-luong",
+    "locationName": "Đỉnh Pha Luông (Mộc Châu, Sơn La)",
+    "spotKey": "PHA_LUONG",
+    "date": "2026-11-23",
+    "reportedAt": "2026-11-23T13:29:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (phiếu g0721, 23/11) kèm ảnh chụp màn hình video FB 'Pha luông 23/11/2026' (đăng khoảng 13h, ảnh có nắng thấp rạng sáng): biển mây phủ các thung lũng, đỉnh núi nhô lên, trời quang phía trên. Bản video, không thấy dấu giờ: ghi DAWN theo ánh nắng thấp và quy ước giờ báo trước 9h. Dự báo app (bản chụp 23/11): FOG 62, đồng thuận 67%, mặt mây 2210m trên chỗ đứng 1880m (ΔH -330), ĐÁNG ĐI = sai = BỎ SÓT. Cùng ngày dải Pù Luông - Pha Luông - Pa Phách - Hang Kia: Pù Luông STATIC 80 đáng đi, Pa Phách STATIC 74 đáng đi (đúng), Pha Luông FOG 62 không (bỏ sót), Hang Kia DISSIPATING 52 không (chưa có nhãn người; anh nói có biển mây đẹp 7-8h). Không đổi engine theo một ca; ca FOG-bỏ sót thứ 3 trong 3 ngày (Sa Pa, Tà Xùa, Pha Luông 23/11)."
   }
 ]
