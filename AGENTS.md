@@ -80,6 +80,7 @@ Mục lục: đọc đúng tệp khi làm việc tương ứng. Không viết `@
 - `docs/rang-buoc-vat-ly.md` - đọc TRƯỚC khi sửa vật lý engine (nghịch nhiệt, mực áp suất, estimateCloudTop, BLH, gió theo zone, mùa, ensemble).
 - `docs/luong-du-lieu-file-chinh-backlog.md` - đọc khi cần bảng file chính, luồng dữ liệu v5, hoặc backlog.
 - `docs/cung-duong-kiem-chung.md` - đọc khi đụng ngưỡng độ khó cung đường, bản chụp tuyến, hay có báo cáo chuyến đi thật.
+- `docs/tong-hop-ca-va-hoc-tu-du-lieu.md` - đọc khi gom ca lẻ thành đợt sửa engine, khi nghĩ tới machine learning, hoặc mở đợt FOG (lịch chốt trước: >= 15 ca FOG-bỏ sót hoặc 15/12/2026).
 - `docs/skyradar-doi-chung.md` - đọc khi so với đối thủ skyradar.vn, hoặc chạy `tools/skyradar-shadow.py` (chụp phán quyết biển mây của họ để đối chứng; KHÔNG dùng làm nhãn sự thật).
 
 `services/routeService.ts` + `components/RouteWeather.tsx` (19/11/2026, phiếu gcc29, định hướng số 1): thời tiết + độ khó CUNG ĐƯỜNG.
