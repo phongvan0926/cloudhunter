@@ -973,5 +973,17 @@
     "timeOfDay": "MORNING",
     "source": "USER_RELAY",
     "note": "Anh Phong (phiếu g0f36 + g97f6, 23/11): Best View Sa Pa (plus code 8VCF+H6) lúc 8h00 biển mây phủ kín thung lũng Mường Hoa bên dưới, trời nắng, mây rời rạc trên cao (ảnh bài FB Thịnh Sa Pa 8h00 23/11). Điểm này được thêm vào thư viện sau bản chụp 23/11 nên KHÔNG có dòng bản chụp để ghép cặp, không chụp bù. Tính lại sau (23/11, dữ liệu viết đè, KHÔNG phải bản chụp): FOG 67, đồng thuận 100%, ΔH -729 = không đáng đi. Bản chụp 22/11 19:30 của hai điểm sát bên (cùng thung lũng): Hàm Rồng FOG 78, Hang Đá FOG 70, đồng thuận 100%, mặt mây 2199m (cả 3 mô hình), không đáng đi = BỎ SÓT theo lân cận (chưa phải nhãn của chính các điểm đó)."
+  },
+  {
+    "id": "2026-11-23-ta-xua",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "spotKey": "TA_XUA_SON_LA",
+    "date": "2026-11-23",
+    "reportedAt": "2026-11-23T13:18:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo (phiếu g7dd1, 23/11) kèm ảnh bài FB nhóm review Tà Xùa: 6h00 ngày 23/11 tại trung tâm check-in Tà Xùa, biển mây phủ kín thung lũng bên dưới, ráng cam chân trời, mây tầng cao xám phía trên (ảnh bài đăng cách đó ~7 giờ). Dự báo app (bản chụp 23/11): FOG 72, đồng thuận 67%, mặt mây 1629m, điểm đứng 1800m (ΔH +171), ĐÁNG ĐI = sai (không đáng đi) = BỎ SÓT. Cổng bóng agy: khong 8% (cũng bỏ sót). Cùng kiểu với ca Sa Pa 23/11 và Tà Xùa 21/11: mô hình báo FOG/mây thấp mà người đi thấy biển mây dưới chân. Không đổi engine theo một ca (Luật cổng); gom thêm ca người đi."
   }
 ]

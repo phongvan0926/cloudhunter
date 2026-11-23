@@ -454,3 +454,6 @@ báo đỏ qua bao_chung, KHÔNG đổi cờ, KHÔNG ghi 0. Mọi lần đổi c
 
 ## 23/11/2026 - thêm điểm BEST_VIEW_SAPA + nhãn người đi (phiếu g97f6) - tinh chỉnh nhỏ, engine không đổi
 Nhập dữ liệu: điểm thư viện mới từ plus code anh gửi (DEM 1469m, đáy 1161m) + báo cáo BELOW THICK 23/11 8h. Không đổi `ENGINE_VERSION`, không đụng ngưỡng. Ghi nhận ca bỏ sót lân cận (Hàm Rồng/Hang Đá FOG 100% trong bản chụp 22/11, thực tế có biển mây Mường Hoa); chi tiết `docs/vong-kiem-chung-va-facebook.md`.
+
+## 23/11/2026 - nhãn người đi Tà Xùa (phiếu g7dd1), tinh chỉnh nhỏ, engine KHÔNG đổi
+Anh báo + ảnh FB 6h00 23/11: biển mây dưới chân Tà Xùa. Bản chụp 23/11: FOG 72, mặt mây 1629m < điểm đứng 1800m, không đáng đi = BỎ SÓT (agy cũng 'không'). Thêm `2026-11-23-ta-xua` vào field-reports. Cùng kiểu ca Sa Pa 23/11 và Tà Xùa 21/11: gom thêm ca người đi trước khi xét cổng FOG theo Luật cổng.
