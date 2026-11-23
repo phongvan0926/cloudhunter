@@ -29,6 +29,12 @@
   "v": 100,
   "src": "PROFILE"
  },
+ "BEST_VIEW_SAPA": {
+  "lat": 22.3214,
+  "lon": 103.8731,
+  "v": 1161,
+  "src": "DEM5"
+ },
  "BINH_LIEU": {
   "lat": 21.5203,
   "lon": 107.4883,

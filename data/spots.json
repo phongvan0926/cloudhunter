@@ -170,6 +170,16 @@
     "needsReview": null
   },
   {
+    "key": "BEST_VIEW_SAPA",
+    "name": "Best View Sa Pa (nhìn xuống thung lũng Mường Hoa)",
+    "lat": 22.3214,
+    "lon": 103.8731,
+    "elevation": 1469,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
     "key": "PHU_SA_PHIN",
     "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
     "lat": 21.4089,

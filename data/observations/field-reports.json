@@ -961,5 +961,17 @@
     "timeOfDay": "MORNING",
     "source": "USER_RELAY",
     "note": "Anh Phong báo (phiếu g0f36, 23/11): 8h sáng nay đỉnh Pa Phách nắng đẹp, mây rất dày, thời tiết cực đẹp. Chữ, không ảnh Pa Phách; giờ 8h nên ghi MORNING. Dự báo app (bản chụp 23/11): STATIC 74, đồng thuận 67%, ΔH +360m, ĐÁNG ĐI = đúng (GFS STATIC 74, ICON STATIC 74, UKMO DISSIPATING 52); cổng bóng agy co_the 42%. Kèm ảnh bài FB Thịnh Sa Pa (Lito Travel) best view 8h00 23/11: biển mây phủ thung lũng nhìn từ trên cao, trời nắng; anh nói là nhìn xuống thung lũng Mường Hoa cạnh Fansipan, nhưng không rõ điểm đứng (không phải đỉnh Fansipan) nên KHÔNG gắn vào điểm thư viện nào, chỉ ghi tham khảo: FANSIPAN 23/11 app DISSIPATING 51, không đáng đi (khác điểm đứng, không chấm)."
+  },
+  {
+    "id": "2026-11-23-best-view-sapa",
+    "locationName": "Best View Sa Pa (nhìn xuống thung lũng Mường Hoa)",
+    "spotKey": "BEST_VIEW_SAPA",
+    "date": "2026-11-23",
+    "reportedAt": "2026-11-23T13:10:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "MORNING",
+    "source": "USER_RELAY",
+    "note": "Anh Phong (phiếu g0f36 + g97f6, 23/11): Best View Sa Pa (plus code 8VCF+H6) lúc 8h00 biển mây phủ kín thung lũng Mường Hoa bên dưới, trời nắng, mây rời rạc trên cao (ảnh bài FB Thịnh Sa Pa 8h00 23/11). Điểm này được thêm vào thư viện sau bản chụp 23/11 nên KHÔNG có dòng bản chụp để ghép cặp, không chụp bù. Tính lại sau (23/11, dữ liệu viết đè, KHÔNG phải bản chụp): FOG 67, đồng thuận 100%, ΔH -729 = không đáng đi. Bản chụp 22/11 19:30 của hai điểm sát bên (cùng thung lũng): Hàm Rồng FOG 78, Hang Đá FOG 70, đồng thuận 100%, mặt mây 2199m (cả 3 mô hình), không đáng đi = BỎ SÓT theo lân cận (chưa phải nhãn của chính các điểm đó)."
   }
 ]

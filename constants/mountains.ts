@@ -157,6 +157,16 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     aliases: ['hang đá', 'hang da', 'bản hang đá', 'ban hang da', 'sapa', 'sa pa', 'tả van', 'ta van', 'lào cai', 'lao cai']
   },
 
+  BEST_VIEW_SAPA: {
+    // 23/11/2026 (phiếu g97f6): anh Phong gửi plus code 8VCF+H6 (Sa Pa, Lào Cai), "Best View Sa Pa", phía dưới là
+    // thung lũng Mường Hoa; bài FB Thịnh Sa Pa 23/11 8h00 chụp biển mây từ chỗ này. Giải bằng scripts/pluscode.ts với
+    // tham chiếu Sa Pa (22.336, 103.843): 22.321437, 103.873062 (mã đầy đủ 7PJ58VCF+H6; cách bản Hang Đá ~0,9 km). DEM 1469m.
+    name: "Best View Sa Pa (nhìn xuống thung lũng Mường Hoa)",
+    lat: 22.3214, lon: 103.8731, elevation: 1469,   // nguồn: plus code 8VCF+H6 người dùng cung cấp; độ cao = DEM (không dùng số quảng cáo)
+    zone: "A_CLOUD_TRAP",
+    aliases: ['best view sapa', 'best view sa pa', 'bestview sapa', 'diem ngam best view', 'điểm ngắm best view', 'muong hoa', 'mường hoa', 'thung lũng mường hoa', 'sapa', 'sa pa']
+  },
+
   // --- YÊN BÁI ---
   // Đỉnh 2865m bên Yên Bái nay gọi là PHU SA PHÌN — tách hẳn tên khỏi "Tà Xùa" của Sơn La
   // để người dùng gõ "Tà Xùa" luôn ra khu du lịch Bắc Yên (Sơn La), không nhảy sang đỉnh trek.
