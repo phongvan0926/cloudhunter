@@ -38,3 +38,9 @@ Mở rộng bộ thu `cloudhunter-mxh` (đã có: Cloak, bóc bài có giờ đ�
 
 Rủi ro: hồ sơ Cloak quét mở thêm ~15 bài + 6-8 lượt Google/ngày (hiện mở 2 trang/ngày): tăng nguy cơ Facebook/Google
 nghi bot. Khoá nick là quyết định của anh (luật chung). Chi phí tiền: 0 (gói Claude sẵn có cho bước gắn nhãn ảnh).
+
+## Quyết định (anh Phong, 23/11/2026, thẻ q4c0b): chọn A
+Làm đủ bước khám phá; nếu Facebook đòi đăng nhập thì dùng hồ sơ vẫn quét Facebook (cloak-r02, đã đăng nhập).
+Đã dựng `kham_pha.py` trong bộ thu (ngoài repo) ở CHẾ ĐỘ BÓNG, gắn vào lượt 20:30. Lượt thử 23/11 13:30:
+8 truy vấn trong hồ sơ Cloak không CAPTCHA, ra 14/23/19/21/23/15/6/23 bài FB; mở 4 bài đều lấy được giờ đăng thật
+(06:33-09:56 ngày 23/11) và ảnh chụp màn hình bài. Chưa gắn nhãn, chưa nhập calibrate: xét sau 1 tuần bóng.
