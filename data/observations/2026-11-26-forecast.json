@@ -1,0 +1,2733 @@
+{
+  "date": "2026-11-26",
+  "engineVersion": "engine-2.8.3",
+  "snapshotAt": "2026-11-25T12:30:16.542Z",
+  "spots": [
+    {
+      "key": "CUC_TAY_A_PA_CHAI",
+      "name": "Cực Tây A Pa Chải",
+      "score": 80,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1864,
+      "valleyElevation": 941,
+      "cloudTop": 1375,
+      "deltaH": 489,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 88,
+          "status": "FOG",
+          "cloudTop": 2195
+        },
+        {
+          "model": "icon_seamless",
+          "score": 80,
+          "status": "FLUCTUATING",
+          "cloudTop": 1687
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "STATIC",
+          "cloudTop": 1062
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 47,
+        "doDongThuan": 0.47,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "NGAI_THAU_THUONG",
+      "name": "Ngải Thầu Thượng (Y Tý)",
+      "score": 74,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 2190,
+      "valleyElevation": 1500,
+      "cloudTop": 1825,
+      "deltaH": 365,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 74,
+          "status": "FLUCTUATING",
+          "cloudTop": 2194
+        },
+        {
+          "model": "icon_seamless",
+          "score": 33,
+          "status": "STATIC",
+          "cloudTop": 1825
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "STATIC",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 79,
+        "doDongThuan": 0.75,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "CHIEU_LAU_THI",
+      "name": "Đỉnh Chiêu Lầu Thi",
+      "score": 73,
+      "status": "FLOWING",
+      "agreement": 100,
+      "observerAlt": 2402,
+      "valleyElevation": 1000,
+      "cloudTop": 1692,
+      "deltaH": 710,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 54,
+          "status": "ROLLING",
+          "cloudTop": 2193
+        },
+        {
+          "model": "icon_seamless",
+          "score": 75,
+          "status": "FLOWING",
+          "cloudTop": 1686
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 73,
+          "status": "FLOWING",
+          "cloudTop": 1692
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 94,
+        "doDongThuan": 0.88,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "DEO_MA_PI_LENG",
+      "name": "Đèo Mã Pí Lèng (Mèo Vạc)",
+      "score": 68,
+      "status": "FLUCTUATING",
+      "agreement": 100,
+      "observerAlt": 1400,
+      "valleyElevation": 350,
+      "cloudTop": 1212,
+      "deltaH": 188,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "FLUCTUATING",
+          "cloudTop": 1212
+        },
+        {
+          "model": "icon_seamless",
+          "score": 68,
+          "status": "FLUCTUATING",
+          "cloudTop": 1211
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FLUCTUATING",
+          "cloudTop": 1214
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 48,
+        "doDongThuan": 0.47,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "TA_XUA_SON_LA",
+      "name": "Tà Xùa (Sống lưng Khủng Long)",
+      "score": 64,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 1800,
+      "valleyElevation": 700,
+      "cloudTop": 1064,
+      "deltaH": 736,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 68,
+          "status": "STATIC",
+          "cloudTop": 1064
+        },
+        {
+          "model": "icon_seamless",
+          "score": 42,
+          "status": "STATIC",
+          "cloudTop": 1059
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 64,
+          "status": "STATIC",
+          "cloudTop": 1065
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 39,
+        "doDongThuan": 0.53,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "KIM_BON",
+      "name": "Đỉnh Kim Bon (Đồi gió và cỏ)",
+      "score": 63,
+      "status": "STATIC",
+      "agreement": 67,
+      "observerAlt": 1100,
+      "valleyElevation": 120,
+      "cloudTop": 611,
+      "deltaH": 489,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 78,
+          "status": "STATIC",
+          "cloudTop": 833
+        },
+        {
+          "model": "icon_seamless",
+          "score": 63,
+          "status": "STATIC",
+          "cloudTop": 389
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 43,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 42,
+        "doDongThuan": 0.35,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "MAU_SON",
+      "name": "Mẫu Sơn (Lạng Sơn)",
+      "score": 61,
+      "status": "STATIC",
+      "agreement": 100,
+      "observerAlt": 1155,
+      "valleyElevation": 300,
+      "cloudTop": 759,
+      "deltaH": 396,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 37,
+          "status": "STATIC",
+          "cloudTop": 760
+        },
+        {
+          "model": "icon_seamless",
+          "score": 61,
+          "status": "STATIC",
+          "cloudTop": 759
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 74,
+          "status": "FLOWING",
+          "cloudTop": 613
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 81,
+        "doDongThuan": 0.79,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "SA_MU_U_BO",
+      "name": "Sa Mu - U Bò (2756m)",
+      "score": 57,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 2756,
+      "valleyElevation": 1400,
+      "cloudTop": 1980,
+      "deltaH": 776,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 57,
+          "status": "DISSIPATING",
+          "cloudTop": 2049
+        },
+        {
+          "model": "icon_seamless",
+          "score": 39,
+          "status": "FLOWING",
+          "cloudTop": 2197
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FLOWING",
+          "cloudTop": 1763
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 34,
+        "doDongThuan": 0.21,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "BA_VI",
+      "name": "Đỉnh Ba Vì (Đỉnh Vua)",
+      "score": 48,
+      "status": "FLOWING",
+      "agreement": 67,
+      "observerAlt": 1296,
+      "valleyElevation": 100,
+      "cloudTop": 499,
+      "deltaH": 797,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 50,
+          "status": "STATIC",
+          "cloudTop": 610
+        },
+        {
+          "model": "icon_seamless",
+          "score": 48,
+          "status": "FLOWING",
+          "cloudTop": 387
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 36,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 44,
+        "doDongThuan": 0.56,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "LANG_BIANG",
+      "name": "Núi Lang Biang",
+      "score": 25,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 2167,
+      "valleyElevation": 1467,
+      "cloudTop": 2022,
+      "deltaH": 145,
+      "worthGoing": true,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 25,
+          "status": "STATIC",
+          "cloudTop": 1855
+        },
+        {
+          "model": "icon_seamless",
+          "score": 10,
+          "status": "DISSIPATING",
+          "cloudTop": 2187
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 65,
+          "status": "FLUCTUATING",
+          "cloudTop": 2189
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 44,
+        "doDongThuan": 0.11,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "SUOI_THAU",
+      "name": "Thảo nguyên Suôi Thầu (Xín Mần)",
+      "score": 85,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1200,
+      "valleyElevation": 274,
+      "cloudTop": 1692,
+      "deltaH": -492,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 65,
+          "status": "FOG",
+          "cloudTop": 2193
+        },
+        {
+          "model": "icon_seamless",
+          "score": 87,
+          "status": "FOG",
+          "cloudTop": 1686
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 85,
+          "status": "FOG",
+          "cloudTop": 1692
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 8,
+        "doDongThuan": 0.81,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "SIN_HO",
+      "name": "Sìn Hồ (điểm ngắm ven đường, Lai Châu)",
+      "score": 80,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1503,
+      "valleyElevation": 392,
+      "cloudTop": 832,
+      "deltaH": 671,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 834
+        },
+        {
+          "model": "icon_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 830
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 81,
+          "status": "STATIC",
+          "cloudTop": 1067
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 9,
+        "doDongThuan": 0.77,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "SAPA_HAM_RONG",
+      "name": "Thị trấn Sapa (Hàm Rồng)",
+      "score": 80,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 1200,
+      "cloudTop": 1945,
+      "deltaH": -345,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 2195
+        },
+        {
+          "model": "icon_seamless",
+          "score": 41,
+          "status": "FLUCTUATING",
+          "cloudTop": 1687
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1694
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 22,
+        "doDongThuan": 0.32,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "DEO_KHAU_PHA",
+      "name": "Đèo Khau Phạ",
+      "score": 80,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 940,
+      "valleyElevation": 600,
+      "cloudTop": 835,
+      "deltaH": 105,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 835
+        },
+        {
+          "model": "icon_seamless",
+          "score": 82,
+          "status": "FOG",
+          "cloudTop": 831
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1066
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 2,
+        "doDongThuan": 0.92,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "DOI_MAM_XOI",
+      "name": "Đồi Mâm Xôi (Mù Cang Chải)",
+      "score": 80,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1225,
+      "valleyElevation": 700,
+      "cloudTop": 1688,
+      "deltaH": -463,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 87,
+          "status": "FOG",
+          "cloudTop": 1541
+        },
+        {
+          "model": "icon_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1688
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 4,
+        "doDongThuan": 0.81,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "DEO_PHA_DIN",
+      "name": "Đèo Pha Đin",
+      "score": 78,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1300,
+      "valleyElevation": 760,
+      "cloudTop": 1066,
+      "deltaH": 234,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 78,
+          "status": "FOG",
+          "cloudTop": 1063
+        },
+        {
+          "model": "icon_seamless",
+          "score": 61,
+          "status": "FOG",
+          "cloudTop": 2197
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1066
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 12,
+        "doDongThuan": 0.76,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "PA_PHACH",
+      "name": "Đỉnh Pa Phách (Mộc Châu, Sơn La)",
+      "score": 74,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1180,
+      "valleyElevation": 475,
+      "cloudTop": 2879,
+      "deltaH": -1699,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 72,
+          "status": "FOG",
+          "cloudTop": 3557
+        },
+        {
+          "model": "icon_seamless",
+          "score": 77,
+          "status": "FLUCTUATING",
+          "cloudTop": 980
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 33,
+        "doDongThuan": 0.34,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "SI_THAU_CHAI",
+      "name": "Sì Thâu Chải",
+      "score": 74,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1460,
+      "valleyElevation": 718,
+      "cloudTop": 1693,
+      "deltaH": -233,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 66,
+          "status": "FOG",
+          "cloudTop": 1688
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 4,
+        "doDongThuan": 0.87,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "DON_DEN",
+      "name": "Đồn Đèn (Ba Bể)",
+      "score": 74,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 660,
+      "valleyElevation": 173,
+      "cloudTop": 611,
+      "deltaH": 49,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 74,
+          "status": "FOG",
+          "cloudTop": 612
+        },
+        {
+          "model": "icon_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 609
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 74,
+          "status": "ROLLING",
+          "cloudTop": 614
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 12,
+        "doDongThuan": 0.73,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "DONG_VAN",
+      "name": "Cao nguyên đá Đồng Văn (Mã Pí Lèng)",
+      "score": 72,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1511,
+      "valleyElevation": 1100,
+      "cloudTop": 1488,
+      "deltaH": 23,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 1,
+        "modelsKey": 1,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 72,
+          "status": "FLUCTUATING",
+          "cloudTop": 1488
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 72,
+          "status": "FLUCTUATING",
+          "cloudTop": 1488
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 66,
+        "doDongThuan": 0.58,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "PU_LUONG",
+      "name": "Pù Luông",
+      "score": 72,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1700,
+      "valleyElevation": 400,
+      "cloudTop": 755,
+      "deltaH": 945,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 69,
+          "status": "FOG",
+          "cloudTop": 3559
+        },
+        {
+          "model": "icon_seamless",
+          "score": 73,
+          "status": "FOG",
+          "cloudTop": 755
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 72,
+          "status": "FOG",
+          "cloudTop": 613
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 27,
+        "doDongThuan": 0.28,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "PHINH_HO",
+      "name": "Phình Hồ (Trạm Tấu)",
+      "score": 72,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1080,
+      "valleyElevation": 377,
+      "cloudTop": 1442,
+      "deltaH": -362,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 72,
+          "status": "FOG",
+          "cloudTop": 2047
+        },
+        {
+          "model": "icon_seamless",
+          "score": 80,
+          "status": "FLUCTUATING",
+          "cloudTop": 831
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 70,
+          "status": "FOG",
+          "cloudTop": 837
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 24,
+        "doDongThuan": 0.07,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "BAN_NA",
+      "name": "Điểm săn mây Bản Nà (Tân Yên)",
+      "score": 71,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 740,
+      "valleyElevation": 469,
+      "cloudTop": 1517,
+      "deltaH": -777,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 81,
+          "status": "FOG",
+          "cloudTop": 833
+        },
+        {
+          "model": "icon_seamless",
+          "score": 71,
+          "status": "FLUCTUATING",
+          "cloudTop": 980
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 36,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 21,
+        "doDongThuan": 0.66,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "BEST_VIEW_SAPA",
+      "name": "Best View Sa Pa (nhìn xuống thung lũng Mường Hoa)",
+      "score": 70,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1469,
+      "valleyElevation": 1161,
+      "cloudTop": 1690,
+      "deltaH": -221,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 2195
+        },
+        {
+          "model": "icon_seamless",
+          "score": 41,
+          "status": "FLUCTUATING",
+          "cloudTop": 1687
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 70,
+          "status": "FLUCTUATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 27,
+        "doDongThuan": 0.44,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "TA_LENG_SAN_MAY",
+      "name": "Đồi săn mây Tả Lèng (Lai Châu)",
+      "score": 70,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1360,
+      "valleyElevation": 786,
+      "cloudTop": 1065,
+      "deltaH": 295,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 70,
+          "status": "FOG",
+          "cloudTop": 1065
+        },
+        {
+          "model": "icon_seamless",
+          "score": 65,
+          "status": "FOG",
+          "cloudTop": 1061
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 76,
+          "status": "FOG",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 8,
+        "doDongThuan": 0.87,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "CHIENG_CONG",
+      "name": "Điểm săn mây Chiềng Công (Mường La)",
+      "score": 70,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1350,
+      "valleyElevation": 656,
+      "cloudTop": 1515,
+      "deltaH": -165,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 76,
+          "status": "FOG",
+          "cloudTop": 833
+        },
+        {
+          "model": "icon_seamless",
+          "score": 61,
+          "status": "FOG",
+          "cloudTop": 2197
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 70,
+          "status": "STATIC",
+          "cloudTop": 1065
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 23,
+        "doDongThuan": 0.58,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "DEO_THUNG_KHE",
+      "name": "Đèo Thung Khe (Đèo Đá Trắng)",
+      "score": 69,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 830,
+      "valleyElevation": 343,
+      "cloudTop": 797,
+      "deltaH": 33,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 69,
+          "status": "FOG",
+          "cloudTop": 3558
+        },
+        {
+          "model": "icon_seamless",
+          "score": 74,
+          "status": "FLUCTUATING",
+          "cloudTop": 756
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 39,
+          "status": "FLUCTUATING",
+          "cloudTop": 837
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 44,
+        "doDongThuan": 0.24,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "PHA_LUONG",
+      "name": "Đỉnh Pha Luông",
+      "score": 68,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1880,
+      "valleyElevation": 1400,
+      "cloudTop": 1875,
+      "deltaH": 5,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 77,
+          "status": "FLUCTUATING",
+          "cloudTop": 2050
+        },
+        {
+          "model": "icon_seamless",
+          "score": 62,
+          "status": "FLUCTUATING",
+          "cloudTop": 1700
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 68,
+          "status": "FOG",
+          "cloudTop": 2051
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 21,
+        "doDongThuan": 0.54,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "DEO_O_QUY_HO",
+      "name": "Đèo Ô Quy Hồ",
+      "score": 66,
+      "status": "FOG",
+      "agreement": 33,
+      "observerAlt": 2035,
+      "valleyElevation": 1700,
+      "cloudTop": 2195,
+      "deltaH": -160,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 2195
+        },
+        {
+          "model": "icon_seamless",
+          "score": 26,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 66,
+          "status": "ROLLING",
+          "cloudTop": 2075
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 35,
+        "doDongThuan": 0.18,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "XIM_VANG",
+      "name": "Xím Vàng",
+      "score": 64,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1250,
+      "valleyElevation": 1000,
+      "cloudTop": 2123,
+      "deltaH": -873,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 78,
+          "status": "FOG",
+          "cloudTop": 2048
+        },
+        {
+          "model": "icon_seamless",
+          "score": 52,
+          "status": "FOG",
+          "cloudTop": 2198
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 64,
+          "status": "FLUCTUATING",
+          "cloudTop": 1215
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 16,
+        "doDongThuan": 0.72,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "06:00"
+      }
+    },
+    {
+      "key": "BAN_HANG_DA",
+      "name": "Bản Hang Đá (Sapa)",
+      "score": 64,
+      "status": "FLUCTUATING",
+      "agreement": 67,
+      "observerAlt": 1600,
+      "valleyElevation": 1300,
+      "cloudTop": 1703,
+      "deltaH": -103,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 80,
+          "status": "FOG",
+          "cloudTop": 2197
+        },
+        {
+          "model": "icon_seamless",
+          "score": 41,
+          "status": "FLUCTUATING",
+          "cloudTop": 1713
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 64,
+          "status": "FLUCTUATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 31,
+        "doDongThuan": 0.35,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "KEO_LOM",
+      "name": "Kéo Lồm - Phiêng Pằn (Mai Sơn)",
+      "score": 64,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 860,
+      "valleyElevation": 753,
+      "cloudTop": 2198,
+      "deltaH": -1338,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 81,
+          "status": "FOG",
+          "cloudTop": 1062
+        },
+        {
+          "model": "icon_seamless",
+          "score": 64,
+          "status": "FOG",
+          "cloudTop": 2198
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 60,
+          "status": "FOG",
+          "cloudTop": 2201
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 7,
+        "doDongThuan": 0.96,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "LUNG_VAN",
+      "name": "Lũng Vân (Nóc nhà xứ Mường)",
+      "score": 63,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1202,
+      "valleyElevation": 715,
+      "cloudTop": 2625,
+      "deltaH": -1423,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 63,
+          "status": "FOG",
+          "cloudTop": 3560
+        },
+        {
+          "model": "icon_seamless",
+          "score": 65,
+          "status": "FOG",
+          "cloudTop": 1689
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 45,
+          "status": "FLUCTUATING",
+          "cloudTop": 987
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 40,
+        "doDongThuan": 0.35,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "NGOC_SON_LAC_SON",
+      "name": "Điểm săn mây Ngọc Sơn (Lạc Sơn)",
+      "score": 63,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 390,
+      "valleyElevation": 80,
+      "cloudTop": 1042,
+      "deltaH": -652,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 67,
+          "status": "FLUCTUATING",
+          "cloudTop": 610
+        },
+        {
+          "model": "icon_seamless",
+          "score": 63,
+          "status": "FOG",
+          "cloudTop": 1689
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 49,
+          "status": "FOG",
+          "cloudTop": 394
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 27,
+        "doDongThuan": 0.47,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "06:00"
+      }
+    },
+    {
+      "key": "HANG_KIA_PA_CO",
+      "name": "Hang Kia - Pà Cò (Thung Mài)",
+      "score": 60,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1483,
+      "valleyElevation": 800,
+      "cloudTop": 3558,
+      "deltaH": -2075,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 77,
+          "status": "FOG",
+          "cloudTop": 3558
+        },
+        {
+          "model": "icon_seamless",
+          "score": 60,
+          "status": "FOG",
+          "cloudTop": 1013
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 56,
+          "status": "FOG",
+          "cloudTop": 3559
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 24,
+        "doDongThuan": 0.13,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "PHU_SA_PHIN",
+      "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+      "score": 58,
+      "status": "DISSIPATING",
+      "agreement": 33,
+      "observerAlt": 2865,
+      "valleyElevation": 1735,
+      "cloudTop": 2197,
+      "deltaH": 668,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 70,
+          "status": "FOG",
+          "cloudTop": 2049
+        },
+        {
+          "model": "icon_seamless",
+          "score": 25,
+          "status": "DISSIPATING",
+          "cloudTop": 2197
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 58,
+          "status": "FLOWING",
+          "cloudTop": 2110
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 37,
+        "doDongThuan": 0.15,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "LINH_QUY_PHAP_AN",
+      "name": "Linh Quy Pháp Ấn (Bảo Lộc)",
+      "score": 55,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 850,
+      "valleyElevation": 729,
+      "cloudTop": 1053,
+      "deltaH": -203,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 6,
+          "status": "FLUCTUATING",
+          "cloudTop": 991
+        },
+        {
+          "model": "icon_seamless",
+          "score": 55,
+          "status": "FOG",
+          "cloudTop": 934
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 73,
+          "status": "FOG",
+          "cloudTop": 1172
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 10,
+        "doDongThuan": 0.82,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "TAY_CON_LINH",
+      "name": "Tây Côn Lĩnh",
+      "score": 52,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2428,
+      "valleyElevation": 800,
+      "cloudTop": 1064,
+      "deltaH": 1364,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 36,
+          "status": "DISSIPATING",
+          "cloudTop": 1064
+        },
+        {
+          "model": "icon_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 1063
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 54,
+          "status": "DISSIPATING",
+          "cloudTop": 1068
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 90,
+        "doDongThuan": 0.95,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "LUNG_CUNG",
+      "name": "Lùng Cúng",
+      "score": 48,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2913,
+      "valleyElevation": 1100,
+      "cloudTop": 1693,
+      "deltaH": 1220,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 50,
+          "status": "DISSIPATING",
+          "cloudTop": 2048
+        },
+        {
+          "model": "icon_seamless",
+          "score": 42,
+          "status": "DISSIPATING",
+          "cloudTop": 1687
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 48,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 63,
+        "doDongThuan": 0.86,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "TA_CHI_NHU",
+      "name": "Tà Chì Nhù (Đồi hoa tím)",
+      "score": 46,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 2979,
+      "valleyElevation": 1200,
+      "cloudTop": 1691,
+      "deltaH": 1288,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 60,
+          "status": "FOG",
+          "cloudTop": 2049
+        },
+        {
+          "model": "icon_seamless",
+          "score": 46,
+          "status": "DISSIPATING",
+          "cloudTop": 1688
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 42,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 35,
+        "doDongThuan": 0.16,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "BINH_LIEU",
+      "name": "Bình Liêu - Cao Xiêm (Sống lưng khủng long)",
+      "score": 46,
+      "status": "FOG",
+      "agreement": 100,
+      "observerAlt": 1429,
+      "valleyElevation": 367,
+      "cloudTop": 2198,
+      "deltaH": -769,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 46,
+          "status": "FOG",
+          "cloudTop": 3556
+        },
+        {
+          "model": "icon_seamless",
+          "score": 28,
+          "status": "FOG",
+          "cloudTop": 2198
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 82,
+          "status": "FOG",
+          "cloudTop": 760
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 27,
+        "doDongThuan": 0.56,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "06:00"
+      }
+    },
+    {
+      "key": "FANSIPAN",
+      "name": "Fansipan (Nóc nhà Đông Dương)",
+      "score": 44,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 3143,
+      "valleyElevation": 1900,
+      "cloudTop": 2235,
+      "deltaH": 908,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 2195
+        },
+        {
+          "model": "icon_seamless",
+          "score": 4,
+          "status": "DISSIPATING",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 44,
+          "status": "DISSIPATING",
+          "cloudTop": 2275
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 23,
+        "doDongThuan": 0.23,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "NAM_KANG_HO_TAO",
+      "name": "Nam Kang Ho Tao",
+      "score": 44,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2881,
+      "valleyElevation": 1702,
+      "cloudTop": 2177,
+      "deltaH": 704,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 56,
+          "status": "DISSIPATING",
+          "cloudTop": 2197
+        },
+        {
+          "model": "icon_seamless",
+          "score": 32,
+          "status": "DISSIPATING",
+          "cloudTop": 2177
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 44,
+          "status": "DISSIPATING",
+          "cloudTop": 2065
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 53,
+        "doDongThuan": 0.6,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "PUSILUNG",
+      "name": "Pusilung (Biên giới)",
+      "score": 44,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 3083,
+      "valleyElevation": 1561,
+      "cloudTop": 1999,
+      "deltaH": 1084,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 44,
+          "status": "DISSIPATING",
+          "cloudTop": 1949
+        },
+        {
+          "model": "icon_seamless",
+          "score": 38,
+          "status": "DISSIPATING",
+          "cloudTop": 1999
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 48,
+          "status": "DISSIPATING",
+          "cloudTop": 2197
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 55,
+        "doDongThuan": 0.57,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "NGU_CHI_SON",
+      "name": "Ngũ Chỉ Sơn",
+      "score": 43,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2858,
+      "valleyElevation": 1200,
+      "cloudTop": 1693,
+      "deltaH": 1165,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 8,
+          "status": "DISSIPATING",
+          "cloudTop": 1686
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 43,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 63,
+        "doDongThuan": 0.51,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "PUTALENG",
+      "name": "Putaleng",
+      "score": 42,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 3049,
+      "valleyElevation": 800,
+      "cloudTop": 1068,
+      "deltaH": 1981,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 42,
+          "status": "DISSIPATING",
+          "cloudTop": 1065
+        },
+        {
+          "model": "icon_seamless",
+          "score": 38,
+          "status": "DISSIPATING",
+          "cloudTop": 1688
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 43,
+          "status": "DISSIPATING",
+          "cloudTop": 1068
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 61,
+        "doDongThuan": 0.8,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "MANG_DEN",
+      "name": "Măng Đen",
+      "score": 42,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1200,
+      "valleyElevation": 1031,
+      "cloudTop": 2192,
+      "deltaH": -992,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 40,
+          "status": "DISSIPATING",
+          "cloudTop": 2194
+        },
+        {
+          "model": "icon_seamless",
+          "score": 56,
+          "status": "DISSIPATING",
+          "cloudTop": 2045
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 42,
+          "status": "DISSIPATING",
+          "cloudTop": 2192
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 1,
+        "doDongThuan": 0.97,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "TAM_DAO",
+      "name": "Tam Đảo",
+      "score": 38,
+      "status": "ROLLING",
+      "agreement": 67,
+      "observerAlt": 970,
+      "valleyElevation": 200,
+      "cloudTop": 1096,
+      "deltaH": -126,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 33,
+          "status": "ROLLING",
+          "cloudTop": 983
+        },
+        {
+          "model": "icon_seamless",
+          "score": 69,
+          "status": "FLUCTUATING",
+          "cloudTop": 1209
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 38,
+          "status": "CLEAR",
+          "cloudTop": null
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 32,
+        "doDongThuan": 0.62,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "PHIA_OAC",
+      "name": "Phia Oắc (Cao Bằng)",
+      "score": 38,
+      "status": "FOG",
+      "agreement": 33,
+      "observerAlt": 1931,
+      "valleyElevation": 918,
+      "cloudTop": null,
+      "deltaH": null,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 38,
+          "status": "FOG",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 32,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 64,
+          "status": "FLOWING",
+          "cloudTop": 1215
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co_the",
+        "xacSuat": 52,
+        "doDongThuan": 0.75,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "TA_LIEN_SON",
+      "name": "Tả Liên Sơn (Cổ Trâu)",
+      "score": 37,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2996,
+      "valleyElevation": 1000,
+      "cloudTop": 1693,
+      "deltaH": 1303,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 42,
+          "status": "DISSIPATING",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 37,
+          "status": "DISSIPATING",
+          "cloudTop": 1689
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 36,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 59,
+        "doDongThuan": 0.53,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "NHIU_CO_SAN",
+      "name": "Nhìu Cồ San (Sừng Trâu)",
+      "score": 36,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 2965,
+      "valleyElevation": 1000,
+      "cloudTop": 1693,
+      "deltaH": 1272,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 9,
+          "status": "DISSIPATING",
+          "cloudTop": 1686
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 36,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 54,
+        "doDongThuan": 0.6,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "CU_NHU_SAN",
+      "name": "Đỉnh Cú Nhù San",
+      "score": 36,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 2662,
+      "valleyElevation": 1200,
+      "cloudTop": 1690,
+      "deltaH": 972,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 66,
+          "status": "FLOWING",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 9,
+          "status": "DISSIPATING",
+          "cloudTop": 1686
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 36,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 66,
+        "doDongThuan": 0.76,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "LAO_THAN",
+      "name": "Lảo Thẩn (Y Tý)",
+      "score": 32,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 2860,
+      "valleyElevation": 1800,
+      "cloudTop": 2238,
+      "deltaH": 622,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 62,
+          "status": "FLOWING",
+          "cloudTop": 2196
+        },
+        {
+          "model": "icon_seamless",
+          "score": 5,
+          "status": "DISSIPATING",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 32,
+          "status": "DISSIPATING",
+          "cloudTop": 2238
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 24,
+        "doDongThuan": 0.14,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "BACH_MA",
+      "name": "Bạch Mã (Vọng Hải Đài)",
+      "score": 32,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1448,
+      "valleyElevation": 211,
+      "cloudTop": 821,
+      "deltaH": 627,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 32,
+          "status": "DISSIPATING",
+          "cloudTop": 821
+        },
+        {
+          "model": "icon_seamless",
+          "score": 7,
+          "status": "RAIN",
+          "cloudTop": 2056
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 33,
+          "status": "DISSIPATING",
+          "cloudTop": 589
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 0,
+        "doDongThuan": 1,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "CAU_DAT",
+      "name": "Đồi chè Cầu Đất (Đà Lạt)",
+      "score": 29,
+      "status": "FOG",
+      "agreement": 67,
+      "observerAlt": 1500,
+      "valleyElevation": 1350,
+      "cloudTop": 2006,
+      "deltaH": -506,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 25,
+          "status": "FOG",
+          "cloudTop": 1825
+        },
+        {
+          "model": "icon_seamless",
+          "score": 29,
+          "status": "FOG",
+          "cloudTop": 2187
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 35,
+          "status": "DISSIPATING",
+          "cloudTop": 1670
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 15,
+        "doDongThuan": 0.92,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "05:00"
+      }
+    },
+    {
+      "key": "KY_QUAN_SAN",
+      "name": "Ky Quan San (Bạch Mộc Lương Tử)",
+      "score": 28,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 3046,
+      "valleyElevation": 900,
+      "cloudTop": 1688,
+      "deltaH": 1358,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 52,
+          "status": "DISSIPATING",
+          "cloudTop": 1065
+        },
+        {
+          "model": "icon_seamless",
+          "score": 28,
+          "status": "DISSIPATING",
+          "cloudTop": 1688
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 14,
+          "status": "DISSIPATING",
+          "cloudTop": 1693
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "co",
+        "xacSuat": 55,
+        "doDongThuan": 0.64,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    },
+    {
+      "key": "TA_NANG",
+      "name": "Tà Năng - Phan Dũng",
+      "score": 8,
+      "status": "DISSIPATING",
+      "agreement": 100,
+      "observerAlt": 1100,
+      "valleyElevation": 924,
+      "cloudTop": 1421,
+      "deltaH": -321,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 0,
+          "status": "DISSIPATING",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 8,
+          "status": "DISSIPATING",
+          "cloudTop": 1667
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 45,
+          "status": "DISSIPATING",
+          "cloudTop": 1174
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 7,
+        "doDongThuan": 0.84,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "07:00"
+      }
+    },
+    {
+      "key": "BA_DEN",
+      "name": "Núi Bà Đen (Tây Ninh)",
+      "score": 0,
+      "status": "DISSIPATING",
+      "agreement": 67,
+      "observerAlt": 986,
+      "valleyElevation": 80,
+      "cloudTop": null,
+      "deltaH": null,
+      "worthGoing": false,
+      "capWatch": {
+        "tier": "NONE",
+        "modelsAll": 0,
+        "modelsKey": 0,
+        "modelsTotal": 3
+      },
+      "perModel": [
+        {
+          "model": "gfs_seamless",
+          "score": 0,
+          "status": "CLEAR",
+          "cloudTop": null
+        },
+        {
+          "model": "icon_seamless",
+          "score": 0,
+          "status": "DISSIPATING",
+          "cloudTop": null
+        },
+        {
+          "model": "ukmo_seamless",
+          "score": 0,
+          "status": "DISSIPATING",
+          "cloudTop": null
+        }
+      ],
+      "agyGate": {
+        "ver": "agy-v1.0-shadow-1",
+        "ketLuan": "khong",
+        "xacSuat": 16,
+        "doDongThuan": 0.58,
+        "soMoHinh": 3,
+        "soGio": 4,
+        "gioTot": "04:00"
+      }
+    }
+  ]
+}
