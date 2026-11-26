@@ -1009,5 +1009,16 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh (phiếu g39c3, 23/11): sáng 23/11 Kim Bon, biển mây dày phủ thung lũng bên dưới, lều và xe cắm trại trên sườn cỏ, các dải núi đá nhô lên phía xa. Giờ chụp KHÔNG có EXIF; ước từ ảnh: mặt trời ló sau dải mây tầng cao ở hướng ĐĐN, cao khoảng 3-7 độ so với đường núi xa (ước mắt, sai số vài độ) => thiên văn (astronomy-engine, 21.121N 104.6127E, độ cao 1100m) ứng với khoảng 06:30-06:50, ước ~06:40 ngày 23/11 (mặt trời mọc ~06:18). Dự báo app (bản chụp 23/11): DISSIPATING 74, đồng thuận 33% (GFS STATIC, ICON FOG, UKMO DISSIPATING mặt mây 2212m), ΔH -1112, ĐÁNG ĐI = sai = BỎ SÓT. Không đổi engine theo một ca (Luật cổng); gom vào ca FOG/lệch mô hình bỏ sót 23/11."
+  },
+  {
+    "id": "2026-11-26-ta-xua",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "spotKey": "TA_XUA_SON_LA",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-26T09:57:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong báo qua chat Trạm (phiếu g8aed, 26/11): 'Sáng nay ở Tà Xùa có biển mây'. Chỉ có chữ, không ảnh, không giờ: ghi DAWN theo quy ước giờ báo trước 9h; không ghi độ dày. Dự báo app (bản chụp 26/11): STATIC 64, đồng thuận 100%, mặt mây 1064m, điểm đứng 1800m (ΔH +736), ĐÁNG ĐI = đúng."
   }
 ]
