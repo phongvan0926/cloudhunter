@@ -1020,5 +1020,18 @@
     "timeOfDay": "DAWN",
     "source": "USER_RELAY",
     "note": "Anh Phong báo qua chat Trạm (phiếu g8aed, 26/11): 'Sáng nay ở Tà Xùa có biển mây'. Chỉ có chữ, không ảnh, không giờ: ghi DAWN theo quy ước giờ báo trước 9h; không ghi độ dày. Dự báo app (bản chụp 26/11): STATIC 64, đồng thuận 100%, mặt mây 1064m, điểm đứng 1800m (ΔH +736), ĐÁNG ĐI = đúng."
+  },
+  {
+    "id": "2026-11-26-fansipan",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "spotKey": "FANSIPAN",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-26T16:36:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "06:34 (dấu giờ trên ảnh: 2026.11.26 06:34)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh (phiếu g2139, 26/11, dấu giờ 2026.11.26 06:34, chụp từ sườn gần trụ cáp treo): biển mây trắng dày, phẳng phủ kín thung lũng bên dưới tới chân trời, dải núi xa nhô lên khỏi mặt mây, phía trên có mây tầng cao mỏng và ráng bình minh. Dự báo app (bản chụp 2026-11-26, chụp 25/11 12:30Z): 44/100 DISSIPATING, đồng thuận 100% (GFS 52 DISSIPATING mặt mây 2195m, ICON 4 DISSIPATING null, UKMO 44 DISSIPATING 2275m), mặt mây 2235m, điểm đứng 3143m (ΔH +908m), ĐÁNG ĐI = false => BỎ SÓT (cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao Zone B trong VIỆC 3 ý 2). Cổng bóng agy: khong 23%. Chưa có nhãn vệ tinh 26/11 lúc ghi. Không đổi engine theo một ca (Luật cổng)."
   }
 ]
