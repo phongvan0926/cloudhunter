@@ -1033,5 +1033,18 @@
     "observedAt": "06:34 (dấu giờ trên ảnh: 2026.11.26 06:34)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh (phiếu g2139, 26/11, dấu giờ 2026.11.26 06:34, chụp từ sườn gần trụ cáp treo): biển mây trắng dày, phẳng phủ kín thung lũng bên dưới tới chân trời, dải núi xa nhô lên khỏi mặt mây, phía trên có mây tầng cao mỏng và ráng bình minh. Dự báo app (bản chụp 2026-11-26, chụp 25/11 12:30Z): 44/100 DISSIPATING, đồng thuận 100% (GFS 52 DISSIPATING mặt mây 2195m, ICON 4 DISSIPATING null, UKMO 44 DISSIPATING 2275m), mặt mây 2235m, điểm đứng 3143m (ΔH +908m), ĐÁNG ĐI = false => BỎ SÓT (cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao Zone B trong VIỆC 3 ý 2). Cổng bóng agy: khong 23%. Chưa có nhãn vệ tinh 26/11 lúc ghi. Không đổi engine theo một ca (Luật cổng)."
+  },
+  {
+    "id": "2026-11-26-bavi",
+    "locationName": "Đỉnh Ba Vì (Đỉnh Vua)",
+    "spotKey": "BA_VI",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-26T11:42:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "bình minh sáng 26/11 (ảnh chụp màn hình bài Facebook lúc 11:41 ghi đăng '4h' trước, tức ~07:41 sáng 26/11)",
+    "source": "USER_RELAY",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài địa phương (phiếu g101a, 26/11): 'Cập nhật sáng 26/11: Trên núi Ba Vì vừa xuất hiện bình minh và biển mây siêu đẹp! Hôm qua gió mùa đông bắc thổi mạnh quá... sáng ra mở mắt thấy nguyên một bình minh kèm biển mây'. 5 ảnh bình minh cho thấy biển mây trắng dày cuồn cuộn phủ kín thung lũng bên dưới, đường chân trời ráng cam/xanh quang mây. Dự báo app (bản chụp 2026-11-26, chụp 25/11 12:30Z): 48/100 FLOWING, đồng thuận 67% (GFS 50 STATIC mặt mây 610m, ICON 48 FLOWING 387m, UKMO 36 FOG 2201m), mặt mây 499m, điểm đứng 1296m (ΔH +797m), ĐÁNG ĐI = true => ĐÚNG (báo đúng có). Cổng bóng agy: co_the 44% (gioTot 07:00). Chưa có nhãn vệ tinh 26/11 lúc ghi."
   }
 ]
