@@ -350,11 +350,19 @@ export function valleySaturation(m: DayModelData, valleyElev: number): Saturatio
  * thật, nhưng cái người săn mây nhìn thấy là LỚP THẤP bị nhốt dưới nắp; mọi thứ phía trên
  * nắp là tầng mây khác. GFS — mô hình duy nhất đặt đỉnh mây dưới chỗ đứng — đã đúng.
  */
-function capByInversion(top: number, m: DayModelData, valleyElev: number, base: number): number {
+function capByInversion(top: number, m: DayModelData, valleyElev: number, base: number, stableCap = false): number {
   const inv = computeInversion(m, valleyElev);
   // inv.height nay ĐÃ là "nắp đáng tin": hoặc đỉnh anomaly thật, hoặc tầng ổn định cục bộ.
   // Cổng `strength` đã chuyển vào computeInversion (đỉnh yếu → height = null).
-  if (inv.height === null) return top;
+  // Biến thể đo VS (đăng ký trước 27/11/2026, phiếu gee64): không có nắp anomaly thì thử tầng
+  // ổn định cục bộ (capLayerBase, cùng ngưỡng CAP_LAPSE_RATE) dù profile không "dốc". Mặc định TẮT.
+  const capH = inv.height ?? (stableCap ? capLayerBase(m, valleyElev) : null);
+  if (capH === null) return top;
+  if (inv.height === null) {
+    if (capH <= base + 100) return top;
+    if (top <= capH + 300) return top;
+    return capH;
+  }
   if (inv.height <= base + 100) return top;      // nắp quá sát đáy mây → không tin
   // CHỈ can thiệp khi ước lượng vượt HẲN nắp (>300m). Vượt chút ít là phần đệm bình thường
   // của phép ước lượng; vượt cả cây số nghĩa là đã gộp nhầm một tầng mây khác vào lớp thấp.
@@ -368,6 +376,8 @@ export interface CloudTopOpts {
   rhCloudy?: number;
   /** Mặt mây = giao điểm nội suy RH giữa mực có mây cuối và mực kế tiếp (khe ≤ LEVEL_GAP_INTERP_MAX). */
   interp?: boolean;
+  /** VS: không có nắp nghịch nhiệt thì kẹp ở tầng ổn định cục bộ (capLayerBase). Mặc định tắt. */
+  stableCap?: boolean;
 }
 
 export function estimateCloudTop(m: DayModelData, valleyElev: number, opts?: CloudTopOpts): number | null {
@@ -410,7 +420,7 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number, opts?: Clo
         top = cur.h + f * (nxt.h - cur.h);
       }
     }
-    return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
+    return Math.max(capByInversion(top, m, valleyElev, base, opts?.stableCap), base + 100);
   }
   const levels = [
     { h: LEVEL_HEIGHTS.p925, rh: m.rh925 },
@@ -427,7 +437,7 @@ export function estimateCloudTop(m: DayModelData, valleyElev: number, opts?: Clo
   } else {
     top = moistTop + 150;
   }
-  return Math.max(capByInversion(top, m, valleyElev, base), base + 100);
+  return Math.max(capByInversion(top, m, valleyElev, base, opts?.stableCap), base + 100);
 }
 
 /**

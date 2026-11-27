@@ -475,3 +475,16 @@ Anh gửi ảnh livestream Tà Xùa ~07:20 27/11 (biển mây dày dưới chân
 - Hồ sơ tải lại (Open-Meteo forecast past_days, tức lần chạy MỚI NHẤT, không phải số lúc chụp; chỉ để gợi giả thuyết) Tà Xùa 27/11 06h: RH 1000-800hPa 73-92% ở cả ba mô hình, GFS nhiệt 925->850hPa gần đẳng nhiệt (14,0 -> 13,8°C trên ~715m) = lớp rất ổn định nhưng không phải nghịch nhiệt nên `capByInversion` không chặn. Ứng viên (ĐOÁN, chưa đo) cho đăng ký đợt FOG: chặn mặt mây ở lớp ổn định (giảm nhiệt chậm bất thường), không chỉ ở nghịch nhiệt thật. Phải viết thành giả thuyết + phép đo trước khi chấm, theo Luật cổng.
 - Vệ tinh 26/11: 45/59 điểm BLOCKED_ABOVE (mây tầng cao che), đúng ngày diện rộng. Ngày biển mây sau gió mùa có mây ti phía trên nên nhãn vệ tinh mù; nguồn sự thật cho kiểu ngày này chỉ còn người đi/FB.
 - Bổ sung (phiếu ge6ee, 27/11): anh kể Fansipan sáng 27/11 cũng có biển mây, nắng đẹp; nhập `2026-11-27-fansipan`: app DISSIPATING 52, mặt mây 2879m, ΔH +264 = BỎ SÓT lần hai liên tiếp ở Fansipan (kiểu DISSIPATING ΔH > 0 đỉnh cao, không phải FOG, không đếm vào 15 ca FOG). Bài FB Best View Sa Pa: biển mây dày từ ~1h sáng 26/11, ghi NIGHT (không chấm). Ngày 27/11 tóm lại: Tà Xùa và Fansipan đều có biển mây, app không khuyên đi điểm nào trong hai = hai kiểu lỗi khác nhau cùng một sáng.
+
+## 27/11/2026 - ĐĂNG KÝ TRƯỚC: kẹp mặt mây ở tầng ổn định (biến thể VS, phiếu gee64), CHƯA chấm
+Anh duyệt hướng (phiếu gee64). Theo Luật cổng đây là sửa lớn (`estimateCloudTop`/nắp), nên ghi giả thuyết + phép đo + tiêu chí TRƯỚC khi lấy dữ liệu và chấm.
+- **Giả thuyết H-S:** trong cột khí ẩm sâu (RH >= 80% liên tục lên cao), lớp mây người săn mây thấy bị chặn ở tầng ỔN ĐỊNH đầu tiên trên đáy mây (suy giảm nhiệt <= 3,5°C/km), kể cả khi không có nghịch nhiệt thật. Engine hiện chỉ dùng tầng ổn định đó khi profile anomaly "dốc" (`ramp`); ngoài ra thì không kẹp và mặt mây nhảy lên 2.200m/3.560m. Đây là nguồn của kiểu (a) trong 12 ca FOG-bỏ sót.
+- **Biến thể duy nhất VS** (`CloudTopOpts.stableCap`, mặc định tắt): `computeInversion` không cho nắp (`height = null`) thì lấy `capLayerBase` (hàm có sẵn, ngưỡng `CAP_LAPSE_RATE` 3,5 có sẵn, KHÔNG đổi); áp đúng hai luật cũ của `capByInversion` (nắp > đáy mây + 100m, chỉ kẹp khi mặt mây vượt nắp > 300m). Không thêm biến thể khác sau khi xem kết quả.
+- **Dữ liệu:** `scripts/replay-raw.ts` mẻ mới (historical-forecast-api, GFS/ICON/UKMO, gần lead 0, KHÔNG phải số app thấy lúc chụp: chỉ so V0 với VS trên cùng mẻ). Chấm bằng `scripts/ab-stablecap.ts`, sự thật: người đi + FB (rạng sáng) và vệ tinh (bỏ BLOCKED_ABOVE/NO_DATA).
+- **Tiêu chí (chốt trước):**
+  1. Cứng: BỎ SÓT người đi + FB của VS không được nhiều hơn V0.
+  2. Cứng: báo nhầm người đi + FB tăng tối đa 1.
+  3. Cần: VS bắt thêm >= 2 ca người đi/FB có biển mây mà V0 sót, KHÔNG tính Tà Xùa 27/11 (ca nảy ra ý tưởng).
+  4. Vệ tinh: balanced accuracy (đáng đi so với nhãn vệ tinh) bootstrap theo NGÀY 2.000 lần; nếu khoảng 95% của (VS - V0) nằm hẳn dưới 0 thì BÁC.
+  5. In mọi ca đổi kết luận theo hai chiều, tách Tà Xùa / Fansipan / Ba Vì / >= 2.400m / < 2.400m, và tỉ lệ ca VS thực sự kẹp.
+- Đạt 1-4 thì gọi agent khí tượng độc lập phản biện, rồi mới bật vào engine (đổi `ENGINE_VERSION`). Trượt bất kỳ thì KHÔNG đổi engine, chỉ ghi kết quả. Không chỉnh ngưỡng 3,5 hay luật +300m theo kết quả.
