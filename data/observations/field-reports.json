@@ -1046,5 +1046,18 @@
     "observedAt": "bình minh sáng 26/11 (ảnh chụp màn hình bài Facebook lúc 11:41 ghi đăng '4h' trước, tức ~07:41 sáng 26/11)",
     "source": "USER_RELAY",
     "note": "Anh Phong gửi ảnh chụp màn hình bài địa phương (phiếu g101a, 26/11): 'Cập nhật sáng 26/11: Trên núi Ba Vì vừa xuất hiện bình minh và biển mây siêu đẹp! Hôm qua gió mùa đông bắc thổi mạnh quá... sáng ra mở mắt thấy nguyên một bình minh kèm biển mây'. 5 ảnh bình minh cho thấy biển mây trắng dày cuồn cuộn phủ kín thung lũng bên dưới, đường chân trời ráng cam/xanh quang mây. Dự báo app (bản chụp 2026-11-26, chụp 25/11 12:30Z): 48/100 FLOWING, đồng thuận 67% (GFS 50 STATIC mặt mây 610m, ICON 48 FLOWING 387m, UKMO 36 FOG 2201m), mặt mây 499m, điểm đứng 1296m (ΔH +797m), ĐÁNG ĐI = true => ĐÚNG (báo đúng có). Cổng bóng agy: co_the 44% (gioTot 07:00). Chưa có nhãn vệ tinh 26/11 lúc ghi."
+  },
+  {
+    "id": "2026-11-27-ta-xua",
+    "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+    "spotKey": "TA_XUA_SON_LA",
+    "date": "2026-11-27",
+    "reportedAt": "2026-11-27T08:21:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "DAWN",
+    "observedAt": "~07:15-07:20 (livestream 7:01 phút của trang 'Tà Xùa Lu Trế', hiện '1h' trong ảnh anh chụp lúc ~08:21)",
+    "source": "SOCIAL_VIDEO",
+    "note": "Anh Phong gửi ảnh chụp livestream (phiếu gb324, 27/11): biển mây trắng dày cuồn cuộn phủ kín thung lũng bên dưới chỗ quay, dãy núi xa nhô lên, trời xanh có dải mây tầng cao mỏng; nắng đã lên. Anh: 'sáng hôm qua và sáng hôm nay rất nhiều nơi có biển mây (diện rộng)'. Dự báo app (bản chụp 2026-11-27, chụp 26/11 12:30Z): 50/100 FOG, đồng thuận 67% (GFS 72 FOG mặt mây 3560m, ICON 50 FOG 3561m, UKMO 33 DISSIPATING 2207m), mặt mây 3561m, điểm đứng 1800m (ΔH -1761m), ĐÁNG ĐI = false => BỎ SÓT, ca FOG-bỏ sót thứ 12 cho đợt FOG. Mặt mây 3.56km đến từ nhánh 'RH>=80% liên tục tới 700hPa => +400m' của estimateCloudTop. Cổng bóng agy: khong 35%. Hôm trước (26/11) cùng điểm app báo STATIC 64 khuyên đi, đúng."
   }
 ]

@@ -28,6 +28,7 @@ FOG 11 ca: Tà Xùa 25/8, 3/10, 4/10, 19/11, 23/11; Hang Kia 1/10; Ô Quy Hồ 1
   chỉ bật khi thắng engine trên ngày chưa thấy. Số vẫn do code tính, không giao AI.
 
 ## Lịch đợt tổng hợp tiếp theo (chốt trước, không chỉnh theo kết quả)
-- **Đợt FOG**: bắt đầu khi có >= 15 ca người đi/FB BELOW mà app báo FOG (hiện 11), hoặc ngày 15/12/2026, cái nào tới trước.
+- **Đợt FOG**: bắt đầu khi có >= 15 ca người đi/FB BELOW mà app báo FOG (23/11: 11), hoặc ngày 15/12/2026, cái nào tới trước.
+  Cập nhật 27/11 (phiếu gb324): 12 ca (thêm Tà Xùa 27/11; 26/11 Fansipan là DISSIPATING, không đếm). Hai kiểu con cần đo riêng: mặt mây mô hình cao hơn chỗ đứng vs cổng `observerInCloud` khi mặt mây đã thấp hơn; xem `NHAT-KY-HIEU-CHINH.md` mục 27/11.
   Giả thuyết + phép đo viết vào `NHAT-KY-HIEU-CHINH.md` TRƯỚC khi chấm; ca dùng để nghĩ ra bản sửa không tính là lợi ích.
 - Bước khám phá FB (phiếu geb97) sẽ đẩy số nhãn lên nhanh hơn; nhãn đó chấm tách 2 tuần rồi mới gộp.
