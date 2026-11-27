@@ -1503,6 +1503,56 @@
   ]
  },
  {
+  "id": "2026-11-26-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-26",
+  "source": "FB_AUTO",
+  "seaLevel": "UNKNOWN",
+  "thickness": "THICK",
+  "confidence": 0.8,
+  "needsReview": true,
+  "firstPostAt": "2026-11-26T08:02:31+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-26T08:02:31+07:00",
+    "seaLevel": "BELOW",
+    "text": "Bội thực mây ngày hôm nay luôn rồi cả nhà ơi",
+    "stamps": []
+   },
+   {
+    "postedAt": "2026-11-26T09:32:53+07:00",
+    "seaLevel": "ABOVE",
+    "text": "Đỉnh Fansipan trời sương mù nhẹ, gió nhẹ, nhiệt độ 6 độ",
+    "stamps": [
+     "09:18 ABOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-11-27-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-27",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "confidence": 0.8,
+  "firstPostAt": "2026-11-27T11:15:49+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-27T11:15:49+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời quang, nắng, có gió, nhiệt độ 16 độ.",
+    "stamps": [
+     "10:57 BELOW",
+     "10:58 BELOW"
+    ]
+   }
+  ]
+ },
+ {
   "id": "2026-09-27-TA_XUA_SON_LA-fb",
   "spotKey": "TA_XUA_SON_LA",
   "locationName": "Tà Xùa (Sống lưng Khủng Long)",
@@ -2171,6 +2221,44 @@
      "08:08 BELOW",
      "09:31 BELOW"
     ]
+   }
+  ]
+ },
+ {
+  "id": "2026-11-26-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-26",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.8,
+  "firstPostAt": "2026-11-26T10:59:21+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-26T10:59:21+07:00",
+    "seaLevel": "BELOW",
+    "text": "chỗ nào cũng biển mây luôn các vợ ơi",
+    "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-11-27-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-27",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THICK",
+  "confidence": 0.5,
+  "firstPostAt": "2026-11-27T08:13:20+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-27T08:13:20+07:00",
+    "seaLevel": "BELOW",
+    "text": "giữ chuỗi 4 ngày mây liên tục rồi các vợ ơi",
+    "stamps": []
    }
   ]
  }
