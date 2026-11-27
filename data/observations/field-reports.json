@@ -1131,5 +1131,17 @@
     "observedAt": "khoảng 07:00 27/11: bài FB hiện '6h' trên ảnh chụp màn hình lúc 13:08; mặt trời thấp ngay trên mặt mây (mọc ~06:25). Giờ ước từ dấu '6h' + góc mặt trời, không phải anh khai",
     "source": "SOCIAL_PHOTO",
     "note": "Anh Phong gửi ảnh chụp màn hình bài FB của Chiêu Lầu Thi 2402m Lodge (nhà nghỉ ngay tại đỉnh, phiếu g42ec): 'Biển mây Chiêu Lầu Thi sáng 27/11. Nay dự có biển mây cả ngày'. Ảnh: biển mây trắng dày phủ kín các thung lũng tới chân trời, dãy núi xa nhô lên, đứng trên cao rõ ràng, trời trên quang. Dự báo app (bản chụp 2026-11-27, engine-2.8.3): DISSIPATING 52, đồng thuận 67% (GFS ROLLING 60 mặt mây 2196m, ICON DISSIPATING 52 1210m, UKMO DISSIPATING 52 1694m), mặt mây 1452m, chỗ đứng 2402m (ΔH +950m), ĐÁNG ĐI = false => BỎ SÓT. Bảng tuần: lead 4 FLOWING ✓, lead 3 DISSIPATING, lead 2 ROLLING ✓, lead 1 DISSIPATING. Cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao như ca 15/11 cùng điểm (VIỆC 3 ý 2, cổng gió). Cổng bóng agy: co 81%, giờ tốt 07:00."
+  },
+  {
+    "id": "2026-11-27-suoi-thau",
+    "locationName": "Thảo nguyên Suôi Thầu (Xín Mần)",
+    "spotKey": "SUOI_THAU",
+    "date": "2026-11-27",
+    "reportedAt": "2026-11-27T17:49:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "rạng sáng 27/11 (mặt trời vừa nhô trên dãy núi). Bài FB hiện '9 giờ' trên ảnh anh gửi lúc 17:49; chú thích chỉ ghi 'tháng 11', ngày 27/11 là theo lời anh",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi ảnh chụp màn hình video FB check-in 'Thảo Nguyên Suôi Thầu' (phiếu g5277): 'Biển mây tháng 11 thật đẹp'. Khung hình: mặt trời mọc sau dãy núi, biển mây dày phủ kín phía dưới tới chân núi xa. LƯU Ý: góc quay giống FLYCAM, độ cao máy quay không rõ, nên chưa chắc người đứng ở thảo nguyên (~1200m) thấy mây dưới chân; vẫn ghi BELOW theo lời anh. Dự báo app (bản chụp 2026-11-27, engine-2.8.3): FOG 87, đồng thuận 100% (GFS FOG mặt mây 2196m, ICON FOG 1210m, UKMO FOG 1695m), mặt mây 1695m, chỗ đứng 1200m (ΔH -495m) => app nói đứng TRONG mây, không đáng đi => BỎ SÓT kiểu FOG (cùng nhóm 11 ca FOG ở docs/tong-hop-ca-va-hoc-tu-du-lieu.md). Bảng tuần lead 1-4 đều FOG 83-89. Cổng bóng agy: khong 15%. Mặt mây từng mô hình trùng Chiêu Lầu Thi cùng ngày (2196/1210/1695): hai điểm gần nhau, mặt mây bám mực áp suất, không phải lỗi."
   }
 ]

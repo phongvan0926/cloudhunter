@@ -538,3 +538,4 @@ Ghi chú để minh bạch: lượt kiểm tra thật lúc 27/11 khoảng 11h40 
 - Bóng 6 mô hình: 8 0 0 5 3 5 6.
 Chưa có sự thật cho các ngày này, nên đây không phải kết quả chấm.
 - Bổ sung 27/11 (phiếu g42ec): Chiêu Lầu Thi sáng 27/11 có biển mây dày dưới chân (bài FB của lodge trên đỉnh, ~07h). App DISSIPATING 52, mặt mây 1452m, ΔH +950, không đáng đi = bỏ sót, lần thứ hai ở điểm này sau 15/11. Đếm người đi/FB DISSIPATING ΔH > 0 nay 8/10 có biển mây. Cổng bóng agy nói CÓ (81%). Engine không đổi; ca này vào hàng VIỆC 3 ý 2, không sửa lẻ.
+- Bổ sung 27/11 (phiếu g5277): Suôi Thầu sáng 27/11 có biển mây (video FB check-in, góc giống flycam nên chưa chắc chỗ đứng 1200m ở trên mây). App FOG 87, đồng thuận 100%, mặt mây 1695m, ΔH -495 = bỏ sót kiểu FOG, vào hàng đợt FOG (mốc >= 15 ca hoặc 15/12). Cổng bóng agy cũng nói không (15%). Engine không đổi.
