@@ -1083,5 +1083,28 @@
     "observedAt": "~01:00 26/11 (chú thích bài FB 'Mây về cửa lúc 1h sáng...! 26/11', đăng 'a day ago' khi anh chụp màn hình 27/11)",
     "source": "SOCIAL_PHOTO",
     "note": "Anh Phong gửi ảnh chụp màn hình bài Facebook gắn địa điểm Best View - SaPa (phiếu ge6ee): 5 ảnh đêm, biển mây trắng dày phủ kín thung lũng dưới sân ngắm, dãy núi xa nhô lên, trời quang có sao, người đứng sân gỗ. Ban đêm nên calibrate KHÔNG chấm (chỉ chấm rạng sáng); ghi để biết mây đã về từ 1h. Dự báo app (bản chụp 2026-11-26): 70/100 FLUCTUATING, đồng thuận 67% (GFS FOG 80 mặt mây 2195m, ICON FLUCTUATING 41 1687m, UKMO FLUCTUATING 70 1693m), mặt mây 1690m, điểm đứng 1469m (ΔH -221m), không đáng đi; agy khong 27%."
+  },
+  {
+    "id": "2026-11-26-ngu-chi-son",
+    "locationName": "Ngũ Chỉ Sơn",
+    "spotKey": "NGU_CHI_SON",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-27T08:37:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong (phiếu g5fb9, 27/11, lời kể, không kèm ảnh Ngũ Chỉ Sơn): 'Đồi bò - Sa Pa và Ngũ Chỉ Sơn buổi sáng hôm qua cũng có biển mây... dọc theo dãy Hoàng Liên Sơn xung quanh Sa Pa đều có'. Không nói giờ, ghi DAWN theo quy ước; chỗ đứng chưa rõ (ca 23/11 là chân núi) nhưng mây dưới chỗ đứng thấp hơn thì cũng dưới chóp 2858m nếu không có tầng mây khác trùm đỉnh. Dự báo app (bản chụp 2026-11-26): 43/100 DISSIPATING, đồng thuận 100% (GFS 52 mặt mây 2196m, ICON 8 1686m, UKMO 43 1693m), mặt mây 1693m, ΔH +1165m, ĐÁNG ĐI = false => BỎ SÓT. DISSIPATING là cổng GIÓ (wind Destructive tại cao độ đứng) sau đợt gió mùa 25/11, cùng kiểu Fansipan 26-27/11. Cổng bóng agy: CO 63% (agy nói có, engine nói không). Vệ tinh 26/11: BLOCKED_ABOVE."
+  },
+  {
+    "id": "2026-11-26-doi-bo-sapa",
+    "locationName": "Đồi Bò (Sa Pa) - chưa có trong thư viện, chỉ để tham khảo",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-27T08:37:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "MORNING",
+    "observedAt": "ban ngày 26/11, nắng đã cao (ảnh sáng rõ); bài 'đồi bò hôm nay đẹp quá' hiện '14 giờ' lúc ~08:37 27/11 => đăng ~18:30 26/11",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi chụp màn hình bài FB #sapa #trekking (phiếu g5fb9): 5 ảnh, biển mây trắng dày phủ thung lũng bên dưới đồi cỏ có bò, các dãy núi nhô lên khỏi mặt mây, trời xanh có mây tầng cao. Không có spotKey (Đồi Bò chưa có trong thư viện, chưa có plus code) nên không chấm. Tham chiếu cùng ngày (bản chụp 2026-11-26): Hàm Rồng FOG 80 mặt mây 1945m, Best View FLUCTUATING 70 mặt mây 1690m, Hang Đá FLUCTUATING 64, Ô Quy Hồ FOG 66 mặt mây 2195m: các điểm thấp quanh Sa Pa app đều đặt mặt mây CAO HƠN chỗ đứng, trong khi Best View thấy biển mây dưới chân từ 1h sáng 26/11 (ghi nhãn NIGHT)."
   }
 ]

@@ -488,3 +488,10 @@ Anh duyệt hướng (phiếu gee64). Theo Luật cổng đây là sửa lớn (
   4. Vệ tinh: balanced accuracy (đáng đi so với nhãn vệ tinh) bootstrap theo NGÀY 2.000 lần; nếu khoảng 95% của (VS - V0) nằm hẳn dưới 0 thì BÁC.
   5. In mọi ca đổi kết luận theo hai chiều, tách Tà Xùa / Fansipan / Ba Vì / >= 2.400m / < 2.400m, và tỉ lệ ca VS thực sự kẹp.
 - Đạt 1-4 thì gọi agent khí tượng độc lập phản biện, rồi mới bật vào engine (đổi `ENGINE_VERSION`). Trượt bất kỳ thì KHÔNG đổi engine, chỉ ghi kết quả. Không chỉnh ngưỡng 3,5 hay luật +300m theo kết quả.
+
+## 27/11/2026 - Hoàng Liên Sơn sáng 26/11 (phiếu g5fb9), tinh chỉnh nhỏ, engine KHÔNG đổi
+Anh báo Đồi Bò (Sa Pa) và Ngũ Chỉ Sơn sáng 26/11 có biển mây, "dọc dãy Hoàng Liên Sơn quanh Sa Pa đều có". Nhập `2026-11-26-ngu-chi-son` (BELOW, lời kể) và `2026-11-26-doi-bo-sapa` (không spotKey, chỉ tham khảo).
+- Bản chụp 26/11 cho thấy hai lỗi tách theo độ cao trên CÙNG một sáng: (1) đỉnh >= 2.800m (Fansipan, Ngũ Chỉ Sơn, Lảo Thẩn, Kỳ Quan San, Tả Chì Nhù) app đặt mặt mây 1.690-2.240m, dưới chóp 600-1.350m, đúng hình biển mây, nhưng trạng thái DISSIPATING do cổng gió `Destructive` tại cao độ đứng sau đợt gió mùa 25/11, nên không khuyên đi; (2) điểm thấp quanh Sa Pa (Hàm Rồng, Best View, Hang Đá, Ô Quy Hồ) app đặt mặt mây 1.690-2.200m, CAO hơn chỗ đứng, trong khi Best View thấy biển mây dưới chân từ 1h sáng 26/11.
+- Đếm người đi (rạng sáng, có bản chụp): DISSIPATING với ΔH > 0 nay 8 ca, 6 có biển mây (Hang Kia 3/10, Fansipan 29/10, Chiêu Lầu Thi 15/11, Fansipan 26/11, Ngũ Chỉ Sơn 26/11, Fansipan 27/11), 2 không (Fansipan 10/10, 15/10). Đây là VIỆC 3 ý 2 (cổng gió Zone B), vẫn là quan sát, chưa phải phép đo đăng ký trước.
+- Cổng bóng agy 26/11 nói CÓ ở Ngũ Chỉ Sơn (63%) và Kỳ Quan San (55%) trong khi engine nói không: ghi để lúc chấm cổng bóng biết. Vệ tinh 26/11 mù ở gần hết các điểm này (BLOCKED_ABOVE).
+- Hai nhãn này thêm SAU bản đăng ký VS (0e5b8bc); chúng đi vào phép chấm VS như mọi nhãn khác, không phải ca nảy ra ý tưởng.
