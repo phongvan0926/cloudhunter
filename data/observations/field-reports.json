@@ -1059,5 +1059,29 @@
     "observedAt": "~07:15-07:20 (livestream 7:01 phút của trang 'Tà Xùa Lu Trế', hiện '1h' trong ảnh anh chụp lúc ~08:21)",
     "source": "SOCIAL_VIDEO",
     "note": "Anh Phong gửi ảnh chụp livestream (phiếu gb324, 27/11): biển mây trắng dày cuồn cuộn phủ kín thung lũng bên dưới chỗ quay, dãy núi xa nhô lên, trời xanh có dải mây tầng cao mỏng; nắng đã lên. Anh: 'sáng hôm qua và sáng hôm nay rất nhiều nơi có biển mây (diện rộng)'. Dự báo app (bản chụp 2026-11-27, chụp 26/11 12:30Z): 50/100 FOG, đồng thuận 67% (GFS 72 FOG mặt mây 3560m, ICON 50 FOG 3561m, UKMO 33 DISSIPATING 2207m), mặt mây 3561m, điểm đứng 1800m (ΔH -1761m), ĐÁNG ĐI = false => BỎ SÓT, ca FOG-bỏ sót thứ 12 cho đợt FOG. Mặt mây 3.56km đến từ nhánh 'RH>=80% liên tục tới 700hPa => +400m' của estimateCloudTop. Cổng bóng agy: khong 35%. Hôm trước (26/11) cùng điểm app báo STATIC 64 khuyên đi, đúng."
+  },
+  {
+    "id": "2026-11-27-fansipan",
+    "locationName": "Fansipan (Nóc nhà Đông Dương)",
+    "spotKey": "FANSIPAN",
+    "date": "2026-11-27",
+    "reportedAt": "2026-11-27T08:26:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "source": "USER_RELAY",
+    "note": "Anh Phong (phiếu ge6ee, 27/11, lời kể không kèm ảnh Fansipan): 'Fansipan thì sáng nay cũng có biển mây, trời nắng đẹp, rất thích hợp để chụp ảnh... ngày hôm nay là một ngày điều kiện rất tốt'. Không nói giờ nên ghi DAWN theo quy ước; độ dày không rõ. Dự báo app (bản chụp 2026-11-27): 52/100 DISSIPATING, đồng thuận 100% (GFS 55 DISSIPATING mặt mây 3554m, ICON 9 DISSIPATING null, UKMO 52 DISSIPATING 2203m), mặt mây 2879m, điểm đứng 3143m (ΔH +264m), ĐÁNG ĐI = false => BỎ SÓT, ngày thứ hai liên tiếp sau 26/11 (cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao, VIỆC 3 ý 2). Cổng bóng agy: khong 13%. Cùng lời kể: Tà Xùa có mây gần như cả ngày 26 sang 27, biển mây đứng yên (đã có nhãn 26/11 và 27/11)."
+  },
+  {
+    "id": "2026-11-26-best-view-sapa-dem",
+    "locationName": "Best View Sa Pa (nhìn xuống thung lũng Mường Hoa)",
+    "spotKey": "BEST_VIEW_SAPA",
+    "date": "2026-11-26",
+    "reportedAt": "2026-11-27T08:26:00+07:00",
+    "seaLevel": "BELOW",
+    "thickness": "THICK",
+    "timeOfDay": "NIGHT",
+    "observedAt": "~01:00 26/11 (chú thích bài FB 'Mây về cửa lúc 1h sáng...! 26/11', đăng 'a day ago' khi anh chụp màn hình 27/11)",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài Facebook gắn địa điểm Best View - SaPa (phiếu ge6ee): 5 ảnh đêm, biển mây trắng dày phủ kín thung lũng dưới sân ngắm, dãy núi xa nhô lên, trời quang có sao, người đứng sân gỗ. Ban đêm nên calibrate KHÔNG chấm (chỉ chấm rạng sáng); ghi để biết mây đã về từ 1h. Dự báo app (bản chụp 2026-11-26): 70/100 FLUCTUATING, đồng thuận 67% (GFS FOG 80 mặt mây 2195m, ICON FLUCTUATING 41 1687m, UKMO FLUCTUATING 70 1693m), mặt mây 1690m, điểm đứng 1469m (ΔH -221m), không đáng đi; agy khong 27%."
   }
 ]
