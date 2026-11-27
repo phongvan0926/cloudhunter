@@ -151,6 +151,7 @@ bootstrap ngày [-241, -143]); đừng thử lại cùng luật chọn điểm. 
 `components/SnapshotHistory.tsx` (17/11/2026): nút "Bản chụp dự báo hằng ngày" đọc `data/observations/<ngày>-forecast.json` qua raw.githubusercontent.com (kho public, CORS mở), chỉ đọc. Đổi tên kho/nhánh hoặc chuyển kho private thì tính năng này hỏng.
 
 Kênh chụp thứ hai (17/11/2026, phiếu gb369): `tools/snapshot-local.sh` + `~/.config/systemd/user/cloudhunter-snapshot.{service,timer}` chạy trên máy anh, dùng bản clone riêng (không đụng thư mục làm việc), commit "[máy nhà]" thẳng lên main. KHÔNG bao giờ `--force`. Bản 17/11 chụp lúc ~01:23 sáng 17/11 (lead ~3,5h; GitHub nổ trễ lúc ~01:50, sau máy nhà, chỉ ghi được bản tuần vì bản chính đã có), vẫn trước rạng sáng nhưng ngắn hơn bản thường.
+Nhánh 429-THEO-NGÀY (28/11/2026, phiếu g2a0b; tối 27/11 cả 19:30 lẫn 22:30 hỏng vì IP nhà hết hạn mức ngày Open-Meteo): sau mỗi lần chụp hỏng, script dò 1 lượt rẻ; thân phản hồi có "Daily API request limit" thì KHÔNG thử lại nữa mà `gh workflow run verify-loop.yml -f job=snapshot -f date=$D` (không kích trùng nếu đã có lượt verify-loop đang chạy/chờ) rồi chờ tối đa 40 phút cho `$D-forecast.json` lên origin/main; chỉ đỏ khi Actions cũng không ra tệp. 429 theo phút giữ đường thử lại cũ. Test `tests/snapshot-local.test.ts` (kho git tạm, npx/gh/lượt dò giả; đột biến bỏ nhánh thì đỏ). Script phân tích/replay chạy ở máy nhà vẫn ăn chung hạn mức ngày của IP: tránh chạy đợt lớn sau ~17:00 VN.
 
 Bóng 6 mô hình bản chụp tuần (27/11/2026, phiếu gf1b7, đăng ký trước trong `NHAT-KY-HIEU-CHINH.md`): `scripts/snapshot-week.ts` gọi `rankSpotsForWeekWithShadow` (1 call 6 mô hình `WEEK_SHADOW_MODELS`, ~1.279 lượt quy đổi). `weekDaysFromBlock` tính trường hiển thị CHỈ từ `RANK_MODELS` (3 mô hình, y hệt app), cột `shadow` từ cả 6. Bóng lỗi -> lùi về 3 mô hình + `shadowError`. Không tham gia bảng/điểm/đáng đi; đổi bảng sang 6 mô hình là sửa lớn. Test `tests/week-shadow.test.ts`.
 
@@ -229,7 +230,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 288 test (bóng 6 mô hình bản chụp tuần + thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 292 test (snapshot-local 429 ngày -> Actions + bóng 6 mô hình bản chụp tuần + thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 
