@@ -1119,5 +1119,17 @@
     "observedAt": "~08:1x 27/11 (dấu giờ camera 'Phu Sa Phìn skyview' trên ảnh)",
     "source": "SOCIAL_PHOTO",
     "note": "Anh Phong gửi ảnh chụp màn hình bài FB của porter thường trực Phu Sa Phìn (phiếu g1ed7): 'thời tiết ngon rồi, biển mây đẹp lắm'. Ảnh camera skyview: nắng, trời xanh, biển mây trắng phủ các thung lũng bên dưới, dãy núi xa nhô lên, mây tích lẻ ngang tầm. Độ dày không rõ. Dự báo app (bản chụp 2026-11-27): 48/100 DISSIPATING, đồng thuận 67% (GFS FLOWING 52 mặt mây 2053m, ICON DISSIPATING 35 2054m, UKMO DISSIPATING 48 2206m), mặt mây 2130m, điểm đứng 2865m (ΔH +735m), ĐÁNG ĐI = false => BỎ SÓT. Cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao như Fansipan/Ngũ Chỉ Sơn 26-27/11 (VIỆC 3 ý 2, cổng gió). Cổng bóng agy: khong 27%."
+  },
+  {
+    "id": "2026-11-27-chieu-lau-thi",
+    "locationName": "Đỉnh Chiêu Lầu Thi",
+    "spotKey": "CHIEU_LAU_THI",
+    "date": "2026-11-27",
+    "reportedAt": "2026-11-27T13:09:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "khoảng 07:00 27/11: bài FB hiện '6h' trên ảnh chụp màn hình lúc 13:08; mặt trời thấp ngay trên mặt mây (mọc ~06:25). Giờ ước từ dấu '6h' + góc mặt trời, không phải anh khai",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài FB của Chiêu Lầu Thi 2402m Lodge (nhà nghỉ ngay tại đỉnh, phiếu g42ec): 'Biển mây Chiêu Lầu Thi sáng 27/11. Nay dự có biển mây cả ngày'. Ảnh: biển mây trắng dày phủ kín các thung lũng tới chân trời, dãy núi xa nhô lên, đứng trên cao rõ ràng, trời trên quang. Dự báo app (bản chụp 2026-11-27, engine-2.8.3): DISSIPATING 52, đồng thuận 67% (GFS ROLLING 60 mặt mây 2196m, ICON DISSIPATING 52 1210m, UKMO DISSIPATING 52 1694m), mặt mây 1452m, chỗ đứng 2402m (ΔH +950m), ĐÁNG ĐI = false => BỎ SÓT. Bảng tuần: lead 4 FLOWING ✓, lead 3 DISSIPATING, lead 2 ROLLING ✓, lead 1 DISSIPATING. Cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao như ca 15/11 cùng điểm (VIỆC 3 ý 2, cổng gió). Cổng bóng agy: co 81%, giờ tốt 07:00."
   }
 ]
