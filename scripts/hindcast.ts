@@ -19,7 +19,7 @@ if (typeof (globalThis as any).localStorage === 'undefined') {
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { vnTodayStr, fetchMountainWeather, WeatherModelId, DayModelData } from '../services/weatherService';
 import { computeDayForecast, scoreOneModel, computeInversion, computeCloudBase, estimateCloudTop, assessWind } from '../services/cloudScoreEngine';
-import { findBestMatchingPeak } from '../services/geminiService';
+import { presetForSpot } from '../services/geminiService';
 
 const KEY = process.argv[2] || 'TA_XUA_SON_LA';
 const DATE = process.argv[3] || vnTodayStr();
@@ -32,7 +32,7 @@ async function main() {
 
   // Đi ĐÚNG đường của app thật: có truyền mặt cắt địa hình đã xác thực (App gọi qua
   // geminiService.analyzeWeatherData và luôn kèm matchedPreset.elevation_profile).
-  const preset = findBestMatchingPeak(mt.name);
+  const preset = presetForSpot(mt.name, KEY);
   // pastDays = 90: hindcast tồn tại để soi NGÀY ĐÃ QUA, nên không dùng cửa sổ 2 ngày của app.
   const pkg = await fetchMountainWeather(KEY, mt.name, DATE, DATE, undefined, undefined,
                                          undefined, preset?.elevation_profile, 90);

@@ -146,7 +146,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 npm install
 npm run dev      # http://localhost:3000
 npm run lint     # type-check
-npm test         # 284 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
+npm test         # 285 test: engine + mùa 3 miền + ensemble + ERA5 + AOD + trăng + fallback + múi giờ + alias + cache/lịch sử + chọn model mới + lọc nhiễu khung vệ tinh + khí hậu tháng + thung lũng v2 + dông/sạt lở dọc tuyến
 npm run build
 
 # công cụ kiểm chứng (gọi API thật, không phải unit test)

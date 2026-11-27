@@ -14,6 +14,7 @@ import { WeatherInput, CloudAnalysis, LocationAnalysis, DailyForecast, TerrainAn
 import { NORTHWEST_PEAKS } from '../constants';
 import { MOUNTAIN_DB } from '../constants/mountains';
 import { fetchMountainWeather, pointElevation } from './weatherService';
+import { sameSpotName } from './rankingService';
 import {
   computeDayForecast, computeTripSummary, seasonAdjust, ENGINE_VERSION, EngineDayOutput,
 } from './cloudScoreEngine';
@@ -63,6 +64,20 @@ export function findBestMatchingPeak(input: string) {
     if (score > highestScore) { highestScore = score; bestMatch = peak; }
   }
   return highestScore > 0 ? bestMatch : null;
+}
+
+/**
+ * Mặt cắt địa hình (preset) cho một điểm. Điểm có trong thư viện thì CHỈ nhận preset trùng tên
+ * theo `sameSpotName` - đúng luật bảng xếp hạng và bản chụp đang dùng. Khớp mờ theo bí danh đã
+ * gán nhầm (đo 27/11/2026, phiếu gd401): "Đỉnh Pa Phách (Mộc Châu, Sơn La)" dính bí danh "mộc châu"
+ * của preset Pha Luông nên phân tích đầy đủ lấy đáy thung lũng 1400m, cao hơn cả chỗ đứng 1180m;
+ * Đồi Bò/Best View Sa Pa nhận preset Hàm Rồng, Phu Sa Phìn nhận preset Tà Chì Nhù.
+ * Tên gõ tự do (không có trong thư viện) vẫn khớp mờ như cũ.
+ */
+export function presetForSpot(locationName: string, mountainKey: string | null) {
+  const preset = findBestMatchingPeak(locationName);
+  if (!preset || !mountainKey || !MOUNTAIN_DB[mountainKey]) return preset;
+  return sameSpotName(preset.name, MOUNTAIN_DB[mountainKey].name) ? preset : null;
 }
 
 export function findBestMatchingMountain(input: string): { key: string; info: typeof MOUNTAIN_DB[string] } | null {
@@ -303,9 +318,9 @@ QUY TẮC SẮT (vi phạm = bản tin bị loại):
 
 export const analyzeWeatherData = async (data: WeatherInput): Promise<CloudAnalysis> => {
   // 1) Nhận diện địa hình
-  const matchedPreset = findBestMatchingPeak(data.locationName);
   const matchedMountainEntry = findBestMatchingMountain(data.locationName);
   const mountainKey = matchedMountainEntry ? matchedMountainEntry.key : null;
+  const matchedPreset = presetForSpot(data.locationName, mountainKey);
 
   // 2) Dữ liệu khí tượng thật (2 điểm × 6 mô hình) — lỗi ở đây phải nổi lên, không nuốt
   const pkg = await fetchMountainWeather(

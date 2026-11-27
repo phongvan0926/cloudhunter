@@ -1116,6 +1116,25 @@ describe('MOUNTAIN_DB × mặt cắt địa hình — chỗ đứng phải CAO H
     }
     expect(bad).toEqual([]);
   });
+
+  // 27/11/2026 (gd401): phân tích đầy đủ khớp preset bằng tên MỜ nên Pa Phách (1180m) nhận mặt cắt
+  // Pha Luông (đáy 1400m) qua bí danh "mộc châu". Đường phân tích phải dùng đúng luật của xếp hạng.
+  it('phân tích đầy đủ khớp preset giống hệt bảng xếp hạng cho mọi điểm thư viện', async () => {
+    const { MOUNTAIN_DB } = await import('../constants/mountains');
+    const { NORTHWEST_PEAKS } = await import('../constants');
+    const { sameSpotName } = await import('../services/rankingService');
+    const { presetForSpot } = await import('../services/geminiService');
+    const diff: string[] = [];
+    for (const [key, m] of Object.entries(MOUNTAIN_DB)) {
+      const rank = NORTHWEST_PEAKS.find(p => p.elevation_profile?.length && sameSpotName(p.name, m.name));
+      const full = presetForSpot(m.name, key);
+      const fullProfile = full?.elevation_profile?.length ? full.name : null;
+      if (fullProfile !== (rank?.name ?? null)) diff.push(`${key}: phân tích=${fullProfile} xếp hạng=${rank?.name ?? null}`);
+    }
+    expect(diff).toEqual([]);
+    expect(presetForSpot('Đỉnh Pa Phách (Mộc Châu, Sơn La)', 'PA_PHACH')).toBeNull();
+    expect(presetForSpot('Đỉnh Pha Luông', 'PHA_LUONG')?.name).toBe('Đỉnh Pha Luông');
+  });
 });
 
 /**

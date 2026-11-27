@@ -174,6 +174,8 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
    **Trang kết quả phải verdict-first**: thêm khối mới thì đặt SAU phán quyết và mặc định
    thu gọn (`<details>`); Header nhận `compact` khi đang xem kết quả (bỏ logo+chip ~400px).
    Điểm chọn từ thư viện xác thực (source='DB') bỏ qua màn "Xác nhận địa điểm".
+   Mặt cắt preset cho điểm thư viện lấy qua `presetForSpot` (geminiService) = cùng luật `sameSpotName` của xếp hạng;
+   khớp mờ theo bí danh từng gán Pa Phách vào mặt cắt Pha Luông (đáy 1400m > chỗ đứng 1180m, 27/11/2026). Test so hai đường cho mọi điểm.
    **A11y bắt buộc:** phần tử bấm được là `<button>` thật với aria-label, tap target
    ≥44px (min-h-11), không dùng chữ <10px, modal phải có role=dialog + Esc + khóa scroll.
    Nhãn chữ TRONG SVG viewBox bị co theo màn hình → ẩn ở mobile (`hidden md:block`),
@@ -225,7 +227,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 284 test (thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 285 test (thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 
