@@ -1107,5 +1107,17 @@
     "source": "SOCIAL_PHOTO",
     "note": "Anh Phong gửi chụp màn hình bài FB #sapa #trekking (phiếu g5fb9): 5 ảnh, biển mây trắng dày phủ thung lũng bên dưới đồi cỏ có bò, các dãy núi nhô lên khỏi mặt mây, trời xanh có mây tầng cao. Không có spotKey (Đồi Bò chưa có trong thư viện, chưa có plus code) nên không chấm. Tham chiếu cùng ngày (bản chụp 2026-11-26): Hàm Rồng FOG 80 mặt mây 1945m, Best View FLUCTUATING 70 mặt mây 1690m, Hang Đá FLUCTUATING 64, Ô Quy Hồ FOG 66 mặt mây 2195m: các điểm thấp quanh Sa Pa app đều đặt mặt mây CAO HƠN chỗ đứng, trong khi Best View thấy biển mây dưới chân từ 1h sáng 26/11 (ghi nhãn NIGHT). Cập nhật 27/11 (phiếu gc472): anh gửi plus code 9R98+36, đã thêm DOI_BO_SAPA (2213m) vào thư viện; bản chụp 26/11 không có điểm này nên vẫn không chấm, không chụp bù.",
     "spotKey": "DOI_BO_SAPA"
+  },
+  {
+    "id": "2026-11-27-phu-sa-phin",
+    "locationName": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
+    "spotKey": "PHU_SA_PHIN",
+    "date": "2026-11-27",
+    "reportedAt": "2026-11-27T09:24:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "MORNING",
+    "observedAt": "~08:1x 27/11 (dấu giờ camera 'Phu Sa Phìn skyview' trên ảnh)",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài FB của porter thường trực Phu Sa Phìn (phiếu g1ed7): 'thời tiết ngon rồi, biển mây đẹp lắm'. Ảnh camera skyview: nắng, trời xanh, biển mây trắng phủ các thung lũng bên dưới, dãy núi xa nhô lên, mây tích lẻ ngang tầm. Độ dày không rõ. Dự báo app (bản chụp 2026-11-27): 48/100 DISSIPATING, đồng thuận 67% (GFS FLOWING 52 mặt mây 2053m, ICON DISSIPATING 35 2054m, UKMO DISSIPATING 48 2206m), mặt mây 2130m, điểm đứng 2865m (ΔH +735m), ĐÁNG ĐI = false => BỎ SÓT. Cùng kiểu DISSIPATING ΔH > 0 ở đỉnh cao như Fansipan/Ngũ Chỉ Sơn 26-27/11 (VIỆC 3 ý 2, cổng gió). Cổng bóng agy: khong 27%."
   }
 ]

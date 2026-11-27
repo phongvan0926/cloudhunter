@@ -495,3 +495,4 @@ Anh báo Đồi Bò (Sa Pa) và Ngũ Chỉ Sơn sáng 26/11 có biển mây, "d�
 - Đếm người đi (rạng sáng, có bản chụp): DISSIPATING với ΔH > 0 nay 8 ca, 6 có biển mây (Hang Kia 3/10, Fansipan 29/10, Chiêu Lầu Thi 15/11, Fansipan 26/11, Ngũ Chỉ Sơn 26/11, Fansipan 27/11), 2 không (Fansipan 10/10, 15/10). Đây là VIỆC 3 ý 2 (cổng gió Zone B), vẫn là quan sát, chưa phải phép đo đăng ký trước.
 - Cổng bóng agy 26/11 nói CÓ ở Ngũ Chỉ Sơn (63%) và Kỳ Quan San (55%) trong khi engine nói không: ghi để lúc chấm cổng bóng biết. Vệ tinh 26/11 mù ở gần hết các điểm này (BLOCKED_ABOVE).
 - Hai nhãn này thêm SAU bản đăng ký VS (0e5b8bc); chúng đi vào phép chấm VS như mọi nhãn khác, không phải ca nảy ra ý tưởng.
+- Bổ sung 27/11 (phiếu g1ed7): Phu Sa Phìn sáng 27/11 có biển mây dưới chân (ảnh camera skyview ~8h qua bài FB porter); app DISSIPATING 48, mặt mây 2130m, ΔH +735, không đáng đi = bỏ sót. Đếm người đi/FB DISSIPATING ΔH > 0 nay 7/9 có biển mây. Engine không đổi.
