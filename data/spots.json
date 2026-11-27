@@ -180,6 +180,16 @@
     "needsReview": null
   },
   {
+    "key": "DOI_BO_SAPA",
+    "name": "Đồi Bò Sa Pa",
+    "lat": 22.3677,
+    "lon": 103.8156,
+    "elevation": 2213,
+    "zone": "A_CLOUD_TRAP",
+    "valleyElevation": null,
+    "needsReview": null
+  },
+  {
     "key": "PHU_SA_PHIN",
     "name": "Phu Sa Phìn (Trạm Tấu - Yên Bái)",
     "lat": 21.4089,

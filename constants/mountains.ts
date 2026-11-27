@@ -166,6 +166,16 @@ export const MOUNTAIN_DB: Record<string, MountainInfo> = {
     zone: "A_CLOUD_TRAP",
     aliases: ['best view sapa', 'best view sa pa', 'bestview sapa', 'diem ngam best view', 'điểm ngắm best view', 'muong hoa', 'mường hoa', 'thung lũng mường hoa', 'sapa', 'sa pa']
   },
+  DOI_BO_SAPA: {
+    // 27/11/2026 (phiếu gc472): anh Phong gửi plus code chỗ đứng 9R98+36 (Sa Pa, Lào Cai), "Đồi Bò Sa Pa"; bài FB 26/11
+    // chụp biển mây dày dưới đồi cỏ từ chỗ này. Giải bằng scripts/pluscode.ts với tham chiếu Sa Pa (22.34, 103.84):
+    // 22.367687, 103.815562 (mã đầy đủ 7PJ59R98+36), DEM 2213m. Cách Hàm Rồng ~4,6 km, Ô Quy Hồ ~5,0 km.
+    // Zone A (điểm ngắm sườn nhìn xuống thung lũng, như Hàm Rồng/Best View), KHÔNG lấy B của đèo Ô Quy Hồ: là quy ước, chưa đo.
+    name: "Đồi Bò Sa Pa",
+    lat: 22.3677, lon: 103.8156, elevation: 2213,   // nguồn: plus code 9R98+36 người dùng cung cấp; độ cao = DEM
+    zone: "A_CLOUD_TRAP",
+    aliases: ['đồi bò', 'doi bo', 'đồi bò sapa', 'doi bo sapa', 'đồi bò sa pa', 'doi bo sa pa', 'sapa', 'sa pa']
+  },
 
   // --- YÊN BÁI ---
   // Đỉnh 2865m bên Yên Bái nay gọi là PHU SA PHÌN — tách hẳn tên khỏi "Tà Xùa" của Sơn La
