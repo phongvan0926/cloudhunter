@@ -501,3 +501,39 @@ Anh báo Đồi Bò (Sa Pa) và Ngũ Chỉ Sơn sáng 26/11 có biển mây, "d�
 - Cổng bóng agy 26/11 nói CÓ ở Ngũ Chỉ Sơn (63%) và Kỳ Quan San (55%) trong khi engine nói không: ghi để lúc chấm cổng bóng biết. Vệ tinh 26/11 mù ở gần hết các điểm này (BLOCKED_ABOVE).
 - Hai nhãn này thêm SAU bản đăng ký VS (0e5b8bc); chúng đi vào phép chấm VS như mọi nhãn khác, không phải ca nảy ra ý tưởng.
 - Bổ sung 27/11 (phiếu g1ed7): Phu Sa Phìn sáng 27/11 có biển mây dưới chân (ảnh camera skyview ~8h qua bài FB porter); app DISSIPATING 48, mặt mây 2130m, ΔH +735, không đáng đi = bỏ sót. Đếm người đi/FB DISSIPATING ΔH > 0 nay 7/9 có biển mây. Engine không đổi.
+
+## 27/11/2026 (phiếu gf1b7) - Bóng 6 mô hình cho bản chụp tuần: ĐĂNG KÝ TRƯỚC, chưa có sự thật nào cho cột bóng
+
+Bối cảnh: anh hỏi vì sao bảng 7 ngày (GFS + ICON + UKMO) xanh nhiều hơn phân tích đầy đủ (6 mô hình). Cái này là tinh chỉnh
+nhỏ (chỉ thêm cột ghi, engine và bảng hiển thị KHÔNG đổi). Đổi bảng sang 6 mô hình mới là sửa lớn: cần Luật cổng và anh duyệt.
+
+Số nền đã đo hôm nay trên 27 bản chụp xa (`far/`, 30/10-26/11) cộng bản chụp lead 0, cột ✓ (worthGoing) 3 mô hình:
+- So với vệ tinh: tỉ lệ có biển mây khi ✓ là 18% ở lead 1-3, 17% ở lead 4-5, 12% ở lead 6-7. Tỉ lệ nền lần lượt là 18%, 18%, 19%.
+  Nói cách khác, ✓ không hơn đoán mò ở mọi lead.
+- So với người đi + FB: 93% (27/29) ở lead 1-3, 81% ở lead 4-5, 80% ở lead 6-7. Tỉ lệ nền lần lượt là 69%, 72%, 76%.
+  Tỉ lệ nền cao vì người ta chủ yếu đăng khi có mây. Lead 1-3 có độ nâng thật, lead 4-7 chỉ nâng yếu.
+- Bắt được ít: khoảng 20% số sáng có mây ở lead 1-5, và 3-9% ở lead 6-7.
+- Không chấm ngược được bóng 6 mô hình, vì bản chụp cũ không ghi số liệu từng mô hình.
+
+Đã thêm: `scripts/snapshot-week.ts` gọi `rankSpotsForWeekWithShadow`. Đó là MỘT call gồm 6 mô hình (đo 27/11: khoảng 1.279 lượt
+quy đổi, gấp đôi bản cũ). Các trường hiển thị vẫn tính từ đúng 3 mô hình. Mỗi ngày có thêm `shadow` gồm
+`{models, score, status, agreement, deltaH, worthGoing, perModel}`. Tệp ghi `shadowModels`. Nếu bóng lỗi thì chụp lại bằng 3 mô hình
+và ghi `shadowError`. Test `tests/week-shadow.test.ts` khoá hai điều: trường hiển thị khi tải 6 mô hình giống hệt khi tải 3, và bóng
+chấm đủ 6 mô hình. Đột biến đã thử: cho bảng dùng cả 6 mô hình thì trượt 2/3; cho bóng chỉ dùng 3 mô hình thì trượt 1/3.
+
+Giả thuyết H (viết trước khi có sự thật): ở lead 1-5, ✓ của bóng 6 mô hình có độ chính xác cao hơn ✓ của bảng 3 mô hình, mà số ca
+có mây bắt được không giảm quá 1/3.
+
+Cách chấm, chốt trước:
+- Tách riêng (a) người đi + FB và (b) vệ tinh, theo cùng thứ bậc nguồn và cùng bộ lọc như phép đo số nền ở trên.
+- Chỉ dùng các ô có cả hai cột trên cùng một bản chụp. Không vá bản chụp cũ, không chụp bù.
+- In mọi ca đổi kết luận theo cả hai chiều.
+- Ngày chấm: khi có >= 21 ngày chụp có bóng (khoảng 18-20/12/2026), chấm MỘT lần.
+- Đạt cả (a) và (b) chỉ có nghĩa là đủ điều kiện ĐỀ XUẤT. Muốn đổi bảng thì phải theo Luật cổng sửa lớn, có agent phản biện và anh
+  duyệt. Không đổi ngưỡng nào theo kết quả.
+- Lead 6-7: UKMO thường thiếu ở ngày cuối (đo 27/11, ngày 04/12 chỉ có 5 mô hình), nên chỉ báo số, không tính vào H.
+
+Ghi chú để minh bạch: lượt kiểm tra thật lúc 27/11 khoảng 11h40 cho số ô ✓ theo ngày 28/11 -> 04/12 như sau.
+- Bảng 3 mô hình: 8 5 5 6 5 3 3.
+- Bóng 6 mô hình: 8 0 0 5 3 5 6.
+Chưa có sự thật cho các ngày này, nên đây không phải kết quả chấm.

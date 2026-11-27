@@ -306,7 +306,17 @@ export interface WeekDay {
   deltaH: number | null;
   worthGoing: boolean;
   capWatch?: CapWatch;
+  /** BÓNG 6 mô hình (chỉ có trong bản chụp `snapshot-week`, gf1b7 27/11/2026): KHÔNG hiển thị, KHÔNG
+   *  đổi score/status/worthGoing ở trên (các trường đó luôn tính từ đúng RANK_MODELS như app). */
+  shadow?: WeekShadow;
 }
+export interface WeekShadow {
+  models: string[];
+  score: number; status: StatusCode; agreement: number; deltaH: number | null; worthGoing: boolean;
+  perModel: Record<string, { score: number; status: StatusCode; cloudTop: number | null }>;
+}
+/** Bộ mô hình của bóng: 3 mô hình của bảng + ECMWF IFS, JMA, AIFS (cùng 6 mô hình phân tích đầy đủ). */
+export const WEEK_SHADOW_MODELS: WeatherModelId[] = [...RANK_MODELS, 'ecmwf_ifs025', 'jma_seamless', 'ecmwf_aifs025_single'];
 export interface WeekRow {
   key: string; name: string; elevation: number; zone: string;
   days: WeekDay[];
@@ -337,6 +347,59 @@ export async function rankSpotsForWeek(
     }
   } catch { /* bỏ qua */ }
 
+  const rows = await computeWeekRows(today, dates, RANK_MODELS, onProgress);
+  WEEK_CACHE = { sig, ts: Date.now(), rows };
+  try { localStorage.setItem(WEEK_LS_KEY, JSON.stringify(WEEK_CACHE)); } catch { /* hết quota */ }
+  return rows;
+}
+
+/** Bản chụp tuần KÈM bóng 6 mô hình (chỉ script `snapshot-week` gọi). Một call 6 mô hình; các trường
+ *  hiển thị tính từ đúng RANK_MODELS trong cùng mẻ dữ liệu nên trùng bảng app (test `week-shadow`). */
+export function rankSpotsForWeekWithShadow(today: string, dates: string[], onProgress?: (msg: string) => void) {
+  return computeWeekRows(today, dates, WEEK_SHADOW_MODELS, onProgress);
+}
+
+/** Chấm một điểm × các rạng sáng từ khối hourly đã tải. `fetched` có thể RỘNG hơn RANK_MODELS (bóng). */
+export function weekDaysFromBlock(
+  block: ReturnType<typeof makeHourlyBlock>, fetched: WeatherModelId[], dates: string[], today: string,
+  mt: { elevation: number; zone: any; lat: number }, valley: number,
+): WeekDay[] {
+  const ctx = { valleyElevation: Math.round(valley), observerAlt: mt.elevation, zone: mt.zone, lat: mt.lat };
+  const days: WeekDay[] = [];
+  for (const d of dates) {
+    const all: ReturnType<typeof scoreOneModel>[] = [];
+    const aggs: Record<string, DayModelData> = {};
+    for (const model of fetched) {
+      const agg = aggregateDayModel(block, block, model, d, addDaysStr(d, -1));
+      if (agg) { all.push(scoreOneModel(model, agg, ctx, d)); if (RANK_MODELS.includes(model)) aggs[model] = agg; }
+    }
+    const per = all.filter(p => RANK_MODELS.includes(p.model));
+    if (!per.length) continue;   // ngày thiếu dữ liệu thì để trống, không bịa
+    const c = combineModels(per);
+    const deltaH = c.cloudTop !== null ? mt.elevation - c.cloudTop : null;
+    const day: WeekDay = {
+      date: d, leadDays: Math.round((Date.parse(d) - Date.parse(today)) / 86400000),
+      score: c.score, status: c.status, agreement: c.agreement, deltaH,
+      worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
+      capWatch: capWatchOf(aggs),
+    };
+    if (fetched.some(m => !RANK_MODELS.includes(m))) {
+      const sh = combineModels(all);
+      const sdh = sh.cloudTop !== null ? mt.elevation - sh.cloudTop : null;
+      day.shadow = {
+        models: all.map(p => p.model), score: sh.score, status: sh.status, agreement: sh.agreement, deltaH: sdh,
+        worthGoing: isWorthGoing({ status: sh.status, agreement: sh.agreement, deltaH: sdh }),
+        perModel: Object.fromEntries(all.map(p => [p.model, { score: p.score, status: p.status, cloudTop: p.cloudTop }])),
+      };
+    }
+    days.push(day);
+  }
+  return days;
+}
+
+async function computeWeekRows(
+  today: string, dates: string[], models: WeatherModelId[], onProgress?: (msg: string) => void
+): Promise<WeekRow[]> {
   const MIN_GAP_M = 80;
   const spots = Object.entries(MOUNTAIN_DB).filter(([, m]) => !m.needsReview && climateRegion(m.lat) === 'NORTH');
   const valleys = await valleyElevationsForAll(onProgress);
@@ -348,7 +411,7 @@ export async function rankSpotsForWeek(
     `?latitude=${usable.map(([, m]) => m.lat.toFixed(4)).join(',')}` +
     `&longitude=${usable.map(([, m]) => m.lon.toFixed(4)).join(',')}` +
     `&elevation=${usable.map(([k]) => Math.round(valleys[k])).join(',')}` +
-    `&hourly=${RANK_VARS.join(',')}&models=${RANK_MODELS.join(',')}` +
+    `&hourly=${RANK_VARS.join(',')}&models=${models.join(',')}` +
     `&start_date=${addDaysStr(dates[0], -1)}&end_date=${dates[dates.length - 1]}&timezone=Asia%2FBangkok`;
   const data = await fetchJson(url);
   const arr: any[] = Array.isArray(data) ? data : [data];
@@ -357,30 +420,9 @@ export async function rankSpotsForWeek(
   usable.forEach(([key, mt], i) => {
     const loc = arr[i];
     if (!loc?.hourly) return;
-    const block = makeHourlyBlock(loc.hourly);
-    const ctx = { valleyElevation: Math.round(valleys[key]), observerAlt: mt.elevation, zone: mt.zone, lat: mt.lat };
-    const days: WeekDay[] = [];
-    for (const d of dates) {
-      const per = [];
-      const aggs: Record<string, DayModelData> = {};
-      for (const model of RANK_MODELS) {
-        const agg = aggregateDayModel(block, block, model, d, addDaysStr(d, -1));
-        if (agg) { per.push(scoreOneModel(model, agg, ctx, d)); aggs[model] = agg; }
-      }
-      if (!per.length) continue;   // ngày thiếu dữ liệu thì để trống, không bịa
-      const c = combineModels(per);
-      const deltaH = c.cloudTop !== null ? mt.elevation - c.cloudTop : null;
-      days.push({
-        date: d, leadDays: Math.round((Date.parse(d) - Date.parse(today)) / 86400000),
-        score: c.score, status: c.status, agreement: c.agreement, deltaH,
-        worthGoing: isWorthGoing({ status: c.status, agreement: c.agreement, deltaH }),
-        capWatch: capWatchOf(aggs),
-      });
-    }
+    const days = weekDaysFromBlock(makeHourlyBlock(loc.hourly), models, dates, today, mt, valleys[key]);
     if (days.length) rows.push({ key, name: mt.name, elevation: mt.elevation, zone: mt.zone, days, worthDays: days.filter(x => x.worthGoing).length });
   });
   rows.sort((a, b) => b.worthDays - a.worthDays || Math.max(...b.days.map(x => x.score)) - Math.max(...a.days.map(x => x.score)));
-  WEEK_CACHE = { sig, ts: Date.now(), rows };
-  try { localStorage.setItem(WEEK_LS_KEY, JSON.stringify(WEEK_CACHE)); } catch { /* hết quota */ }
   return rows;
 }

@@ -20,7 +20,7 @@ import { countCallsAs } from './count-calls';
 countCallsAs('snapshot-week');   // log 1 dòng lượt gọi theo máy chủ khi kết thúc (vòng 7)
 import { seedValleyCache, dumpValleyCache } from './valley-seed';
 import { mkdirSync, writeFileSync, existsSync } from 'fs';
-import { rankSpotsForWeek } from '../services/rankingService';
+import { rankSpotsForWeek, rankSpotsForWeekWithShadow, WEEK_SHADOW_MODELS } from '../services/rankingService';
 import { vnTodayStr, addDaysStr } from '../services/weatherService';
 import { ENGINE_VERSION } from '../services/cloudScoreEngine';
 
@@ -30,16 +30,27 @@ if (existsSync(path)) { console.log(`đã có ${path}, không đè (bản chụp
 
 const dates = Array.from({ length: 7 }, (_, i) => addDaysStr(TODAY, i + 1));
 console.log(`   nạp ${seedValleyCache()} đáy thung lũng từ data/valley-dem-seed.json`);
-rankSpotsForWeek(TODAY, dates, m => console.log('   ' + m)).then(rows => {
+// Bóng 6 mô hình (gf1b7 27/11/2026): một call 6 mô hình, các trường hiển thị vẫn tính từ 3 mô hình của app.
+// Gọi bóng lỗi thì lùi về đúng bảng 3 mô hình và ghi `shadowError` - bản chụp chính không được mất vì bóng.
+let shadowError: string | null = null;
+const load = () => rankSpotsForWeekWithShadow(TODAY, dates, m => console.log('   ' + m)).catch(e => {
+  shadowError = String(e?.message || e);
+  console.log(`   cảnh báo: bóng ${WEEK_SHADOW_MODELS.length} mô hình lỗi (${shadowError}), chụp lại bằng 3 mô hình`);
+  return new Promise(r => setTimeout(r, 65_000)).then(() => rankSpotsForWeek(TODAY, dates, m => console.log('   ' + m)));
+});
+load().then(rows => {
   if (!rows.length) throw new Error('không có điểm nào - không ghi file rỗng');
   mkdirSync('data/observations/far', { recursive: true });
   writeFileSync(path, JSON.stringify({
     capturedOn: TODAY, engineVersion: ENGINE_VERSION, snapshotAt: new Date().toISOString(),
+    shadowModels: shadowError ? null : WEEK_SHADOW_MODELS, ...(shadowError ? { shadowError } : {}),
     spots: rows.map(r => ({
       key: r.key, name: r.name, observerAlt: r.elevation,
       days: r.days.map(d => ({ date: d.date, lead: d.leadDays, score: d.score, status: d.status,
-        agreement: d.agreement, deltaH: d.deltaH, worthGoing: d.worthGoing, capWatch: d.capWatch })),
+        agreement: d.agreement, deltaH: d.deltaH, worthGoing: d.worthGoing, capWatch: d.capWatch,
+        ...(d.shadow ? { shadow: d.shadow } : {}) })),
     })),
   }) + '\n');
-  console.log(`✅ ${rows.length} điểm × ${dates.length} ngày → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`);
+  console.log(`✅ ${rows.length} điểm × ${dates.length} ngày → ${path} (${ENGINE_VERSION}); bảng đáy ${dumpValleyCache()} điểm`
+    + (shadowError ? '; KHÔNG có bóng 6 mô hình' : `; bóng ${rows.reduce((n, r) => n + r.days.filter(d => d.shadow).length, 0)} ô`));
 }).catch(e => { console.error('❌', e?.message || e); process.exit(1); });

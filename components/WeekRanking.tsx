@@ -45,7 +45,7 @@ export const WeekRanking: React.FC<Props> = ({ today, dates, onPickSpot }) => {
       <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
         Mỗi ô là một rạng sáng. <b className="text-emerald-300">✓ Đáng đi</b> = các mô hình kết luận có biển mây và bạn đứng
         cao hơn mặt mây (không dựa vào điểm). <b>Số</b> = điểm nguyên liệu sương bức xạ, chỉ để xếp hạng, KHÔNG phải mức khuyên:
-        ô ✓ vẫn có thể kèm điểm thấp. ★ = điểm đã kiểm chứng thực địa. Ô viền đứt = dự báo xa hơn {WEEK_CONFIDENT_LEAD_DAYS} ngày, chỉ để tham khảo, hãy xem lại gần ngày đi.
+        ô ✓ vẫn có thể kèm điểm thấp. ★ = điểm đã kiểm chứng thực địa. Ô viền đứt = dự báo xa hơn {WEEK_CONFIDENT_LEAD_DAYS} ngày, chỉ để tham khảo, hãy xem lại gần ngày đi. Bảng này xếp nhanh bằng 3 mô hình (GFS, ICON, UKMO); bấm vào điểm để phân tích đầy đủ 6 mô hình, có thể ra khác.
       </p>
       {error && <p className="mt-3 text-xs text-rose-300 bg-rose-950/50 border border-rose-700/50 rounded-xl p-3">Không xếp hạng được: {error}</p>}
       {!rows && !error && <p className="mt-3 text-xs text-cyan-300">{progress}</p>}
