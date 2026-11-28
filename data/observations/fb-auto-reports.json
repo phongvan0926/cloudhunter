@@ -1538,9 +1538,20 @@
   "source": "FB_AUTO",
   "seaLevel": "BELOW",
   "thickness": "THIN",
-  "confidence": 0.8,
-  "firstPostAt": "2026-11-27T11:15:49+07:00",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:54",
+  "confidence": 0.85,
+  "firstPostAt": "2026-11-27T09:48:16+07:00",
   "evidence": [
+   {
+    "postedAt": "2026-11-27T09:48:16+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời quang, nắng, có gió, nhiệt độ 12 độ.",
+    "stamps": [
+     "08:54 BELOW",
+     "08:55 BELOW"
+    ]
+   },
    {
     "postedAt": "2026-11-27T11:15:49+07:00",
     "seaLevel": "BELOW",
@@ -1548,6 +1559,39 @@
     "stamps": [
      "10:57 BELOW",
      "10:58 BELOW"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "2026-11-28-FANSIPAN-fb",
+  "spotKey": "FANSIPAN",
+  "locationName": "Fansipan (Nóc nhà Đông Dương)",
+  "date": "2026-11-28",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "07:06",
+  "confidence": 0.85,
+  "firstPostAt": "2026-11-28T07:30:02+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-28T07:30:02+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời quang, nắng, có gió, nhiệt độ 4 độ.",
+    "stamps": [
+     "07:06 BELOW",
+     "07:06 BELOW",
+     "07:06 BELOW"
+    ]
+   },
+   {
+    "postedAt": "2026-11-28T08:33:50+07:00",
+    "seaLevel": "BELOW",
+    "text": "Đỉnh Fansipan trời nắng đẹp, nhiệt độ 9 độ",
+    "stamps": [
+     "07:49 BELOW"
     ]
    }
   ]
@@ -2259,6 +2303,29 @@
     "seaLevel": "BELOW",
     "text": "giữ chuỗi 4 ngày mây liên tục rồi các vợ ơi",
     "stamps": []
+   }
+  ]
+ },
+ {
+  "id": "2026-11-28-TA_XUA_SON_LA-fb",
+  "spotKey": "TA_XUA_SON_LA",
+  "locationName": "Tà Xùa (Sống lưng Khủng Long)",
+  "date": "2026-11-28",
+  "source": "FB_AUTO",
+  "seaLevel": "BELOW",
+  "thickness": "THIN",
+  "timeOfDay": "DAWN",
+  "observedAt": "08:30",
+  "confidence": 0.75,
+  "firstPostAt": "2026-11-28T11:06:44+07:00",
+  "evidence": [
+   {
+    "postedAt": "2026-11-28T11:06:44+07:00",
+    "seaLevel": "BELOW",
+    "text": "Thời tiết tà xùa hôm nay: vừa nắng vừa mây",
+    "stamps": [
+     "08:30 BELOW"
+    ]
    }
   ]
  }
