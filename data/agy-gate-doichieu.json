@@ -1,34 +1,34 @@
 {
  "moiNhat": {
-  "ngay": "2026-11-27",
+  "ngay": "2026-11-28",
   "engine": "engine-2.8.3",
   "hanhDong": "chua_du_mau",
   "duDieuKienCham": false,
   "vt": {
-   "n": 111,
-   "ngay": 5,
+   "n": 157,
+   "ngay": 6,
    "baoDung": 2,
-   "botSot": 22,
-   "baoNham": 13,
-   "dungKhong": 74
+   "botSot": 25,
+   "baoNham": 19,
+   "dungKhong": 111
   },
   "field": {
-   "n": 18,
-   "ngay": 6,
+   "n": 24,
+   "ngay": 7,
    "baoDung": 3,
-   "botSot": 11,
+   "botSot": 15,
    "baoNham": 0,
-   "dungKhong": 4
+   "dungKhong": 6
   },
   "nguoiDi": {
-   "n": 13,
-   "ngay": 3,
+   "n": 19,
+   "ngay": 4,
    "baoDung": 3,
-   "botSot": 10,
+   "botSot": 14,
    "baoNham": 0,
-   "dungKhong": 0
+   "dungKhong": 2
   },
-  "ghiChu": "chưa đủ mẫu: FIELD 18/30 điểm-ngày và 14/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
+  "ghiChu": "chưa đủ mẫu: FIELD 24/30 điểm-ngày và 18/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
  },
  "lichSu": [
   {
@@ -309,6 +309,37 @@
     "dungKhong": 0
    },
    "ghiChu": "chưa đủ mẫu: FIELD 18/30 điểm-ngày và 14/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
+  },
+  {
+   "ngay": "2026-11-28",
+   "engine": "engine-2.8.3",
+   "hanhDong": "chua_du_mau",
+   "duDieuKienCham": false,
+   "vt": {
+    "n": 157,
+    "ngay": 6,
+    "baoDung": 2,
+    "botSot": 25,
+    "baoNham": 19,
+    "dungKhong": 111
+   },
+   "field": {
+    "n": 24,
+    "ngay": 7,
+    "baoDung": 3,
+    "botSot": 15,
+    "baoNham": 0,
+    "dungKhong": 6
+   },
+   "nguoiDi": {
+    "n": 19,
+    "ngay": 4,
+    "baoDung": 3,
+    "botSot": 14,
+    "baoNham": 0,
+    "dungKhong": 2
+   },
+   "ghiChu": "chưa đủ mẫu: FIELD 24/30 điểm-ngày và 18/10 ca CÓ (hoặc từ 2026-12-20); không in số phụ thuộc cổng, không kết luận"
   }
  ]
 }
