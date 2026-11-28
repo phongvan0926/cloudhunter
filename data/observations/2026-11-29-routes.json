@@ -1,0 +1,3742 @@
+{
+ "date": "2026-11-29",
+ "rulesVersion": "route-1.2",
+ "snapshotAt": "2026-11-28T17:08:20.172Z",
+ "note": "Phán quyết độ khó cung đường của app TRƯỚC chuyến đi. Không phải sự thật; chấm theo docs/cung-duong-kiem-chung.md.",
+ "routes": [
+  {
+   "id": "YB-PHINH_HO-moto",
+   "from": "Yên Bái (TP)",
+   "to": "PHINH_HO",
+   "toName": "Phình Hồ (Trạm Tấu)",
+   "sunrise": "06:28",
+   "vehicle": "motorbike",
+   "speedKmh": 40,
+   "router": "valhalla-motorcycle",
+   "fallbackNote": null,
+   "departVN": "2026-11-29T03:52",
+   "distanceKm": 83.8,
+   "durationH": 2.1,
+   "maxElev": 1083,
+   "cautionNote": null,
+   "endGapKm": 0.01,
+   "endNote": null,
+   "destElev": 1083,
+   "level": 1,
+   "levelLabel": "Cần chú ý",
+   "noDataCount": 0,
+   "worst": [
+    {
+     "kind": "dark",
+     "level": 1,
+     "km": 84,
+     "text": "Qua đoạn núi lúc trời tối"
+    }
+   ],
+   "samples": [
+    {
+     "km": 0,
+     "elev": 52,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 14.1,
+      "rh": 92,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 10680,
+      "gust": 4.7,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 12,
+     "elev": 42,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 12.3,
+      "rh": 90,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 10820,
+      "gust": 11.2,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 24,
+     "elev": 170,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 12.3,
+      "rh": 87,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 10780,
+      "gust": 12.2,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 36,
+     "elev": 327,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 13,
+      "rh": 77,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 14240,
+      "gust": 9.4,
+      "r24": 0,
+      "r72": 0.1,
+      "rp": [
+       0,
+       0.1,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 48,
+     "elev": 253,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 15,
+      "rh": 70,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 17480,
+      "gust": 8.3,
+      "r24": 0,
+      "r72": 0.1,
+      "rp": [
+       0,
+       0.1,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 60,
+     "elev": 374,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 13.5,
+      "rh": 76,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 1,
+      "vis": 14460,
+      "gust": 12.2,
+      "r24": 0,
+      "r72": 0.1,
+      "rp": [
+       0,
+       0.1,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 72,
+     "elev": 402,
+     "hour": "2026-11-29T06:00",
+     "level": 0,
+     "wx": {
+      "t": 12.3,
+      "rh": 71,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 2,
+      "vis": 16700,
+      "gust": 8.6,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 84,
+     "elev": 1083,
+     "hour": "2026-11-29T06:00",
+     "level": 1,
+     "wx": {
+      "t": 10.1,
+      "rh": 75,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 1,
+      "vis": 19240,
+      "gust": 13.7,
+      "r24": 0,
+      "r72": 0.2,
+      "rp": [
+       0,
+       0.2,
+       null
+      ]
+     },
+     "hz": [
+      "dark1"
+     ]
+    }
+   ],
+   "stability": {
+    "arrivalDate": "2026-11-29",
+    "fetchedAt": "2026-11-28T17:08:03.008Z",
+    "models": [
+     "ecmwf_ifs025",
+     "gfs_seamless",
+     "icon_seamless",
+     "ukmo_seamless"
+    ],
+    "missingModels": [],
+    "days": [
+     {
+      "date": "2026-11-29",
+      "leadDays": 1,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         26,
+         2,
+         0
+        ],
+        [
+         7,
+         8,
+         2
+        ],
+        [
+         54,
+         2,
+         28
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-11-30",
+      "leadDays": 2,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 3,
+       "values": [
+        [
+         0,
+         53,
+         69
+        ],
+        [
+         19,
+         49,
+         71
+        ],
+        [
+         58,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-01",
+      "leadDays": 3,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0.6,
+         0.3,
+         0.3
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0.6,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 4,
+       "values": [
+        [
+         79,
+         64,
+         45
+        ],
+        [
+         100,
+         59,
+         100
+        ],
+        [
+         79,
+         46,
+         57
+        ],
+        [
+         8,
+         47,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-02",
+      "leadDays": 4,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         1.4,
+         0,
+         0
+        ],
+        [
+         0.5,
+         0.3,
+         0.2
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         25,
+         37,
+         62
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         39
+        ],
+        [
+         95,
+         70,
+         88
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-03",
+      "leadDays": 5,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         4.9,
+         1.2,
+         1.6
+        ],
+        [
+         2,
+         1.1,
+         1.1
+        ],
+        [
+         0,
+         0,
+         null
+        ],
+        [
+         0.9,
+         0,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         100,
+         88,
+         73
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         98,
+         82,
+         null
+        ],
+        [
+         90,
+         78,
+         null
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-04",
+      "leadDays": 6,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         2.4,
+         3.7,
+         null
+        ],
+        [
+         1.5,
+         2.8,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         77,
+         85,
+         null
+        ],
+        [
+         95,
+         84,
+         null
+        ],
+        [
+         87,
+         null,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "storm": {
+    "rulesVersion": "storm-1.0",
+    "fetchedAt": "2026-11-28T17:08:03.431Z",
+    "missingModels": [],
+    "worst": "NONE",
+    "segments": [
+     {
+      "fromKm": 0,
+      "toKm": 84,
+      "fromHour": "2026-11-29T04:00",
+      "toHour": "2026-11-29T06:00",
+      "level": "NONE",
+      "maxThunder": 0,
+      "capeMax": 0
+     }
+    ],
+    "points": [
+     {
+      "km": 0,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 12,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 24,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 36,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 48,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 60,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 72,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 84,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   },
+   "slide": {
+    "source": "QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII",
+    "points": [],
+    "noDataCount": 0
+   }
+  },
+  {
+   "id": "HN-BA_VI-moto",
+   "from": "Hà Nội (Hồ Gươm)",
+   "to": "BA_VI",
+   "toName": "Đỉnh Ba Vì (Đỉnh Vua)",
+   "sunrise": "06:23",
+   "vehicle": "motorbike",
+   "speedKmh": 40,
+   "router": "valhalla-motorcycle",
+   "fallbackNote": null,
+   "departVN": "2026-11-29T04:16",
+   "distanceKm": 64.7,
+   "durationH": 1.62,
+   "maxElev": 1094,
+   "cautionNote": null,
+   "endGapKm": 0.48,
+   "endNote": null,
+   "destElev": 1094,
+   "level": 1,
+   "levelLabel": "Cần chú ý",
+   "noDataCount": 0,
+   "worst": [
+    {
+     "kind": "cold",
+     "level": 1,
+     "km": 65,
+     "text": "Lạnh 9.2°C, cần áo ấm, găng tay"
+    },
+    {
+     "kind": "dark",
+     "level": 1,
+     "km": 65,
+     "text": "Qua đoạn núi lúc trời tối"
+    }
+   ],
+   "samples": [
+    {
+     "km": 0,
+     "elev": 11,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 16.4,
+      "rh": 77,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 13980,
+      "gust": 13.3,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 12,
+     "elev": 10,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 16.5,
+      "rh": 77,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 15420,
+      "gust": 4.7,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 24,
+     "elev": 15,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 16.1,
+      "rh": 84,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 12200,
+      "gust": 4.3,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 36,
+     "elev": 14,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 15.8,
+      "rh": 83,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 8140,
+      "gust": 4.3,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 48,
+     "elev": 27,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 15.7,
+      "rh": 88,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 8480,
+      "gust": 2.5,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 65,
+     "elev": 1094,
+     "hour": "2026-11-29T06:00",
+     "level": 1,
+     "wx": {
+      "t": 9.2,
+      "rh": 86,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 11760,
+      "gust": 6.8,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": [
+      "cold1",
+      "dark1"
+     ]
+    }
+   ],
+   "stability": {
+    "arrivalDate": "2026-11-29",
+    "fetchedAt": "2026-11-28T17:08:08.262Z",
+    "models": [
+     "ecmwf_ifs025",
+     "gfs_seamless",
+     "icon_seamless",
+     "ukmo_seamless"
+    ],
+    "missingModels": [],
+    "days": [
+     {
+      "date": "2026-11-29",
+      "leadDays": 1,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         0,
+         0,
+         4
+        ],
+        [
+         9,
+         2,
+         7
+        ],
+        [
+         35,
+         40,
+         12
+        ],
+        [
+         5,
+         0,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-11-30",
+      "leadDays": 2,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 3,
+       "values": [
+        [
+         32,
+         88,
+         63
+        ],
+        [
+         2,
+         7,
+         10
+        ],
+        [
+         85,
+         73,
+         73
+        ],
+        [
+         0,
+         17,
+         71
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-01",
+      "leadDays": 3,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         0.3,
+         0.9,
+         0
+        ],
+        [
+         0.1,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0.9,
+         0,
+         1.5
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         96,
+         99,
+         82
+        ],
+        [
+         97,
+         76,
+         100
+        ],
+        [
+         96,
+         86,
+         95
+        ],
+        [
+         99,
+         91,
+         100
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-02",
+      "leadDays": 4,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         0.6,
+         0.3,
+         0.6
+        ],
+        [
+         0.5,
+         0.4,
+         1
+        ],
+        [
+         0,
+         0.3,
+         0
+        ],
+        [
+         0.3,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         68,
+         95,
+         77
+        ],
+        [
+         98,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         98
+        ],
+        [
+         99,
+         100,
+         100
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-03",
+      "leadDays": 5,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         2.1,
+         1.5,
+         0.6
+        ],
+        [
+         3.5,
+         2.6,
+         1.3
+        ],
+        [
+         0,
+         0,
+         null
+        ],
+        [
+         0.6,
+         0,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         92,
+         94,
+         87
+        ],
+        [
+         100,
+         98,
+         100
+        ],
+        [
+         98,
+         95,
+         null
+        ],
+        [
+         98,
+         100,
+         null
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-04",
+      "leadDays": 6,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         0.3,
+         0.9,
+         null
+        ],
+        [
+         0.3,
+         0.2,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ],
+        [
+         1.2,
+         null,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         100,
+         95,
+         null
+        ],
+        [
+         96,
+         89,
+         null
+        ],
+        [
+         99,
+         null,
+         null
+        ],
+        [
+         88,
+         null,
+         null
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "storm": {
+    "rulesVersion": "storm-1.0",
+    "fetchedAt": "2026-11-28T17:08:08.565Z",
+    "missingModels": [],
+    "worst": "NONE",
+    "segments": [
+     {
+      "fromKm": 0,
+      "toKm": 65,
+      "fromHour": "2026-11-29T04:00",
+      "toHour": "2026-11-29T06:00",
+      "level": "NONE",
+      "maxThunder": 0,
+      "capeMax": 0
+     }
+    ],
+    "points": [
+     {
+      "km": 0,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 12,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 24,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 36,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 48,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 65,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   },
+   "slide": {
+    "source": "QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII",
+    "points": [],
+    "noDataCount": 0
+   }
+  },
+  {
+   "id": "HN-SAPA-car",
+   "from": "Hà Nội (Hồ Gươm)",
+   "to": "SAPA_HAM_RONG",
+   "toName": "Thị trấn Sapa (Hàm Rồng)",
+   "sunrise": "06:32",
+   "vehicle": "car",
+   "speedKmh": 50,
+   "router": "osrm-car",
+   "fallbackNote": null,
+   "departVN": "2026-11-28T23:45",
+   "distanceKm": 313.9,
+   "durationH": 6.28,
+   "maxElev": 1514,
+   "cautionNote": null,
+   "endGapKm": 0,
+   "endNote": null,
+   "destElev": 1514,
+   "level": 1,
+   "levelLabel": "Cần chú ý",
+   "noDataCount": 0,
+   "worst": [
+    {
+     "kind": "dark",
+     "level": 1,
+     "km": 314,
+     "text": "Qua đoạn núi lúc trời tối"
+    }
+   ],
+   "samples": [
+    {
+     "km": 0,
+     "elev": 11,
+     "hour": "2026-11-29T00:00",
+     "level": 0,
+     "wx": {
+      "t": 17.1,
+      "rh": 81,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 2,
+      "vis": 14000,
+      "gust": 10.1,
+      "r24": 0,
+      "r72": 0.3,
+      "rp": [
+       0,
+       0.3,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 21,
+     "elev": 11,
+     "hour": "2026-11-29T00:00",
+     "level": 0,
+     "wx": {
+      "t": 16.8,
+      "rh": 81,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 2,
+      "vis": 14000,
+      "gust": 9.7,
+      "r24": 0,
+      "r72": 0.1,
+      "rp": [
+       0,
+       0.1,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 42,
+     "elev": 7,
+     "hour": "2026-11-29T01:00",
+     "level": 0,
+     "wx": {
+      "t": 17.1,
+      "rh": 75,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 14000,
+      "gust": 10.1,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 63,
+     "elev": 18,
+     "hour": "2026-11-29T01:00",
+     "level": 0,
+     "wx": {
+      "t": 17.4,
+      "rh": 73,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 1,
+      "vis": 15580,
+      "gust": 3.2,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 84,
+     "elev": 15,
+     "hour": "2026-11-29T01:00",
+     "level": 0,
+     "wx": {
+      "t": 17.6,
+      "rh": 84,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 2,
+      "vis": 7460,
+      "gust": 2.9,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 105,
+     "elev": 27,
+     "hour": "2026-11-29T02:00",
+     "level": 0,
+     "wx": {
+      "t": 15.1,
+      "rh": 87,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 1,
+      "vis": 12120,
+      "gust": 6.1,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 126,
+     "elev": 71,
+     "hour": "2026-11-29T02:00",
+     "level": 0,
+     "wx": {
+      "t": 13.8,
+      "rh": 95,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 1,
+      "vis": 8520,
+      "gust": 6.5,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 147,
+     "elev": 50,
+     "hour": "2026-11-29T03:00",
+     "level": 0,
+     "wx": {
+      "t": 12.5,
+      "rh": 91,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 8860,
+      "gust": 10.1,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 168,
+     "elev": 64,
+     "hour": "2026-11-29T03:00",
+     "level": 0,
+     "wx": {
+      "t": 13.7,
+      "rh": 80,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 14760,
+      "gust": 11.5,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 189,
+     "elev": 49,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 12.5,
+      "rh": 87,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 2,
+      "vis": 11480,
+      "gust": 10.4,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 209,
+     "elev": 97,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 15.8,
+      "rh": 60,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 22540,
+      "gust": 5.4,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 230,
+     "elev": 67,
+     "hour": "2026-11-29T04:00",
+     "level": 0,
+     "wx": {
+      "t": 14.1,
+      "rh": 67,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 20220,
+      "gust": 3.2,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 251,
+     "elev": 74,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 14.8,
+      "rh": 84,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 10820,
+      "gust": 1.8,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 272,
+     "elev": 152,
+     "hour": "2026-11-29T05:00",
+     "level": 0,
+     "wx": {
+      "t": 15.2,
+      "rh": 53,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 24600,
+      "gust": 5,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 293,
+     "elev": 275,
+     "hour": "2026-11-29T06:00",
+     "level": 0,
+     "wx": {
+      "t": 12.7,
+      "rh": 63,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 12540,
+      "gust": 7.9,
+      "r24": 0,
+      "r72": 0,
+      "rp": [
+       0,
+       0,
+       null
+      ]
+     },
+     "hz": []
+    },
+    {
+     "km": 314,
+     "elev": 1514,
+     "hour": "2026-11-29T06:00",
+     "level": 1,
+     "wx": {
+      "t": 8.2,
+      "rh": 65,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 30700,
+      "gust": 6.5,
+      "r24": 0,
+      "r72": 0.4,
+      "rp": [
+       0,
+       0.4,
+       null
+      ]
+     },
+     "hz": [
+      "dark1"
+     ]
+    }
+   ],
+   "stability": {
+    "arrivalDate": "2026-11-29",
+    "fetchedAt": "2026-11-28T17:08:11.895Z",
+    "models": [
+     "ecmwf_ifs025",
+     "gfs_seamless",
+     "icon_seamless",
+     "ukmo_seamless"
+    ],
+    "missingModels": [],
+    "days": [
+     {
+      "date": "2026-11-29",
+      "leadDays": 1,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         0,
+         6,
+         0
+        ],
+        [
+         2,
+         0,
+         4
+        ],
+        [
+         0,
+         0,
+         43
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-11-30",
+      "leadDays": 2,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         0,
+         12,
+         10
+        ],
+        [
+         0,
+         4,
+         70
+        ],
+        [
+         39,
+         1,
+         35
+        ],
+        [
+         0,
+         0,
+         13
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-01",
+      "leadDays": 3,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         2.4,
+         0,
+         0
+        ],
+        [
+         0.1,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 4,
+       "values": [
+        [
+         94,
+         92,
+         49
+        ],
+        [
+         100,
+         43,
+         98
+        ],
+        [
+         73,
+         55,
+         9
+        ],
+        [
+         63,
+         0,
+         42
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-02",
+      "leadDays": 4,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 4,
+       "values": [
+        [
+         14,
+         35,
+         69
+        ],
+        [
+         100,
+         43,
+         91
+        ],
+        [
+         31,
+         83,
+         40
+        ],
+        [
+         19,
+         42,
+         79
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-03",
+      "leadDays": 5,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0.5,
+         0.4,
+         0
+        ],
+        [
+         0.5,
+         0.6,
+         0.3
+        ],
+        [
+         0,
+         0,
+         null
+        ],
+        [
+         0,
+         0,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 3,
+       "values": [
+        [
+         52,
+         81,
+         60
+        ],
+        [
+         100,
+         99,
+         100
+        ],
+        [
+         60,
+         86,
+         null
+        ],
+        [
+         29,
+         97,
+         null
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-04",
+      "leadDays": 6,
+      "rain": {
+       "verdict": "SHIFTING",
+       "usable": 2,
+       "changed": 2,
+       "values": [
+        [
+         3.4,
+         0.1,
+         null
+        ],
+        [
+         0,
+         1.8,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         100,
+         98,
+         null
+        ],
+        [
+         100,
+         94,
+         null
+        ],
+        [
+         83,
+         null,
+         null
+        ],
+        [
+         2,
+         null,
+         null
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "storm": {
+    "rulesVersion": "storm-1.0",
+    "fetchedAt": "2026-11-28T17:08:12.564Z",
+    "missingModels": [],
+    "worst": "NONE",
+    "segments": [
+     {
+      "fromKm": 0,
+      "toKm": 314,
+      "fromHour": "2026-11-29T00:00",
+      "toHour": "2026-11-29T06:00",
+      "level": "NONE",
+      "maxThunder": 0,
+      "capeMax": 10
+     }
+    ],
+    "points": [
+     {
+      "km": 0,
+      "hour": "2026-11-29T00:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 21,
+      "hour": "2026-11-29T00:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 42,
+      "hour": "2026-11-29T01:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 63,
+      "hour": "2026-11-29T01:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 84,
+      "hour": "2026-11-29T01:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       10
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 105,
+      "hour": "2026-11-29T02:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 126,
+      "hour": "2026-11-29T02:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 147,
+      "hour": "2026-11-29T03:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 168,
+      "hour": "2026-11-29T03:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 189,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 209,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 230,
+      "hour": "2026-11-29T04:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 251,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 272,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 293,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 314,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   },
+   "slide": {
+    "source": "QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII",
+    "points": [],
+    "noDataCount": 0
+   }
+  },
+  {
+   "id": "HUE-BACH_MA-car",
+   "from": "Huế (TP)",
+   "to": "BACH_MA",
+   "toName": "Bạch Mã (Vọng Hải Đài)",
+   "sunrise": "06:05",
+   "vehicle": "car",
+   "speedKmh": 50,
+   "router": "osrm-car",
+   "fallbackNote": null,
+   "departVN": "2026-11-29T04:30",
+   "distanceKm": 53.9,
+   "durationH": 1.08,
+   "maxElev": 1047,
+   "cautionNote": null,
+   "endGapKm": 2.26,
+   "endNote": "Tuyến CHƯA TỚI ĐÍCH: đường xe trên bản đồ dừng cách điểm đến 2,3 km chim bay (đoạn cuối là đường mòn, đường nội bộ hoặc bản đồ chưa có). Độ khó dọc đường chỉ tính tới điểm cuối của tuyến, đoạn còn lại tự tìm hiểu; Tóm tắt ngày tại đích lấy dự báo tại chính điểm đến.",
+   "destElev": 1278,
+   "level": 2,
+   "levelLabel": "Khó đi",
+   "noDataCount": 0,
+   "worst": [
+    {
+     "kind": "rain",
+     "level": 2,
+     "km": 24,
+     "text": "Mưa vừa 3.9 mm/h, đường trơn"
+    },
+    {
+     "kind": "fog",
+     "level": 2,
+     "km": 54,
+     "text": "Sương mù, tầm nhìn ~680 m"
+    },
+    {
+     "kind": "dark",
+     "level": 1,
+     "km": 48,
+     "text": "Qua đoạn núi lúc trời tối"
+    }
+   ],
+   "samples": [
+    {
+     "km": 0,
+     "elev": 7,
+     "hour": "2026-11-29T05:00",
+     "level": 1,
+     "wx": {
+      "t": 23,
+      "rh": 95,
+      "mm": 1.9,
+      "pop": 97,
+      "wmo": 80,
+      "vis": 2440,
+      "gust": 11.5,
+      "r24": 35.2,
+      "r72": 97.1,
+      "rp": [
+       55.3,
+       6.6,
+       null
+      ]
+     },
+     "hz": [
+      "rain1"
+     ]
+    },
+    {
+     "km": 12,
+     "elev": 13,
+     "hour": "2026-11-29T05:00",
+     "level": 1,
+     "wx": {
+      "t": 22.3,
+      "rh": 99,
+      "mm": 1.3,
+      "pop": 97,
+      "wmo": 80,
+      "vis": 3060,
+      "gust": 16.9,
+      "r24": 31.3,
+      "r72": 84.8,
+      "rp": [
+       46.6,
+       6.9,
+       null
+      ]
+     },
+     "hz": [
+      "rain1"
+     ]
+    },
+    {
+     "km": 24,
+     "elev": 3,
+     "hour": "2026-11-29T05:00",
+     "level": 2,
+     "wx": {
+      "t": 23.1,
+      "rh": 97,
+      "mm": 3.9,
+      "pop": 99,
+      "wmo": 81,
+      "vis": 1920,
+      "gust": 9.4,
+      "r24": 34.6,
+      "r72": 87,
+      "rp": [
+       40.9,
+       11.5,
+       null
+      ]
+     },
+     "hz": [
+      "rain2"
+     ]
+    },
+    {
+     "km": 36,
+     "elev": 12,
+     "hour": "2026-11-29T05:00",
+     "level": 2,
+     "wx": {
+      "t": 23.1,
+      "rh": 98,
+      "mm": 6.3,
+      "pop": 99,
+      "wmo": 81,
+      "vis": 1480,
+      "gust": 14,
+      "r24": 58.7,
+      "r72": 131.6,
+      "rp": [
+       61.1,
+       11.8,
+       null
+      ]
+     },
+     "hz": [
+      "rain2"
+     ]
+    },
+    {
+     "km": 48,
+     "elev": 603,
+     "hour": "2026-11-29T05:00",
+     "level": 2,
+     "wx": {
+      "t": 18.6,
+      "rh": 100,
+      "mm": 5.1,
+      "pop": 99,
+      "wmo": 63,
+      "vis": 1380,
+      "gust": 12.6,
+      "r24": 51.1,
+      "r72": 127.3,
+      "rp": [
+       67.2,
+       9,
+       null
+      ]
+     },
+     "hz": [
+      "rain2",
+      "rain1",
+      "dark1"
+     ]
+    },
+    {
+     "km": 54,
+     "elev": 1047,
+     "hour": "2026-11-29T06:00",
+     "level": 2,
+     "wx": {
+      "t": 15.9,
+      "rh": 100,
+      "mm": 4.8,
+      "pop": 100,
+      "wmo": 81,
+      "vis": 680,
+      "gust": 15.5,
+      "r24": 54,
+      "r72": 130,
+      "rp": [
+       68.8,
+       7.2,
+       null
+      ]
+     },
+     "hz": [
+      "rain2",
+      "fog2",
+      "rain1"
+     ]
+    }
+   ],
+   "stability": {
+    "arrivalDate": "2026-11-29",
+    "fetchedAt": "2026-11-28T17:08:17.324Z",
+    "models": [
+     "ecmwf_ifs025",
+     "gfs_seamless",
+     "icon_seamless",
+     "ukmo_seamless"
+    ],
+    "missingModels": [],
+    "days": [
+     {
+      "date": "2026-11-29",
+      "leadDays": 1,
+      "rain": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         30.7,
+         88.9,
+         135.2
+        ],
+        [
+         71.9,
+         117.9,
+         79.5
+        ],
+        [
+         27.5,
+         3.4,
+         7.4
+        ],
+        [
+         78.2,
+         98.3,
+         131.3
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-11-30",
+      "leadDays": 2,
+      "rain": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 3,
+       "values": [
+        [
+         32.2,
+         32.7,
+         34
+        ],
+        [
+         29,
+         98.6,
+         52.1
+        ],
+        [
+         20.7,
+         5.4,
+         9.1
+        ],
+        [
+         66.2,
+         44.2,
+         65.9
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ],
+        [
+         100,
+         100,
+         100
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-01",
+      "leadDays": 3,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         2.4,
+         2.9,
+         6.1
+        ],
+        [
+         1.4,
+         2.9,
+         3.3
+        ],
+        [
+         0.3,
+         0.9,
+         1.6
+        ],
+        [
+         4.1,
+         9.8,
+         9.8
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         96,
+         100,
+         98
+        ],
+        [
+         86,
+         90,
+         98
+        ],
+        [
+         90,
+         97,
+         96
+        ],
+        [
+         46,
+         85,
+         98
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-02",
+      "leadDays": 4,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         2.7,
+         2,
+         1.5
+        ],
+        [
+         3.7,
+         5.1,
+         1
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         1,
+         2.7,
+         1
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         31,
+         95,
+         70
+        ],
+        [
+         82,
+         79,
+         82
+        ],
+        [
+         88,
+         87,
+         82
+        ],
+        [
+         61,
+         38,
+         95
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-03",
+      "leadDays": 5,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         18.3,
+         5.8,
+         7.8
+        ],
+        [
+         7.7,
+         4.9,
+         2.3
+        ],
+        [
+         8.4,
+         9,
+         null
+        ],
+        [
+         31,
+         20.1,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         98,
+         100,
+         87
+        ],
+        [
+         98,
+         82,
+         82
+        ],
+        [
+         95,
+         100,
+         null
+        ],
+        [
+         100,
+         58,
+         null
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-04",
+      "leadDays": 6,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         2.1,
+         3.3,
+         null
+        ],
+        [
+         1.5,
+         4,
+         null
+        ],
+        [
+         3,
+         null,
+         null
+        ],
+        [
+         2.4,
+         null,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 2,
+       "changed": 1,
+       "values": [
+        [
+         100,
+         100,
+         null
+        ],
+        [
+         82,
+         39,
+         null
+        ],
+        [
+         98,
+         null,
+         null
+        ],
+        [
+         8,
+         null,
+         null
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "storm": {
+    "rulesVersion": "storm-1.0",
+    "fetchedAt": "2026-11-28T17:08:17.681Z",
+    "missingModels": [],
+    "worst": "NONE",
+    "segments": [
+     {
+      "fromKm": 0,
+      "toKm": 54,
+      "fromHour": "2026-11-29T05:00",
+      "toHour": "2026-11-29T06:00",
+      "level": "NONE",
+      "maxThunder": 0,
+      "capeMax": 540
+     }
+    ],
+    "points": [
+     {
+      "km": 0,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       70,
+       70,
+       0,
+       170
+      ],
+      "rain": [
+       2.2,
+       1.9,
+       0.3,
+       1.7
+      ]
+     },
+     {
+      "km": 12,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       70,
+       100,
+       0,
+       70
+      ],
+      "rain": [
+       2.2,
+       2.2,
+       0.2,
+       3.8
+      ]
+     },
+     {
+      "km": 24,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       50,
+       40,
+       0,
+       70
+      ],
+      "rain": [
+       4.6,
+       8.4,
+       0.9,
+       3.8
+      ]
+     },
+     {
+      "km": 36,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       50,
+       40,
+       0,
+       540
+      ],
+      "rain": [
+       4.6,
+       8.4,
+       2.9,
+       2.9
+      ]
+     },
+     {
+      "km": 48,
+      "hour": "2026-11-29T05:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       50,
+       40,
+       0,
+       10
+      ],
+      "rain": [
+       4.6,
+       13,
+       1.5,
+       2.7
+      ]
+     },
+     {
+      "km": 54,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       70,
+       50,
+       0,
+       0
+      ],
+      "rain": [
+       4.6,
+       13,
+       1.5,
+       5.2
+      ]
+     }
+    ]
+   },
+   "slide": {
+    "source": "QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII",
+    "points": [],
+    "noDataCount": 0
+   }
+  },
+  {
+   "id": "SAPA-O_QUY_HO-moto",
+   "from": "Sa Pa (TT)",
+   "to": "DEO_O_QUY_HO",
+   "toName": "Đèo Ô Quy Hồ",
+   "sunrise": "06:32",
+   "vehicle": "motorbike",
+   "speedKmh": 40,
+   "router": "valhalla-motorcycle",
+   "fallbackNote": null,
+   "departVN": "2026-11-29T05:42",
+   "distanceKm": 13.1,
+   "durationH": 0.33,
+   "maxElev": 1922,
+   "cautionNote": null,
+   "endGapKm": 0.03,
+   "endNote": null,
+   "destElev": 1922,
+   "level": 1,
+   "levelLabel": "Cần chú ý",
+   "noDataCount": 0,
+   "worst": [
+    {
+     "kind": "cold",
+     "level": 1,
+     "km": 0,
+     "text": "Lạnh 8.4°C, cần áo ấm, găng tay"
+    },
+    {
+     "kind": "dark",
+     "level": 1,
+     "km": 0,
+     "text": "Qua đoạn núi lúc trời tối"
+    }
+   ],
+   "samples": [
+    {
+     "km": 0,
+     "elev": 1480,
+     "hour": "2026-11-29T06:00",
+     "level": 1,
+     "wx": {
+      "t": 8.4,
+      "rh": 65,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 30700,
+      "gust": 6.5,
+      "r24": 0,
+      "r72": 0.4,
+      "rp": [
+       0,
+       0.4,
+       null
+      ]
+     },
+     "hz": [
+      "cold1",
+      "dark1"
+     ]
+    },
+    {
+     "km": 13,
+     "elev": 1922,
+     "hour": "2026-11-29T06:00",
+     "level": 1,
+     "wx": {
+      "t": 5.8,
+      "rh": 56,
+      "mm": 0,
+      "pop": 0,
+      "wmo": 0,
+      "vis": 34680,
+      "gust": 7.9,
+      "r24": 0,
+      "r72": 0.2,
+      "rp": [
+       0,
+       0.2,
+       null
+      ]
+     },
+     "hz": [
+      "cold1",
+      "dark1"
+     ]
+    }
+   ],
+   "stability": {
+    "arrivalDate": "2026-11-29",
+    "fetchedAt": "2026-11-28T17:08:20.142Z",
+    "models": [
+     "ecmwf_ifs025",
+     "gfs_seamless",
+     "icon_seamless",
+     "ukmo_seamless"
+    ],
+    "missingModels": [],
+    "days": [
+     {
+      "date": "2026-11-29",
+      "leadDays": 1,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         0,
+         6,
+         0
+        ],
+        [
+         2,
+         0,
+         4
+        ],
+        [
+         0,
+         0,
+         53
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-11-30",
+      "leadDays": 2,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 2,
+       "values": [
+        [
+         0,
+         12,
+         10
+        ],
+        [
+         0,
+         4,
+         70
+        ],
+        [
+         44,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         13
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-01",
+      "leadDays": 3,
+      "rain": {
+       "verdict": "SLIGHT",
+       "usable": 4,
+       "changed": 1,
+       "values": [
+        [
+         2.4,
+         0,
+         0
+        ],
+        [
+         0.1,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 4,
+       "values": [
+        [
+         94,
+         92,
+         49
+        ],
+        [
+         100,
+         43,
+         98
+        ],
+        [
+         71,
+         58,
+         12
+        ],
+        [
+         63,
+         0,
+         42
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-02",
+      "leadDays": 4,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 4,
+       "values": [
+        [
+         14,
+         35,
+         69
+        ],
+        [
+         100,
+         43,
+         91
+        ],
+        [
+         38,
+         84,
+         27
+        ],
+        [
+         19,
+         42,
+         79
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-03",
+      "leadDays": 5,
+      "rain": {
+       "verdict": "STABLE",
+       "usable": 4,
+       "changed": 0,
+       "values": [
+        [
+         0.5,
+         0.4,
+         0
+        ],
+        [
+         0.5,
+         0.6,
+         0.3
+        ],
+        [
+         0,
+         0,
+         null
+        ],
+        [
+         0,
+         0,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "SHIFTING",
+       "usable": 4,
+       "changed": 3,
+       "values": [
+        [
+         52,
+         81,
+         60
+        ],
+        [
+         100,
+         99,
+         100
+        ],
+        [
+         42,
+         82,
+         null
+        ],
+        [
+         29,
+         97,
+         null
+        ]
+       ]
+      }
+     },
+     {
+      "date": "2026-12-04",
+      "leadDays": 6,
+      "rain": {
+       "verdict": "SHIFTING",
+       "usable": 2,
+       "changed": 2,
+       "values": [
+        [
+         3.4,
+         0.1,
+         null
+        ],
+        [
+         0,
+         1.8,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ],
+        [
+         0,
+         null,
+         null
+        ]
+       ]
+      },
+      "dawnCloud": {
+       "verdict": "STABLE",
+       "usable": 2,
+       "changed": 0,
+       "values": [
+        [
+         100,
+         98,
+         null
+        ],
+        [
+         100,
+         94,
+         null
+        ],
+        [
+         85,
+         null,
+         null
+        ],
+        [
+         2,
+         null,
+         null
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "storm": {
+    "rulesVersion": "storm-1.0",
+    "fetchedAt": "2026-11-28T17:08:20.172Z",
+    "missingModels": [],
+    "worst": "NONE",
+    "segments": [
+     {
+      "fromKm": 0,
+      "toKm": 13,
+      "fromHour": "2026-11-29T06:00",
+      "toHour": "2026-11-29T06:00",
+      "level": "NONE",
+      "maxThunder": 0,
+      "capeMax": 0
+     }
+    ],
+    "points": [
+     {
+      "km": 0,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "km": 13,
+      "hour": "2026-11-29T06:00",
+      "level": "NONE",
+      "usable": 4,
+      "thunder": 0,
+      "cape": [
+       0,
+       0,
+       0,
+       0
+      ],
+      "rain": [
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   },
+   "slide": {
+    "source": "QĐ 18/2021/QĐ-TTg, Điều 46 + Bảng 6 Phụ lục XII",
+    "points": [],
+    "noDataCount": 0
+   }
+  }
+ ]
+}
