@@ -1203,5 +1203,17 @@
     "observedAt": "07:00 28/11, theo chữ trong bài FB ('Ngay lúc này, 7h ngày 28/11'); bài hiện '3 giờ' trên ảnh chụp màn hình lúc 10:13, khớp",
     "source": "SOCIAL_PHOTO",
     "note": "Anh Phong gửi ảnh chụp màn hình bài FB (phiếu g2287) và xác định là điểm săn mây Tả Lèng CGJ2+7G. Ảnh: đài ngắm lan can sắt có cờ đỏ, biển mây trắng phủ kín thung lũng phía dưới, vài chỏm núi nhô lên, nắng sớm, trời trên quang. LƯU Ý ĐỊA DANH: chữ trong bài ghi 'tại Phìn Ngan' (xã cũ thuộc Bát Xát, Lào Cai, phía đông dãy Hoàng Liên), KHÔNG ghi Tả Lèng; em không xác minh được ảnh chụp ở đâu, ghi theo lời anh. Nếu sau này rõ là Phìn Ngan thì ca này phải bỏ khỏi chấm. Dự báo app (bản chụp 2026-11-28, engine-2.8.3): FOG 30, đồng thuận 33% (GFS FOG 54 mặt mây 1733m, ICON CLEAR 2, UKMO ROLLING 30 mặt mây 1250m), mặt mây 1733m, chỗ đứng 1360m (ΔH -373m), không đáng đi => BỎ SÓT kiểu FOG. UKMO đặt mặt mây 1250m, dưới chỗ đứng, khớp ảnh. Cổng bóng agy: khong 19%."
+  },
+  {
+    "id": "2026-11-28-hang-kia",
+    "locationName": "Hang Kia - Pà Cò (Thung Mài)",
+    "spotKey": "HANG_KIA_PA_CO",
+    "date": "2026-11-28",
+    "reportedAt": "2026-11-28T12:11:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "khoảng 07:00 28/11: livestream FB hiện '5 hours ago' trên ảnh chụp màn hình anh gửi lúc 12:11; chú thích 'Biển mây hôm nay 28/11/2026'. Giờ ước từ dấu '5 hours ago', mặt trời thấp",
+    "source": "SOCIAL_VIDEO",
+    "note": "Anh Phong gửi ảnh chụp màn hình livestream của A La Homestay Hang Kia Pà Cò (phiếu gfbed). Khung hình: đứng trên đồi có đài gỗ, biển mây trắng phẳng phủ kín thung lũng phía dưới tới chân trời, mặt trời thấp, trời trên quang có mây tích lẻ. Anh nói đã xem app nhiều lần từ chiều 27 tới đêm 27/11, lần nào cũng không khuyên đi. Dự báo app (bản chụp 2026-11-28 lúc 23:25 27/11 VN, engine-2.8.3): DISSIPATING 17, đồng thuận 67% (GFS STATIC 62 mặt mây 1099m, ICON DISSIPATING 17 mặt mây 1733m, UKMO DISSIPATING 10), mặt mây 1733m, chỗ đứng 1483m (ΔH -250m), không đáng đi => BỎ SÓT. Bản chụp 27/11 (lead 2) cũng DISSIPATING 64. Hindcast 28/11 6 mô hình (chạy 12h 28/11): cả 6 ra DISSIPATING/FLOWING vì gió 850 hPa (ngay độ cao chỗ đứng) 35-53 km/h = Destructive, trong khi 5/6 mô hình có nghịch nhiệt mạnh +3..+5°C và đáy thung lũng bão hoà (T-Td 0,1-0,8°C); mặt mây GFS/UKMO/AIFS 1030-1255m, dưới chân. Cùng kiểu VIỆC 3 ý 2 (cổng gió đo ở mực trên nắp nghịch nhiệt dìm biển mây nằm dưới). Cổng bóng agy: khong 12%."
   }
 ]
