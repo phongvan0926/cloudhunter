@@ -1191,5 +1191,17 @@
     "observedAt": "sáng 28/11; anh không nói giờ nên ghi DAWN theo quy ước (anh báo biển mây là trước 9h)",
     "seaLevel": "NONE",
     "note": "Anh Phong báo qua phiếu g85f0: 'Tà Xùa không có' biển mây sáng nay. Không kèm ảnh. Dự báo app (bản chụp 2026-11-28, engine-2.8.3): DISSIPATING 12, đồng thuận 33% (GFS STATIC 30 mặt mây 1017m, ICON CLEAR, UKMO DISSIPATING 0), không có mặt mây chung, không đáng đi => ĐÚNG (từ chối đúng). Cổng bóng agy: khong 18%."
+  },
+  {
+    "id": "2026-11-28-ta-leng",
+    "locationName": "Đồi săn mây Tả Lèng (Lai Châu)",
+    "spotKey": "TA_LENG_SAN_MAY",
+    "date": "2026-11-28",
+    "reportedAt": "2026-11-28T10:16:00+07:00",
+    "seaLevel": "BELOW",
+    "timeOfDay": "DAWN",
+    "observedAt": "07:00 28/11, theo chữ trong bài FB ('Ngay lúc này, 7h ngày 28/11'); bài hiện '3 giờ' trên ảnh chụp màn hình lúc 10:13, khớp",
+    "source": "SOCIAL_PHOTO",
+    "note": "Anh Phong gửi ảnh chụp màn hình bài FB (phiếu g2287) và xác định là điểm săn mây Tả Lèng CGJ2+7G. Ảnh: đài ngắm lan can sắt có cờ đỏ, biển mây trắng phủ kín thung lũng phía dưới, vài chỏm núi nhô lên, nắng sớm, trời trên quang. LƯU Ý ĐỊA DANH: chữ trong bài ghi 'tại Phìn Ngan' (xã cũ thuộc Bát Xát, Lào Cai, phía đông dãy Hoàng Liên), KHÔNG ghi Tả Lèng; em không xác minh được ảnh chụp ở đâu, ghi theo lời anh. Nếu sau này rõ là Phìn Ngan thì ca này phải bỏ khỏi chấm. Dự báo app (bản chụp 2026-11-28, engine-2.8.3): FOG 30, đồng thuận 33% (GFS FOG 54 mặt mây 1733m, ICON CLEAR 2, UKMO ROLLING 30 mặt mây 1250m), mặt mây 1733m, chỗ đứng 1360m (ΔH -373m), không đáng đi => BỎ SÓT kiểu FOG. UKMO đặt mặt mây 1250m, dưới chỗ đứng, khớp ảnh. Cổng bóng agy: khong 19%."
   }
 ]
