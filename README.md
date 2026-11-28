@@ -131,6 +131,7 @@ Không có API key AI, app **vẫn dự báo đầy đủ** — chỉ thiếu ph
 | FSI | 2(T−Td) + 2(T_valley − T850) + gió — tham chiếu thung lũng |
 | VRII | 85 − 12·spread − 2.5·gió_đêm + bonus nghịch nhiệt − phạt mây cao đêm |
 | Gió theo vùng | Zone A: 12/18/26 km/h · Zone B (ống gió Lai Châu): 5/8/15 km/h |
+| Gió trên nắp (28/11/2026) | Gió 850 mạnh mà lớp mặt mây → 850 bền (Ri khối ≥ 0,25): chỉ thêm cảnh báo "có thể tan sớm, lên trước 8h". Luật đổi trạng thái theo gió trong lớp mây đã chấm và BỊ BÁC (NHAT-KY-HIEU-CHINH.md 28/11) |
 | Mặt mây bị kẹp | không vươn qua **đáy nắp** được — trời mưa làm cả cột khí ẩm, nếu không kẹp thì mọi mô hình đều báo "chìm trong mây". Kẹp bằng đỉnh anomaly khi có đỉnh THẬT, bằng tầng ổn định cục bộ khi anomaly chỉ là một cái dốc |
 | Chọn tầng gió | biển mây bị nhốt dưới nắp nghịch nhiệt → xét gió **925hPa trong lớp mây**; không có nắp → 850hPa |
 | Bão hoà thung lũng | T−Td ≤1°C + RH cao → tín hiệu biển mây **độc lập** với `cloud_cover_low` (mô hình toàn cầu bỏ sót sương thung lũng hẹp) |

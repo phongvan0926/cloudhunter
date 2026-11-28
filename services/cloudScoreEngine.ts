@@ -703,11 +703,48 @@ export interface ModelDayScore {
   reasons: string[];
 }
 
+/**
+ * Gió TRONG lớp mây khi gió tách tầng (đợt "cổng gió tách tầng", đăng ký trước 28/11/2026, NHAT-KY-HIEU-CHINH.md).
+ * Gió chỉ xé được biển mây khi thổi trong lớp mây hoặc trộn được xuống đó. Mặt mây dưới mực 850hPa và lớp
+ * mặt mây -> 850 bền (Richardson khối >= 0,25, Miles-Howard) thì gió 850 trượt trên nắp, không với xuống.
+ * Trả null khi không áp dụng (không có mặt mây, mặt mây >= 850, thiếu số, hoặc lớp giữa không bền).
+ */
+export const DECOUPLE_RI = 0.25;
+export function decoupledCloudWind(m: DayModelData, valley: number, top: number | null): { wind: number; ri: number } | null {
+  if (top === null || !Number.isFinite(m.wind850_dawn_max) || !Number.isFinite(m.wind925_dawn_max)) return null;
+  const h925 = m.levels?.find(l => l.p === 925)?.h ?? LEVEL_HEIGHTS.p925;
+  const h850 = m.levels?.find(l => l.p === 850)?.h ?? LEVEL_HEIGHTS.p850;
+  if (!(h850 > h925) || top >= h850) return null;
+  const f = Math.max(0, Math.min(1, (top - h925) / (h850 - h925)));
+  const wTop = m.wind925_dawn_max + f * (m.wind850_dawn_max - m.wind925_dawn_max);
+  const wind = Math.max(wTop, h925 >= valley && h925 <= top ? m.wind925_dawn_max : -Infinity);
+  // nhiệt độ tại mặt mây: nội suy theo profile thật; thiếu profile thì 925<->850
+  const prof = (m.levels ?? []).filter(l => Number.isFinite(l.t) && Number.isFinite(l.h)).sort((a, b) => a.h - b.h);
+  let tTop: number;
+  if (prof.length >= 2 && top >= prof[0].h && top <= prof[prof.length - 1].h) {
+    const j = prof.findIndex(l => l.h >= top);
+    const a = prof[Math.max(0, j - 1)], b = prof[j];
+    tTop = b.h === a.h ? a.t : a.t + (top - a.h) / (b.h - a.h) * (b.t - a.t);
+  } else {
+    if (!Number.isFinite(m.t925) || !Number.isFinite(m.t850)) return null;
+    tTop = m.t925 + (top - h925) / (h850 - h925) * (m.t850 - m.t925);
+  }
+  const t850 = m.levels?.find(l => l.p === 850)?.t ?? m.t850;
+  if (!Number.isFinite(t850) || !Number.isFinite(tTop)) return null;
+  const dz = h850 - top;
+  const dTheta = (t850 - tTop) + 0.0098 * dz;
+  const thetaMean = (t850 + tTop) / 2 + 273.15 + 0.0098 * dz / 2;
+  const dU = (m.wind850_dawn_max - wTop) / 3.6;
+  const ri = Math.abs(dU) <= 0.5 ? Infinity : 9.81 * dTheta * dz / (thetaMean * dU * dU);
+  if (ri < DECOUPLE_RI) return null;
+  return { wind: +wind.toFixed(1), ri };
+}
+
 export function scoreOneModel(
   model: WeatherModelId, m: DayModelData, ctx: DayContext, dateStr: string,
   // Chỉ dùng cho script đo: truyền Infinity để chấm lại bằng luật TRƯỚC engine-2.8.4 trên
   // cùng một mẻ dữ liệu (hai lần fetch không so được — Open-Meteo viết đè quá khứ).
-  opts?: { observerFogMaxDeltaH?: number; observerFogRelaxLowCloud?: number; cloudTop?: CloudTopOpts }
+  opts?: { observerFogMaxDeltaH?: number; observerFogRelaxLowCloud?: number; cloudTop?: CloudTopOpts; windDecouple?: boolean }
 ): ModelDayScore {
   const reasons: string[] = [];
   const inv = computeInversion(m, ctx.valleyElevation);
@@ -744,10 +781,15 @@ export function scoreOneModel(
     ? m.wind850_dawn_max + Math.min(1, (ctx.observerAlt - h850w) / (h700w - h850w))
       * (m.wind700_dawn_max! - m.wind850_dawn_max)
     : m.wind850_dawn_max;
-  const windLevel = useObsWind ? `nội suy 850↔700hPa về ${ctx.observerAlt}m`
+  // Luật H (gió trong lớp mây) BỊ BÁC 28/11/2026 sau phản biện (NHAT-KY-HIEU-CHINH.md): chỉ bật trong script đo.
+  // Phần còn dùng thật: CẢNH BÁO "gió trên nắp, biển mây tan sớm" - không đổi điểm/trạng thái/đáng đi.
+  const decInfo = decoupledCloudWind(m, ctx.valleyElevation, top);
+  const dec = opts?.windDecouple ? decInfo : null;
+  const windLevel = dec ? `trong lớp mây (đáy thung lũng → mặt mây ${top}m, Ri khối ${dec.ri === Infinity ? '∞' : dec.ri.toFixed(2)})`
+    : useObsWind ? `nội suy 850↔700hPa về ${ctx.observerAlt}m`
     : seaCapped ? '925hPa (trong lớp mây)' : '850hPa';
   const wind = assessWind(
-    useObsWind ? +windAtObs.toFixed(1) : (seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max),
+    dec ? dec.wind : useObsWind ? +windAtObs.toFixed(1) : (seaCapped ? m.wind925_dawn_max : m.wind850_dawn_max),
     ctx.zone);
   const spread = m.t_valley_dawn - m.td_valley_dawn;
   // Ẩm "lớp biển mây" phải đo Ở CHÍNH LỚP MÂY — xem seaLayerRH.
@@ -812,6 +854,13 @@ export function scoreOneModel(
   else if (wind.level === 'High') add(-14, `Gió ${windLevel}: ${wind.detail}`);
   else if (wind.level === 'Destructive') add(-28, `Gió ${windLevel}: ${wind.detail}`);
   else reasons.push(`±0 · Gió ${windLevel}: ${wind.detail}` + (seaCapped ? ' — gió trên nắp nghịch nhiệt không với xuống được' : ''));
+  if (decInfo) {
+    const w850 = assessWind(m.wind850_dawn_max, ctx.zone);
+    if (w850.level === 'High' || w850.level === 'Destructive') {
+      reasons.push(`±0 · Gió 850hPa ${m.wind850_dawn_max}km/h có thể thổi TRÊN nắp nghịch nhiệt (lớp mặt mây→850 bền, Ri khối ${decInfo.ri === Infinity ? '∞' : decInfo.ri.toFixed(1)}):`
+        + ' nếu biển mây có thì nắng lên làm vỡ nắp, gió trộn xuống rất nhanh — tan sớm, nên lên trước 8h; chỗ đứng gió lạnh mạnh');
+    }
+  }
 
   // Mây cao ban đêm chỉ là BIẾN THAY THẾ để đoán "sẽ không có nghịch nhiệt". Nếu mô hình đã
   // nói thẳng nghịch nhiệt CÓ (hoặc lớp biên đêm mỏng dính) thì phỏng đoán đó đã sai — trừ

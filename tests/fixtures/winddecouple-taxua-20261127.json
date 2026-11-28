@@ -1,0 +1,93 @@
+{
+ "nguon": "replay-raw historical-forecast 28/11/2026, Tà Xùa 27/11, mô hình UKMO (ca người đi có biển mây)",
+ "ctx": {
+  "valleyElevation": 700,
+  "observerAlt": 1800,
+  "zone": "A_CLOUD_TRAP",
+  "lat": 21.2764
+ },
+ "ukmo": {
+  "t_valley_dawn": 13.1,
+  "td_valley_dawn": 12,
+  "t_obs_dawn": 13.1,
+  "td_obs_dawn": 12,
+  "cloud_low_dawn": 16,
+  "cloud_mid_dawn": 0,
+  "cloud_high_dawn": 0,
+  "precip_dawn": 0,
+  "wind850_dawn_max": 31,
+  "wind925_dawn_max": 5.2,
+  "wind700_dawn_max": 46.6,
+  "t925": 14.3,
+  "t850": 13.9,
+  "t700": 6.1,
+  "rh925": 87,
+  "rh850": 77,
+  "rh700": 53,
+  "cloud_high_night": 0,
+  "wind925_night": 2.3,
+  "precip_night": 0,
+  "rh2m_valley_night": 95,
+  "levels": [
+   {
+    "p": 975,
+    "h": 382,
+    "hReal": true,
+    "t": 17.7,
+    "rh": 85,
+    "cc": 0
+   },
+   {
+    "p": 950,
+    "h": 606,
+    "hReal": true,
+    "t": 16.2,
+    "rh": 85,
+    "cc": 0
+   },
+   {
+    "p": 925,
+    "h": 834,
+    "hReal": true,
+    "t": 14.3,
+    "rh": 87,
+    "cc": 13
+   },
+   {
+    "p": 900,
+    "h": 1066,
+    "hReal": true,
+    "t": 13.9,
+    "rh": 88,
+    "cc": 21
+   },
+   {
+    "p": 850,
+    "h": 1548,
+    "hReal": true,
+    "t": 13.9,
+    "rh": 77,
+    "cc": 0
+   },
+   {
+    "p": 800,
+    "h": 2059,
+    "hReal": true,
+    "t": 12.1,
+    "rh": 70,
+    "cc": 0
+   },
+   {
+    "p": 700,
+    "h": 3167,
+    "hReal": true,
+    "t": 6.1,
+    "rh": 53,
+    "cc": 0
+   }
+  ],
+  "blh_night_min": null,
+  "freezing_level": null,
+  "lifted_index": null
+ }
+}

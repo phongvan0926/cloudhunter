@@ -3,10 +3,11 @@
  * Chạy: npm test
  */
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'fs';
 import {
   computeInversion, computeCloudBase, estimateCloudTop, assessWind, computeFSI,
   computeVRII, sunriseColorPotential, seasonAdjust, scoreOneModel, combineModels,
-  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase, summitCloud, observerInCloud,
+  computeDayForecast, rootedLowLayer, seaLayerRH, verdictOf, capLayerBase, summitCloud, observerInCloud, decoupledCloudWind,
 } from '../services/cloudScoreEngine';
 import { DayModelData, DayData, qualityForDaysAhead, computeSunTimes, aggregateDayModel, vnTodayStr, addDaysStr } from '../services/weatherService';
 
@@ -1694,5 +1695,29 @@ describe('audit-cloud-top: lọc nhiễu khung vệ tinh khi đo sai số mặt 
         { vn: '06:30', top_m: null, emiss: null },
       ],
     })).toEqual({ top: null, contaminated: false, lowFrames: 1 });
+  });
+});
+
+describe('cổng gió tách tầng (luật H, bác 28/11/2026): chỉ cảnh báo, không đổi kết luận', () => {
+  // nắp ấm ở 1100-1550m, gió 925 lặng, 850 mạnh: lớp mặt mây -> 850 bền
+  const windy = goldenNight({ wind925_dawn_max: 6, wind850_dawn_max: 45, t925: 14, t850: 16 });
+  it('Ri khối tính được và lớp bền', () => {
+    const d = decoupledCloudWind(windy, 600, 1000);
+    expect(d).not.toBeNull();
+    expect(d!.ri).toBeGreaterThanOrEqual(0.25);
+    expect(d!.wind).toBeLessThan(45);
+  });
+  it('lớp không bền (850 lạnh hơn nhiều) thì không áp', () => {
+    expect(decoupledCloudWind(goldenNight({ wind925_dawn_max: 6, wind850_dawn_max: 45, t925: 20, t850: 8 }), 600, 1000)).toBeNull();
+  });
+  it('mặc định: điểm và trạng thái y như không có luật H; chỉ thêm lời cảnh báo tan sớm', () => {
+    // ca thật (dữ liệu thô UKMO Tà Xùa 27/11/2026, người đi thấy biển mây): gió 925 5,2 / 850 31 km/h
+    const fx = JSON.parse(readFileSync('tests/fixtures/winddecouple-taxua-20261127.json', 'utf-8'));
+    const a = scoreOneModel('ukmo_seamless', fx.ukmo, fx.ctx, '2026-11-27');
+    const h = scoreOneModel('ukmo_seamless', fx.ukmo, fx.ctx, '2026-11-27', { windDecouple: true });
+    expect(a.status).toBe('DISSIPATING');          // luật thật: gió 850 45km/h vẫn quyết
+    expect(h.status).not.toBe('DISSIPATING');      // chứng minh bộ dữ liệu thử thực sự kích luật H
+    expect(h.score).toBeGreaterThan(a.score);
+    expect(a.reasons.some(r => r.includes('tan sớm'))).toBe(true);
   });
 });

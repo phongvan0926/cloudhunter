@@ -144,6 +144,8 @@ Là BÓNG: không tham gia điểm/trạng thái/đáng đi/thứ hạng (test `
 
 Vòng TỰ ĐO / BẬT CỜ / TỰ LÙI cho cổng bóng (19/11/2026, phiếu g2448; đăng ký trước 4ec0db6 + sửa sau phản biện 824f85b trong `NHAT-KY-HIEU-CHINH.md`; thay luật "chấm một lần, không tự bật" của gd355): `scripts/agy-gate-loop.ts` + `tools/doichieu-local.sh` + timer user `cloudhunter-doichieu` (23:40 VN, Persistent, dùng clone của kênh chụp). Mỗi đêm đọc kho (0 gọi mạng, 0 LLM), ghi `data/agy-gate-doichieu.json/.md` (n, đếm thô; số phụ thuộc cổng CHỈ in khi đủ điều kiện chấm = `isReady`: FIELD >= 30 điểm-ngày VÀ >= 10 ca CÓ, hoặc từ 20/12/2026). "Tự điều chỉnh" = đổi MỘT cờ `data/agy-gate-flag.json` (`enabled`, mặc định false): lượt quyết định L0, +14, +28 ngày (tối đa 3); BẬT khi mọi K1-K6 DAT ở HAI lượt liên tiếp; có K TRUOT thì khoá (cờ tắt); sau bật tự LÙI + khoá nếu R1 (ca CÓ của FIELD bị loại ở >= 2 ngày khác nhau), R2 (một ca người đi bị loại) hoặc R3, chỉ trong 60 ngày. Cờ bật: `worthGoing` hiển thị = `worthGoingBase && agyGate != khong` (chỉ HẠ), bản chụp ghi cả `worthGoingBase`; mọi phép chấm đọc `worthGoingBase ?? worthGoing`. Phép đo rỗng/hụt/> 10% điểm lỗi/bản chụp cũ > 3 ngày = LỖI ĐO (thoát 1, tin đỏ qua bao_chung, KHÔNG đổi cờ, không tiêu lượt). Không tự dò ngưỡng, không đổi tiêu chí. Cờ đổi thì commit + `gh workflow run deploy.yml` + một dòng vào NHAT-KY + tin "cần xem". Bộ đệm xếp hạng trong localStorage khoá thêm theo cờ. Test: `tests/agy-gate-loop.test.ts` (đột biến 3 nhánh từ chối/bật/tự lùi + lỗi đo + mẫu nhỏ). Đọc kết quả: `data/agy-gate-doichieu.md`. D2a/D2b `routeDifficulty` KHÔNG nằm trong vòng này (cần Open-Meteo historical + nhãn đường).
 
+Đợt "cổng gió tách tầng" (28/11/2026, phiếu gb6fe, VIỆC 3 ý 2): luật H (gió trong lớp mây thay gió 850 khi lớp mặt mây -> 850 có Ri khối >= 0,25) ĐÃ BỊ BÁC sau phản biện dù qua 3 tiêu chí hình thức: lợi chính danh 1 ca người đi, 25 ca vệ tinh nhầm thêm, Ri khối lớp dày quá dễ dãi, lỡ gộp cả việc bỏ nhánh gió đỉnh cao. Còn lại: `decoupledCloudWind` sinh dòng cảnh báo "gió 850 trên nắp, có thể tan sớm, lên trước 8h" (không đổi điểm/trạng thái/đáng đi); cờ `windDecouple` (mặc định tắt) + `scripts/ab-winddecouple.ts` chỉ để đo. Biến thể H' (NHAT-KY 28/11) chỉ được chấm trên nhãn MỚI.
+
 Đợt "dự báo tại điểm thung lũng" (19/11/2026, ý b skyradar): luật "điểm DEM thấp nhất trong 20 km" ĐÃ BỊ BÁC (báo nhầm 419 -> 612,
 bootstrap ngày [-241, -143]); đừng thử lại cùng luật chọn điểm. Đợt sau nếu làm thì theo đề xuất phản biện trong `NHAT-KY-HIEU-CHINH.md`
 (vùng nhìn thấy, cùng lưu vực, 3-8 km, khác ô mô hình, kiểm cơ chế đầu vào trước). Công cụ: `scripts/replay-valley.ts`, `scripts/ab-valley.ts`.
@@ -230,7 +232,7 @@ Lịch sử: `historyService` 10 lần phân tích; `rankingService.archiveRanki
 
 ```bash
 npm run lint   # tsc --noEmit
-npm test       # vitest — 292 test (snapshot-local 429 ngày -> Actions + bóng 6 mô hình bản chụp tuần + thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
+npm test       # vitest — 295 test (cổng gió tách tầng chỉ cảnh báo + snapshot-local 429 ngày -> Actions + bóng 6 mô hình bản chụp tuần + thiên văn khớp USNO + tuyến chưa tới đích + đếm lượt gọi + dông/sạt lở dọc tuyến + engine + lịch sử + capWatch + cung đường + khí hậu tháng + thung lũng v2 + đối chứng skyradar...)
 npm run build  # vite build (Tailwind build-time, copy vercel.json vào dist)
 ```
 
